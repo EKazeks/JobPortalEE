@@ -1,0 +1,225 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap');
+ */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap');
+
+html,
+body {
+  max-width: 100%;
+  height: 0;
+}
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #ffffff !important;
+  font-size: 1rem !important;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+@-moz-document {
+  h2 {
+    color: 'red';
+  }
+}
+/* rte settings */
+.EditorToolbar__root___3_Aqz {
+  text-align: center;
+}
+.public-DraftEditor-content {
+  min-height: 300px;
+}
+.RichTextEditor__root___2QXK- {
+  font-family: inherit !important;
+}
+
+.react-rte {
+  border: 1px solid red !important;
+}
+
+/* Overriding the bootstrap stylings */
+.navbar-dark .navbar-nav .nav-link {
+  margin-right: 20px;
+  font-weight: 700;
+}
+
+.language-select {
+  padding-top: 6px;
+  outline: none;
+  color: rgba(255, 255, 255, 0.5);
+  background-color: #34495e;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: sans-serif;
+  font-size: 17.5px;
+}
+.language-select:hover {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* Pagination stylings */
+
+.pagination {
+  padding: 50px 0;
+  justify-content: center;
+  width: 100%;
+}
+
+.pagination li {
+  margin-right: 30px;
+  cursor: pointer;
+}
+
+.pagination li.active a {
+  border-bottom: 3px solid #88c0f7;
+  padding: 5px;
+  font-weight: 900;
+}
+
+.MuiAppBar-colorPrimary {
+  background-color: #88c0f7 !important;
+}
+
+.btnLink:hover {
+  text-decoration: none;
+  color: #34495e;
+}
+.btnLink_white:hover {
+  text-decoration: none;
+}
+
+.ad_title_1 {
+  color: #34495e;
+  font-weight: 600;
+  /* text-transform: capitalize; */
+}
+.ad_title_2 {
+  color: #0056b3;
+  /* text-transform: capitalize; */
+}
+.ad_title_3 {
+  color: #88c0f7;
+  /* text-transform: capitalize; */
+  margin-bottom: 20px;
+  margin-top: 12px;
+}
+
+.final-content {
+  margin-bottom: 60px;
+}
+
+.panel {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+}
+.panel > .panel-heading {
+  background-image: none;
+  background-color: #88c0f7;
+  text-align: center;
+  padding: 10px 15px;
+}
+
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 18px;
+  line-height: 1.1;
+  font-weight: 900;
+}
+
+.application-notes .public-DraftEditor-content {
+  min-height: 360px;
+}
+.interview-rte .public-DraftEditor-content {
+  min-height: 200px;
+}
+
+.job-application input,
+.job-application textarea {
+  color: #34495e;
+}
+
+:disabled {
+  cursor: not-allowed;
+}
+
+/* Multiselect custom component */
+.rw-multiselect .rw-input-reset {
+  /* height: 40px !important;
+  width: inherit !important; */
+  font-family: 'Source Sans Pro';
+  font-size: initial;
+}
+.rw-widget-container {
+  border-radius: 0px !important;
+}
+
+.rw-multiselect-tag {
+  border-radius: 40px !important;
+  margin: 5px !important;
+  padding: 5px 10px !important;
+  /* width: 100%; */
+  text-align: left !important;
+}
+/* .rw-multiselect-tag > span {
+  width: 90%;
+} */
+
+.rw-list-option.rw-state-focus, .rw-list-option.rw-state-focus:hover {
+  border: none !important;
+}
+
+.rw-list-empty {
+  display: none;
+}
+
+/* For all full-width btns when in mobile view:: */
+
+@media only screen and (max-width: 767px) {
+  .fullWidthBtn {
+    width: 100%;
+  }
+}
+
+/* Responsive Font Sizes */
+@media only screen and (max-width: 400px) {
+  h1 {
+    font-size: 1.9rem !important;
+  }
+  h3 {
+    font-size: 1.2rem !important;
+  }
+  p {
+    font-size: 0.9rem !important;
+  }
+}
+/* For responsive footer */
+
+@media only screen and (min-width: 960px) {
+  #page-container {
+    position: relative;
+    min-height: 100vh;
+  }
+
+  #content-wrap {
+    padding-bottom: 345px;
+  }
+}
+
+.companyLists {
+  list-style: none;
+  text-align: left;
+  overflow-y: auto;
+}
+
+.companyLists li {
+  cursor: pointer;
+  border-bottom: 1px solid rgb(206, 204, 204);
+}
+
+.companyLists li:hover {
+  background-color: rgb(206, 204, 204);
+}
