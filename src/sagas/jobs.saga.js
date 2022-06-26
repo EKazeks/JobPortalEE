@@ -83,7 +83,7 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
 
 function* getJobDetailsByIdSaga(props) {
   try {
-    const url = `${API_SERVER}/GetJobPostByEmail`;
+    const url = `${API_SERVER_EST}/jobPostNumber`;
 
     let body;
     let result;
@@ -104,20 +104,20 @@ function* getJobDetailsByIdSaga(props) {
 
     if (email) {
       body = JSON.stringify({
-        post_id: parseInt(job_detail[0]),
-        company_id: parseInt(job_detail[1]),
+        jobPostNumber: parseInt(job_detail[0]),
+        companyBusinessId: parseInt(job_detail[1]),
         email,
         isApplyPage,
       });
     } else {
       body = JSON.stringify({
-        post_id: parseInt(job_detail[0]),
-        company_id: parseInt(job_detail[1]),
+        jobPostNumber: parseInt(job_detail[0]),
+        companyBusinessId: parseInt(job_detail[1]),
         isApplyPage,
       });
     }
 
-    result = yield call(apiOpenPost, url, body);
+    result = yield call(apiOpenRequest, url, body);
 
     if (result.data !== 'job details does not exist') {
       resultParsed = JSON.parse(result.data)[0];
@@ -210,7 +210,7 @@ function* getFavoriteJobsSaga() {
     const body = JSON.stringify({
       email,
     });
-    if (email !== null) {
+    //if (email !== null) {
       // In case users are not logged in don't call this API
       const result = yield call(apiManualPost, url, body);
       const resultParsed = JSON.parse(result.data);
@@ -220,7 +220,7 @@ function* getFavoriteJobsSaga() {
       } else {
         // yield put(getFavoriteJobsSuccess([]));
       }
-    }
+    
   } catch (e) {
     console.log(e);
   }

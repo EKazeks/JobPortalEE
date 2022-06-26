@@ -281,7 +281,7 @@ export default function advertisementsReducer(state = initialState, action,data)
       return {
         ...state,
         // selectedMainMenu: '',
-        selectedAd: action.jobPostNumber,
+        selectedAd: action.id,
         showSpinner: true,
       };
 

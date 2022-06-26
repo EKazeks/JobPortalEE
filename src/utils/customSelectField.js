@@ -38,7 +38,7 @@ export const JobTypeComponent = ({ margin, hideLabel }) => {
   const { t } = useTranslation('jobtype');
   return (
     <div>
-      <Field component={renderSelectField} name="job_type" label={hideLabel ? '' : `${t('jobTypeLabel')} *`} margin={margin} required>
+      <Field component={renderSelectField} name="jobType" label={hideLabel ? '' : `${t('jobTypeLabel')} *`} margin={margin} required>
         <option value="" />
         <option value="12">{t('jobType12')}</option>
         <option value="13">{t('jobType13')}</option>
@@ -155,7 +155,7 @@ export const JobCategoriesComponent = ({ jobCategories, margin, hideLabel }) => 
     <div>
       <Field
         component={renderSelectField}
-        name="job_category"
+        name="jobCategory"
         label={hideLabel ? '' : `${t('category')} *`}
         id="job_category"
         fullWidth

@@ -69,6 +69,7 @@ const AutoCompleteLocation = ({ input, meta, label, required, margin, placeholde
                 const style = suggestion.active ? { backgroundColor: '#fafafa', cursor: 'pointer' } : { backgroundColor: '#ffffff', cursor: 'pointer' };
                 return (
                   <div
+                  key={suggestion.id}
                     {...getSuggestionItemProps(suggestion, {
                       className,
                       style,

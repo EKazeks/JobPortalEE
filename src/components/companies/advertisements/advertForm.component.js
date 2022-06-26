@@ -154,7 +154,7 @@ const AdvertFormComponent = ({
           <div className={i18n.language === 'ee' ? classes.paperForEE : classes.paper}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <Field component={renderTextField} id="jobName" label={t('field1')} name="jobName" required />
+                <Field component={renderTextField} id="jobTitle" label={t('field1')} name="jobTitle" required />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <JobCategoriesComponent jobCategories={jobCategories} />
@@ -169,13 +169,13 @@ const AdvertFormComponent = ({
                 <Field component={AutoCompleteLocationInput} name="jobLocation" label={t('field3')} id="jobLocation" required />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Field component={renderDatePicker} id="dueDateOfApplication" label={t('advertForm:field5')} name="dueDateOfApplication" required />
+                <Field component={renderDatePicker} id="lastApplicationDate" label={t('lastApplicationDate')} name="lastApplicationDate" required />
               </Grid>
               <Grid item xs={12}>
                 <p style={{ color: '#6c757d' }}>{t('linkInfoMsg')}</p>
-                <Field component={renderTextField} label={t('field6')} name="url" id="url" />
+                <Field component={renderTextField} label={t('field6')} name="applicationUrl" id="applicationUrl" />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <Field
                   component={renderDropzoneField}
                   type="file"
@@ -186,8 +186,8 @@ const AdvertFormComponent = ({
                   fullWidth
                   isImage
                 />
-              </Grid>
-              <Grid item xs={12} sm={6} className={classes.dropzone}>
+              </Grid> */}
+              {/* <Grid item xs={12} sm={6} className={classes.dropzone}>
                 <i style={{ color: '#6c757d' }}>{t('voluntary')}</i>
                 <p className={classes.imageText}>{t('picText')}</p>
                 <Button
@@ -208,9 +208,12 @@ const AdvertFormComponent = ({
                   <DeleteForeverIcon fontSize="small" style={{ marginRight: 5 }} />
                   {t('delPic')}
                 </Button>
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 <Field component={TextEditor} fullWidth name="jobDescription" placeholder={t('field4')} id="jobDescription" />
+              </Grid>
+              <Grid item xs={12}>
+                <Field component={TextEditor} fullWidth name="campaignLevel" placeholder={t('campaignLevel')} id="campaignLevel" />
               </Grid>
             </Grid>
             {/* <Grid container>

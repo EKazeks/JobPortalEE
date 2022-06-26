@@ -139,7 +139,7 @@ function* saveAndPublishAdvertisementSaga() {
     if (isToEdit) {
       url = `${API_SERVER}/UpdateJobPost`;
     } else {
-      url = `${API_SERVER_EST}`;
+      url = `${API_SERVER_EST}/postJob`;
     }
 
     const statusToUpdate = isDraft || extraService.help || extraService.sos ? 0 : selectedCampaign.type === 'free' ? 1 : 4;
@@ -264,19 +264,17 @@ function* saveAndPublishAdvertisementSaga() {
   }
 }
 
-function* getJobPostByPostIdSaga({ jobPostNumber }) {
+function* getJobPostByPostIdSaga({ id }) {
   try {
-    const jbn = 653536;
-    const url = `${API_SERVER_EST}/jobPostNumber`;
-    const jobPostNumber = store.getState().companyProfile.profile.jobPostNumber;
+    const url = `${API_SERVER_EST}/${id}`;
+    const companyBusinessId = store.getState().companyProfile.profile.companyBusinessId;
     const userRole = store.getState().client.user.data[6].user_type;
 
     const body = JSON.stringify({
-      jobPostNumber: userRole === 'admin' ? jobPostNumber : jobPostNumber,
-      // company_id: userRole === 'admin' ? id.split('admin')[1] : companyId,
+      jobPostNumber: userRole === 'admin' ? id.split('admin')[0] : id,
+      companyBusinessId: userRole === 'admin' ? id.split('admin')[1] : companyBusinessId,
     });
     const result = yield call(apiOpenRequest, url, body);
-   const jsonResult = JSON.stringify(result.data)
     const resultParsed = JSON.parse(result.data);
     yield put(openAdToSeeAdInfoSuccess(resultParsed[0]));
   } catch (error) {

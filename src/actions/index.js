@@ -1,3 +1,4 @@
+import { id } from 'date-fns/locale';
 import {
   SAVE_AND_PUBLISH_ADVERTISEMENT,
   UPDATE_AND_PUBLISH_ADVERTISEMENT,
@@ -222,15 +223,14 @@ export const getAllAdsByStatusSuccess = (jobPostNumber, result) => ({
   result,
 });
 
-export const openAdToSeeAdInfo = jobPostNumber => ({
+export const openAdToSeeAdInfo = id => ({
   type: OPEN_AD_TO_SEE_AD_INFO,
-  jobPostNumber,
+  id,
 });
 
-export const openAdToSeeAdInfoSuccess = (result,jobPostNumber) => ({
+export const openAdToSeeAdInfoSuccess = result => ({
   type: OPEN_AD_TO_SEE_AD_INFO_SUCCESS,
   result,
-  jobPostNumber,
 });
 
 export const hideSpinner = () => ({

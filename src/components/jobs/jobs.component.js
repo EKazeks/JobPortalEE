@@ -260,7 +260,7 @@ const JobsComponent = ({
 
                             <div>
                               <h5 className={classes.companyInfo}>
-                                {item.companyName},{item.jobPostAddress.address}
+                                {item.companyName},{'adress'}
                               </h5>
                             </div>
                             <Hidden only={'xl'}>

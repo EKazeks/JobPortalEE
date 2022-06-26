@@ -113,15 +113,17 @@ const JobDetailsComponent = ({
   const { t } = useTranslation('jobDetails', 'jobhours', 'jobtype');
   const heroImage = jobsToRender.logo && jobsToRender.logo[0].path;
   const title = `${jobsToRender?.jobName} - ${jobsToRender?.companyName}, ${jobsToRender?.jobPostAsukohaAddress.address} | Avoimet työpaikat`;
-
+  const selectedPage = 1;
+  
   return (
     <div>
-      {jobsToRender !== [] && jobsToRender.jobPostNumber !== undefined ? (
-        <div className="container">
+      {jobsToRender.slice(selectedPage * 1, selectedPage * 1 + 1).map(item => {
+        return (
+          <div className="container">
           <SEO
             title={title}
-            location={jobsToRender?.url}
-            heroImage={jobsToRender?.logo} // Incase we want to use post specific image..Right now, we are using same default image for all posts as marketing wanted.
+            location={item?.url}
+            heroImage={item?.logo} // Incase we want to use post specific image..Right now, we are using same default image for all posts as marketing wanted.
           />
           <div className={classes.addMargin}>
             <div className={classes.backBtnContainer}>
@@ -135,18 +137,17 @@ const JobDetailsComponent = ({
                 <ArrowBackIosIcon /> {t('backToJobList')}
               </Link>
             </div>
-
             <Grid container spacing={4} alignItems="center">
               <Grid item sm={12} md={7}>
-                <h2 className="ad_title_1">{`${jobsToRender.jobName}, ${jobsToRender.jobPostAsukohaAddress.address}`}</h2>
+                <h2 className="ad_title_1">{`${item.jobName}, ${item.jobPostAsukohaAddress.address}`}</h2>
                 <h6>
                   <strong className={classes.metaDataTitle}>
                     <span>{t('applyPeriod')}: </span>
                     <span className={classes.metaData}>
-                      {jobsToRender.dateOfApplication &&
-                        `${new Intl.DateTimeFormat('fi-FI').format(new Date(jobsToRender.dateOfApplication))} - 
+                      {item.dateOfApplication &&
+                        `${new Intl.DateTimeFormat('fi-FI').format(new Date(item.dateOfApplication))} -
                         {/* ${new Intl.DateTimeFormat('fi-FI').format(
-                          new Date(jobsToRender.due_date),
+                          new Date(item.due_date),
                         )} */}`}
                     </span>
                   </strong>
@@ -154,14 +155,13 @@ const JobDetailsComponent = ({
                 <h6>
                   <strong className={classes.metaDataTitle}>
                     <span>{t('jobtype:jobTypeLabel')}: </span>
-                    <span className={classes.metaData}>{convertJobTypeToStr(t, jobsToRender.durationOfEmployment)}</span>
+                    <span className={classes.metaData}>{convertJobTypeToStr(t, item.durationOfEmployment)}</span>
                   </strong>
                 </h6>
-
                 <h6>
                   <strong className={classes.metaDataTitle}>
                     <span>{t('jobhours:jobHoursLabel')}: </span>
-                    <span className={classes.metaData}>{convertJobHoursToStr(t, jobsToRender.workingTime)}</span>
+                    <span className={classes.metaData}>{convertJobHoursToStr(t, item.workingTime)}</span>
                   </strong>
                 </h6>
                 {/* {workStart != null ? (
@@ -172,11 +172,10 @@ const JobDetailsComponent = ({
                     </strong>
                   </h6>
                 ) : null} */}
-
-                {jobsToRender.status === 2 && <p style={{ color: 'red' }}>{t('inactiveBtn')}</p>}
+                {item.status === 2 && <p style={{ color: 'red' }}>{t('inactiveBtn')}</p>}
               </Grid>
               <Grid item sm={12} md={5}>
-                {jobsToRender.status === 1 && (
+                {item.status === 1 && (
                   <Grid container spacing={2} className={classes.ctaBtn}>
                     {/* <Grid item>
                   <Button color='primary' variant='outlined'>
@@ -185,21 +184,21 @@ const JobDetailsComponent = ({
                 </Grid> */}
                     <Grid item>
                       <FavBtn
-                        isFav={!!jobsToRender.favourite}
-                        handleFav={() => toggleFavoriteJobs(jobsToRender.companyBusinessId, jobsToRender.jobPostNumber, !favBtnstatus)}
-                        btnText={!jobsToRender.favourite ? t('addFav') : t('deleteFav')}
+                        isFav={!!item.favourite}
+                        handleFav={() => toggleFavoriteJobs(item.companyBusinessId, item.jobPostNumber, !favBtnstatus)}
+                        btnText={!item.favourite ? t('addFav') : t('deleteFav')}
                       />
                     </Grid>
                     <Grid item>
-                      {jobsToRender.url ? (
-                        <a className="btnLink" href={jobsToRender.url} target="_blank" rel="noopener noreferrer">
+                      {item.url ? (
+                        <a className="btnLink" href={item.url} target="_blank" rel="noopener noreferrer">
                           <Button color="primary" variant="contained">
                             <DescriptionIcon />
                             <span style={{ marginLeft: 8 }}>{t('applyBtn')}</span>
                           </Button>
                         </a>
                       ) : (
-                        <Link className="btnLink" to={customURL(jobsToRender.url, 'application')}>
+                        <Link className="btnLink" to={customURL(item.url, 'application')}>
                           <Button color="primary" variant="contained">
                             <DescriptionIcon />
                             <span style={{ marginLeft: 8 }}>{t('applyBtn')}</span>
@@ -215,22 +214,21 @@ const JobDetailsComponent = ({
           </div>
           <Grid container justifyContent="flex-end">
             <div
-              className={jobsToRender.logo ? classes.logo : null}
+              className={item.logo ? classes.logo : null}
               style={{
-                backgroundImage: `url(${jobsToRender.logo ? jobsToRender.logo[0].path : null})`,
+                backgroundImage: `url(${item.logo ? item.logo[0].path : null})`,
               }}
             />
           </Grid>
-
           <div className={classes.jobDetail}>
-            {jobsToRender.logo && (
+            {item.logo && (
               <div className={classes.companyImgFrame}>
-                <img src={heroImage} alt="company-img" className={jobsToRender.logo ? classes.companyImage : ''} />
+                <img src={heroImage} alt="company-img" className={item.logo ? classes.companyImage : ''} />
               </div>
             )}
             <div
               className={classes.jobDesc}
-              dangerouslySetInnerHTML={{ __html: jobsToRender.jobDescription }} // To convert rte string into html
+              dangerouslySetInnerHTML={{ __html: item.jobDescription }} // To convert rte string into html
             />
             {/* {jobsToRender.profile_description && !isRteEmpty(jobsToRender.profile_description) && (
               <div className={classes.additionalInfo}>
@@ -244,20 +242,19 @@ const JobDetailsComponent = ({
                 />
               </div>
             )} */}
-            {jobsToRender.companyPageUrl && (
+            {item.companyPageUrl && (
               <p className={classes.additionalInfo}>
                 {`${t('readMore')} : `}
-                <a href={jobsToRender.companyPageUrl} target="_blank" rel="noopener noreferrer">
-                  {`${jobsToRender.companyPageUrl}`}
+                <a href={item.companyPageUrl} target="_blank" rel="noopener noreferrer">
+                  {`${item.companyPageUrl}`}
                 </a>
               </p>
             )}
-            {!!jobsToRender?.url && (
+            {!!item?.url && (
               <p className={classes.sourceInfo}>
                 <em>
                   {t('source')}
-
-                  <a href={`${mol_page_url}/${jobsToRender?.url}`} className={classes.metaData} target="_blank" rel="noopener noreferrer">
+                  <a href={`${mol_page_url}/${item?.url}`} className={classes.metaData} target="_blank" rel="noopener noreferrer">
                     {t('mol')}
                   </a>
                 </em>
@@ -278,21 +275,21 @@ const JobDetailsComponent = ({
                 </Grid> */}
                   <Grid item>
                     <FavBtn
-                      isFav={!!jobsToRender.favourite}
-                      handleFav={() => toggleFavoriteJobs(jobsToRender.companyBusinessId, jobsToRender.jobPostNumber, !favBtnstatus)}
-                      btnText={!jobsToRender.favourite ? t('addFav') : t('deleteFav')}
+                      isFav={!!item.favourite}
+                      handleFav={() => toggleFavoriteJobs(item.companyBusinessId, item.jobPostNumber, !favBtnstatus)}
+                      btnText={!item.favourite ? t('addFav') : t('deleteFav')}
                     />
                   </Grid>
                   <Grid item>
-                    {jobsToRender.url ? (
-                      <a className="btnLink" href={jobsToRender.url} target="_blank" rel="noopener noreferrer">
+                    {item.url ? (
+                      <a className="btnLink" href={item.url} target="_blank" rel="noopener noreferrer">
                         <Button color="primary" variant="contained">
                           <DescriptionIcon />
                           <span style={{ marginLeft: 8 }}>{t('applyBtn')}</span>
                         </Button>
                       </a>
                     ) : (
-                      <Link className="btnLink" to={customURL(jobsToRender.url, 'application')}>
+                      <Link className="btnLink" to={customURL(item.url, 'application')}>
                         <Button color="primary" variant="contained">
                           <DescriptionIcon />
                           <span style={{ marginLeft: 8 }}>{t('applyBtn')}</span>
@@ -305,10 +302,8 @@ const JobDetailsComponent = ({
             </Grid>
           </Grid>
         </div>
-      ) : jobsToRender === 'job details does not exist' ? (
-        <NotFoundPage />
-      ) : (
-        ''
+        )
+      }
       )
       /* Display structure for mol ads --Copy code from molAds.js if needed in future otherwise delete that file */
       }
