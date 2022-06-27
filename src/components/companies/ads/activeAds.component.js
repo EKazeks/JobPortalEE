@@ -31,9 +31,7 @@ const ActiveAdsComponent = ({
   const { t } = useTranslation('jobs');
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
-  // const dispatch = useDispatch()
-   //const offers = useSelector(state => state.getState().offers)
-  // console.log(offers)
+
   useEffect(() => {
     axios
     .get(`https://localhost:7262/jobsEn`)
@@ -41,6 +39,7 @@ const ActiveAdsComponent = ({
        setJobsToRender(res.data);
     })
   },[]);
+  
   const updateSize = () => {
     setIsDesktop(window.innerWidth >= 1440);
   };

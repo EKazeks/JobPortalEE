@@ -162,7 +162,7 @@ const AdvertFormComponent = ({
               <Grid item xs={12} sm={6}>
                 <JobTypeComponent />
               </Grid>
-              <Grid item xs={12} sm={6} id='durationOfEmployment'>
+              <Grid item xs={12} sm={6} id='jobDuration'>
                 <JobHoursComponent />
               </Grid>
               <Grid item xs={12} sm={6}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getFormValues, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -6,6 +6,7 @@ import HomePageComponent from '../../components/jobseekers/homePage.component';
 import { getApplicantDashboardInfo, toggleEmailNotification, updateEmailNotification, closeSnackbar } from '../../actions';
 import { jobPreferenceValidate as validate } from '../validate';
 import i18next from 'i18next';
+import axios from 'axios';
 
 class HomePageContainer extends React.Component {
   componentDidMount() {

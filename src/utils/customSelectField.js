@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Field } from 'redux-form';
-import { useTranslation } from 'react-i18next';
-import Multiselect from 'react-widgets/lib/Multiselect';
-import { renderSelectField, renderFormHelper } from './wrappers';
-import 'react-widgets/dist/css/react-widgets.css';
-import store from '../store';
-import { customTranslateCampaign } from './customTranslate';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { Field } from "redux-form";
+import { useTranslation } from "react-i18next";
+import Multiselect from "react-widgets/lib/Multiselect";
+import { renderSelectField, renderFormHelper } from "./wrappers";
+import "react-widgets/dist/css/react-widgets.css";
+import store from "../store";
+import { customTranslateCampaign } from "./customTranslate";
+import axios from "axios";
 
 export const jobHours = [
   {
@@ -23,66 +23,91 @@ export const jobHours = [
   },
 ];
 
-export const jobType = [{ value: 12 }, { value: 13 }, { value: 14 }, { value: 15 }];
+export const jobType = [
+  { value: 12 },
+  { value: 13 },
+  { value: 14 },
+  { value: 15 },
+];
 
-export const publishedTimes = [{ value: '' }, { value: 2 }, { value: 4 }, { value: 8 }, { value: 15 }];
+export const publishedTimes = [
+  { value: "" },
+  { value: 2 },
+  { value: 4 },
+  { value: 8 },
+  { value: 15 },
+];
 
 export const emailLanguages = [
-  { id: 1, value: 'finnish' },
-  { id: 2, value: 'english' },
-  { id: 3, value: 'swedish' },
-  { id: 4, value: 'estonian' },
+  { id: 1, value: "finnish" },
+  { id: 2, value: "english" },
+  { id: 3, value: "swedish" },
+  { id: 4, value: "estonian" },
 ];
 
 export const JobTypeComponent = ({ margin, hideLabel }) => {
-  const { t } = useTranslation('jobtype');
+  const { t } = useTranslation("jobtype");
   return (
     <div>
-      <Field component={renderSelectField} name="jobType" label={hideLabel ? '' : `${t('jobTypeLabel')} *`} margin={margin} required>
+      <Field
+        component={renderSelectField}
+        name="jobType"
+        label={hideLabel ? "" : `${t("jobTypeLabel")} *`}
+        margin={margin}
+        required
+      >
         <option value="" />
-        <option value="12">{t('jobType12')}</option>
-        <option value="13">{t('jobType13')}</option>
-        <option value="14">{t('jobType14')}</option>
-        <option value="15">{t('jobType15')}</option>
+        <option value="12">{t("jobType12")}</option>
+        <option value="13">{t("jobType13")}</option>
+        <option value="14">{t("jobType14")}</option>
+        <option value="15">{t("jobType15")}</option>
       </Field>
     </div>
   );
 };
 export const JobHoursComponent = ({ margin, hideLabel }) => {
-  const { t } = useTranslation('jobhours');
+  const { t } = useTranslation("jobhours");
   return (
     <div>
-      <Field component={renderSelectField} name="job_hours" label={hideLabel ? '' : `${t('jobHoursLabel')} *`} margin={margin} required>
+      <Field
+        component={renderSelectField}
+        name="jobDuration"
+        label={hideLabel ? "" : `${t("jobHoursLabel")} *`}
+        margin={margin}
+        required
+      >
         <option value="" />
-        <option value="31">{t('jobHours31')}</option>
-        <option value="32">{t('jobHours32')}</option>
-        <option value="33">{t('jobHours33')}</option>
-        <option value="34">{t('jobHours34')}</option>
+        <option value="31">{t("jobHours31")}</option>
+        <option value="32">{t("jobHours32")}</option>
+        <option value="33">{t("jobHours33")}</option>
+        <option value="34">{t("jobHours34")}</option>
       </Field>
     </div>
   );
 };
 export const AdminCampaigns = ({ viewBy }) => {
   let { campaigns } = store.getState().advertisement;
-  campaigns = campaigns.filter(campaign => campaign.id === 4 || campaign.id === 5);
+  campaigns = campaigns.filter(
+    (campaign) => campaign.id === 4 || campaign.id === 5
+  );
 
   // For admins, initially I want to show campaigns type select field with empty option, so empty body is sent when the component mounts.
   const emptyCampaignOption = [
     {
-      type: '',
+      type: "",
       value: 0,
     },
   ];
   const adminCampaigns = emptyCampaignOption.concat(campaigns);
-  const { t } = useTranslation('campaigns', 'adminMarketing');
+  const { t } = useTranslation("campaigns", "adminMarketing");
   return (
     <div>
       <Field
         component={renderSelectField}
         name="campaign_type"
-        label={t('adminMarketing:campaignType')}
+        label={t("adminMarketing:campaignType")}
         margin="dense"
-        style={{ backgroundColor: 'white', margin: 10, width: 200 }}
+        style={{ backgroundColor: "white", margin: 10, width: 200 }}
         viewBy={viewBy}
       >
         {adminCampaigns.map((campaign, i) => {
@@ -97,76 +122,126 @@ export const AdminCampaigns = ({ viewBy }) => {
   );
 };
 export const AdminStatus = ({ viewBy }) => {
-  const { t } = useTranslation('adminMarketing');
+  const { t } = useTranslation("adminMarketing");
 
   return (
     <div>
       <Field
         component={renderSelectField}
         name="status"
-        label={t('status')}
+        label={t("status")}
         margin="dense"
-        style={{ backgroundColor: 'white', margin: 10, width: 200 }}
+        style={{ backgroundColor: "white", margin: 10, width: 200 }}
         viewBy={viewBy}
       >
         <option value="" />
-        <option value="1">{t('active')}</option>
-        <option value="2">{t('inactive')}</option>
-        <option value="3">{t('deleted')}</option>
+        <option value="1">{t("active")}</option>
+        <option value="2">{t("inactive")}</option>
+        <option value="3">{t("deleted")}</option>
       </Field>
     </div>
   );
 };
 export const MarketingPlatform = ({ viewBy }) => {
-  const { t } = useTranslation('campaigns');
+  const { t } = useTranslation("campaigns");
 
   return (
     <div>
       <Field
         component={renderSelectField}
         name="marketing_platform"
-        label={t('plTitle')}
+        label={t("plTitle")}
         margin="dense"
-        style={{ backgroundColor: 'white', margin: 10, width: 200 }}
+        style={{ backgroundColor: "white", margin: 10, width: 200 }}
         viewBy={viewBy}
       >
         <option value="" />
-        <option value="facebook/instagram">{t('facebook')}</option>
-        <option value="linkedin">{t('linkedin')}</option>
-        <option value="any">{t('any')}</option>
-        <option value="unavailable">{t('notAvailable')}</option>
+        <option value="facebook/instagram">{t("facebook")}</option>
+        <option value="linkedin">{t("linkedin")}</option>
+        <option value="any">{t("any")}</option>
+        <option value="unavailable">{t("notAvailable")}</option>
       </Field>
     </div>
   );
 };
 
-export const JobCategoriesComponent = ({ jobCategories, margin, hideLabel }) => {
-  const { t } = useTranslation('category');
+export const JobCategoriesComponent = ({
+  jobCategories,
+  margin,
+  hideLabel,
+}) => {
+  const { t } = useTranslation("category");
   const [jobsToRender, setJobsToRender] = useState([]);
 
   useEffect(() => {
-    axios.get('https://localhost:7262/jobsEn').then(res => {
+    axios.get("https://localhost:7262/jobsEn").then((res) => {
       setJobsToRender(res.data);
-      console.log(jobsToRender);
+      //console.log(jobsToRender);
     });
   }, []);
+
+  return (
+    <Field
+      component={renderSelectField}
+      name="jobCategory"
+      label={hideLabel ? "" : `${t("category")} *`}
+      id="job_category"
+      fullWidth
+      margin={margin}
+      required
+    >
+      {jobsToRender.slice(1 * 10, 1 * 10 + 10).map((category) => {
+        let categorys = [];
+        let array = category.jobTags.split();
+        let sortedCategory = array.sort((a, b) => a - b);
+        let i = 0
+        let j = 0
+        for (i = 0; i < sortedCategory.length; i++)
+    {
+        for (j = i + 1; j < sortedCategory.length; j++)
+        {
+            if (sortedCategory[i] != null && sortedCategory[i].equals(sortedCategory[j])) {
+                return true;
+            }
+        }
+    }
+
+        console.log(sortedCategory);
+
+        return (
+          <option
+            value={sortedCategory.id === 1 ? '' : sortedCategory.id} // id:1 is empty -- required for validation
+            key={sortedCategory.id}
+          >
+            {t(`${sortedCategory}`)}
+          </option>
+          )
+      })}
+
+      {/* {jobsToRender.slice(1 * 10, 1 * 10 + 10).map(category => {
+        return (
+          //console.log(category.jobTags)
+          )
+      })} */}
+    </Field>
+  );
 
   return (
     <div>
       <Field
         component={renderSelectField}
         name="jobCategory"
-        label={hideLabel ? '' : `${t('category')} *`}
+        label={hideLabel ? "" : `${t("category")} *`}
         id="job_category"
         fullWidth
         margin={margin}
         required
       >
-        {jobCategories.map(category => {
-          //console.log(jobCategories);
+        {jobCategories.map((category) => {
+          console.log(jobCategories);
           return (
             <option
-              value={category.id === 1 ? '' : category.id} // id:1 is empty -- required for validation
+              value={category.id === 1 ? "" : category.id} // id:1 is empty -- required for validation
               key={category.id}
             >
               {t(`${category.id}`)}
@@ -178,7 +253,15 @@ export const JobCategoriesComponent = ({ jobCategories, margin, hideLabel }) => 
   );
 };
 
-export const renderMultiselect = ({ input, meta: { touched, error, invalid }, data, valueField, textField, label, placeholder }) => {
+export const renderMultiselect = ({
+  input,
+  meta: { touched, error, invalid },
+  data,
+  valueField,
+  textField,
+  label,
+  placeholder,
+}) => {
   return (
     <div>
       <Multiselect
@@ -198,43 +281,43 @@ export const renderMultiselect = ({ input, meta: { touched, error, invalid }, da
 };
 
 export const AdminAdditionalServiceStatus = ({ viewBy }) => {
-  const { t } = useTranslation('adminAdditionalService');
+  const { t } = useTranslation("adminAdditionalService");
 
   return (
     <div>
       <Field
         component={renderSelectField}
         name="status"
-        label={t('status')}
+        label={t("status")}
         margin="dense"
-        style={{ backgroundColor: 'white', margin: 10, width: 200 }}
+        style={{ backgroundColor: "white", margin: 10, width: 200 }}
         viewBy={viewBy}
       >
         <option value="" />
-        <option value="1">{t('published')}</option>
-        <option value="0">{t('draft')}</option>
-        <option value="3">{t('deleted')}</option>
+        <option value="1">{t("published")}</option>
+        <option value="0">{t("draft")}</option>
+        <option value="3">{t("deleted")}</option>
       </Field>
     </div>
   );
 };
 
 export const AdminAdditionalServiceRequest = ({ viewBy }) => {
-  const { t } = useTranslation('adminAdditionalService');
+  const { t } = useTranslation("adminAdditionalService");
 
   return (
     <div>
       <Field
         component={renderSelectField}
         name="extra_service"
-        label={t('request')}
+        label={t("request")}
         margin="dense"
-        style={{ backgroundColor: 'white', margin: 10, width: 200 }}
+        style={{ backgroundColor: "white", margin: 10, width: 200 }}
         viewBy={viewBy}
       >
         <option value="" />
-        <option value="help">{t('activatedHelp')}</option>
-        <option value="sos">{t('activatedSos')}</option>
+        <option value="help">{t("activatedHelp")}</option>
+        <option value="sos">{t("activatedSos")}</option>
       </Field>
     </div>
   );
