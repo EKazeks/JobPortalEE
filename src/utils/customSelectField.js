@@ -180,51 +180,53 @@ export const JobCategoriesComponent = ({
     });
   }, []);
 
-  return (
-    <Field
-      component={renderSelectField}
-      name="jobCategory"
-      label={hideLabel ? "" : `${t("category")} *`}
-      id="job_category"
-      fullWidth
-      margin={margin}
-      required
-    >
-      {jobsToRender.slice(1 * 10, 1 * 10 + 10).map((category) => {
-        let categorys = [];
-        let array = category.jobTags.split();
-        let sortedCategory = array.sort((a, b) => a - b);
-        let i = 0
-        let j = 0
-        for (i = 0; i < sortedCategory.length; i++)
-    {
-        for (j = i + 1; j < sortedCategory.length; j++)
-        {
-            if (sortedCategory[i] != null && sortedCategory[i].equals(sortedCategory[j])) {
-                return true;
-            }
-        }
-    }
+  // return (
+  //   <Field
+  //     component={renderSelectField}
+  //     name="jobCategory"
+  //     label={hideLabel ? "" : `${t("category")} *`}
+  //     id="job_category"
+  //     fullWidth
+  //     margin={margin}
+  //     required
+  //   >
+  //     {jobsToRender.slice(1 * 10, 1 * 10 + 10).map((category) => {
+  //       let array = category.jobTags.split()
+  //   // its works only for array with objects, not for objects.
 
-        console.log(sortedCategory);
+  //       //let sortedCategory = array.sort((a, b) => a - b);
 
-        return (
-          <option
-            value={sortedCategory.id === 1 ? '' : sortedCategory.id} // id:1 is empty -- required for validation
-            key={sortedCategory.id}
-          >
-            {t(`${sortedCategory}`)}
-          </option>
-          )
-      })}
+  //       {/* const result = array.reduce((finalArray, current) => {
+  //         let obj = finalArray.find((item) => item.text === current.text);
 
-      {/* {jobsToRender.slice(1 * 10, 1 * 10 + 10).map(category => {
-        return (
-          //console.log(category.jobTags)
-          )
-      })} */}
-    </Field>
-  );
+  //         if (obj) {
+  //           return finalArray;
+  //         }
+  //         return finalArray.concat([current]);
+  //       }, []); */}
+
+  //       //console.log("result", result);
+  //       console.log(array);
+
+  //       {
+  //        return (
+  //         <option
+  //           value={array.id === 1 ? '' : array.id} // id:1 is empty -- required for validation
+  //           key={array.id}
+  //         >
+  //           {t(`${array}`)}
+  //         </option>
+  //         ) 
+  //       }
+  //     })}
+
+  //     {/* {jobsToRender.slice(1 * 10, 1 * 10 + 10).map(category => {
+  //       return (
+  //         //console.log(category.jobTags)
+  //         )
+  //     })} */}
+  //   </Field>
+  // );
 
   return (
     <div>

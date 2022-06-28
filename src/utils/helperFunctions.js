@@ -1,6 +1,7 @@
 import React from 'react';
 
-export const customURL = (url='https://www.tootukassa.ee/et/toopakkumised', type) => {
+export const customURL = (url='https://www.tootukassa.ee/et/toopakkumised/valvetootaja-655362', type) => {
+  // url comes from our db - 'https://www.tootukassa.ee/et/toopakkumised/Nordic-C-Creditor-Oy/67289/valvetootaja-655362'
   // url comes from backend in this format - "https://vpt-ui-dev.azurewebsites.net/tyopaikat/Nordic-C-Creditor-Oy/67289/Kirjanpitäjä-Controller/14"
 
   const pathname = url && url.split('/tyopaikat/')[0];
@@ -10,12 +11,22 @@ export const customURL = (url='https://www.tootukassa.ee/et/toopakkumised', type
   const connectString = path[0] + '/' + path[1];
   // const companyName = splittedPath && splittedPath[0]
   const companyId = splittedPath && splittedPath[1];
-  const jobTitle = connectString && connectString[0];
-  const postId = splittedPath && splittedPath[2];
+  const jobTitle = path[0];
+  const postId = path && path[1];
 
+  // const pathname = url && url.split('/toopakkumised/')[1]; // work
+  // const splittedPath = pathname && pathname.split('/'); // work
+  // const slicedPath= splittedPath.slice(2); // work
+  // const path = slicedPath[0].split('-'); // work
+  // const connectString = path[0] + '/' + path[1]; // work
+
+  // const companyId = splittedPath && splittedPath[1]; // work 
+  // const jobTitle = path && path[0]; // work
+  // const postId = path && path[1]; // work
+  
   switch (type) {
     case 'internal': // For admins and companies, url path is jobpost/jobTitle/postId
-      return `/jobpost/${connectString}`;
+      return `/jobpost/${jobTitle}/${postId}`;
 
     case 'external': // For public, url path is tyopaikat/companyName/companyId/jobTitle/postId
       return `/tyopaikat/${connectString}`;
