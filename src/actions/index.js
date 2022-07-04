@@ -1,4 +1,4 @@
-import { id } from 'date-fns/locale';
+import { id } from "date-fns/locale";
 import {
   SAVE_AND_PUBLISH_ADVERTISEMENT,
   UPDATE_AND_PUBLISH_ADVERTISEMENT,
@@ -11,6 +11,7 @@ import {
   FILTER_JOBS,
   FILTER_JOBS_SUCCESS,
   GET_JOB_DETAILS_BY_ID,
+  FETCH_JOB_BY_ID,
   GET_JOB_DETAILS_BY_ID_SUCCESS,
   GET_AD_INFO_FROM_SIDE_MENU,
   GET_ALL_ADS_BY_STATUS,
@@ -146,11 +147,16 @@ import {
   POPULATE_EMAIL_MESSAGE,
   GET_JOBS_OFFERS,
   GET_JOBS_OFFERS_SUCCESS,
-} from '../constants';
+} from "../constants";
 
 // get jobs offers
 export const getJobsOffers = () => ({
   type: GET_JOBS_OFFERS_SUCCESS,
+});
+
+export const fetchJobById = (id) => ({
+  type: FETCH_JOB_BY_ID,
+  id,
 });
 
 // export const getJobsOffersSuccess = () => ({
@@ -158,13 +164,13 @@ export const getJobsOffers = () => ({
 // });
 
 //search companies details action
-export const searchCompanyDetails = companyName => ({
+export const searchCompanyDetails = (companyName) => ({
   type: SEARCH_COMPANY_DETAILS,
   companyName: companyName,
 });
 
 // search companies details success
-export const searchCompanyDetailsSuccess = companyLists => ({
+export const searchCompanyDetailsSuccess = (companyLists) => ({
   type: SEARCH_COMPANY_DETAILS_SUCCESS,
   companyLists,
 });
@@ -183,37 +189,37 @@ export const closeCompanyLists = () => ({
 
 // OPEN JOBS COMPONENT
 
-export const filterJobs = isToRetainSelectedPage => ({
+export const filterJobs = (isToRetainSelectedPage) => ({
   type: FILTER_JOBS,
   isToRetainSelectedPage,
 });
-export const filterJobsSuccess = result => ({
+export const filterJobsSuccess = (result) => ({
   type: FILTER_JOBS_SUCCESS,
   result,
 });
-export const getJobDetailsById = id => ({ type: GET_JOB_DETAILS_BY_ID, id });
-export const getJobDetailsByIdSuccess = result => ({
+export const getJobDetailsById = (id) => ({ type: GET_JOB_DETAILS_BY_ID, id });
+export const getJobDetailsByIdSuccess = (result) => ({
   type: GET_JOB_DETAILS_BY_ID_SUCCESS,
   result,
 });
 
-export const getWorkStartSuccess = result => ({
+export const getWorkStartSuccess = (result) => ({
   type: GET_WORK_START_SUCCESS,
   result,
 });
 
 // LAYOUT COMPONENT
-export const getAdInfoFromSideMenu = value => ({
+export const getAdInfoFromSideMenu = (value) => ({
   type: GET_AD_INFO_FROM_SIDE_MENU,
   value,
 });
 
-export const navigateAdsFromMainMenu = status => ({
+export const navigateAdsFromMainMenu = (status) => ({
   type: NAVIGATE_ADS_FROM_MAIN_MENU,
   status,
 });
 
-export const getAllAdsByStatus = status => ({
+export const getAllAdsByStatus = (status) => ({
   type: GET_ALL_ADS_BY_STATUS,
   status,
 });
@@ -223,12 +229,12 @@ export const getAllAdsByStatusSuccess = (jobPostNumber, result) => ({
   result,
 });
 
-export const openAdToSeeAdInfo = id => ({
+export const openAdToSeeAdInfo = (id) => ({
   type: OPEN_AD_TO_SEE_AD_INFO,
   id,
 });
 
-export const openAdToSeeAdInfoSuccess = result => ({
+export const openAdToSeeAdInfoSuccess = (result) => ({
   type: OPEN_AD_TO_SEE_AD_INFO_SUCCESS,
   result,
 });
@@ -241,25 +247,25 @@ export const openApplicantToSeeApplication = {
   type: OPEN_APPLICANT_TO_SEE_APPLICATION,
 };
 
-export const changeAdvertPage = selected => ({
+export const changeAdvertPage = (selected) => ({
   type: CHANGE_ADVERT_PAGE,
   selected,
 });
 
 // LANGUAGE TRANSLATION
-export const handleChangeLang = lang => ({ type: LANGUAGE_CHANGE, lang });
+export const handleChangeLang = (lang) => ({ type: LANGUAGE_CHANGE, lang });
 
 // REGISTER USER
 export const signUpFormSubmit = () => ({ type: SIGNUP_FORM_SUBMIT });
-export const signUpFormSubmitSuccess = result => ({
+export const signUpFormSubmitSuccess = (result) => ({
   type: SIGNUP_FORM_SUBMIT_SUCCESS,
   result,
 });
-export const signUpFormSubmitUserExistError = error => ({
+export const signUpFormSubmitUserExistError = (error) => ({
   type: SIGNUP_FORM_SUBMIT_USER_EXIST_ERROR,
   error,
 });
-export const signUpFormSubmitFailed = error => ({
+export const signUpFormSubmitFailed = (error) => ({
   type: SIGNUP_FORM_SUBMIT_FAILED,
   error,
 });
@@ -268,23 +274,23 @@ export const closeRegisterSnackbar = () => ({
 });
 
 // USER SELECTION
-export const selectUserType = userType => ({
+export const selectUserType = (userType) => ({
   type: SELECT_USER_TYPE,
   userType,
 });
 
 // SIGNIN USER
 export const signInFormSubmit = () => ({ type: SIGNIN_FORM_SUBMIT });
-export const signInFormSubmitSuccess = result => ({
+export const signInFormSubmitSuccess = (result) => ({
   type: SIGNIN_FORM_SUBMIT_SUCCESS,
   result,
 });
-export const signInFormSubmitFailed = error => ({
+export const signInFormSubmitFailed = (error) => ({
   type: SIGNIN_FORM_SUBMIT_FAILED,
   error,
 });
 export const closeSignInSnackBar = () => ({ type: CLOSE_SIGNIN_SNACKBAR });
-export const setClient = token => ({ type: CLIENT_SET, token });
+export const setClient = (token) => ({ type: CLIENT_SET, token });
 export const unsetClient = () => ({ type: CLIENT_UNSET });
 export const logout = () => ({ type: LOGOUT });
 
@@ -328,7 +334,7 @@ export const saveAdvertisementAsDraft = () => ({
   type: SAVE_ADVERTISEMENT_AS_DRAFT,
 });
 
-export const addExtraService = serviceType => ({
+export const addExtraService = (serviceType) => ({
   type: ADD_EXTRA_SERVICE,
   serviceType,
 });
@@ -341,7 +347,7 @@ export const saveAndPublishAdvertisementFailed = () => ({
   type: SAVE_AND_PUBLISH_ADVERTISEMENT_FAILED,
 });
 
-export const retrieveImageInfo = image => ({
+export const retrieveImageInfo = (image) => ({
   type: RETRIEVE_IMAGE_INFO,
   image: {
     name: image.name,
@@ -349,7 +355,7 @@ export const retrieveImageInfo = image => ({
     id: 0,
   },
 });
-export const retrieveLogoInfo = image => ({
+export const retrieveLogoInfo = (image) => ({
   type: RETRIEVE_LOGO_INFO,
   image: {
     name: image.name,
@@ -357,7 +363,7 @@ export const retrieveLogoInfo = image => ({
     id: 0,
   },
 });
-export const retrieveProfilePicInfo = image => ({
+export const retrieveProfilePicInfo = (image) => ({
   type: RETRIEVE_PROFILE_PIC_INFO,
   image: {
     name: image.name,
@@ -365,7 +371,7 @@ export const retrieveProfilePicInfo = image => ({
     id: 0,
   },
 });
-export const retrieveDocumentInfo = document => ({
+export const retrieveDocumentInfo = (document) => ({
   type: RETRIEVE_DOCUMENT_INFO,
   document: {
     name: document.name,
@@ -381,7 +387,7 @@ export const clearJobseekerProfilePic = () => ({
 export const getJobPostViewsByDate = () => ({
   type: GET_JOBPOST_VIEWS_BY_DATE,
 });
-export const getJobPostViewsByDateSuccess = response => ({
+export const getJobPostViewsByDateSuccess = (response) => ({
   type: GET_JOBPOST_VIEWS_BY_DATE_SUCCESS,
   response,
 });
@@ -389,12 +395,12 @@ export const choosePaymentMethod = () => ({
   type: CHOOSE_PAYMENT_METHOD,
 });
 
-export const sendInvoiceToTalous = detail => ({
+export const sendInvoiceToTalous = (detail) => ({
   type: SEND_INVOICE_TO_TALOUS,
   detail,
 });
 
-export const registerPayment = jobpostOrderDetails => ({
+export const registerPayment = (jobpostOrderDetails) => ({
   type: REGISTER_PAYMENT,
   jobpostOrderDetails,
 });
@@ -403,7 +409,7 @@ export const processOnlinePayment = () => ({
   type: PROCESS_ONLINE_PAYMENT,
 });
 
-export const displayPaymentStatusMessage = responseText => ({
+export const displayPaymentStatusMessage = (responseText) => ({
   type: DISPLAY_PAYMENT_STATUS_MESSAGE,
   responseText,
 });
@@ -412,7 +418,7 @@ export const autoEmailToApplicant = () => ({
   type: AUTO_EMAIL_TO_APPLICANT,
 });
 
-export const populateEmailMessage = languages => ({
+export const populateEmailMessage = (languages) => ({
   type: POPULATE_EMAIL_MESSAGE,
   languages,
 });
@@ -431,7 +437,7 @@ export const populateVacancyFormSuccess = (campaignDetails, isToEdit) => ({
 });
 
 // POPULATE SIGNUP FORM
-export const populateSignupForm = applicantData => ({
+export const populateSignupForm = (applicantData) => ({
   type: POPULATE_SIGNUP_FORM,
   applicantData,
 });
@@ -441,58 +447,58 @@ export const populateSignupForm = applicantData => ({
 export const updateAdvertisement = () => ({
   type: UPDATE_ADVERTISEMENT,
 });
-export const changeCampaign = campaign => ({
+export const changeCampaign = (campaign) => ({
   type: CHANGE_CAMPAIGN,
   campaign,
 });
-export const saveNewCampaign = id => ({
+export const saveNewCampaign = (id) => ({
   type: SAVE_NEW_CAMPAIGN,
   id,
 });
 export const saveNewCampaignSuccess = () => ({
   type: SAVE_NEW_CAMPAIGN_SUCCESS,
 });
-export const changeActivePostToInactive = id => ({
+export const changeActivePostToInactive = (id) => ({
   type: CHANGE_ACTIVE_POST_TO_INACTIVE,
   id,
 });
 
 // DELETE ADVERTISEMENT
-export const deleteAdvertisement = id => ({
+export const deleteAdvertisement = (id) => ({
   type: DELETE_ADVERTISEMENT,
   id,
 });
-export const warnToDelete = id => ({
+export const warnToDelete = (id) => ({
   type: WARN_TO_DELETE,
   id,
 });
 
 // GET ALL CAMAPIGNS
-export const chooseCampaign = campaign => ({
+export const chooseCampaign = (campaign) => ({
   type: CHOOSE_CAMPAIGN,
   campaign,
 });
 export const getAllCampaigns = () => ({ type: GET_ALL_CAMPAIGNS });
-export const getAllCampaignsSuccess = result => ({
+export const getAllCampaignsSuccess = (result) => ({
   type: GET_ALL_CAMPAIGNS_SUCCESS,
   result,
 });
 export const saveMarketingDetails = () => ({
   type: SAVE_MARKETING_DETAILS,
 });
-export const saveMarketingDetailsSuccess = details => ({
+export const saveMarketingDetailsSuccess = (details) => ({
   type: SAVE_MARKETING_DETAILS_SUCCESS,
   details,
 });
 
 // GET ALL JOB CATEGORIES
-export const chooseJobCategory = name => ({
+export const chooseJobCategory = (name) => ({
   type: CHOOSE_JOB_CATEGORY,
   name,
 });
 
 export const getAllJobCategory = () => ({ type: GET_ALL_JOB_CATEGORY });
-export const getAllJobCategorySuccess = result => ({
+export const getAllJobCategorySuccess = (result) => ({
   type: GET_ALL_JOB_CATEGORY_SUCCESS,
   result,
 });
@@ -504,11 +510,11 @@ export const addCompanyProfile = () => ({
 export const getCompanyProfile = () => ({
   type: GET_COMPANY_PROFILE,
 });
-export const getCompanyProfileSuccess = response => ({
+export const getCompanyProfileSuccess = (response) => ({
   type: GET_COMPANY_PROFILE_SUCCESS,
   response,
 });
-export const getCompanyProfileFailed = response => ({
+export const getCompanyProfileFailed = (response) => ({
   type: GET_COMPANY_PROFILE_FAILED,
   response,
 });
@@ -520,24 +526,24 @@ export const addNewCompanyEnd = () => ({
   type: ADD_NEW_COMPANY_END,
 });
 
-export const adminGetUserCompanyProfile = id => ({
+export const adminGetUserCompanyProfile = (id) => ({
   type: ADMIN_GET_USER_PROFILE,
   id,
 });
 
 // GET USER'S ALL COMPANIES
-export const getUserCompanyList = isProfileUpdated => ({
+export const getUserCompanyList = (isProfileUpdated) => ({
   type: GET_USER_COMPANIES_LIST,
   isProfileUpdated,
 });
-export const getUserCompanyListSuccess = data => ({
+export const getUserCompanyListSuccess = (data) => ({
   type: GET_USER_COMPANIES_LIST_SUCCESS,
   data,
 });
 
 // SELECT COMPANY
-export const selectCompany = data => ({ type: SELECT_COMPANY, data });
-export const selectCompanySuccess = data => ({
+export const selectCompany = (data) => ({ type: SELECT_COMPANY, data });
+export const selectCompanySuccess = (data) => ({
   type: SELECT_COMPANY_SUCCESS,
   data,
 });
@@ -549,7 +555,7 @@ export const addApplicantProfile = () => ({
 export const getApplicantProfile = () => ({
   type: GET_APPLICANT_PROFILE,
 });
-export const getApplicantProfileSuccess = response => ({
+export const getApplicantProfileSuccess = (response) => ({
   type: GET_APPLICANT_PROFILE_SUCCESS,
   response,
 });
@@ -557,7 +563,7 @@ export const getApplicantProfileSuccess = response => ({
 export const getFavoriteJobs = () => ({
   type: GET_FAVORITE_JOBS,
 });
-export const getFavoriteJobsSuccess = response => ({
+export const getFavoriteJobsSuccess = (response) => ({
   type: GET_FAVORITE_JOBS_SUCCESS,
   response,
 });
@@ -565,7 +571,7 @@ export const getFavoriteJobsSuccess = response => ({
 export const getAppliedJobs = () => ({
   type: GET_APPLIED_JOBS,
 });
-export const getAppliedJobsSuccess = response => ({
+export const getAppliedJobsSuccess = (response) => ({
   type: GET_APPLIED_JOBS_SUCCESS,
   response,
 });
@@ -573,7 +579,7 @@ export const getAppliedJobsSuccess = response => ({
 export const getApplicantDashboardInfo = () => ({
   type: GET_APPLICANT_DASHBOARD_INFO,
 });
-export const getApplicantDashboardInfoSuccess = response => ({
+export const getApplicantDashboardInfoSuccess = (response) => ({
   type: GET_APPLICANT_DASHBOARD_INFO_SUCCESS,
   response,
 });
@@ -585,13 +591,21 @@ export const updateEmailNotification = () => ({
 });
 
 // FAVORITE JOBS
-export const toggleFavoriteJobs = (companyBusinessId, jobPostNumber, status) => ({
+export const toggleFavoriteJobs = (
+  companyBusinessId,
+  jobPostNumber,
+  status
+) => ({
   type: TOGGLE_FAVORITE_JOBS,
   companyBusinessId,
   jobPostNumber,
   status,
 });
-export const deleteFavoriteJobs = (companyBusinessId, jobPostNumber, status) => ({
+export const deleteFavoriteJobs = (
+  companyBusinessId,
+  jobPostNumber,
+  status
+) => ({
   type: DELETE_FAVORITE_JOBS,
   companyBusinessId,
   jobPostNumber,
@@ -599,30 +613,30 @@ export const deleteFavoriteJobs = (companyBusinessId, jobPostNumber, status) => 
 });
 
 // ADMINS
-export const adminSearchCompany = isToRetainSelectedPage => ({
+export const adminSearchCompany = (isToRetainSelectedPage) => ({
   type: ADMIN_SEARCH_COMPANY,
   isToRetainSelectedPage,
 });
-export const adminSearchCompanySuccess = response => ({
+export const adminSearchCompanySuccess = (response) => ({
   type: ADMIN_SEARCH_COMPANY_SUCCESS,
   response,
 });
-export const adminSearchApplicant = isToRetainSelectedPage => ({
+export const adminSearchApplicant = (isToRetainSelectedPage) => ({
   type: ADMIN_SEARCH_APPLICANT,
   isToRetainSelectedPage,
 });
-export const adminSearchApplicantSuccess = response => ({
+export const adminSearchApplicantSuccess = (response) => ({
   type: ADMIN_SEARCH_APPLICANT_SUCCESS,
   response,
 });
 export const adminSearchInvoice = () => ({
   type: ADMIN_SEARCH_INVOICE,
 });
-export const adminSearchInvoiceSuccess = response => ({
+export const adminSearchInvoiceSuccess = (response) => ({
   type: ADMIN_SEARCH_INVOICE_SUCCESS,
   response,
 });
-export const adminSearchAdsMarketing = keepRowExpanded => ({
+export const adminSearchAdsMarketing = (keepRowExpanded) => ({
   type: ADMIN_SEARCH_ADS_MARKETING,
   keepRowExpanded,
 });
@@ -631,7 +645,11 @@ export const adminSearchAdsMarketingSuccess = (response, keepRowExpanded) => ({
   response,
   keepRowExpanded,
 });
-export const adminUpdateMarketingStatus = (company_id, post_id, campaign_id) => ({
+export const adminUpdateMarketingStatus = (
+  company_id,
+  post_id,
+  campaign_id
+) => ({
   type: ADMIN_UPDATE_MARKETING_STATUS,
   company_id,
   post_id,
@@ -640,17 +658,17 @@ export const adminUpdateMarketingStatus = (company_id, post_id, campaign_id) => 
 
 // Admin additional service for activated help and sos feature
 
-export const adminSearchAdditionalService = isToRetainSelectedPage => ({
+export const adminSearchAdditionalService = (isToRetainSelectedPage) => ({
   type: ADMIN_SEARCH_ADDITIONAL_SERVICE,
   isToRetainSelectedPage,
 });
 
-export const adminSearchAdditionalServiceSuccess = response => ({
+export const adminSearchAdditionalServiceSuccess = (response) => ({
   type: ADMIN_SEARCH_ADDITIONAL_SERVICE_SUCCESS,
   response,
 });
 
-export const updatePaymentStatus = orderDetails => ({
+export const updatePaymentStatus = (orderDetails) => ({
   type: UPDATE_PAYMENT_STATUS,
   orderDetails,
 });
@@ -664,7 +682,7 @@ export const adminExpandAdRow = (post_id, sm_marketing_status) => ({
 export const adminCloseAdRow = () => ({
   type: ADMIN_CLOSE_AD_ROW,
 });
-export const getMarketingBudgetSuccess = details => ({
+export const getMarketingBudgetSuccess = (details) => ({
   type: GET_MARKETING_BUDGET_SUCCESS,
   details,
 });
@@ -678,7 +696,7 @@ export const editContactDetails = (details, user) => ({
 export const cancelEditContactDetails = () => ({
   type: CANCEL_EDIT_CONTACT_DETAILS,
 });
-export const adminUpdateUserProfile = user => ({
+export const adminUpdateUserProfile = (user) => ({
   type: ADMIN_UPDATE_USER_PROFILE,
   user,
 });
@@ -696,7 +714,7 @@ export const showSuccessSnackbar = () => ({
 export const showFailedSnackbar = () => ({
   type: SHOW_FAILED_SNACKBAR,
 });
-export const showCustomErrorMsg = msg => ({
+export const showCustomErrorMsg = (msg) => ({
   type: SHOW_CUSTOM_ERROR_MESSAGE,
   msg,
 });
@@ -711,7 +729,7 @@ export const closeDialog = () => ({
 });
 
 // SEND APPLICATION
-export const sendApplication = id => ({
+export const sendApplication = (id) => ({
   type: SEND_APPLICATION,
   id,
 });
@@ -724,19 +742,30 @@ export const resetApplicationSent = () => ({
 });
 
 // GET APPLICATION
-export const getApplicationDetailsById = (application_id, company_id, post_id, email) => ({
+export const getApplicationDetailsById = (
+  application_id,
+  company_id,
+  post_id,
+  email
+) => ({
   type: GET_APPLICATION_DETAILS_BY_ID,
   application_id,
   company_id,
   post_id,
   email,
 });
-export const getApplicationDetailsByIdSuccess = response => ({
+export const getApplicationDetailsByIdSuccess = (response) => ({
   type: GET_APPLICATION_DETAILS_BY_ID_SUCCESS,
   response,
 });
 
-export const updateApplicantStatus = (application_id, company_id, post_id, email, status) => ({
+export const updateApplicantStatus = (
+  application_id,
+  company_id,
+  post_id,
+  email,
+  status
+) => ({
   type: UPDATE_APPLICANT_STATUS,
   application_id,
   company_id,
@@ -745,7 +774,13 @@ export const updateApplicantStatus = (application_id, company_id, post_id, email
   status,
 });
 
-export const updateJobApplicationDetails = (application_id, company_id, post_id, email, update) => ({
+export const updateJobApplicationDetails = (
+  application_id,
+  company_id,
+  post_id,
+  email,
+  update
+) => ({
   type: UPDATE_JOB_APPLICATION_DETAILS,
   application_id,
   company_id,
@@ -754,12 +789,12 @@ export const updateJobApplicationDetails = (application_id, company_id, post_id,
   update,
 });
 
-export const editInterviewDetails = isToEdit => ({
+export const editInterviewDetails = (isToEdit) => ({
   type: EDIT_INTERVIEW_DETAILS,
   isToEdit,
 });
 
-export const warnToDeleteApplication = applicationDetails => ({
+export const warnToDeleteApplication = (applicationDetails) => ({
   type: WARN_TO_DELETE_APPLICATION,
   applicationDetails,
 });
@@ -769,7 +804,7 @@ export const deleteApplication = () => ({
 });
 
 // SHOW APPLICATIONS PER PAGE OPTIONS
-export const changeRowsPerPage = rows => ({
+export const changeRowsPerPage = (rows) => ({
   type: CHANGE_ROWS_PER_PAGE,
   rows,
 });
@@ -781,7 +816,7 @@ export const resetSearchCriteriaForm = () => ({
 
 // CHANGE_PAGINATION to the same page
 
-export const changePagination = changePage => ({
+export const changePagination = (changePage) => ({
   type: CHANGE_PAGINATION,
   changePage,
 });

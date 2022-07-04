@@ -9,6 +9,8 @@ import { customURL } from '../../../utils/helperFunctions';
 import CustomizedDialogs from '../../../utils/customizedDialog';
 import i18n from '../../../utils/i18n';
 import axios from 'axios';
+import { fetchJobById } from '../../../actions';
+
 //import clientReducer from '../../../reducers/clientReducer';
 //import { format } from 'date-fns';
 //import moment from 'moment';
@@ -27,11 +29,12 @@ const ActiveAdsComponent = ({
   companyBusinessId,
   showDialog,
   isToDeleteAdvertisementId,
+  fetchJobById
 }) => {
   const { t } = useTranslation('jobs');
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
-  // const dispatch = useDispatch()
+
    //const offers = useSelector(state => state.getState().offers)
   // console.log(offers)
   useEffect(() => {
@@ -96,16 +99,19 @@ const ActiveAdsComponent = ({
                 <Grid item md={5}>
                   <div>
                     <Link to={customURL(item.url, 'internal')} className="btnLink">
-                      <h4 onClick={() => openAdToSeeAdInfo(item.jobPostNumber)}>
+                      <h4 onClick={() => {
+                        // openAdToSeeAdInfo(item.jobPostNumber)
+                       fetchJobById(item.jobPostNumber)
+                      }}>
                         {item.jobName === null ? item.jobName : item.jobName},
-                        {/* {item.jobPostAsukohaAddress.map(address => {
+                        {item.jobPostAsukohaAddress.map(address => {
                           {
                             if (address.address[17] === null) {
                               return address.address.split(',').splice(1).toString();
                             } else return address.address
                           }
-                        })} */}
-                        {'adress'}
+                        })}
+                        {/* {'kuku'} */}
                       </h4>
                     </Link>
                   </div>

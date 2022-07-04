@@ -1,5 +1,6 @@
 import {
   FILTER_JOBS,
+  FETCH_JOB_BY_ID,
   FILTER_JOBS_SUCCESS,
   GET_JOB_DETAILS_BY_ID,
   GET_JOB_DETAILS_BY_ID_SUCCESS,
@@ -11,11 +12,12 @@ import {
   GET_APPLICANT_DASHBOARD_INFO_SUCCESS,
   TOGGLE_EMAIL_NOTIFICATION,
   GET_WORK_START_SUCCESS,
-} from '../constants';
+} from "../constants";
 
 const initialState = {
   jobsList: [],
   id: 0,
+  jobPostNumber:29,
   jobDetails: [],
   selectedPage: {
     selected: 0,
@@ -31,6 +33,12 @@ const initialState = {
 
 const jobsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case FETCH_JOB_BY_ID:
+      return {
+        ...state,
+        jobPostNumber: action.id,
+      };
+
     case FILTER_JOBS:
       return {
         ...state,
@@ -105,6 +113,7 @@ const jobsReducer = (state = initialState, action) => {
         ...state,
         notificationToggleBtn: !state.notificationToggleBtn,
       };
+
     default:
       return state;
   }
