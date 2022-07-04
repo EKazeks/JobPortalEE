@@ -44,6 +44,7 @@ const ActiveAdsComponent = ({
        setJobsToRender(res.data);
     })
   },[]);
+  
   const updateSize = () => {
     setIsDesktop(window.innerWidth >= 1440);
   };

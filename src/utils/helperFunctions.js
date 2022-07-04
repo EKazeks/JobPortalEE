@@ -21,6 +21,16 @@ export const customURL = (url, type) => {
   const jobTitle = path && path[0]; // work
   const postId = path && path[1]; // work
 
+  // const pathname = url && url.split('/toopakkumised/')[1]; // work
+  // const splittedPath = pathname && pathname.split('/'); // work
+  // const slicedPath= splittedPath.slice(2); // work
+  // const path = slicedPath[0].split('-'); // work
+  // const connectString = path[0] + '/' + path[1]; // work
+
+  // const companyId = splittedPath && splittedPath[1]; // work 
+  // const jobTitle = path && path[0]; // work
+  // const postId = path && path[1]; // work
+  
   switch (type) {
     case "internal": // For admins and companies, url path is jobpost/jobTitle/postId
       return `/jobpost/${connectString}`;

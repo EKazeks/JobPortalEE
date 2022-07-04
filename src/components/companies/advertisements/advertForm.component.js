@@ -162,14 +162,14 @@ const AdvertFormComponent = ({
               <Grid item xs={12} sm={6}>
                 <JobTypeComponent />
               </Grid>
-              <Grid item xs={12} sm={6} id='durationOfEmployment'>
+              <Grid item xs={12} sm={6} id='jobDuration' name="jobDuration">
                 <JobHoursComponent />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Field component={AutoCompleteLocationInput} name="jobLocation" label={t('field3')} id="jobLocation" required />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Field component={renderDatePicker} id="lastApplicationDate" label={t('lastApplicationDate')} name="lastApplicationDate" required />
+                <Field component={renderDatePicker} id="lastApplicationDate" label={t('Last application date')} name="lastApplicationDate" required />
               </Grid>
               <Grid item xs={12}>
                 <p style={{ color: '#6c757d' }}>{t('linkInfoMsg')}</p>

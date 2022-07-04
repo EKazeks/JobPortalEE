@@ -33,9 +33,9 @@ const FavoriteJobsComponent = ({ favoriteJobs, advertPages, changeAdvertPage, se
                 <Grid container style={{ padding: 20 }} alignItems="center" spacing={1} justifyContent="space-between">
                   <Grid item md={8} sm={8} xs={12}>
                     <div>
-                      <Link to={customURL(post.job_post_link, 'external')} className="btnLink">
+                      {/* <Link to={customURL(post.job_post_link, 'external')} className="btnLink">
                         <h4>{post.job_title}</h4>
-                      </Link>
+                      </Link> */}
                     </div>
                     <div>
                       <span>
@@ -52,11 +52,11 @@ const FavoriteJobsComponent = ({ favoriteJobs, advertPages, changeAdvertPage, se
                         </Button>
                       </Grid>
                       <Grid item>
-                        <Link to={customURL(post.job_post_link, 'external')} className="btnLink">
+                        {/* <Link to={customURL(post.job_post_link, 'external')} className="btnLink">
                           <Button variant="contained" color="primary">
                             {t('common:openBtn')}
                           </Button>
-                        </Link>
+                        </Link> */}
                       </Grid>
                     </Grid>
                   </Grid>
