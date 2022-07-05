@@ -20,7 +20,7 @@ export const customURL = (url, type) => {
   const companyId = path[1]; // work
   const jobTitle = path && path[0]; // work
   const postId = path && path[1]; // work
-  
+
   switch (type) {
     case "internal": // For admins and companies, url path is jobpost/jobTitle/postId
       return `/jobpost/${connectString}`;
@@ -33,6 +33,9 @@ export const customURL = (url, type) => {
 
     case "campaign": // For campaign component
       return `/${jobTitle}/${postId}/campaign`;
+
+    case "open_position":
+      return `/tyopaikat/${companyName}/${companyId}/${jobTitle}/${postId}`;
     default:
       break;
   }

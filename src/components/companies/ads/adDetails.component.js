@@ -149,7 +149,7 @@ const AdDetails = ({
                       } else return address.address;
                     }
                   })}`} */}
-                {jobsToRender.jobName}, {"adress"}
+                {jobsToRender.jobName} 
               </h2>
               <h6 className="ad_title_2">
                 <strong style={{ marginRight: 10 }}>

@@ -113,7 +113,7 @@ const JobDetailsComponent = ({
 
   const { t } = useTranslation('jobDetails', 'jobhours', 'jobtype');
   const heroImage = jobsToRender.logo && jobsToRender.logo[0].path;
-  const title = `${jobsToRender?.jobName} - ${jobsToRender?.companyName}, ${jobsToRender?.jobPostAsukohaAddress.address} | Avoimet työpaikat`;
+  const title = `${jobsToRender?.jobName} - ${jobsToRender?.companyName} | Avoimet työpaikat`;
   const selectedPage = 1;
   
   return (
@@ -138,16 +138,13 @@ const JobDetailsComponent = ({
             </div>
             <Grid container spacing={4} alignItems="center">
               <Grid item sm={12} md={7}>
-                <h2 className="ad_title_1">{`${jobsToRender.jobName}, ${jobsToRender.jobPostAsukohaAddress.address}`}</h2>
+                <h2 className="ad_title_1">{`${jobsToRender.jobName}`}</h2>
                 <h6>
                   <strong className={classes.metaDataTitle}>
                     <span>{t('applyPeriod')}: </span>
                     <span className={classes.metaData}>
-                      {jobsToRender.dateOfApplication &&
-                        `${new Intl.DateTimeFormat('fi-FI').format(new Date(jobsToRender.dateOfApplication))} -
-                        {/* ${new Intl.DateTimeFormat('fi-FI').format(
-                          new Date(jobsToRender.due_date),
-                        )} */}`}
+                      {jobsToRender.dateOfApplication}
+                      
                     </span>
                   </strong>
                 </h6>
@@ -305,7 +302,7 @@ const JobDetailsComponent = ({
       {
       /* Display structure for mol ads --Copy code from molAds.js if needed in future otherwise delete that file */
       }
-      <Loader showSpinner={showSpinner} />
+      {/* <Loader showSpinner={showSpinner} /> */}
 
       <Snackbar
         anchorOrigin={{

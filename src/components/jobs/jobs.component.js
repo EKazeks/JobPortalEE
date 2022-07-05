@@ -1,55 +1,55 @@
-import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
-import { Link } from 'react-router-dom';
-import { Grid, Paper, Button, Snackbar, Hidden } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import ReactPaginate from 'react-paginate';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import { useTranslation } from 'react-i18next';
-import { customURL } from '../../utils/helperFunctions';
-import { FavBtn } from '../../utils/favBtn.js';
-import SearchFormContainer from '../../containers/jobs/searchForm.container.js';
-import { MySnackbarContentWrapper } from '../../utils/snackbar.utils';
-import CustomizedDialog from '../../utils/customizedDialog';
-import Loader from '../../utils/loader';
-import jobHeroImg from '../../images/jobportal_hero.jpg';
-import { SEO } from '../seo/metaInfo.component';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchJobById } from '../../actions';
+import React, { useEffect, useState } from "react";
+import classNames from "classnames";
+import { Link } from "react-router-dom";
+import { Grid, Paper, Button, Snackbar, Hidden } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import ReactPaginate from "react-paginate";
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
+import { useTranslation } from "react-i18next";
+import { customURL } from "../../utils/helperFunctions";
+import { FavBtn } from "../../utils/favBtn.js";
+import SearchFormContainer from "../../containers/jobs/searchForm.container.js";
+import { MySnackbarContentWrapper } from "../../utils/snackbar.utils";
+import CustomizedDialog from "../../utils/customizedDialog";
+import Loader from "../../utils/loader";
+import jobHeroImg from "../../images/jobportal_hero.jpg";
+import { SEO } from "../seo/metaInfo.component";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchJobById } from "../../actions";
 
-const styles = theme => ({
+const styles = (theme) => ({
   heroImage: {
     height: 420,
     background: `url(${jobHeroImg}) no-repeat`,
-    backgroundSize: 'contain',
-    backgroundPosition: 'center center',
-    backgroundColor: '#F1B1B1',
+    backgroundSize: "contain",
+    backgroundPosition: "center center",
+    backgroundColor: "#F1B1B1",
   },
   heroImageTitle: {
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
     paddingTop: 20,
     fontWeight: 800,
-    fontSize: '4.5rem',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '2.5rem !important',
+    fontSize: "4.5rem",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "2.5rem !important",
     },
   },
   searchForm: {
     marginTop: -150,
     backgroundColor: theme.palette.primary.main,
-    padding: '50px 10px 70px 10px',
+    padding: "50px 10px 70px 10px",
   },
   jobInfo: {
     color: theme.palette.custom.darkText,
-    [theme.breakpoints.down('xs')]: {
-      fontSize: '1rem',
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "1rem",
     },
   },
   titleSpacer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       height: 170,
     },
   },
@@ -57,100 +57,100 @@ const styles = theme => ({
     color: theme.palette.primary.main,
 
     fontWeight: 600,
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down("xs")]: {
       fontSize: 18,
     },
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       fontSize: 20,
     },
-    [theme.breakpoints.up('lg')]: {
+    [theme.breakpoints.up("lg")]: {
       fontSize: 22,
     },
   },
   companyInfo: {
     fontWeight: 400,
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down("xs")]: {
       fontSize: 14,
     },
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       fontSize: 16,
     },
-    [theme.breakpoints.up('lg')]: {
+    [theme.breakpoints.up("lg")]: {
       fontSize: 18,
     },
   },
 
   jobInfobody: {
-    [theme.breakpoints.up('md')]: {
-      paddingLeft: '12px !important',
+    [theme.breakpoints.up("md")]: {
+      paddingLeft: "12px !important",
     },
-    [theme.breakpoints.up('lg')]: {
-      paddingLeft: '40px !important',
+    [theme.breakpoints.up("lg")]: {
+      paddingLeft: "40px !important",
     },
   },
 
   emptyResult: {
-    padding: '50px 20px 70px 20px',
+    padding: "50px 20px 70px 20px",
   },
   listContainer: {
     backgroundColor: theme.palette.custom.background,
     paddingBottom: 30,
   },
   logoContainer: {
-    height: '6rem',
-    width: '6rem',
-    position: 'relative',
-    display: 'flex',
-    [theme.breakpoints.down('xs')]: {
-      height: '6rem',
-      width: '5rem',
+    height: "6rem",
+    width: "6rem",
+    position: "relative",
+    display: "flex",
+    [theme.breakpoints.down("xs")]: {
+      height: "6rem",
+      width: "5rem",
       fontSize: 12,
     },
-    [theme.breakpoints.up('lg')]: {
+    [theme.breakpoints.up("lg")]: {
       marginLeft: 20,
     },
   },
   logoDiv: {
-    height: '5.5rem',
-    width: '5.5rem',
-    backgroundSize: 'contain',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: '50% 50%',
-    [theme.breakpoints.down('xs')]: {
-      height: '4rem',
-      width: '4rem',
+    height: "5.5rem",
+    width: "5.5rem",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "50% 50%",
+    [theme.breakpoints.down("xs")]: {
+      height: "4rem",
+      width: "4rem",
     },
   },
   companyName: {
     borderRadius: 50,
-    overflow: 'hidden',
-    width: '100%',
+    overflow: "hidden",
+    width: "100%",
     fontSize: 13,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   jobContainerHover: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
+    position: "absolute",
+    width: "100%",
+    height: "100%",
     left: 0,
     top: 0,
   },
   paper: {
     marginTop: 12,
-    position: 'relative',
-    '&:hover': {
+    position: "relative",
+    "&:hover": {
       backgroundColor: theme.palette.custom.jobListHoverColor,
     },
   },
   dateInfo: {
-    '& span': {
+    "& span": {
       marginRight: 20,
       fontSize: 16,
-      [theme.breakpoints.down('xs')]: {
-        fontSize: '0.8rem',
+      [theme.breakpoints.down("xs")]: {
+        fontSize: "0.8rem",
       },
-      [theme.breakpoints.down('sm')]: {
-        fontSize: '0.9rem',
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "0.9rem",
       },
     },
   },
@@ -178,16 +178,17 @@ const JobsComponent = ({
   isWarnToDelete,
   deleteAdvertisement,
   classes,
+  fetchJobById
 }) => {
-  const { t } = useTranslation('jobsList', 'jobs');
+  const { t } = useTranslation("jobsList", "jobs");
   const [jobsToRender, setJobsToRender] = useState([]);
 
   useEffect(() => {
-     axios.get(`https://localhost:7262/jobsEn`).then(res => {
-       setJobsToRender(res.data);
-       console.log(jobsToRender);
-     });
-   },[]);
+    axios.get(`https://localhost:7262/jobsEn`).then((res) => {
+      setJobsToRender(res.data);
+      console.log(jobsToRender);
+    });
+  }, []);
 
   return (
     // <div>
@@ -203,44 +204,65 @@ const JobsComponent = ({
       <SEO title="Töökohad | Jobportal" />
       <div className={classes.heroImage}>
         <div className={classes.titleSpacer} />
-        <h1 className={classes.heroImageTitle}>{t('heroTitle')}</h1>
+        <h1 className={classes.heroImageTitle}>{t("heroTitle")}</h1>
       </div>
       <div>
-        <Grid container justifyContent="space-around" className={jobsToRender.length !== 0 ? classes.listContainer : null}>
+        <Grid
+          container
+          justifyContent="space-around"
+          className={jobsToRender.length !== 0 ? classes.listContainer : null}
+        >
           <Grid item md={3} xs={10} xl={2}>
             <div className={classes.searchForm}>
               <SearchFormContainer />
             </div>
           </Grid>
           <Grid item md={8} xs={12} sm={10} xl={8}>
-            {jobsToRender && jobsToRender.length === 0 && showSpinner === false && (
-              <p className={classes.emptyResult}>
-                <strong>{t('noJobsFound')}</strong>
-              </p>
-            )}
+            {jobsToRender &&
+              jobsToRender.length === 0 &&
+              showSpinner === false && (
+                <p className={classes.emptyResult}>
+                  <strong>{t("noJobsFound")}</strong>
+                </p>
+              )}
             <Loader showSpinner={showSpinner} />
-
-
 
             {jobsToRender &&
               jobsToRender
                 .slice(selectedPage * 10, selectedPage * 10 + 10)
-                .map(item => {
+                .map((item) => {
                   return (
                     <div key={`${item.companyBusinessId}${item.jobPostNumber}`}>
                       <Paper className={classes.paper}>
-                        <Grid container style={{ padding: 8 }} spacing={1} alignItems="center" justifyContent="space-around">
-                          {userRole === 'admin' ? ( // To give the admins same view as Companies so they can edit ads!
+                        <Grid
+                          container
+                          style={{ padding: 8 }}
+                          spacing={1}
+                          alignItems="center"
+                          justifyContent="space-around"
+                        >
+                          {userRole === "admin" ? ( // To give the admins same view as Companies so they can edit ads!
                             <Link
                               className={classes.jobContainerHover}
-                              to={customURL(item.url, 'internal')}
+                              to={customURL(item.url, "open_position")}
                               //onClick={() => openAdToSeeAdInfo(`${item.jobPostNumber}admin${item.companyBusinessId}`)}
                               onClick={() => fetchJobById(item.jobPostNumber)}
                             />
                           ) : (
-                            <Link className={classes.jobContainerHover} to={customURL(item.url, 'internal')} />
+                            <Link
+                              onClick={() => fetchJobById(item.jobPostNumber)}
+                              className={classes.jobContainerHover}
+                              to={customURL(item.url, "open_position")}
+                            />
                           )}
-                          <Grid item sm={2} xs={4} lg={2} xl={1} style={{ display: 'contents' }}>
+                          <Grid
+                            item
+                            sm={2}
+                            xs={4}
+                            lg={2}
+                            xl={1}
+                            style={{ display: "contents" }}
+                          >
                             <div className={classes.logoContainer}>
                               {item.logo ? (
                                 // <div
@@ -250,47 +272,66 @@ const JobsComponent = ({
                                 //   }}
                                 // />
                                 <span className={classes.companyName}>
-                                {item.companyName.length > 9 ? `${item.companyName.slice(0, 9)}...` : item.companyName}
-                              </span>
+                                  {item.companyName.length > 9
+                                    ? `${item.companyName.slice(0, 9)}...`
+                                    : item.companyName}
+                                </span>
                               ) : (
                                 <span className={classes.companyName}>
-                                  {item.companyName.length > 9 ? `${item.companyName.slice(0, 9)}...` : item.companyName}
+                                  {item.companyName.length > 9
+                                    ? `${item.companyName.slice(0, 9)}...`
+                                    : item.companyName}
                                 </span>
                               )}
                             </div>
                           </Grid>
-                          <Grid item sm={6} xs={8} lg={7} xl={5} className={classes.jobInfobody}>
+                          <Grid
+                            item
+                            sm={6}
+                            xs={8}
+                            lg={7}
+                            xl={5}
+                            className={classes.jobInfobody}
+                          >
                             <div>
-                              <h3 className={classNames(classes.jobTitle, classes.jobInfo)}> {item.companyName} </h3>
+                              <h3
+                                className={classNames(
+                                  classes.jobTitle,
+                                  classes.jobInfo
+                                )}
+                              >
+                                {" "}
+                                {item.companyName}{" "}
+                              </h3>
                             </div>
 
                             <div>
                               <h5 className={classes.companyInfo}>
                                 {item.companyName},
                                 {item.jobPostAsukohaAddress.map((address) => {
-                            {
-                              if (address.address[17] === null) {
-                                return address.address
-                                  .split(",")
-                                  .splice(1)
-                                  .toString();
-                              } else return address.address;
-                            }
-                          })}
+                                  {
+                                    if (address.address[17] === null) {
+                                      return address.address
+                                        .split(",")
+                                        .splice(1)
+                                        .toString();
+                                    } else return address.address;
+                                  }
+                                })}
                                 {/* {'adress'} */}
                               </h5>
                             </div>
-                            <Hidden only={'xl'}>
+                            <Hidden only={"xl"}>
                               <Grid container className={classes.dateInfo}>
                                 <Grid item>
                                   <span>
-                                    {t('publishedDate')}:  
-                                {item.dateOfApplication}
+                                    {t("publishedDate")}:
+                                    {item.dateOfApplication}
                                   </span>
                                 </Grid>
                                 <Grid item>
                                   <span>
-                                    {t('applicationDueDate')}: 
+                                    {t("applicationDueDate")}:
                                     {/* {item.durationOfEmployment} */}
                                     empty
                                   </span>
@@ -299,28 +340,39 @@ const JobsComponent = ({
                             </Hidden>
                           </Grid>
                           <Grid item xl={2}>
-                            <Hidden only={['xs', 'sm', 'md', 'lg']}>
-                            <Grid item>
-                              <span>
-                              {t('publishedDate')}:  
-                              {item.dateOfApplication}
-                              </span>
-                            </Grid>
-                            <Grid item>
-                              <span>
-                              {t('applicationDueDate')}:
-                              {/* {item.durationOfEmployment} */}
-                              empty
-                              </span>
-                            </Grid>
+                            <Hidden only={["xs", "sm", "md", "lg"]}>
+                              <Grid item>
+                                <span>
+                                  {t("publishedDate")}:{item.dateOfApplication}
+                                </span>
+                              </Grid>
+                              <Grid item>
+                                <span>
+                                  {t("applicationDueDate")}:
+                                  {/* {item.durationOfEmployment} */}
+                                  empty
+                                </span>
+                              </Grid>
                             </Hidden>
                           </Grid>
                           <Grid item xl={2} lg={3} md={4} sm={4} xs={12}>
-                            <Grid container justifyContent="space-between" spacing={2}>
+                            <Grid
+                              container
+                              justifyContent="space-between"
+                              spacing={2}
+                            >
                               <Grid item sm={5} xs={6}>
-                                {userRole === 'admin' ? ( // For admins show deleteBtn instead of FavBtn
-                                  <Button variant="outlined" color="secondary" onClick={() => warnToDelete(`${item.jobPostNumber}admin${item.companyBusinessId}`)}>
-                                    {t('common:deleteBtn')}
+                                {userRole === "admin" ? ( // For admins show deleteBtn instead of FavBtn
+                                  <Button
+                                    variant="outlined"
+                                    color="secondary"
+                                    onClick={() =>
+                                      warnToDelete(
+                                        `${item.jobPostNumber}admin${item.companyBusinessId}`
+                                      )
+                                    }
+                                  >
+                                    {t("common:deleteBtn")}
                                   </Button>
                                 ) : (
                                   <FavBtn
@@ -329,30 +381,64 @@ const JobsComponent = ({
                                       toggleFavoriteJobs(
                                         item.companyBusinessId,
                                         item.jobPostNumber,
-                                        !favoriteJobs.some(favList => favList.companyBusinessId === item.companyBusinessId && favList.jobPostNumber === item.jobPostNumber),
+                                        !favoriteJobs.some(
+                                          (favList) =>
+                                            favList.companyBusinessId ===
+                                              item.companyBusinessId &&
+                                            favList.jobPostNumber ===
+                                              item.jobPostNumber
+                                        )
                                       );
                                     }}
-                                    isFav={favoriteJobs.some(favList => favList.companyBusinessId === item.companyBusinessId && favList.jobPostNumber === item.jobPostNumber)} // checking from the favoriteJobs list
+                                    isFav={favoriteJobs.some(
+                                      (favList) =>
+                                        favList.companyBusinessId ===
+                                          item.companyBusinessId &&
+                                        favList.jobPostNumber ===
+                                          item.jobPostNumber
+                                    )} // checking from the favoriteJobs list
                                     btnText={
-                                      !favoriteJobs.some(favList => favList.companyBusinessId === item.companyBusinessId && favList.jobPostNumber === item.jobPostNumber)
-                                        ? t('addFav')
-                                        : t('delFav')
+                                      !favoriteJobs.some(
+                                        (favList) =>
+                                          favList.companyBusinessId ===
+                                            item.companyBusinessId &&
+                                          favList.jobPostNumber ===
+                                            item.jobPostNumber
+                                      )
+                                        ? t("addFav")
+                                        : t("delFav")
                                     }
                                   />
                                 )}
                               </Grid>
                               <Grid item sm={5} xs={6}>
                                 <div>
-                                  {userRole === 'admin' ? ( // To show the company view so admins can edit the ads.
-                                    <Link className="btnLink" to={customURL(item.url, 'internal')}>
-                                      <Button variant="contained" color="primary" onClick={() => fetchJobById(item.jobPostNumber)}>
-                                        {t('common:openBtn')}
+                                  {userRole === "admin" ? ( // To show the company view so admins can edit the ads.
+                                    <Link
+                                      className="btnLink"
+                                      to={customURL(item.url, "internal")}
+                                    >
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() =>
+                                          fetchJobById(item.jobPostNumber)
+                                        }
+                                      >
+                                        {t("common:openBtn")}
                                       </Button>
                                     </Link>
                                   ) : (
-                                    <Link className="btnLink" to={customURL(item.url, 'external')}>
-                                      <Button variant="contained" color="primary" className="fullWidthBtn">
-                                        {t('watchBtn')}
+                                    <Link
+                                      className="btnLink"
+                                      to={customURL(item.url, "external")}
+                                    >
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className="fullWidthBtn"
+                                      >
+                                        {t("watchBtn")}
                                       </Button>
                                     </Link>
                                   )}
@@ -369,8 +455,8 @@ const JobsComponent = ({
         </Grid>
         <Snackbar
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
+            vertical: "bottom",
+            horizontal: "center",
           }}
           open={showSuccessSnackbar}
           autoHideDuration={2000}
@@ -380,16 +466,20 @@ const JobsComponent = ({
         >
           <MySnackbarContentWrapper
             variant="success"
-            message={t('successMsg')}
+            message={t("successMsg")}
             onClose={() => {
               closeSnackbar();
             }}
           />
         </Snackbar>
-        <CustomizedDialog showDialog={showDialog} dialogText={t('loginText')} loginModal />
+        <CustomizedDialog
+          showDialog={showDialog}
+          dialogText={t("loginText")}
+          loginModal
+        />
         <CustomizedDialog
           showDialog={showDialog && isWarnToDelete}
-          dialogText={t('jobs:warnToDeletePostText')}
+          dialogText={t("jobs:warnToDeletePostText")}
           warnToDeleteModal
           handleClick={() => deleteAdvertisement(isToDeleteAdvertisementId)}
         />
@@ -403,7 +493,7 @@ const JobsComponent = ({
           pageCount={3000}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
-          onPageChange={data => {
+          onPageChange={(data) => {
             changeAdvertPage({
               selected: data.selected,
             });
