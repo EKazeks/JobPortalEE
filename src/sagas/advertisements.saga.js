@@ -316,13 +316,13 @@ function* getAllAdsByStatusSaga({ status }) {
 function* populateVacancyFormSaga({ id, isToEdit }) {
   try {
     const url = `${API_SERVER_EST}`;
-    const companyId = store.getState().companyProfile.profile.asutuS_REGISTRIKOOD;
-    const campaigns = store.getState().advertisement.campaigns;
+    const companyId = store.getState().jobsToRender.companyBusinessId;
+    //const campaigns = store.getState().advertisement.campaigns;
     const userRole = store.getState().client.user.data[6].user_type;
 
     const body = JSON.stringify({
-      toopakkuminE_NUMBER: userRole === 'admin' ? id.split('admin')[0] : id,
-      asutuS_REGISTRIKOOD: userRole === 'admin' ? id.split('admin')[1] : companyId,
+      jobPostNumber: userRole === 'admin' ? id.split('admin')[0] : id,
+      companyBusinessId: userRole === 'admin' ? id.split('admin')[1] : companyId,
     });
     const result = yield call(apiManualPost, url, body);
     const resultParsed = JSON.parse(result.data);
@@ -374,10 +374,10 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     yield put(change('vacancy', 'email', email));
     yield put(change('vacancy', 'notice_frequency', notice_frequency));
 
-    const postCampaign = campaigns.find(campaign => campaign.id === campaign_id);
+    //const postCampaign = campaigns.find(campaign => campaign.id === campaign_id);
 
     const campaignDetails = {
-      postCampaign,
+     // postCampaign,
       marketing_platform,
       more_budget,
       marketing_budget,

@@ -102,8 +102,6 @@ const AdDetails = ({
   const { jobPostNumber } = useSelector((state) => state.jobs);
   const [jobsToRender, setJobsToRender] = useState([]);
   selectedPage = 1;
-  //const jobsPostNumber =  useSelector(state => state.getState().jobPostNumber);
-  // const jobPostNumber = 653536;
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn/${jobPostNumber}`).then((res) => {
@@ -112,328 +110,317 @@ const AdDetails = ({
   }, []);
 
   return (
+    // <div>
+    //   <div>
+    //     <Grid>
+    //       <div>
+    //         <h1>
+    //           {jobsToRender.jobPostNumber}
+    //           {jobsToRender.jobName}
+    //           {console.log(jobsToRender.jobPostNumber)}
+    //         </h1>
+    //       </div>
+    //     </Grid>
+    //   </div>
+
+    //   <h1>Test</h1>
+    // </div>
     <div>
-      <div>
-        <Grid>
-          <div>
-            <h1>
-              {jobsToRender.jobPostNumber}
-              {console.log(jobsToRender.jobPostNumber)}
-            </h1>
+      <div className="container" key={jobsToRender.id}>
+        <div className={classes.backBtnContainer}>
+          <Link
+            to={userRole === "company" ? "/omat-ilmoitukseni" : "/tyopaikat"}
+            className={classes.backBtnText}
+          >
+            <ArrowBackIosIcon /> {t("jobs:backButton")}
+          </Link>
+        </div>
+        <div className={classes.titleMargin}>
+          <Grid container>
+            <Grid item sm={12} md={7}>
+              <h2 className="ad_title_1">
+                {/* {`${jobsToRender.jobName}, ${jobsToRender.jobPostAsukohaAddress.map(address => {
+                    {
+                      if (address.address[17]) {
+                        return address.address
+                          .split(',')
+                          .splice(1)
+                          .toString();
+                      } else return address.address;
+                    }
+                  })}`} */}
+                {jobsToRender.jobName}, {"adress"}
+              </h2>
+              <h6 className="ad_title_2">
+                <strong style={{ marginRight: 10 }}>
+                  {`${
+                    jobsToRender.status === 0
+                      ? t("draft")
+                      : jobsToRender.status === 1
+                      ? t("active")
+                      : t("inactive")
+                  }`}
+                  :
+                </strong>
+                <strong>{jobsToRender.dateOfApplication}</strong>
+              </h6>
+            </Grid>
+            <Grid item sm={12} md={5}>
+              <Grid container spacing={2} className={classes.ctaBtn}>
+                <Grid item>
+                  {/* If post is active post, show Inactive btn. If it is inactive post, show copy btn in Addetails */}
+                  {jobsToRender.campaignType === "Free" ? (
+                    <Link to="/tyopaikkailmoitus/" className="btnLink">
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => {
+                          store.dispatch(
+                            populateVacancyForm(
+                              jobsToRender.jobPostNumber,
+                              false
+                            )
+                          );
+                        }}
+                      >
+                        {t("common:copyBtn")}
+                      </Button>
+                    </Link>
+                  ) : jobsToRender.campaignType === "Free" ? (
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => {
+                        // alert('updateJOBPOSTSTATUS');
+                        store.dispatch(
+                          changeActivePostToInactive(
+                            userRole === "admin"
+                              ? `${jobsToRender.jobPostNumber}admin${jobsToRender.companyBusinessId}`
+                              : jobsToRender.jobPostNumber
+                          )
+                        );
+                      }}
+                    >
+                      {t("common:inactiveBtn")}
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                </Grid>
+                {jobsToRender.campaignType === "Free" && (
+                  <Grid item>
+                    <Link
+                      to={`/tyopaikkailmoitus/${jobsToRender.jobPostNumber}`}
+                      className="btnLink"
+                    >
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => store.dispatch(updateAdvertisement())}
+                      >
+                        {t("editBtn")}
+                      </Button>
+                    </Link>
+                  </Grid>
+                )}
+                <Grid item>
+                  {/* To avoid errors when viewSelectedAd is empty array */}
+                  {jobsToRender.jobName && (
+                    <Link
+                      to={customURL(jobsToRender.url, "campaign")}
+                      className="btnLink"
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                          store.dispatch(
+                            changeCampaign(
+                              campaignsList.find(
+                                (campaign) =>
+                                  campaign.id === jobsToRender.campaignType
+                              )
+                            )
+                          )
+                        }
+                      >
+                        {t("boostBtn")}
+                      </Button>
+                    </Link>
+                  )}
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Divider />
+        </div>
+        <div className={classes.addMargin}>
+          <Grid container>
+            <Grid item sm={8}>
+              <div className={classes.campaignType}>
+                <h6>
+                  <strong>{t("postType")}: </strong>
+                  {/* <span>{customTranslateCampaign(item.campaignType)}</span> */}
+                  <span>{jobsToRender.campaignType}</span>
+                </h6>
+                <h6>
+                  <strong>{t("postStatus")}: </strong>
+                  {/* {customTranslateStatus(item.campaignType)} */}
+                  {`Active`}
+                </h6>
+              </div>
+            </Grid>
+            <Grid
+              item
+              sm={4}
+              style={{ display: "flex", justifyContent: "flex-end" }}
+            >
+              <div
+                className={classes.companyLogo}
+                style={{
+                  backgroundImage: `url(${
+                    jobsToRender.logo ? jobsToRender.logo[0].path : ""
+                  })`,
+                }}
+              />
+            </Grid>
+          </Grid>
+        </div>
+        <div className={classes.adDetail}>
+          <div className={classes.companyImgFrame}>
+            <img
+              src={jobsToRender.logo && jobsToRender.logo[0].path}
+              alt={
+                jobsToRender.logo ? `${jobsToRender.jobName} Company-Image` : ""
+              }
+              className={jobsToRender.company_image ? classes.companyImage : ""}
+            />
           </div>
+          <div
+            className={classes.jobDesc}
+            dangerouslySetInnerHTML={{
+              __html: jobsToRender.jobDescription,
+            }} // To convert rte string into html
+          />
+        </div>
+        <Grid container>
+          <Grid item sm={12} md={6} />
+          <Grid item sm={12} md={6}>
+            <Grid container spacing={2} className={classes.ctaBtn}>
+              <Grid item>
+                {/* If post is active post, show Inactive btn. If it is inactive post, show copy btn in Addetails */}
+                {jobsToRender.campaignType === "Free" ? (
+                  <Link to="/tyopaikkailmoitus/" className="btnLink">
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => {
+                        store.dispatch(
+                          populateVacancyForm(jobsToRender.jobPostNumber, false)
+                        );
+                      }}
+                    >
+                      {t("common:copyBtn")}
+                    </Button>
+                  </Link>
+                ) : jobsToRender.campaignType === "Free" ? (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => {
+                      store.dispatch(
+                        changeActivePostToInactive(
+                          userRole === "admin"
+                            ? `${jobsToRender.jobPostNumber}admin${jobsToRender.companyBusinessId}`
+                            : jobsToRender.jobPostNumber
+                        )
+                      );
+                    }}
+                  >
+                    {t("common:inactiveBtn")}
+                  </Button>
+                ) : (
+                  ""
+                )}
+              </Grid>
+              {jobsToRender.campaignType === "Free" && (
+                <Grid item>
+                  <Link
+                    to={`/tyopaikkailmoitus/${jobsToRender.jobPostNumber}`}
+                    className="btnLink"
+                  >
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => store.dispatch(updateAdvertisement())}
+                    >
+                      {t("editBtn")}
+                    </Button>
+                  </Link>
+                </Grid>
+              )}
+              <Grid item>
+                {/* To avoid errors when viewSelectedAd is empty array */}
+                {jobsToRender.jobName && (
+                  <Link
+                    to={customURL(jobsToRender.url, "campaign")}
+                    className="btnLink"
+                  >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() =>
+                        store.dispatch(
+                          changeCampaign(
+                            campaignsList.find(
+                              (campaign) =>
+                                campaign.id === jobsToRender.campaign_id
+                            )
+                          )
+                        )
+                      }
+                    >
+                      {t("boostBtn")}
+                    </Button>
+                  </Link>
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
         </Grid>
       </div>
-
-      <h1>Test</h1>
+      <Loader showSpinner={showSpinner} />
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        open={showSuccessSnackbar}
+        autoHideDuration={2000}
+        onClose={() => store.dispatch(closeSnackbar())}
+      >
+        <MySnackbarContentWrapper
+          onClose={() => store.dispatch(closeSnackbar())}
+          variant="success"
+          message={t("successMsg")}
+        />
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        open={showFailedSnackbar}
+        autoHideDuration={2000}
+        onClose={() => store.dispatch(closeSnackbar())}
+      >
+        <MySnackbarContentWrapper
+          onClose={() => store.dispatch(closeSnackbar())}
+          variant="error"
+          message={t("failedMsg")}
+        />
+      </Snackbar>
     </div>
-    // <div>
-    //   {jobsToRender
-    //     .slice(selectedPage * 1, selectedPage * 1 + 1)
-    //     .map((item) => {
-    //       return item !== [] && item.jobPostNumber !== undefined ? (
-    //         <div className="container" key={item.jobPostNumber}>
-    //           <div className={classes.backBtnContainer}>
-    //             <Link
-    //               to={
-    //                 userRole === "company" ? "/omat-ilmoitukseni" : "/tyopaikat"
-    //               }
-    //               className={classes.backBtnText}
-    //             >
-    //               <ArrowBackIosIcon /> {t("jobs:backButton")}
-    //             </Link>
-    //           </div>
-    //           <div className={classes.titleMargin}>
-    //             <Grid container>
-    //               <Grid item sm={12} md={7}>
-    //                 <h2 className="ad_title_1">
-    //                   {/* {`${item.jobName}, ${item.jobPostAsukohaAddress.map(address => {
-    //                 {
-    //                   if (address.address[17]) {
-    //                     return address.address
-    //                       .split(',')
-    //                       .splice(1)
-    //                       .toString();
-    //                   } else return address.address;
-    //                 }
-    //               })}`} */}
-    //                   {item.jobName}
-    //                   {"adress"}
-    //                 </h2>
-    //                 <h6 className="ad_title_2">
-    //                   <strong style={{ marginRight: 10 }}>
-    //                     {`${
-    //                       item.status === 0
-    //                         ? t("draft")
-    //                         : item.status === 1
-    //                         ? t("active")
-    //                         : t("inactive")
-    //                     }`}
-    //                     :
-    //                   </strong>
-    //                   <strong>{item.dateOfApplication}</strong>
-    //                 </h6>
-    //               </Grid>
-    //               <Grid item sm={12} md={5}>
-    //                 <Grid container spacing={2} className={classes.ctaBtn}>
-    //                   <Grid item>
-    //                     {/* If post is active post, show Inactive btn. If it is inactive post, show copy btn in Addetails */}
-    //                     {item.campaignType === "Free" ? (
-    //                       <Link to="/tyopaikkailmoitus/" className="btnLink">
-    //                         <Button
-    //                           variant="outlined"
-    //                           color="primary"
-    //                           onClick={() => {
-    //                             store.dispatch(
-    //                               populateVacancyForm(item.jobPostNumber, false)
-    //                             );
-    //                           }}
-    //                         >
-    //                           {t("common:copyBtn")}
-    //                         </Button>
-    //                       </Link>
-    //                     ) : item.campaignType === "Free" ? (
-    //                       <Button
-    //                         variant="outlined"
-    //                         color="primary"
-    //                         onClick={() => {
-    //                           // alert('updateJOBPOSTSTATUS');
-    //                           store.dispatch(
-    //                             changeActivePostToInactive(
-    //                               userRole === "admin"
-    //                                 ? `${item.jobPostNumber}admin${item.companyBusinessId}`
-    //                                 : item.jobPostNumber
-    //                             )
-    //                           );
-    //                         }}
-    //                       >
-    //                         {t("common:inactiveBtn")}
-    //                       </Button>
-    //                     ) : (
-    //                       ""
-    //                     )}
-    //                   </Grid>
-    //                   {item.campaignType === "Free" && (
-    //                     <Grid item>
-    //                       <Link
-    //                         to={`/tyopaikkailmoitus/${item.jobPostNumber}`}
-    //                         className="btnLink"
-    //                       >
-    //                         <Button
-    //                           variant="outlined"
-    //                           color="primary"
-    //                           onClick={() =>
-    //                             store.dispatch(updateAdvertisement())
-    //                           }
-    //                         >
-    //                           {t("editBtn")}
-    //                         </Button>
-    //                       </Link>
-    //                     </Grid>
-    //                   )}
-    //                   <Grid item>
-    //                     {/* To avoid errors when viewSelectedAd is empty array */}
-    //                     {item.jobName && (
-    //                       <Link
-    //                         to={customURL(item.url, "campaign")}
-    //                         className="btnLink"
-    //                       >
-    //                         <Button
-    //                           variant="contained"
-    //                           color="primary"
-    //                           onClick={() =>
-    //                             store.dispatch(
-    //                               changeCampaign(
-    //                                 campaignsList.find(
-    //                                   (campaign) =>
-    //                                     campaign.id === item.campaignType
-    //                                 )
-    //                               )
-    //                             )
-    //                           }
-    //                         >
-    //                           {t("boostBtn")}
-    //                         </Button>
-    //                       </Link>
-    //                     )}
-    //                   </Grid>
-    //                 </Grid>
-    //               </Grid>
-    //             </Grid>
-    //             <Divider />
-    //           </div>
-    //           <div className={classes.addMargin}>
-    //             <Grid container>
-    //               <Grid item sm={8}>
-    //                 <div className={classes.campaignType}>
-    //                   <h6>
-    //                     <strong>{t("postType")}: </strong>
-    //                     {/* <span>{customTranslateCampaign(item.campaignType)}</span> */}
-    //                     <span>{item.campaignType}</span>
-    //                   </h6>
-    //                   <h6>
-    //                     <strong>{t("postStatus")}: </strong>
-    //                     {/* {customTranslateStatus(item.campaignType)} */}
-    //                     {`Active`}
-    //                   </h6>
-    //                 </div>
-    //               </Grid>
-    //               <Grid
-    //                 item
-    //                 sm={4}
-    //                 style={{ display: "flex", justifyContent: "flex-end" }}
-    //               >
-    //                 <div
-    //                   className={classes.companyLogo}
-    //                   style={{
-    //                     backgroundImage: `url(${
-    //                       item.logo ? item.logo[0].path : ""
-    //                     })`,
-    //                   }}
-    //                 />
-    //               </Grid>
-    //             </Grid>
-    //           </div>
-    //           <div className={classes.adDetail}>
-    //             <div className={classes.companyImgFrame}>
-    //               <img
-    //                 src={item.logo && item.logo[0].path}
-    //                 alt={item.logo ? `${item.jobName} Company-Image` : ""}
-    //                 className={item.company_image ? classes.companyImage : ""}
-    //               />
-    //             </div>
-    //             <div
-    //               className={classes.jobDesc}
-    //               dangerouslySetInnerHTML={{
-    //                 __html: item.jobDescription,
-    //               }} // To convert rte string into html
-    //             />
-    //           </div>
-    //           <Grid container>
-    //             <Grid item sm={12} md={6} />
-    //             <Grid item sm={12} md={6}>
-    //               <Grid container spacing={2} className={classes.ctaBtn}>
-    //                 <Grid item>
-    //                   {/* If post is active post, show Inactive btn. If it is inactive post, show copy btn in Addetails */}
-    //                   {item.campaignType === "Free" ? (
-    //                     <Link to="/tyopaikkailmoitus/" className="btnLink">
-    //                       <Button
-    //                         variant="outlined"
-    //                         color="primary"
-    //                         onClick={() => {
-    //                           store.dispatch(
-    //                             populateVacancyForm(item.jobPostNumber, false)
-    //                           );
-    //                         }}
-    //                       >
-    //                         {t("common:copyBtn")}
-    //                       </Button>
-    //                     </Link>
-    //                   ) : item.campaignType === "Free" ? (
-    //                     <Button
-    //                       variant="outlined"
-    //                       color="primary"
-    //                       onClick={() => {
-    //                         store.dispatch(
-    //                           changeActivePostToInactive(
-    //                             userRole === "admin"
-    //                               ? `${item.jobPostNumber}admin${item.companyBusinessId}`
-    //                               : item.jobPostNumber
-    //                           )
-    //                         );
-    //                       }}
-    //                     >
-    //                       {t("common:inactiveBtn")}
-    //                     </Button>
-    //                   ) : (
-    //                     ""
-    //                   )}
-    //                 </Grid>
-    //                 {item.campaignType === "Free" && (
-    //                   <Grid item>
-    //                     <Link
-    //                       to={`/tyopaikkailmoitus/${item.jobPostNumber}`}
-    //                       className="btnLink"
-    //                     >
-    //                       <Button
-    //                         variant="outlined"
-    //                         color="primary"
-    //                         onClick={() =>
-    //                           store.dispatch(updateAdvertisement())
-    //                         }
-    //                       >
-    //                         {t("editBtn")}
-    //                       </Button>
-    //                     </Link>
-    //                   </Grid>
-    //                 )}
-    //                 <Grid item>
-    //                   {/* To avoid errors when viewSelectedAd is empty array */}
-    //                   {item.jobName && (
-    //                     <Link
-    //                       to={customURL(item.url, "campaign")}
-    //                       className="btnLink"
-    //                     >
-    //                       <Button
-    //                         variant="contained"
-    //                         color="primary"
-    //                         onClick={() =>
-    //                           store.dispatch(
-    //                             changeCampaign(
-    //                               campaignsList.find(
-    //                                 (campaign) =>
-    //                                   campaign.id === item.campaign_id
-    //                               )
-    //                             )
-    //                           )
-    //                         }
-    //                       >
-    //                         {t("boostBtn")}
-    //                       </Button>
-    //                     </Link>
-    //                   )}
-    //                 </Grid>
-    //               </Grid>
-    //             </Grid>
-    //           </Grid>
-    //         </div>
-    //       ) : (
-    //         " "
-    //       );
-    //     })}
-
-    //   <Loader showSpinner={showSpinner} />
-
-    //   <Snackbar
-    //     anchorOrigin={{
-    //       vertical: "bottom",
-    //       horizontal: "center",
-    //     }}
-    //     open={showSuccessSnackbar}
-    //     autoHideDuration={2000}
-    //     onClose={() => store.dispatch(closeSnackbar())}
-    //   >
-    //     <MySnackbarContentWrapper
-    //       onClose={() => store.dispatch(closeSnackbar())}
-    //       variant="success"
-    //       message={t("successMsg")}
-    //     />
-    //   </Snackbar>
-    //   <Snackbar
-    //     anchorOrigin={{
-    //       vertical: "bottom",
-    //       horizontal: "center",
-    //     }}
-    //     open={showFailedSnackbar}
-    //     autoHideDuration={2000}
-    //     onClose={() => store.dispatch(closeSnackbar())}
-    //   >
-    //     <MySnackbarContentWrapper
-    //       onClose={() => store.dispatch(closeSnackbar())}
-    //       variant="error"
-    //       message={t("failedMsg")}
-    //     />
-    //   </Snackbar>
-    // </div>
   );
 };
 

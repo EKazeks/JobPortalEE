@@ -17,7 +17,7 @@ import {
 const initialState = {
   jobsList: [],
   id: 0,
-  jobPostNumber:29,
+  jobPostNumber:[],
   jobDetails: [],
   selectedPage: {
     selected: 0,

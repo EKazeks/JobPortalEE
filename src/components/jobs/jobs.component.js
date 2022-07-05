@@ -16,6 +16,8 @@ import Loader from '../../utils/loader';
 import jobHeroImg from '../../images/jobportal_hero.jpg';
 import { SEO } from '../seo/metaInfo.component';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchJobById } from '../../actions';
 
 const styles = theme => ({
   heroImage: {
@@ -181,7 +183,7 @@ const JobsComponent = ({
   const [jobsToRender, setJobsToRender] = useState([]);
 
   useEffect(() => {
-     axios.get('https://localhost:7262/jobsEn').then(res => {
+     axios.get(`https://localhost:7262/jobsEn`).then(res => {
        setJobsToRender(res.data);
        console.log(jobsToRender);
      });
@@ -232,20 +234,24 @@ const JobsComponent = ({
                             <Link
                               className={classes.jobContainerHover}
                               to={customURL(item.url, 'internal')}
-                              onClick={() => openAdToSeeAdInfo(`${item.jobPostNumber}admin${item.companyBusinessId}`)}
+                              //onClick={() => openAdToSeeAdInfo(`${item.jobPostNumber}admin${item.companyBusinessId}`)}
+                              onClick={() => fetchJobById(item.jobPostNumber)}
                             />
                           ) : (
-                            <Link className={classes.jobContainerHover} to={customURL(item.url, 'external')} />
+                            <Link className={classes.jobContainerHover} to={customURL(item.url, 'internal')} />
                           )}
                           <Grid item sm={2} xs={4} lg={2} xl={1} style={{ display: 'contents' }}>
                             <div className={classes.logoContainer}>
                               {item.logo ? (
-                                <div
-                                  className={classes.logoDiv}
-                                  style={{
-                                    backgroundImage: `url(${item.logo[0].path})`,
-                                  }}
-                                />
+                                // <div
+                                //   className={classes.logoDiv}
+                                //   style={{
+                                //     backgroundImage: `url(${item.logo[0].path})`,
+                                //   }}
+                                // />
+                                <span className={classes.companyName}>
+                                {item.companyName.length > 9 ? `${item.companyName.slice(0, 9)}...` : item.companyName}
+                              </span>
                               ) : (
                                 <span className={classes.companyName}>
                                   {item.companyName.length > 9 ? `${item.companyName.slice(0, 9)}...` : item.companyName}
@@ -260,7 +266,18 @@ const JobsComponent = ({
 
                             <div>
                               <h5 className={classes.companyInfo}>
-                                {item.companyName},{'adress'}
+                                {item.companyName},
+                                {item.jobPostAsukohaAddress.map((address) => {
+                            {
+                              if (address.address[17] === null) {
+                                return address.address
+                                  .split(",")
+                                  .splice(1)
+                                  .toString();
+                              } else return address.address;
+                            }
+                          })}
+                                {/* {'adress'} */}
                               </h5>
                             </div>
                             <Hidden only={'xl'}>
@@ -328,7 +345,7 @@ const JobsComponent = ({
                                 <div>
                                   {userRole === 'admin' ? ( // To show the company view so admins can edit the ads.
                                     <Link className="btnLink" to={customURL(item.url, 'internal')}>
-                                      <Button variant="contained" color="primary" onClick={() => openAdToSeeAdInfo(`${item.jobPostNumber}admin${item.companyBusinessId}`)}>
+                                      <Button variant="contained" color="primary" onClick={() => fetchJobById(item.jobPostNumber)}>
                                         {t('common:openBtn')}
                                       </Button>
                                     </Link>
@@ -383,7 +400,7 @@ const JobsComponent = ({
           nextLabel={<NavigateNextIcon />}
           breakLabel="..."
           breakClassName="break-me"
-          pageCount={advertPages}
+          pageCount={3000}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={data => {

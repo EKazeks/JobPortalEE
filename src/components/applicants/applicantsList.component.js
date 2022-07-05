@@ -104,7 +104,7 @@ const ApplicantsList = ({ viewSelectedAd, applications, classes, showDialog, del
       setJobsToRender(res.data);
       console.log(jobsToRender);
     });
-  }, []);
+  }, [jobsToRender]);
 
   return (
     <div className="container">

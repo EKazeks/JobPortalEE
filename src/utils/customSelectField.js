@@ -191,33 +191,14 @@ export const JobCategoriesComponent = ({
   //     required
   //   >
   //     {jobsToRender.slice(1 * 10, 1 * 10 + 10).map((category) => {
-  //       let array = category.jobTags.split()
-  //   // its works only for array with objects, not for objects.
-
-  //       //let sortedCategory = array.sort((a, b) => a - b);
-
-  //       {/* const result = array.reduce((finalArray, current) => {
-  //         let obj = finalArray.find((item) => item.text === current.text);
-
-  //         if (obj) {
-  //           return finalArray;
-  //         }
-  //         return finalArray.concat([current]);
-  //       }, []); */}
-
-  //       //console.log("result", result);
-  //       console.log(array);
-
-  //       {
   //        return (
   //         <option
-  //           value={array.id === 1 ? '' : array.id} // id:1 is empty -- required for validation
-  //           key={array.id}
+  //           value={category.jobTags.id === 1 ? '' : category.jobTags.id} // id:1 is empty -- required for validation
+  //           key={category.jobTags.id}
   //         >
-  //           {t(`${array}`)}
+  //           {t(`${category.jobTags}`)}
   //         </option>
   //         ) 
-  //       }
   //     })}
 
   //     {/* {jobsToRender.slice(1 * 10, 1 * 10 + 10).map(category => {
@@ -240,7 +221,7 @@ export const JobCategoriesComponent = ({
         required
       >
         {jobCategories.map((category) => {
-          console.log(jobCategories);
+          //console.log(jobCategories);
           return (
             <option
               value={category.id === 1 ? "" : category.id} // id:1 is empty -- required for validation

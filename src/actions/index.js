@@ -223,9 +223,8 @@ export const getAllAdsByStatus = (status) => ({
   type: GET_ALL_ADS_BY_STATUS,
   status,
 });
-export const getAllAdsByStatusSuccess = (jobPostNumber, result) => ({
+export const getAllAdsByStatusSuccess = ( result) => ({
   type: GET_ALL_ADS_BY_STATUS_SUCCESS,
-  //jobPostNumber,
   result,
 });
 
