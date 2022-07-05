@@ -35,7 +35,7 @@ import {
   GET_JOBS_OFFERS_SUCCESS,
 } from '../constants';
 import store from '../store';
-import { apiManualRequest, apiManualPost, apiOpenRequest, apiGetJobsOffers } from '../utils/request';
+import { apiManualRequest, apiManualPost, apiOpenRequest, apiGetJobsOffers, fetchJobTags } from '../utils/request';
 import { filterObj } from '../utils/wrappers';
 import {
   getAllCampaignsSuccess,
@@ -63,23 +63,11 @@ import {
   getCompanyProfileSuccess,
   openAdToSeeAdInfoSuccess,
   getJobsOffers,
+  getAllJobCategoryFromEstoniaSuccess,
 } from '../actions';
 import { customTranslateCampaign } from '../utils/customTranslate';
 import browserHistory from '../history';
 import { messageTemplate } from '../components/companies/advertisements/automaticMessageToApplicants/messages';
-
-// GET JOBS OFFERS
-
-// function* getJobsOffersSaga() {
-//   try {
-//     const offers = yield call(apiGetJobsOffers);
-//     yield put({type: GET_JOBS_OFFERS_SUCCESS, offers})
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
-// END
 
 function* getAllCampaignsSaga() {
   try {
@@ -101,6 +89,19 @@ function* getAllJobCategorySaga() {
     console.log(error);
   }
 }
+
+function* getAllJobCategoryFromEstoniaSaga() {
+  try {
+    const url = `${API_SERVER_EST}`;
+    const jobTags = yield call(  fetchJobTags );
+    const json = jobTags.json()
+    //const resultParsed = JSON.parse(jobTags.data);
+    yield put(getAllJobCategoryFromEstoniaSuccess(json));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
 function* saveAndPublishAdvertisementSaga() {
   try {
@@ -879,7 +880,7 @@ export function* watchgetAllCampaignsSaga() {
 }
 
 export function* watchgetAllJobCategorysSaga() {
-  yield takeEvery(GET_ALL_JOB_CATEGORY, getAllJobCategorySaga);
+  yield takeEvery(GET_ALL_JOB_CATEGORY, getAllJobCategorySaga, getAllJobCategoryFromEstoniaSaga);
 }
 
 export function* watchgetAllAdsByStatusSaga() {
@@ -888,10 +889,6 @@ export function* watchgetAllAdsByStatusSaga() {
 export function* watchgetJobPostByPostIdSaga() {
   yield takeEvery(OPEN_AD_TO_SEE_AD_INFO, getJobPostByPostIdSaga);
 }
-// export function* watchgetJobPostByPostIdSaga() {
-//   yield takeEvery(GET_AND_OPEN_JOB_POSTS_SUCCESS, getJobPostByPostIdSaga);
-// }
-
 export function* watchdeleteJobPostSaga() {
   yield takeEvery(DELETE_ADVERTISEMENT, deleteJobPostSaga);
 }

@@ -16,8 +16,6 @@ import Loader from "../../utils/loader";
 import jobHeroImg from "../../images/jobportal_hero.jpg";
 import { SEO } from "../seo/metaInfo.component";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchJobById } from "../../actions";
 
 const styles = (theme) => ({
   heroImage: {
@@ -318,7 +316,6 @@ const JobsComponent = ({
                                     } else return address.address;
                                   }
                                 })}
-                                {/* {'adress'} */}
                               </h5>
                             </div>
                             <Hidden only={"xl"}>
@@ -326,14 +323,14 @@ const JobsComponent = ({
                                 <Grid item>
                                   <span>
                                     {t("publishedDate")}:
-                                    {item.dateOfApplication}
+                                    {/* {item.dateOfApplication} */}
+                                    'At the moment'
                                   </span>
                                 </Grid>
                                 <Grid item>
                                   <span>
                                     {t("applicationDueDate")}:
-                                    {/* {item.durationOfEmployment} */}
-                                    empty
+                                    {item.dateOfApplication}
                                   </span>
                                 </Grid>
                               </Grid>
@@ -343,14 +340,15 @@ const JobsComponent = ({
                             <Hidden only={["xs", "sm", "md", "lg"]}>
                               <Grid item>
                                 <span>
-                                  {t("publishedDate")}:{item.dateOfApplication}
+                                  {t("publishedDate")}:
+                                  {/* {item.dateOfApplication} */}
+                                  'At the moment'
                                 </span>
                               </Grid>
                               <Grid item>
                                 <span>
                                   {t("applicationDueDate")}:
-                                  {/* {item.durationOfEmployment} */}
-                                  empty
+                                  {item.dateOfApplication}
                                 </span>
                               </Grid>
                             </Hidden>

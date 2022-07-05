@@ -7,6 +7,7 @@ import "react-widgets/dist/css/react-widgets.css";
 import store from "../store";
 import { customTranslateCampaign } from "./customTranslate";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 export const jobHours = [
   {
@@ -167,12 +168,13 @@ export const MarketingPlatform = ({ viewBy }) => {
 
 export const JobCategoriesComponent = ({
   jobCategories,
+  jobTags,
   margin,
   hideLabel,
 }) => {
   const { t } = useTranslation("category");
   const [jobsToRender, setJobsToRender] = useState([]);
-
+  //const {jobTags} = useSelector((state) => state.jobTags)
   useEffect(() => {
     axios.get("https://localhost:7262/jobsEn").then((res) => {
       setJobsToRender(res.data);
@@ -221,7 +223,7 @@ export const JobCategoriesComponent = ({
         required
       >
         {jobCategories.map((category) => {
-          //console.log(jobCategories);
+          console.log(jobCategories);
           return (
             <option
               value={category.id === 1 ? "" : category.id} // id:1 is empty -- required for validation
