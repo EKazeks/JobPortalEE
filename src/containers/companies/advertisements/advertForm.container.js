@@ -9,6 +9,7 @@ import {
   choosePaymentMethod,
   addExtraService,
   changeRoute,
+  getAllJobCategoryFromEstoniaSuccess
 } from '../../../actions';
 import store from '../../../store';
 import { jobPostFormValidate as validate } from '../../validate';
@@ -58,5 +59,6 @@ const mapDispatchToProps = {
   choosePaymentMethod,
   addExtraService,
   changeRoute,
+  getAllJobCategoryFromEstoniaSuccess,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AdvertFormContainer);

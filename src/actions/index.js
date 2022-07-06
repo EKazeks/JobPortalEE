@@ -147,6 +147,7 @@ import {
   POPULATE_EMAIL_MESSAGE,
   GET_JOBS_OFFERS,
   GET_JOBS_OFFERS_SUCCESS,
+  GET_ALL_JOB_CATEGORY_FROM_ESTONIA_SUCCESS,
 } from "../constants";
 
 // get jobs offers
@@ -500,6 +501,10 @@ export const getAllJobCategory = () => ({ type: GET_ALL_JOB_CATEGORY });
 export const getAllJobCategorySuccess = (result) => ({
   type: GET_ALL_JOB_CATEGORY_SUCCESS,
   result,
+});
+export const getAllJobCategoryFromEstoniaSuccess = (jobTags) => ({
+  type: GET_ALL_JOB_CATEGORY_FROM_ESTONIA_SUCCESS,
+  jobTags,
 });
 
 // COMPANY PROFILE

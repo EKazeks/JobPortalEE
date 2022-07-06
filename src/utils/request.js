@@ -123,3 +123,14 @@ export const apiOpenPost = (url = 'https://localhost:7262/jobsEn/postJob', body,
     .then(data => ({ data }))
     .catch(error => ({ error }));
 };
+
+export const fetchJobTags = (req, res) => {
+  return fetch('https://localhost:7262/jobsEn',{
+    method:'GET',
+    headers:{
+        'Content-Type': 'application/json',
+        'X-Requested-With':'XMLHttpRequest',
+    }
+  })
+  .then(res => res.json())
+}
