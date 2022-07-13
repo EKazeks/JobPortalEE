@@ -40,23 +40,31 @@ const ActiveAdsComponent = ({
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
   });
+
   return (
-    // <div>
-    //   {jobsToRender.slice(selectedPage * 30, selectedPage * 30 + 30).map(job => {
+    //  <div>
+    //   {jobsToRender.slice(1 * 30, 1 * 30 + 30).map(job => {
+    //     {job.jobPostHaridus.map((valdkond) => {
+    //       return (
+    //         <div>
+    //           {/* {console.log(jobPostHaridus)} */}
+
+    //         </div>
+    //       )
+    //     })}
     //     return (
     //       <div key={job.jobPostNumber}>
     //       <Grid>
     //         <div>
     //           <h1>
-    //             {job.jobTags}
-    //             {console.log(job.jobTags)};
+    //             {console.log(job.jobPostHaridus)}
     //           </h1>
     //         </div>
     //       </Grid>
     //       </div>
     //     )
     //   })}
-    // </div>
+    //   </div>
     <div className="container">
       <Grid container style={{ margin: "30px 0px" }}>
         <Grid item sm={10}>
@@ -103,9 +111,9 @@ const ActiveAdsComponent = ({
           return (
             <div
               key={
-                item.jobPostNumber === null
-                  ? item.jobPostNumber
-                  : item.jobPostNumber
+                item.id === null
+                  ? item.id
+                  : item.id
               }
             >
               <Paper style={{ marginTop: 20 }}>
@@ -124,7 +132,7 @@ const ActiveAdsComponent = ({
                         <h4
                           onClick={() => {
                             // openAdToSeeAdInfo(item.jobPostNumber)
-                            fetchJobById(item.jobPostNumber);
+                            fetchJobById(item.id);
                           }}
                         >
                           {item.jobName === null ? item.jobName : item.jobName},
@@ -180,9 +188,9 @@ const ActiveAdsComponent = ({
                           variant="outlined"
                           color="secondary"
                           onClick={() =>
-                            warnToDelete(item.jobPostNumber) === null
-                              ? warnToDelete(item.jobPostNumber)
-                              : warnToDelete(item.jobPostNumber)
+                            warnToDelete(item.id) === null
+                              ? warnToDelete(item.id)
+                              : warnToDelete(item.id)
                           }
                         >
                           {t("common:deleteBtn")}
@@ -195,11 +203,11 @@ const ActiveAdsComponent = ({
                             variant="contained"
                             color="secondary"
                             onClick={() => {
-                              populateVacancyForm(item.jobPostNumber, false) ===
+                              populateVacancyForm(item.id, false) ===
                               null
-                                ? populateVacancyForm(item.jobPostNumber, false)
+                                ? populateVacancyForm(item.id, false)
                                 : populateVacancyForm(
-                                    item.jobPostNumber,
+                                    item.id,
                                     false
                                   );
                             }}
@@ -226,7 +234,7 @@ const ActiveAdsComponent = ({
                                   : null
                               }
                               color="primary"
-                              onClick={() => fetchJobById(item.jobPostNumber)}
+                              onClick={() => fetchJobById(item.id)}
                             >
                               {t("common:openBtn")}
                             </Button>

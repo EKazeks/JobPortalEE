@@ -108,10 +108,10 @@ const JobDetailsComponent = ({
   changePagination,
 }) => {
   const [jobsToRender, setJobsToRender] = useState([]);
-  const { jobPostNumber } = useSelector((state) => state.jobs);
+  const { id } = useSelector((state) => state.jobs);
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${jobPostNumber}`).then((res) => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data);
       console.log(jobsToRender);
     });
@@ -197,7 +197,7 @@ const JobDetailsComponent = ({
                       handleFav={() =>
                         toggleFavoriteJobs(
                           jobsToRender.companyBusinessId,
-                          jobsToRender.jobPostNumber,
+                          jobsToRender.id,
                           !favBtnstatus
                         )
                       }
@@ -320,7 +320,7 @@ const JobDetailsComponent = ({
                     handleFav={() =>
                       toggleFavoriteJobs(
                         jobsToRender.companyBusinessId,
-                        jobsToRender.jobPostNumber,
+                        jobsToRender.id,
                         !favBtnstatus
                       )
                     }

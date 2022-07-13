@@ -175,7 +175,7 @@ const AdvertFormComponent = ({
                 <p style={{ color: '#6c757d' }}>{t('linkInfoMsg')}</p>
                 <Field component={renderTextField} label={t('field6')} name="applicationUrl" id="applicationUrl" />
               </Grid>
-              {/* <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6}>
                 <Field
                   component={renderDropzoneField}
                   type="file"
@@ -186,8 +186,8 @@ const AdvertFormComponent = ({
                   fullWidth
                   isImage
                 />
-              </Grid> */}
-              {/* <Grid item xs={12} sm={6} className={classes.dropzone}>
+              </Grid>
+              <Grid item xs={12} sm={6} className={classes.dropzone}>
                 <i style={{ color: '#6c757d' }}>{t('voluntary')}</i>
                 <p className={classes.imageText}>{t('picText')}</p>
                 <Button
@@ -208,17 +208,16 @@ const AdvertFormComponent = ({
                   <DeleteForeverIcon fontSize="small" style={{ marginRight: 5 }} />
                   {t('delPic')}
                 </Button>
-              </Grid> */}
+              </Grid>
               <Grid item xs={12}>
                 <Field component={TextEditor} fullWidth name="jobDescription" placeholder={t('field4')} id="jobDescription" />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Field component={TextEditor} fullWidth name="campaignLevel" placeholder={t('campaignLevel')} id="campaignLevel" />
-              </Grid>
+              </Grid> */}
             </Grid>
-            {/* <Grid container>
-              <AutomaticEmailAnswersContainer />
-            </Grid> */}
+            <Grid container>
+            </Grid>
             <CampaignsContainer />
           </div>
 
@@ -351,3 +350,4 @@ const AdvertFormComponent = ({
 };
 
 export default withStyles(styles)(AdvertFormComponent);
+

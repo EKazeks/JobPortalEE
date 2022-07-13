@@ -21,9 +21,8 @@ const AdvertFormContainer = reduxForm({
 })(AdvertFormComponent);
 
 const mapStateToProps = state => {
-  //let companyName = store.getState().usersCompanyList.selectedCompany?.company_name;
-  // let language = formValueSelector('vacancy')(store.getState(), 'email_language');
-  // let emailMessage = messageTemplate(companyName, language);
+  let companyName = store.getState().usersCompanyList.selectedCompany?.company_name;
+  //let language = formValueSelector('vacancy')(store.getState(), 'email_language');
 
   return {
     image: formValueSelector('vacancy')(state, 'image_document'),

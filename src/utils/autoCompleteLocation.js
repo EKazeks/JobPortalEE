@@ -78,6 +78,7 @@ const AutoCompleteLocation = ({ input, meta, label, required, margin, placeholde
                     <span>
                       <LocationOnIcon style={{ marginRight: 8, fontSize: 14 }} />
                       {suggestion.description}
+                      {console.log(suggestion)}
                     </span>
                   </div>
                 );

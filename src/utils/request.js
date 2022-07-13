@@ -33,7 +33,7 @@ export const apiManualRequest = (url = 'https://localhost:7262/jobsEn', method =
     headers,
   };
   return fetch(url, options)
-    //.then(res => res.json())
+    .then(res => res.json())
     .then(data => ({ data }))
     .catch(error => ({ error }));
 };
@@ -127,10 +127,6 @@ export const apiOpenPost = (url = 'https://localhost:7262/jobsEn/postJob', body,
 export const fetchJobTags = (req, res) => {
   return fetch('https://localhost:7262/jobsEn',{
     method:'GET',
-    headers:{
-        'Content-Type': 'application/json',
-        'X-Requested-With':'XMLHttpRequest',
-    }
   })
   .then(res => res.json())
 }

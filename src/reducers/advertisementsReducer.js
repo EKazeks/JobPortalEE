@@ -66,7 +66,7 @@ const initialState = {
   automaticEmailToggleBtn: false,
 };
 
-export default function advertisementsReducer(state = initialState, action,data) {
+export default function advertisementsReducer(state = initialState, action) {
   switch (action.type) {
     // Dispatching actions related to job advertisements
     case POST_ADVERTISEMENT:

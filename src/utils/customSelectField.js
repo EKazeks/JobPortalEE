@@ -8,6 +8,7 @@ import store from "../store";
 import { customTranslateCampaign } from "./customTranslate";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { Category, CenterFocusStrongOutlined } from "@material-ui/icons";
 
 export const jobHours = [
   {
@@ -171,46 +172,25 @@ export const JobCategoriesComponent = ({
   jobTags,
   margin,
   hideLabel,
+  selectedPage
 }) => {
   const { t } = useTranslation("category");
   const [jobsToRender, setJobsToRender] = useState([]);
-  //const {jobTags} = useSelector((state) => state.jobTags)
+
+  const categorys = jobsToRender.map((category) => category.jobTags)
+  const sortCategorys = Array.from(new Set(categorys))
+
+  //console.log(sortCategorys);
+
   useEffect(() => {
     axios.get("https://localhost:7262/jobsEn").then((res) => {
       setJobsToRender(res.data);
-      //console.log(jobsToRender);
     });
   }, []);
-
-  // return (
-  //   <Field
-  //     component={renderSelectField}
-  //     name="jobCategory"
-  //     label={hideLabel ? "" : `${t("category")} *`}
-  //     id="job_category"
-  //     fullWidth
-  //     margin={margin}
-  //     required
-  //   >
-  //     {jobsToRender.slice(1 * 10, 1 * 10 + 10).map((category) => {
-  //        return (
-  //         <option
-  //           value={category.jobTags.id === 1 ? '' : category.jobTags.id} // id:1 is empty -- required for validation
-  //           key={category.jobTags.id}
-  //         >
-  //           {t(`${category.jobTags}`)}
-  //         </option>
-  //         ) 
-  //     })}
-
-  //     {/* {jobsToRender.slice(1 * 10, 1 * 10 + 10).map(category => {
-  //       return (
-  //         //console.log(category.jobTags)
-  //         )
-  //     })} */}
-  //   </Field>
-  // );
-
+  const objCategory = sortCategorys.map((str, index) => ({
+    value: str,
+    id: index + 1
+  }));
   return (
     <div>
       <Field
@@ -222,11 +202,12 @@ export const JobCategoriesComponent = ({
         margin={margin}
         required
       >
-        {jobCategories.map((category) => {
-          console.log(jobCategories);
+        {objCategory.map((category) => {
+          console.log(category.id.length);
           return (
             <option
               value={category.id === 1 ? "" : category.id} // id:1 is empty -- required for validation
+              //value={category} // id:1 is empty -- required for validation
               key={category.id}
             >
               {t(`${category.id}`)}

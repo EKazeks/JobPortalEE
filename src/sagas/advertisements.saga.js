@@ -94,9 +94,9 @@ function* getAllJobCategoryFromEstoniaSaga() {
   try {
     const url = `${API_SERVER_EST}`;
     const jobTags = yield call(  fetchJobTags );
-    const json = jobTags.json()
+    //const json = jobTags.json()
     //const resultParsed = JSON.parse(jobTags.data);
-    yield put(getAllJobCategoryFromEstoniaSuccess(json));
+    yield put(getAllJobCategoryFromEstoniaSuccess(jobTags));
   } catch (error) {
     console.log(error);
   }
@@ -115,20 +115,20 @@ function* saveAndPublishAdvertisementSaga() {
     const uuid = client.user.data[2];
     const userRole = client.user.data[6].user_type;
     const payment_method = paymentInfoForm && paymentInfoForm.payment_method;
-    const companyBusinessId = companyProfile.profile.companyBusinessId;
+    const companyId = companyProfile.profile.company_id;
 
-    if (!formValues.companyBusinessId) {
-      formValues.companyBusinessId = companyBusinessId; // Also sending company_id to add company specific post.
+    if (!formValues.company_id) {
+      formValues.company_id = companyId; // Also sending company_id to add company specific post.
     }
 
     yield put(closeDialog());
 
     if (userRole === 'admin') {
       const companyDetails = {
-        companyBusinessId: parseInt(formValues.companyBusinessId),
+        company_id: parseInt(formValues.company_id),
         uuid,
       };
-      const jobPostOwner = yield call(apiManualPost, `${API_SERVER_EST}/postJob`, JSON.stringify({ ...companyDetails }));
+      const jobPostOwner = yield call(apiManualPost, `${API_SERVER}/GetCompanyProfile`, JSON.stringify({ ...companyDetails }));
       parsedCompany = JSON.parse(jobPostOwner.data);
     }
 
@@ -140,7 +140,7 @@ function* saveAndPublishAdvertisementSaga() {
     if (isToEdit) {
       url = `${API_SERVER}/UpdateJobPost`;
     } else {
-      url = `${API_SERVER_EST}/postJob`;
+      url = `${API_SERVER}/AddJobPost`;
     }
 
     const statusToUpdate = isDraft || extraService.help || extraService.sos ? 0 : selectedCampaign.type === 'free' ? 1 : 4;
@@ -192,14 +192,14 @@ function* saveAndPublishAdvertisementSaga() {
     // SAVING AND PUBLISHING JOBPOST
     const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
     const parsedResult = JSON.parse(result.data);
-    //console.log(result.data);
+
     // If publishing post, Generate invoice under the hood via Talousvirta API or online payment via NETS
 
     if (parsedResult) {
       const { company_name, business_id, firstname, lastname, email, address, zip_code, city } =
         userRole === 'admin' ? parsedCompany[0] : companyProfile.profile;
-      const jobTitle = formValues.jobName;
-      const postId = parsedResult[0].jobPostNumber;
+      const jobTitle = formValues.job_title;
+      const postId = parsedResult[0].post_id;
       const orderId = parsedResult[0].order_id;
       const publishedPostStatus = parsedResult[0].job_post_status;
       const description = `${jobTitle} | Kampanjapaketti - ${customTranslateCampaign(selectedCampaign.id)}`;
@@ -316,9 +316,9 @@ function* getAllAdsByStatusSaga({ status }) {
 // Populating vacancy form when editing or copying
 function* populateVacancyFormSaga({ id, isToEdit }) {
   try {
-    const url = `${API_SERVER_EST}`;
+    const url = `${API_SERVER}`;
     const companyId = store.getState().jobsToRender.companyBusinessId;
-    //const campaigns = store.getState().advertisement.campaigns;
+    const campaigns = store.getState().advertisement.campaigns;
     const userRole = store.getState().client.user.data[6].user_type;
 
     const body = JSON.stringify({
@@ -375,10 +375,10 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     yield put(change('vacancy', 'email', email));
     yield put(change('vacancy', 'notice_frequency', notice_frequency));
 
-    //const postCampaign = campaigns.find(campaign => campaign.id === campaign_id);
+    const postCampaign = campaigns.find(campaign => campaign.id === campaign_id);
 
     const campaignDetails = {
-     // postCampaign,
+      postCampaign,
       marketing_platform,
       more_budget,
       marketing_budget,

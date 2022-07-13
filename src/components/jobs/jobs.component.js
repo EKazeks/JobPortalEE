@@ -189,15 +189,7 @@ const JobsComponent = ({
   }, []);
 
   return (
-    // <div>
-    //   <Grid>
-    //     {jobsToRedner.slice(selectedPage * 10, selectedPage * 10 + 10).map(item => {
-    //       <h3>
-    //         {item.jobPostNumber}
-    //       </h3>
-    //     })}
-    //   </Grid>
-    // </div>
+
     <div>
       <SEO title="Töökohad | Jobportal" />
       <div className={classes.heroImage}>
@@ -230,7 +222,7 @@ const JobsComponent = ({
                 .slice(selectedPage * 10, selectedPage * 10 + 10)
                 .map((item) => {
                   return (
-                    <div key={`${item.companyBusinessId}${item.jobPostNumber}`}>
+                    <div key={`${item.companyBusinessId}${item.id}`}>
                       <Paper className={classes.paper}>
                         <Grid
                           container
@@ -243,12 +235,11 @@ const JobsComponent = ({
                             <Link
                               className={classes.jobContainerHover}
                               to={customURL(item.url, "open_position")}
-                              //onClick={() => openAdToSeeAdInfo(`${item.jobPostNumber}admin${item.companyBusinessId}`)}
-                              onClick={() => fetchJobById(item.jobPostNumber)}
+                              onClick={() => fetchJobById(item.id)}
                             />
                           ) : (
                             <Link
-                              onClick={() => fetchJobById(item.jobPostNumber)}
+                              onClick={() => fetchJobById(item.id)}
                               className={classes.jobContainerHover}
                               to={customURL(item.url, "open_position")}
                             />
@@ -366,7 +357,7 @@ const JobsComponent = ({
                                     color="secondary"
                                     onClick={() =>
                                       warnToDelete(
-                                        `${item.jobPostNumber}admin${item.companyBusinessId}`
+                                        `${item.id}admin${item.companyBusinessId}`
                                       )
                                     }
                                   >
@@ -378,13 +369,13 @@ const JobsComponent = ({
                                     handleFav={() => {
                                       toggleFavoriteJobs(
                                         item.companyBusinessId,
-                                        item.jobPostNumber,
+                                        item.id,
                                         !favoriteJobs.some(
                                           (favList) =>
                                             favList.companyBusinessId ===
                                               item.companyBusinessId &&
-                                            favList.jobPostNumber ===
-                                              item.jobPostNumber
+                                            favList.id ===
+                                              item.id
                                         )
                                       );
                                     }}
@@ -392,16 +383,16 @@ const JobsComponent = ({
                                       (favList) =>
                                         favList.companyBusinessId ===
                                           item.companyBusinessId &&
-                                        favList.jobPostNumber ===
-                                          item.jobPostNumber
+                                        favList.id ===
+                                          item.id
                                     )} // checking from the favoriteJobs list
                                     btnText={
                                       !favoriteJobs.some(
                                         (favList) =>
                                           favList.companyBusinessId ===
                                             item.companyBusinessId &&
-                                          favList.jobPostNumber ===
-                                            item.jobPostNumber
+                                          favList.id ===
+                                            item.id
                                       )
                                         ? t("addFav")
                                         : t("delFav")
@@ -420,7 +411,7 @@ const JobsComponent = ({
                                         variant="contained"
                                         color="primary"
                                         onClick={() =>
-                                          fetchJobById(item.jobPostNumber)
+                                          fetchJobById(item.id)
                                         }
                                       >
                                         {t("common:openBtn")}
@@ -429,12 +420,15 @@ const JobsComponent = ({
                                   ) : (
                                     <Link
                                       className="btnLink"
-                                      to={customURL(item.url, "external")}
+                                      to={customURL(item.url, "open_position")}
                                     >
                                       <Button
                                         variant="contained"
                                         color="primary"
                                         className="fullWidthBtn"
+                                        onClick={() =>
+                                          fetchJobById(item.id)
+                                        }
                                       >
                                         {t("watchBtn")}
                                       </Button>
