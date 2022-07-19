@@ -12,7 +12,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Line } from "react-chartjs-2";
-import { customURL } from "../../../utils/helperFunctions";
+import { customURL,dateFormat } from "../../../utils/helperFunctions";
 import { customTranslateCampaign } from "../../../utils/customTranslate";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import axios from "axios";
@@ -50,26 +50,21 @@ const DashboardComponent = ({
 }) => {
   const { t } = useTranslation("campaigns", "adDetails");
   const [jobsToRender, setJobsToRender] = useState([]);
-  const selectedPage = 1;
+  const [dateOfApplication,setDateOfApplication] = useState();
+  const [address,setAddress] = useState();
+  const selectedPage = 1; 
   const dispatch = useDispatch();
   const { id } = useSelector((state) => state.jobs);
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data);
-      console.log(jobsToRender);
+      setDateOfApplication(dateFormat(res.data.dateOfApplication))
+      setAddress(res.data.jobPostAddress.address)
     });
   }, []);
 
-  const dateFormat = (date) => {
-    const formatedDate = date.split('T', 10)[0].split('-')
-    const newDateFormat = formatedDate[2] + '.' + formatedDate[1] + '.' + formatedDate[0]
-      if (newDateFormat == 'undefined.undefined.' || newDateFormat == 'undefined.undefined.string') {
-        return 'Date'
-      } else {
-        return newDateFormat
-      }
-  }
+  
 
   return (
     <div>
@@ -95,7 +90,7 @@ const DashboardComponent = ({
                   } else return address.address;
                 }
               })} */}
-              {'Adress'}
+              {address}
             </strong>
           </h6>
           <Divider />
@@ -110,7 +105,7 @@ const DashboardComponent = ({
             </Grid>
           </Grid>
           <strong style={{ color: "#34495e" }}>
-            {jobsToRender && jobsToRender.dateOfApplication}
+            {jobsToRender && dateOfApplication}
           </strong>{" "}
         </div>
         <div>

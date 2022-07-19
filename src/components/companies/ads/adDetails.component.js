@@ -5,7 +5,7 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import store from "../../../store";
-import { customURL } from "../../../utils/helperFunctions";
+import { customURL,dateFormat } from "../../../utils/helperFunctions";
 import {
   updateAdvertisement,
   changeCampaign,
@@ -99,30 +99,24 @@ const AdDetails = ({
 }) => {
   const { t } = useTranslation("adDetails");
   const { id, jobDetails } = useSelector((state) => state.jobs);
-  const [jobsToRender, setJobsToRender] = useState([]);
+  const [dateOfApplication,setDateOfApplication] = useState();
+  const [address,setAddress] = useState();
+  const [jobsToRender, setJobsToRender] = useState({});
   selectedPage = 1;
 
   useEffect(() => {
+    
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data);
+      setDateOfApplication(dateFormat(res.data.dateOfApplication))
+      setAddress(res.data.jobPostAddress.address)
     });
   }, []);
 
-  const dateFormat = (date) => {
-    const formatedDate = date.split('T', 10)[0].split('-')
-    const newDateFormat = formatedDate[2] + '.' + formatedDate[1] + '.' + formatedDate[0]
-      if (newDateFormat == 'undefined.undefined.' || newDateFormat == 'undefined.undefined.string') {
-        return 'Date'
-      } else {
-        return newDateFormat
-      }
-  }
+  
 
 
-
-
-
-  const updateJobOffer = (res,req) => {
+  const updateJobOffer = (res, req) => {
     const {
       jobTitle,
       jobCategory,
@@ -132,14 +126,14 @@ const AdDetails = ({
       applicationUrl,
       lastApplicationDate,
       jobDescription,
-      campaignLevel
-    } = req.body
+      campaignLevel,
+    } = req.body;
     const jobOffer = axios
-    .patch(`https://localhost:7262/updateJobOffer`, {
-    ...req.body
-    })
-    .then((res) => res.json(jobOffer))
-  }
+      .patch(`https://localhost:7262/updateJobOffer`, {
+        ...req.body,
+      })
+      .then((res) => res.json(jobOffer));
+  };
 
   return (
     // <div>
@@ -163,7 +157,7 @@ const AdDetails = ({
 
     //   <h1>Test</h1>
     // </div>
-    
+
     <div>
       <div className="container" key={jobsToRender.id}>
         <div className={classes.backBtnContainer}>
@@ -178,7 +172,7 @@ const AdDetails = ({
           <Grid container>
             <Grid item sm={12} md={7}>
               <h2 className="ad_title_1">
-              {jobsToRender.jobName}, {'address'}
+                {jobsToRender.jobName}, {address}
               </h2>
               <h6 className="ad_title_2">
                 <strong style={{ marginRight: 10 }}>
@@ -191,7 +185,7 @@ const AdDetails = ({
                   }`}
                   :
                 </strong>
-                <strong>{jobsToRender.dateOfApplication}</strong>
+                <strong>{dateOfApplication}</strong>
               </h6>
             </Grid>
             <Grid item sm={12} md={5}>
@@ -315,13 +309,6 @@ const AdDetails = ({
         </div>
         <div className={classes.adDetail}>
           <div className={classes.companyImgFrame}>
-            <img
-              src={jobsToRender.logo && jobsToRender.logo[0].path}
-              alt={
-                jobsToRender.logo ? `${jobsToRender.jobName} Company-Image` : ""
-              }
-              className={jobsToRender.company_image ? classes.companyImage : ""}
-            />
           </div>
           <div
             className={classes.jobDesc}

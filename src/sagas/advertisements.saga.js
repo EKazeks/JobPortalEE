@@ -146,7 +146,7 @@ function* saveAndPublishAdvertisementSaga() {
       body = {
         ...formValues,
         uuid,
-        campaign_type: selectedCampaign.type,
+        campaignLevel: selectedCampaign.type,
         status: statusToUpdate,
         extra_service: selectedService,
       };
@@ -155,7 +155,7 @@ function* saveAndPublishAdvertisementSaga() {
       body = {
         ...formValues,
         uuid,
-        campaign_type: selectedCampaign.type,
+        campaignLevel: selectedCampaign.type,
         status: statusToUpdate,
         image_document: {
           uuid,
