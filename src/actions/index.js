@@ -435,6 +435,18 @@ export const populateVacancyFormSuccess = (campaignDetails, isToEdit) => ({
   campaignDetails,
   isToEdit,
 });
+export const populateVacancyFormForEe = (id, isToEdit) => ({
+  type: POPULATE_VACANCY_FORM,
+  id,
+  isToEdit,
+});
+export const populateVacancyFormForEeSuccess = (campaignDetails, isToEdit) => ({
+  type: POPULATE_VACANCY_FORM_SUCCESS,
+  campaignDetails,
+  isToEdit,
+});
+
+
 
 // POPULATE SIGNUP FORM
 export const populateSignupForm = (applicantData) => ({

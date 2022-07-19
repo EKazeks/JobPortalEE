@@ -36,7 +36,7 @@ const jobsReducer = (state = initialState, action) => {
     case FETCH_JOB_BY_ID:
       return {
         ...state,
-        jobPostNumber: action.id,
+        id: action.id,
       };
 
     case FILTER_JOBS:

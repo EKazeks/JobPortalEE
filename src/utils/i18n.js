@@ -32,13 +32,13 @@ i18n
       en,
       ru,
     },
-    lng: lang,
+    lng: 'ee',
     //debug: true,
     ns: ['common'],
     // defaultNS: 'modal',
     fallbackLng: lang, // use fi if detected lng is not available
     react: {
-      //wait: true
+      wait: true
     },
     interpolation: {
       escapeValue: false, // react already safes from xss

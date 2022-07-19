@@ -99,12 +99,12 @@ const AdDetails = ({
 }) => {
   const { t } = useTranslation("adDetails");
   const dispatch = useDispatch();
-  const { jobPostNumber } = useSelector((state) => state.jobs);
+  const { id } = useSelector((state) => state.jobs);
   const [jobsToRender, setJobsToRender] = useState([]);
   selectedPage = 1;
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${jobPostNumber}`).then((res) => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data);
     });
   }, []);
@@ -177,7 +177,7 @@ const AdDetails = ({
                         onClick={() => {
                           store.dispatch(
                             populateVacancyForm(
-                              jobsToRender.jobPostNumber,
+                              jobsToRender.id,
                               false
                             )
                           );
@@ -195,8 +195,8 @@ const AdDetails = ({
                         store.dispatch(
                           changeActivePostToInactive(
                             userRole === "admin"
-                              ? `${jobsToRender.jobPostNumber}admin${jobsToRender.companyBusinessId}`
-                              : jobsToRender.jobPostNumber
+                              ? `${jobsToRender.id}admin${jobsToRender.companyBusinessId}`
+                              : jobsToRender.id
                           )
                         );
                       }}
@@ -210,7 +210,7 @@ const AdDetails = ({
                 {jobsToRender.campaignType === "Free" && (
                   <Grid item>
                     <Link
-                      to={`/tyopaikkailmoitus/${jobsToRender.jobPostNumber}`}
+                      to={`/tyopaikkailmoitus/${jobsToRender.id}`}
                       className="btnLink"
                     >
                       <Button
@@ -316,7 +316,7 @@ const AdDetails = ({
                       color="primary"
                       onClick={() => {
                         store.dispatch(
-                          populateVacancyForm(jobsToRender.jobPostNumber, false)
+                          populateVacancyForm(jobsToRender.id, false)
                         );
                       }}
                     >
@@ -331,8 +331,8 @@ const AdDetails = ({
                       store.dispatch(
                         changeActivePostToInactive(
                           userRole === "admin"
-                            ? `${jobsToRender.jobPostNumber}admin${jobsToRender.companyBusinessId}`
-                            : jobsToRender.jobPostNumber
+                            ? `${jobsToRender.id}admin${jobsToRender.companyBusinessId}`
+                            : jobsToRender.id
                         )
                       );
                     }}
@@ -346,7 +346,7 @@ const AdDetails = ({
               {jobsToRender.campaignType === "Free" && (
                 <Grid item>
                   <Link
-                    to={`/tyopaikkailmoitus/${jobsToRender.jobPostNumber}`}
+                    to={`/tyopaikkailmoitus/${jobsToRender.id}`}
                     className="btnLink"
                   >
                     <Button
