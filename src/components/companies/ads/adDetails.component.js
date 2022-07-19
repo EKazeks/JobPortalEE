@@ -98,8 +98,7 @@ const AdDetails = ({
   props,
 }) => {
   const { t } = useTranslation("adDetails");
-  const dispatch = useDispatch();
-  const { id } = useSelector((state) => state.jobs);
+  const { id, jobDetails } = useSelector((state) => state.jobs);
   const [jobsToRender, setJobsToRender] = useState([]);
   selectedPage = 1;
 
@@ -109,15 +108,54 @@ const AdDetails = ({
     });
   }, []);
 
+  const dateFormat = (date) => {
+    const formatedDate = date.split('T', 10)[0].split('-')
+    const newDateFormat = formatedDate[2] + '.' + formatedDate[1] + '.' + formatedDate[0]
+      if (newDateFormat == 'undefined.undefined.' || newDateFormat == 'undefined.undefined.string') {
+        return 'Date'
+      } else {
+        return newDateFormat
+      }
+  }
+
+
+
+
+
+  const updateJobOffer = (res,req) => {
+    const {
+      jobTitle,
+      jobCategory,
+      jobType,
+      jobDuration,
+      jobLocation,
+      applicationUrl,
+      lastApplicationDate,
+      jobDescription,
+      campaignLevel
+    } = req.body
+    const jobOffer = axios
+    .patch(`https://localhost:7262/updateJobOffer`, {
+    ...req.body
+    })
+    .then((res) => res.json(jobOffer))
+  }
+
   return (
     // <div>
     //   <div>
     //     <Grid>
     //       <div>
     //         <h1>
-    //           {jobsToRender.jobPostNumber}
-    //           {jobsToRender.jobName}
-    //           {console.log(jobsToRender.jobPostNumber)}
+    //           {jobsToRender.map((job) => {
+    //             return (
+    //               <div>
+    //                 <h1>
+    //                   {job.jobPostAddress.address}
+    //                 </h1>
+    //               </div>
+    //             )
+    //           })}
     //         </h1>
     //       </div>
     //     </Grid>
@@ -125,6 +163,7 @@ const AdDetails = ({
 
     //   <h1>Test</h1>
     // </div>
+    
     <div>
       <div className="container" key={jobsToRender.id}>
         <div className={classes.backBtnContainer}>
@@ -139,17 +178,7 @@ const AdDetails = ({
           <Grid container>
             <Grid item sm={12} md={7}>
               <h2 className="ad_title_1">
-                {/* {`${jobsToRender.jobName}, ${jobsToRender.jobPostAsukohaAddress.map(address => {
-                    {
-                      if (address.address[17]) {
-                        return address.address
-                          .split(',')
-                          .splice(1)
-                          .toString();
-                      } else return address.address;
-                    }
-                  })}`} */}
-                {jobsToRender.jobName} 
+              {jobsToRender.jobName}, {'address'}
               </h2>
               <h6 className="ad_title_2">
                 <strong style={{ marginRight: 10 }}>
@@ -176,17 +205,14 @@ const AdDetails = ({
                         color="primary"
                         onClick={() => {
                           store.dispatch(
-                            populateVacancyForm(
-                              jobsToRender.id,
-                              false
-                            )
+                            populateVacancyForm(jobsToRender.id, false)
                           );
                         }}
                       >
                         {t("common:copyBtn")}
                       </Button>
                     </Link>
-                  ) : jobsToRender.campaignType === "Free" ? (
+                  ) : jobsToRender.campaignLevel === "Free" ? (
                     <Button
                       variant="outlined"
                       color="primary"
@@ -217,6 +243,7 @@ const AdDetails = ({
                         variant="outlined"
                         color="primary"
                         onClick={() => store.dispatch(updateAdvertisement())}
+                        //onClick={() => updateJobOffer()}
                       >
                         {t("editBtn")}
                       </Button>
@@ -353,6 +380,7 @@ const AdDetails = ({
                       variant="outlined"
                       color="primary"
                       onClick={() => store.dispatch(updateAdvertisement())}
+                      //onClick={() => updateJobOffer()}
                     >
                       {t("editBtn")}
                     </Button>

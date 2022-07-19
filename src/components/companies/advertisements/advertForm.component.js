@@ -19,6 +19,8 @@ import CustomizedDialog from '../../../utils/customizedDialog';
 //import AutomaticEmailAnswersContainer from '../../../containers/companies/advertisements/automaticEmailAnswers.container';
 import i18n from '../../../utils/i18n';
 import TextEditor from '../../../utils/textEditor';
+import { Link } from 'react-router-dom';
+import { saveAndPublishAdvertisementToEe } from '../../../actions';
 
 const styles = theme => ({
   header: {
@@ -111,6 +113,7 @@ const AdvertFormComponent = ({
   classes,
   handleSubmit,
   saveAndPublishAdvertisement,
+  saveAndPublishAdvertisementToEe,
   saveAdvertisementAsDraft,
   choosePaymentMethod,
   showPaymentDialog,

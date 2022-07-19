@@ -4,7 +4,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage/session'; // saving in sessionStorage
 import rootSaga from './sagas';
 import rootReducer from './reducers';
-
+import { composeWithDevTools } from 'redux-devtools-extension';
 // redux persist
 const persistConfig = {
   key: 'root',
@@ -18,7 +18,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const composeEnhancers = (process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
-const createStoreWithMiddleware = composeEnhancers(applyMiddleware(sagaMiddleware))(createStore);
+const createStoreWithMiddleware = composeWithDevTools(applyMiddleware(sagaMiddleware))(createStore);
 
 const initialState = {};
 

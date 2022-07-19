@@ -9,6 +9,8 @@ import { customURL } from "../../../utils/helperFunctions";
 import CustomizedDialogs from "../../../utils/customizedDialog";
 import i18n from "../../../utils/i18n";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { deleteJobOfferRequest } from "../../../utils/request";
 
 const ActiveAdsComponent = ({
   warnToDelete,
@@ -26,6 +28,7 @@ const ActiveAdsComponent = ({
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
+  const { id } = useSelector((state) => state.jobs);
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn`).then((res) => {
@@ -41,23 +44,34 @@ const ActiveAdsComponent = ({
     return () => window.removeEventListener("resize", updateSize);
   });
 
+  const deleteJobOfferHandler = (response) => {
+    axios
+      .delete(`https://localhost:7262/jobsEn/${id}`)
+      .then((response) => response.json())
+      .catch((error) => error.message);
+  };
+  
+  const dateFormat = (date) => {
+    const formatedDate = date.split('T', 10)[0].split('-')
+    const newDateFormat = formatedDate[2] + '.' + formatedDate[1] + '.' + formatedDate[0]
+      if (newDateFormat == 'undefined.undefined.' || newDateFormat == 'undefined.undefined.string') {
+        return 'Date'
+      } else {
+        return newDateFormat
+      }
+  }
+
   return (
     //  <div>
-    //   {jobsToRender.slice(1 * 30, 1 * 30 + 30).map(job => {
-    //     {job.jobPostHaridus.map((valdkond) => {
-    //       return (
-    //         <div>
-    //           {/* {console.log(jobPostHaridus)} */}
+    //   {jobsToRender.map(job => {
 
-    //         </div>
-    //       )
-    //     })}
     //     return (
     //       <div key={job.jobPostNumber}>
     //       <Grid>
     //         <div>
     //           <h1>
-    //             {console.log(job.jobPostHaridus)}
+    //             {job.jobName} + <br /> + {job.jobPostAddress.address}
+    //             {console.log(job.jobPostAddress.address)}
     //           </h1>
     //         </div>
     //       </Grid>
@@ -109,13 +123,7 @@ const ActiveAdsComponent = ({
         .slice(selectedPage * 10, selectedPage * 10 + 10)
         .map((item) => {
           return (
-            <div
-              key={
-                item.id === null
-                  ? item.id
-                  : item.id
-              }
-            >
+            <div key={item.id === null ? item.id : item.id}>
               <Paper style={{ marginTop: 20 }}>
                 <Grid
                   container
@@ -131,7 +139,6 @@ const ActiveAdsComponent = ({
                       >
                         <h4
                           onClick={() => {
-                            // openAdToSeeAdInfo(item.jobPostNumber)
                             fetchJobById(item.id);
                           }}
                         >
@@ -145,7 +152,18 @@ const ActiveAdsComponent = ({
                                   .toString();
                               } else return address.address;
                             }
-                          })}
+                          }) === null || undefined
+                            ? item.jobPostAsukohaAddress.map((address) => {
+                                {
+                                  if (address.address[17] === null) {
+                                    return address.address
+                                      .split(",")
+                                      .splice(1)
+                                      .toString();
+                                  } else return address.address;
+                                }
+                              })
+                            : item.jobPostAddress.address}
                         </h4>
                       </Link>
                     </div>
@@ -175,9 +193,7 @@ const ActiveAdsComponent = ({
                   <Grid item md={3} style={{ color: "#34495E " }}>
                     <div>
                       <h5>
-                        {item.dateOfApplication === null
-                          ? item.dateOfApplication
-                          : item.dateOfApplication}
+                        {dateFormat(item.dateOfApplication)}
                       </h5>
                     </div>
                   </Grid>
@@ -187,11 +203,12 @@ const ActiveAdsComponent = ({
                         <Button
                           variant="outlined"
                           color="secondary"
-                          onClick={() =>
-                            warnToDelete(item.id) === null
-                              ? warnToDelete(item.id)
-                              : warnToDelete(item.id)
-                          }
+                          // onClick={() =>
+                          //   warnToDelete(item.id) === null
+                          //     ? warnToDelete(item.id)
+                          //     : warnToDelete(item.id)
+                          // }
+                          onClick={deleteJobOfferHandler}
                         >
                           {t("common:deleteBtn")}
                         </Button>
@@ -203,13 +220,9 @@ const ActiveAdsComponent = ({
                             variant="contained"
                             color="secondary"
                             onClick={() => {
-                              populateVacancyForm(item.id, false) ===
-                              null
+                              populateVacancyForm(item.id, false) === null
                                 ? populateVacancyForm(item.id, false)
-                                : populateVacancyForm(
-                                    item.id,
-                                    false
-                                  );
+                                : populateVacancyForm(item.id, false);
                             }}
                           >
                             {t("common:copyBtn")}
@@ -260,7 +273,7 @@ const ActiveAdsComponent = ({
           nextLabel={<NavigateNextIcon />}
           breakLabel="..."
           breakClassName="break-me"
-          pageCount={5}
+          pageCount={6}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={changeAdvertPage}

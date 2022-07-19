@@ -102,9 +102,8 @@ const ApplicantsList = ({ viewSelectedAd, applications, classes, showDialog, del
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn`).then(res => {
       setJobsToRender(res.data);
-      console.log(jobsToRender);
     });
-  }, [jobsToRender]);
+  }, []);
 
   return (
     <div className="container">
@@ -118,7 +117,7 @@ const ApplicantsList = ({ viewSelectedAd, applications, classes, showDialog, del
         <Grid container>
           <Grid item xs={9} sm={11}>
             <h3 className="ad_title_3">
-              {t('allApplicants')} ({jobsToRender.totalApplicants}):
+              {t('allApplicants')} ({'0'}):
             </h3>
           </Grid>
           <Grid item xs={3} sm={1}>

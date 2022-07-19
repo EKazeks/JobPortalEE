@@ -12,10 +12,15 @@ import {
   GET_APPLICANT_DASHBOARD_INFO_SUCCESS,
   TOGGLE_EMAIL_NOTIFICATION,
   GET_WORK_START_SUCCESS,
+  SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE,
+  SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS
 } from "../constants";
 
 const initialState = {
   jobsList: [],
+  apiSuccess: false,
+  apiFailed: false,
+  isToEdit: false,
   id: 0,
   jobPostNumber:[],
   jobDetails: [],
@@ -33,6 +38,17 @@ const initialState = {
 
 const jobsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE: 
+      return {
+        ...state,
+        showSpinner: true
+      }
+    case SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS:
+      return {
+        ...state,
+        showSpinner: false,
+        apiSuccess: true,
+      }
     case FETCH_JOB_BY_ID:
       return {
         ...state,

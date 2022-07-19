@@ -31,11 +31,9 @@ import {
   SOS_SERVICE_FEE,
   POPULATE_EMAIL_MESSAGE,
   AUTO_EMAIL_TO_APPLICANT,
-  GET_JOBS_OFFERS,
-  GET_JOBS_OFFERS_SUCCESS,
 } from '../constants';
 import store from '../store';
-import { apiManualRequest, apiManualPost, apiOpenRequest, apiGetJobsOffers, fetchJobTags } from '../utils/request';
+import { apiManualRequest, apiManualPost, apiOpenRequest, apiGetJobsOffers } from '../utils/request';
 import { filterObj } from '../utils/wrappers';
 import {
   getAllCampaignsSuccess,
@@ -90,19 +88,6 @@ function* getAllJobCategorySaga() {
   }
 }
 
-function* getAllJobCategoryFromEstoniaSaga() {
-  try {
-    const url = `${API_SERVER_EST}`;
-    const jobTags = yield call(  fetchJobTags );
-    //const json = jobTags.json()
-    //const resultParsed = JSON.parse(jobTags.data);
-    yield put(getAllJobCategoryFromEstoniaSuccess(jobTags));
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-
 function* saveAndPublishAdvertisementSaga() {
   try {
     let url;
@@ -140,7 +125,7 @@ function* saveAndPublishAdvertisementSaga() {
     if (isToEdit) {
       url = `${API_SERVER}/UpdateJobPost`;
     } else {
-      url = `${API_SERVER}/AddJobPost`;
+      url = `${API_SERVER_EST}/postJob`;
     }
 
     const statusToUpdate = isDraft || extraService.help || extraService.sos ? 0 : selectedCampaign.type === 'free' ? 1 : 4;
@@ -284,55 +269,55 @@ function* getJobPostByPostIdSaga({ id }) {
   }
 }
 
-function* getAllAdsByStatusSaga({ status }) {
-  try {
-    const url = `${API_SERVER}/SearchJobPosts`;
-    const { client, usersCompanyList, companyProfile } = store.getState();
-    const uuid = client.user.data[2];
-    const roleId = client.user.data[5];
-    let selectedCompanyId;
-    selectedCompanyId = usersCompanyList.selectedCompany.company_id;
-    const assignedCompanyId = client.user.data[6].company_id;
+// function* getAllAdsByStatusSaga({ status }) {
+//   try {
+//     const url = `${API_SERVER}/SearchJobPosts`;
+//     const { client, usersCompanyList, companyProfile } = store.getState();
+//     const uuid = client.user.data[2];
+//     const roleId = client.user.data[5];
+//     let selectedCompanyId;
+//     selectedCompanyId = usersCompanyList.selectedCompany.company_id;
+//     const assignedCompanyId = client.user.data[6].company_id;
 
-    if (!selectedCompanyId) {
-      // For first time registered users, client company_id is null since user profile is not updated
-      selectedCompanyId = companyProfile.profile.company_id;
-    }
+//     if (!selectedCompanyId) {
+//       // For first time registered users, client company_id is null since user profile is not updated
+//       selectedCompanyId = companyProfile.profile.company_id;
+//     }
 
-    const company_id = roleId === 0 ? selectedCompanyId : assignedCompanyId; //super user with many companies
-    const body = JSON.stringify({
-      status,
-      uuid,
-      company_id,
-    });
+//     const company_id = roleId === 0 ? selectedCompanyId : assignedCompanyId; //super user with many companies
+//     const body = JSON.stringify({
+//       status,
+//       uuid,
+//       company_id,
+//     });
 
-    const result = yield call(apiManualPost, url, body);
-    const resultParsed = JSON.parse(result.data);
-    yield put(getAllAdsByStatusSuccess(status, resultParsed));
-  } catch (error) {
-    console.log(error);
-  }
-}
+//     const result = yield call(apiManualPost, url, body);
+//     const resultParsed = JSON.parse(result.data);
+//     yield put(getAllAdsByStatusSuccess(status, resultParsed));
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 // Populating vacancy form when editing or copying
 function* populateVacancyFormSaga({ id, isToEdit }) {
   try {
-    const url = `${API_SERVER}`;
-    const companyId = store.getState().jobsToRender.companyBusinessId;
+    const url = `${API_SERVER_EST}/${id}`;
+    //const companyBusinessId = store.getState().jobs.companyBusinessId;
     const campaigns = store.getState().advertisement.campaigns;
     const userRole = store.getState().client.user.data[6].user_type;
 
     const body = JSON.stringify({
       jobPostNumber: userRole === 'admin' ? id.split('admin')[0] : id,
-      companyBusinessId: userRole === 'admin' ? id.split('admin')[1] : companyId,
+      //companyBusinessId: userRole === 'admin' ? id.split('admin')[1] : companyBusinessId,
     });
-    const result = yield call(apiManualPost, url, body);
+    const result = yield call(apiManualRequest, url, body);
     const resultParsed = JSON.parse(result.data);
     // console.log('resultParsed', resultParsed);
     // If we are populating from Draft Component, we are editing--> call UpdateJobPost API, it needs company_id && post_id which is being sent along with the vacancy form!
 
     const {
-      post_id,
-      company_id,
+      jobPostNumber,
+      //companyBusinessId,
       company_image,
       image_id,
       job_title,
@@ -354,8 +339,8 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     } = resultParsed[0];
 
     if (isToEdit) {
-      yield put(change('vacancy', 'post_id', post_id));
-      yield put(change('vacancy', 'company_id', company_id));
+      yield put(change('vacancy', 'jobPostNumber', jobPostNumber));
+     // yield put(change('vacancy', 'company_id', company_id));
       if (company_image) {
         yield put(change('vacancy', 'image_document', company_image));
         yield put(change('vacancy', 'image_id', image_id));
@@ -428,7 +413,7 @@ function* updateJobPostSaga() {
 function* updateAndPublishAdvertisementSaga() {
   try {
     let body;
-    const url = `${API_SERVER}/UpdateJobPost`;
+    const url = `${API_SERVER_EST}/updateJobOffer`;
     const formValues = getFormValues('editVacancy')(store.getState());
     const uuid = store.getState().client.user.data[2];
     const { uploadedImage } = store.getState().advertisement;
@@ -649,7 +634,7 @@ function* displayInitialDetails({ isToEdit }) {
 }
 function* deleteJobPostSaga({ id }) {
   try {
-    const url = `${API_SERVER}/DeleteJobPost`;
+    const url = `${API_SERVER_EST}/${id}`;
     const companyId = store.getState().companyProfile.profile.company_id;
     const userRole = store.getState().client.user.data[6].user_type;
 
@@ -657,7 +642,7 @@ function* deleteJobPostSaga({ id }) {
       post_id: userRole === 'admin' ? id.split('admin')[0] : id,
       company_id: userRole === 'admin' ? id.split('admin')[1] : companyId,
     });
-    yield call(apiManualPost, url, body);
+    yield call( apiOpenRequest, url);
 
     if (userRole === 'admin') {
       yield put(filterJobs(true));
@@ -862,9 +847,6 @@ function* populateEmailMessageSaga({ languages }) {
   }
 }
 
-// export function* watchGetJobsOffersSaga() {
-//   yield takeEvery(GET_JOBS_OFFERS, getJobsOffersSaga);
-// } // GET JOBS OFFERS
 export function* watchsaveAndPublishAdvertisementSaga() {
   yield takeEvery(SAVE_AND_PUBLISH_ADVERTISEMENT, saveAndPublishAdvertisementSaga);
 }
@@ -880,12 +862,12 @@ export function* watchgetAllCampaignsSaga() {
 }
 
 export function* watchgetAllJobCategorysSaga() {
-  yield takeEvery(GET_ALL_JOB_CATEGORY, getAllJobCategorySaga, getAllJobCategoryFromEstoniaSaga);
+  yield takeEvery(GET_ALL_JOB_CATEGORY, getAllJobCategorySaga);
 }
 
-export function* watchgetAllAdsByStatusSaga() {
-  yield takeEvery(GET_ALL_ADS_BY_STATUS, getAllAdsByStatusSaga);
-}
+// export function* watchgetAllAdsByStatusSaga() {
+//   yield takeEvery(GET_ALL_ADS_BY_STATUS, getAllAdsByStatusSaga);
+// }
 export function* watchgetJobPostByPostIdSaga() {
   yield takeEvery(OPEN_AD_TO_SEE_AD_INFO, getJobPostByPostIdSaga);
 }

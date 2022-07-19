@@ -1,6 +1,8 @@
 import axios from 'axios';
 import store from '../store';
 import { useEffect, useState } from 'react';
+import jobsReducer from '../reducers/jobsReducer';
+import { useSelector } from 'react-redux';
 
 
 const getManualAuthHeaders = () => {
@@ -108,7 +110,7 @@ export const apiOpenRequest = (url = `https://localhost:7262/jobsEn`, method = '
     .catch(error => ({ error }));
 };
 
-export const apiOpenPost = (url = 'https://localhost:7262/jobsEn/postJob', body, method = 'POST') => {
+export const apiOpenPost = (url = 'https://localhost:7262/jobsEn', body, method = 'POST') => {
   const headers = new Headers();
   headers.append('Content-Type', 'application/json');
 
@@ -123,10 +125,3 @@ export const apiOpenPost = (url = 'https://localhost:7262/jobsEn/postJob', body,
     .then(data => ({ data }))
     .catch(error => ({ error }));
 };
-
-export const fetchJobTags = (req, res) => {
-  return fetch('https://localhost:7262/jobsEn',{
-    method:'GET',
-  })
-  .then(res => res.json())
-}

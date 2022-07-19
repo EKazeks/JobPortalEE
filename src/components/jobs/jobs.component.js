@@ -188,6 +188,16 @@ const JobsComponent = ({
     });
   }, []);
 
+  const dateFormat = (date) => {
+    const formatedDate = date.split('T', 10)[0].split('-')
+    const newDateFormat = formatedDate[2] + '.' + formatedDate[1] + '.' + formatedDate[0]
+      if (newDateFormat == 'undefined.undefined.' || newDateFormat == 'undefined.undefined.string') {
+        return 'Date'
+      } else {
+        return newDateFormat
+      }
+  }
+
   return (
 
     <div>
@@ -298,15 +308,26 @@ const JobsComponent = ({
                               <h5 className={classes.companyInfo}>
                                 {item.companyName},
                                 {item.jobPostAsukohaAddress.map((address) => {
-                                  {
-                                    if (address.address[17] === null) {
-                                      return address.address
-                                        .split(",")
-                                        .splice(1)
-                                        .toString();
-                                    } else return address.address;
-                                  }
-                                })}
+                            {
+                              if (address.address[17] === null) {
+                                return address.address
+                                  .split(",")
+                                  .splice(1)
+                                  .toString();
+                              } else return address.address;
+                            }
+                          }) === null || undefined
+                            ? item.jobPostAsukohaAddress.map((address) => {
+                                {
+                                  if (address.address[17] === null) {
+                                    return address.address
+                                      .split(",")
+                                      .splice(1)
+                                      .toString();
+                                  } else return address.address;
+                                }
+                              })
+                            : item.jobPostAddress.address}
                               </h5>
                             </div>
                             <Hidden only={"xl"}>
@@ -321,7 +342,7 @@ const JobsComponent = ({
                                 <Grid item>
                                   <span>
                                     {t("applicationDueDate")}:
-                                    {item.dateOfApplication}
+                                    {dateFormat(item.dateOfApplication)}
                                   </span>
                                 </Grid>
                               </Grid>

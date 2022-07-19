@@ -60,7 +60,7 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
 
     const portal_url = `${API_SERVER}/SearchPortalAds/?offset=${start}&rows=${JOBPOST_COUNT_PER_PAGE}`;
 
-    const portal_result = yield call(apiOpenPost, portal_url, body);
+    const portal_result = yield call(apiOpenPost,portal_url, body);
     const portal_data = JSON.parse(portal_result.data);
     yield put(filterJobsSuccess(portal_data));
 

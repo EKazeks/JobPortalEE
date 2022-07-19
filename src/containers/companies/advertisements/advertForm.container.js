@@ -9,7 +9,7 @@ import {
   choosePaymentMethod,
   addExtraService,
   changeRoute,
-  getAllJobCategoryFromEstoniaSuccess
+  saveAndPublishAdvertisementToEeSuccess
 } from '../../../actions';
 import store from '../../../store';
 import { jobPostFormValidate as validate } from '../../validate';
@@ -31,7 +31,7 @@ const mapStateToProps = state => {
     apiSuccess: store.getState().advertisement.apiSuccess,
     apiFailed: store.getState().advertisement.apiFailed,
     showSpinner: store.getState().advertisement.showSpinner,
-    isToEdit: state.advertisement.isToEdit,
+    isToEdit: state.jobs.isToEdit,
     synchronousError: state.form && state.form.vacancy && state.form.vacancy.syncErrors,
     showPaymentDialog: state.asyncActions.showPaymentDialog,
     extraService: state.advertisement.extraService,
@@ -58,6 +58,6 @@ const mapDispatchToProps = {
   choosePaymentMethod,
   addExtraService,
   changeRoute,
-  getAllJobCategoryFromEstoniaSuccess,
+  saveAndPublishAdvertisementToEeSuccess
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AdvertFormContainer);

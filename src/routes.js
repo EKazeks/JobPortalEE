@@ -75,7 +75,7 @@ export default class Routes extends React.Component {
                 <Route exact path="/tyopaikkailmoitus" component={isUserAuthenticated(AdvertForm)} />
                 <Route exact path="/tyopaikkailmoitus/:id" component={isUserAuthenticated(EditAdvertFormContainer)} />
                 <Route exact path="/applicants/:id" component={isUserAuthenticated(ApplicantDetails)} />
-                <Route exact path="/jobpost/:name/:jobPostNumber" component={isUserAuthenticated(AdInfoContainer)} />
+                <Route exact path="/jobpost/:name/:id" component={isUserAuthenticated(AdInfoContainer)} />
                 <Route exact path="/omat-ilmoitukseni" component={isUserAuthenticated(AllAdsContainer)} />
                 <Route exact path="/omat-tiedot" component={isUserAuthenticated(ProfileContainer)} />
 

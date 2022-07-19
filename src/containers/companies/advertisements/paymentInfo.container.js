@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-import { saveAndPublishAdvertisement, closeDialog } from '../../../actions';
+import { saveAndPublishAdvertisement,saveAndPublishAdvertisementToEe, closeDialog } from '../../../actions';
 import PaymentInfoComponent from '../../../components/companies/advertisements/paymentInfo.component';
 import { HELP_SERVICE_FEE, SOS_SERVICE_FEE } from '../../../constants';
 import { customTranslateCampaign } from '../../../utils/customTranslate';
@@ -51,6 +51,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   saveAndPublishAdvertisement,
+  saveAndPublishAdvertisementToEe,
   closeDialog,
 };
 

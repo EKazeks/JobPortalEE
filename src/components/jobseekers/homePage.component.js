@@ -263,7 +263,8 @@ const HomePageComponent = ({
                 </Link>
               </div>
               <p className={classes.cardContentInfo}>
-                <span className={classes.cardContentDynamicInfo}>{dashboard && dashboard.favourite}</span>
+                {/* <span className={classes.cardContentDynamicInfo}>{dashboard && dashboard.favourite}</span> */}
+                <span className={classes.cardContentDynamicInfo}>{'0'}</span>
                 {t('totalFavs')}
               </p>
             </CardContent>

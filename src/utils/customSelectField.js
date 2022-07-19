@@ -168,8 +168,6 @@ export const MarketingPlatform = ({ viewBy }) => {
 };
 
 export const JobCategoriesComponent = ({
-  jobCategories,
-  jobTags,
   margin,
   hideLabel,
   selectedPage
@@ -180,8 +178,6 @@ export const JobCategoriesComponent = ({
   const categorys = jobsToRender.map((category) => category.jobTags)
   const sortCategorys = Array.from(new Set(categorys))
 
-  //console.log(sortCategorys);
-
   useEffect(() => {
     axios.get("https://localhost:7262/jobsEn").then((res) => {
       setJobsToRender(res.data);
@@ -191,6 +187,9 @@ export const JobCategoriesComponent = ({
     value: str,
     id: index + 1
   }));
+  if (objCategory.length = 23) {
+     //console.log(objCategory)
+  }
   return (
     <div>
       <Field
@@ -203,11 +202,9 @@ export const JobCategoriesComponent = ({
         required
       >
         {objCategory.map((category) => {
-          console.log(category.id.length);
           return (
             <option
               value={category.id === 1 ? "" : category.id} // id:1 is empty -- required for validation
-              //value={category} // id:1 is empty -- required for validation
               key={category.id}
             >
               {t(`${category.id}`)}

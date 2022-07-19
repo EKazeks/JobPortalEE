@@ -6,7 +6,7 @@ import AdminSearchFormComponent from '../../components/admin/admin.searchForm.co
 
 class AdminSearchFormContainer extends React.Component {
   componentDidMount() {
-     this.props.getAllJobCategory();
+     //this.props.getAllJobCategory();
   }
 
   render() {

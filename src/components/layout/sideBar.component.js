@@ -1,19 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { Drawer, CssBaseline, List, ListItem, ListItemText } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import Hidden from '@material-ui/core/Hidden';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import Fab from '@material-ui/core/Fab';
-import { customURL } from '../../utils/helperFunctions';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import {
+  Drawer,
+  CssBaseline,
+  List,
+  ListItem,
+  ListItemText,
+} from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
+import Hidden from "@material-ui/core/Hidden";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import Fab from "@material-ui/core/Fab";
+import { customURL } from "../../utils/helperFunctions";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const drawerWidth = 200;
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   drawer: {
     width: drawerWidth,
@@ -21,11 +28,11 @@ const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    top: 'auto',
-    border: 'none',
-    position: 'absolute',
-    [theme.breakpoints.up('md')]: {
-      height: 'max-content',
+    top: "auto",
+    border: "none",
+    position: "absolute",
+    [theme.breakpoints.up("md")]: {
+      height: "max-content",
     },
   },
   // necessary for content to be below app bar
@@ -42,16 +49,23 @@ const styles = theme => ({
   },
 });
 
-const SideBar = ({ classes, selectedMenu, viewSelectedAd, getAdInfoFromSideMenu, match, fetchedPosts }) => {
-  const { t } = useTranslation('navbar');
+const SideBar = ({
+  classes,
+  selectedMenu,
+  viewSelectedAd,
+  getAdInfoFromSideMenu,
+  match,
+  fetchedPosts,
+}) => {
+  const { t } = useTranslation("navbar");
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [jobsToRender, setJobsToRender] = useState([]);
+  const { id } = useSelector((state) => state.jobs);
   const selectedPage = 1;
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn`).then(res => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data);
-      console.log(jobsToRender);
     });
   }, []);
 
@@ -65,20 +79,60 @@ const SideBar = ({ classes, selectedMenu, viewSelectedAd, getAdInfoFromSideMenu,
       <CssBaseline />
       {jobsToRender.length !== 0 && (
         <List>
-          <Link className="btnLink" to={customURL(jobsToRender.url, 'internal')}>
-            <ListItem value={0} button className={selectedMenu === 0 ? classes.activeNav : classes.inactiveNav} onClick={() => getAdInfoFromSideMenu(0)}>
-              <ListItemText primary={t('post')} className={classes.sideBarText} />
+          <Link
+            className="btnLink"
+            to={customURL(jobsToRender.url, "internal")}
+          >
+            <ListItem
+              value={0}
+              button
+              className={
+                selectedMenu === 0 ? classes.activeNav : classes.inactiveNav
+              }
+              onClick={() => getAdInfoFromSideMenu(0)}
+            >
+              <ListItemText
+                primary={t("post")}
+                className={classes.sideBarText}
+              />
             </ListItem>
           </Link>
-          <Link className="btnLink" to={customURL(jobsToRender.url, 'internal')}>
-            <ListItem value={1} button className={selectedMenu === 1 ? classes.activeNav : classes.inactiveNav} onClick={() => getAdInfoFromSideMenu(1)}>
-    {/*           <ListItemText primary={`${t('applications')} (${viewSelectedAd.total_applicants})`} className={classes.sideBarText} /> */}
-              <ListItemText primary={`${t('applications')} (${'1'})`} className={classes.sideBarText} />
+          <Link
+            className="btnLink"
+            to={customURL(jobsToRender.url, "internal")}
+          >
+            <ListItem
+              value={1}
+              button
+              className={
+                selectedMenu === 1 ? classes.activeNav : classes.inactiveNav
+              }
+              onClick={() => getAdInfoFromSideMenu(1)}
+            >
+              <ListItemText
+                primary={`${t("applications")} (${
+                  jobsToRender.totalApplicants
+                })`}
+                className={classes.sideBarText}
+              />
             </ListItem>
           </Link>
-          <Link className="btnLink" to={customURL(jobsToRender.url, 'internal')}>
-            <ListItem value={2} button className={selectedMenu === 2 ? classes.activeNav : classes.inactiveNav} onClick={() => getAdInfoFromSideMenu(2)}>
-              <ListItemText primary={t('dashboard')} className={classes.sideBarText} />
+          <Link
+            className="btnLink"
+            to={customURL(jobsToRender.url, "internal")}
+          >
+            <ListItem
+              value={2}
+              button
+              className={
+                selectedMenu === 2 ? classes.activeNav : classes.inactiveNav
+              }
+              onClick={() => getAdInfoFromSideMenu(2)}
+            >
+              <ListItemText
+                primary={t("dashboard")}
+                className={classes.sideBarText}
+              />
             </ListItem>
           </Link>
         </List>
@@ -89,7 +143,12 @@ const SideBar = ({ classes, selectedMenu, viewSelectedAd, getAdInfoFromSideMenu,
   return (
     <div className={classes.root}>
       <Hidden mdUp implementation="css">
-        <Fab color="secondary" aria-label="open drawer" onClick={handleDrawerToggle} className={classes.menuButton}>
+        <Fab
+          color="secondary"
+          aria-label="open drawer"
+          onClick={handleDrawerToggle}
+          className={classes.menuButton}
+        >
           <MenuIcon />
         </Fab>
         <Drawer

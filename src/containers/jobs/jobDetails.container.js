@@ -16,7 +16,7 @@ class JobDetailsContainer extends React.Component {
 const mapStateToProps = state => {
   return {
     state,
-    jobDetails: state.jobs.jobDetails && state.jobs.jobDetails,
+    jobDetails: state.jobs.jobsList && state.jobs.jobsList,
     workStart: state.jobs.workStart && state.jobs.workStart,
     favoriteJobs: state.jobs.favoriteJobs && state.jobs.favoriteJobs,
     favBtnstatus: !!(state.jobs.jobDetails && state.jobs.jobDetails.favourite),

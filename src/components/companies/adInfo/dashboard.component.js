@@ -52,14 +52,24 @@ const DashboardComponent = ({
   const [jobsToRender, setJobsToRender] = useState([]);
   const selectedPage = 1;
   const dispatch = useDispatch();
-  const { jobPostNumber } = useSelector((state) => state.jobs);
+  const { id } = useSelector((state) => state.jobs);
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${jobPostNumber}`).then((res) => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data);
       console.log(jobsToRender);
     });
   }, []);
+
+  const dateFormat = (date) => {
+    const formatedDate = date.split('T', 10)[0].split('-')
+    const newDateFormat = formatedDate[2] + '.' + formatedDate[1] + '.' + formatedDate[0]
+      if (newDateFormat == 'undefined.undefined.' || newDateFormat == 'undefined.undefined.string') {
+        return 'Date'
+      } else {
+        return newDateFormat
+      }
+  }
 
   return (
     <div>
@@ -93,7 +103,7 @@ const DashboardComponent = ({
         <div className="ad_title_3">
           <Grid container spacing={1}>
             <Grid item>
-              <h3>{t("campaign")}: </h3>
+              <h3>{t("campaign")}: {jobsToRender.campaignType}</h3>
             </Grid>
             <Grid item>
               <h3>{customTranslateCampaign("Free")}</h3>
@@ -118,7 +128,7 @@ const DashboardComponent = ({
                   </div>
                   <div>
                     <h3 className="ad_title_1">
-                      {customTranslateCampaign("Free")}
+                      {jobsToRender.campaignType}
                     </h3>
                   </div>
                 </Grid>
@@ -155,7 +165,8 @@ const DashboardComponent = ({
                 <CardContent className={classes.cardContent}>
                   <div>
                     <h3>
-                      <strong>{jobsToRender.totalLikes}</strong>
+                      {/* <strong>{jobsToRender.totalLikes}</strong> */}
+                      <strong>{'0'}</strong>
                     </h3>
                   </div>
                   <div>{t("adDetails:totalFavs")}</div>
@@ -167,7 +178,8 @@ const DashboardComponent = ({
                 <CardContent className={classes.cardContent}>
                   <div>
                     <h3>
-                      <strong>{jobsToRender.totalViewed}</strong>
+                      {/* <strong>{jobsToRender.totalViewed}</strong> */}
+                      <strong>{'0'}</strong>
                     </h3>
                   </div>
                   <div>{t("adDetails:totalViewed")}</div>
@@ -183,7 +195,7 @@ const DashboardComponent = ({
                 <CardContent className={classes.cardContent}>
                   <div>
                     <h3>
-                      <strong>{"2"}</strong>
+                      <strong>{"0"}</strong>
                     </h3>
                   </div>
                   <div>{t("adDetails:totalLinkClicks")}</div>
@@ -195,7 +207,7 @@ const DashboardComponent = ({
                 <CardContent className={classes.cardContent}>
                   <div>
                     <h3>
-                      <strong>{jobsToRender.totalApplicants}</strong>
+                      <strong>{'0'}</strong>
                     </h3>
                   </div>
                   <div>{t("adDetails:totalApplication")}</div>

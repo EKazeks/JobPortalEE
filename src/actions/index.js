@@ -1,4 +1,5 @@
 import { id } from "date-fns/locale";
+import { actionChannel } from "redux-saga/effects";
 import {
   SAVE_AND_PUBLISH_ADVERTISEMENT,
   UPDATE_AND_PUBLISH_ADVERTISEMENT,
@@ -148,6 +149,8 @@ import {
   GET_JOBS_OFFERS,
   GET_JOBS_OFFERS_SUCCESS,
   GET_ALL_JOB_CATEGORY_FROM_ESTONIA_SUCCESS,
+  SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE,
+  SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS,
 } from "../constants";
 
 // get jobs offers
@@ -319,6 +322,9 @@ export const postAdvertisement = () => ({
 export const saveAndPublishAdvertisement = () => ({
   type: SAVE_AND_PUBLISH_ADVERTISEMENT,
 });
+export const saveAndPublishAdvertisementToEe = () => ({
+  type: SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE,
+});
 export const updateAndPublishAdvertisement = () => ({
   type: UPDATE_AND_PUBLISH_ADVERTISEMENT,
 });
@@ -326,8 +332,12 @@ export const updateAndPublishAdvertisementSuccess = () => ({
   type: UPDATE_AND_PUBLISH_ADVERTISEMENT_SUCCESS,
 });
 
-export const saveAndPublishAdvertisementSuccess = () => ({
+export const saveAndPublishAdvertisementSuccess = (payload) => ({
   type: SAVE_AND_PUBLISH_ADVERTISEMENT_SUCCESS,
+  payload: payload
+});
+export const saveAndPublishAdvertisementToEeSuccess = (action,payload) => ({
+  type: SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS,
 });
 
 export const saveAdvertisementAsDraft = () => ({
@@ -609,12 +619,12 @@ export const updateEmailNotification = () => ({
 // FAVORITE JOBS
 export const toggleFavoriteJobs = (
   companyBusinessId,
-  jobPostNumber,
+  id,
   status
 ) => ({
   type: TOGGLE_FAVORITE_JOBS,
   companyBusinessId,
-  jobPostNumber,
+  id,
   status,
 });
 export const deleteFavoriteJobs = (

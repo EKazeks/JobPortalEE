@@ -20,6 +20,7 @@ import { mol_page_url } from "../../constants";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { isRteEmpty } from "../../containers/validate";
+import NotFoundPage from "../../utils/notFoundPage";
 
 const styles = (theme) => ({
   addMargin: {
@@ -122,291 +123,301 @@ const JobDetailsComponent = ({
   const title = `${jobsToRender?.jobName} - ${jobsToRender?.companyName} | Avoimet työpaikat`;
   const selectedPage = 1;
 
-  return (
-    <div>
-      <div className="container">
-        <SEO
-          title={title}
-          location={jobsToRender?.url}
-          heroImage={jobsToRender?.logo} // Incase we want to use post specific image..Right now, we are using same default image for all posts as marketing wanted.
-        />
-        <div className={classes.addMargin}>
-          <div className={classes.backBtnContainer}>
-            <Link
-              onClick={() => changePagination(false)}
-              to={{
-                pathname: "/tyopaikat",
-              }}
-              className={classes.backBtnText}
-            >
-              <ArrowBackIosIcon /> {t("backToJobList")}
-            </Link>
-          </div>
-          <Grid container spacing={4} alignItems="center">
-            <Grid item sm={12} md={7}>
-              <h2 className="ad_title_1">{`${jobsToRender.jobName}`}</h2>
-              <h6>
-                <strong className={classes.metaDataTitle}>
-                  <span>{t("applyPeriod")}: </span>
-                  <span className={classes.metaData}>
-                    {jobsToRender.dateOfApplication}
-                  </span>
-                </strong>
-              </h6>
-              <h6>
-                <strong className={classes.metaDataTitle}>
-                  <span>{t("jobtype:jobTypeLabel")}: </span>
-                  <span className={classes.metaData}>
-                    {jobsToRender.durationOfEmployment}
-                  </span>
-                </strong>
-              </h6>
-              <h6>
-                <strong className={classes.metaDataTitle}>
-                  <span>{t("jobhours:jobHoursLabel")}: </span>
-                  <span className={classes.metaData}>
-                    {convertJobHoursToStr(t, jobsToRender.workingTime)}
-                  </span>
-                </strong>
-              </h6>
-              {workStart != null ? (
-                <h6>
-                  <strong className={classes.metaDataTitle}>
-                    <span>{t("jobhours:workStartLabel")}: </span>
-                    <span className={classes.metaData}>
-                      {convertJobWorksStartToStr(t, workStart)}
-                    </span>
-                  </strong>
-                </h6>
-              ) : null}
-              {jobsToRender.status === 2 && (
-                <p style={{ color: "red" }}>{t("inactiveBtn")}</p>
-              )}
-            </Grid>
-            <Grid item sm={12} md={5}>
-              {jobsToRender.status === 1 && (
-                <Grid container spacing={2} className={classes.ctaBtn}>
-                  <Grid item>
-                    <Button color="primary" variant="outlined">
-                      {t("shareBtn")}
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <FavBtn
-                      isFav={!!jobsToRender.favourite}
-                      handleFav={() =>
-                        toggleFavoriteJobs(
-                          jobsToRender.companyBusinessId,
-                          jobsToRender.id,
-                          !favBtnstatus
-                        )
-                      }
-                      btnText={
-                        !jobsToRender.favourite ? t("addFav") : t("deleteFav")
-                      }
-                    />
-                  </Grid>
-                  <Grid item>
-                    {jobsToRender.url ? (
-                      <a
-                        className="btnLink"
-                        href={jobsToRender.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button color="primary" variant="contained">
-                          <DescriptionIcon />
-                          <span style={{ marginLeft: 8 }}>{t("applyBtn")}</span>
-                        </Button>
-                      </a>
-                    ) : (
-                      <Link
-                        className="btnLink"
-                        to={customURL(jobsToRender.url, "application")}
-                      >
-                        <Button color="primary" variant="contained">
-                          <DescriptionIcon />
-                          <span style={{ marginLeft: 8 }}>{t("applyBtn")}</span>
-                        </Button>
-                      </Link>
-                    )}
-                  </Grid>
-                </Grid>
-              )}
-            </Grid>
-          </Grid>
-          <Divider style={{ margin: "15px 0 0 0" }} />
-        </div>
-        <Grid container justifyContent="flex-end">
-          <div
-            className={jobsToRender.logo ? classes.logo : null}
-            style={{
-              backgroundImage: `url(${
-                jobsToRender.logo ? jobsToRender.logo[0].path : null
-              })`,
-            }}
-          />
-        </Grid>
-        <div className={classes.jobDetail}>
-          {jobsToRender.logo && (
-            <div className={classes.companyImgFrame}>
-              <img
-                src={heroImage}
-                alt="company-img"
-                className={jobsToRender.logo ? classes.companyImage : ""}
-              />
-            </div>
-          )}
-          <div
-            className={classes.jobDesc}
-            dangerouslySetInnerHTML={{ __html: jobsToRender.jobDescription }} // To convert rte string into html
-          />
-          {jobsToRender.profile_description &&
-            !isRteEmpty(jobsToRender.profile_description) && (
-              <div className={classes.additionalInfo}>
-                <p>
-                  <strong>{t("aboutUs")}</strong>
-                </p>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: jobDetails.profile_description,
-                  }} // To convert rte string into html
-                />
-              </div>
-            )}
-          {jobsToRender.companyPageUrl && (
-            <p className={classes.additionalInfo}>
-              {`${t("readMore")} : `}
-              <a
-                href={jobsToRender.companyPageUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {`${jobsToRender.companyPageUrl}`}
-              </a>
-            </p>
-          )}
-          {!!jobsToRender?.url && (
-            <p className={classes.sourceInfo}>
-              <em>
-                {t("source")}
-                <a
-                  href={`${jobsToRender?.url}`}
-                  className={classes.metaData}
-                  target="_blank"
-                  rel="noopener noreferrer"
+  const dateFormat = (date) => {
+    const formatedDate = date.split('T', 10)[0].split('-')
+    const newDateFormat = formatedDate[2] + '.' + formatedDate[1] + '.' + formatedDate[0]
+      if (newDateFormat == 'undefined.undefined.' || newDateFormat == 'undefined.undefined.string') {
+        return 'Date'
+      } else {
+        return newDateFormat
+      }
+  }
+  
+      return (
+        <div>
+          <div className="container">
+            <SEO
+              title={title}
+              location={jobsToRender?.url}
+              heroImage={jobsToRender?.logo} // Incase we want to use post specific image..Right now, we are using same default image for all posts as marketing wanted.
+            />
+            <div className={classes.addMargin}>
+              <div className={classes.backBtnContainer}>
+                <Link
+                  onClick={() => changePagination(false)}
+                  to={{
+                    pathname: "/tyopaikat",
+                  }}
+                  className={classes.backBtnText}
                 >
-                  {t("mol")}
-                </a>
-              </em>
-            </p>
-          )}
-        </div>
-        <Grid container spacing={4} alignItems="center">
-          <Hidden smDown>
-            <Grid item sm={12} md={7} />
-          </Hidden>
-          <Grid item sm={12} md={5}>
-            {jobDetails.status === 1 && (
-              <Grid container spacing={2} className={classes.ctaBtn}>
-                {/* <Grid item>
-                  <Button color='primary' variant='outlined'>
-                    {t('shareBtn')}
-                  </Button>
-                </Grid> */}
-                <Grid item>
-                  <FavBtn
-                    isFav={!!jobsToRender.favourite}
-                    handleFav={() =>
-                      toggleFavoriteJobs(
-                        jobsToRender.companyBusinessId,
-                        jobsToRender.id,
-                        !favBtnstatus
-                      )
-                    }
-                    btnText={
-                      !jobsToRender.favourite ? t("addFav") : t("deleteFav")
-                    }
-                  />
+                  <ArrowBackIosIcon /> {t("backToJobList")}
+                </Link>
+              </div>
+              <Grid container spacing={4} alignItems="center">
+                <Grid item sm={12} md={7}>
+                  <h2 className="ad_title_1">{`${jobsToRender.jobName}`}</h2>
+                  <h6>
+                    <strong className={classes.metaDataTitle}>
+                      <span>{t("applyPeriod")}: </span>
+                      <span className={classes.metaData}>
+                        {jobsToRender.dateOfApplication}
+                      </span>
+                    </strong>
+                  </h6>
+                  <h6>
+                    <strong className={classes.metaDataTitle}>
+                      <span>{t("jobtype:jobTypeLabel")}: </span>
+                      <span className={classes.metaData}>
+                        {jobsToRender.durationOfEmployment}
+                      </span>
+                    </strong>
+                  </h6>
+                  <h6>
+                    <strong className={classes.metaDataTitle}>
+                      <span>{t("jobhours:jobHoursLabel")}: </span>
+                      <span className={classes.metaData}>
+                        {convertJobHoursToStr(t, jobsToRender.workingTime)}
+                      </span>
+                    </strong>
+                  </h6>
+                  {workStart != null ? (
+                    <h6>
+                      <strong className={classes.metaDataTitle}>
+                        <span>{t("jobhours:workStartLabel")}: </span>
+                        <span className={classes.metaData}>
+                          {convertJobWorksStartToStr(t, workStart)}
+                        </span>
+                      </strong>
+                    </h6>
+                  ) : null}
+                  {jobsToRender.status === 2 && (
+                    <p style={{ color: "red" }}>{t("inactiveBtn")}</p>
+                  )}
                 </Grid>
-                <Grid item>
-                  {jobsToRender.url ? (
-                    <a
-                      className="btnLink"
-                      href={jobsToRender.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button color="primary" variant="contained">
-                        <DescriptionIcon />
-                        <span style={{ marginLeft: 8 }}>{t("applyBtn")}</span>
-                      </Button>
-                    </a>
-                  ) : (
-                    <Link
-                      className="btnLink"
-                      to={customURL(jobsToRender.url, "application")}
-                    >
-                      <Button color="primary" variant="contained">
-                        <DescriptionIcon />
-                        <span style={{ marginLeft: 8 }}>{t("applyBtn")}</span>
-                      </Button>
-                    </Link>
+                <Grid item sm={12} md={5}>
+                  {jobsToRender.status === 1 && (
+                    <Grid container spacing={2} className={classes.ctaBtn}>
+                      {/* <Grid item>
+                        <Button color="primary" variant="outlined">
+                          {t("shareBtn")}
+                        </Button>src/components/jobs/jobDetails.component.js
+                      </Grid> */}
+                      <Grid item>
+                        <FavBtn
+                          isFav={!!jobsToRender.favourite}
+                          handleFav={() =>
+                            toggleFavoriteJobs(
+                              jobsToRender.companyBusinessId,
+                              jobsToRender.id,
+                              !favBtnstatus
+                            )
+                          }
+                          btnText={
+                            !jobsToRender.favourite ? t("addFav") : t("deleteFav")
+                          }
+                        />
+                      </Grid>
+                      <Grid item>
+                        {jobsToRender.urlToApplyJob ? (
+                              <a
+                                className="btnLink"
+                                href={jobsToRender.urlToApplyJob}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <Button color="primary" variant="contained">
+                                  <DescriptionIcon />
+                                  <span style={{ marginLeft: 8 }}>{t("applyBtn")}</span>
+                                </Button>
+                              </a>
+                            ) : (
+                              <Link
+                                className="btnLink"
+                                to={customURL(jobsToRender.urlToApplyJob, "application")}
+                              >
+                                <Button color="primary" variant="contained">
+                                  <DescriptionIcon />
+                                  <span style={{ marginLeft: 8 }}>{t("applyBtn")}</span>
+                                </Button>
+                              </Link>
+                            )}
+                      </Grid>
+                    </Grid>
                   )}
                 </Grid>
               </Grid>
-            )}
-          </Grid>
-        </Grid>
-      </div>
-      )
-      {/* Display structure for mol ads --Copy code from molAds.js if needed in future otherwise delete that file */}
-      {/* <Loader showSpinner={showSpinner} /> */}
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        open={showSuccessSnackbar}
-        autoHideDuration={2000}
-        onClose={() => {
-          closeSnackbar();
-        }}
-      >
-        <MySnackbarContentWrapper
-          variant="success"
-          message={t("successMsg")}
-          onClose={() => {
-            closeSnackbar();
-          }}
-        />
-      </Snackbar>
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        open={showFailedSnackbar}
-        autoHideDuration={2000}
-        onClose={() => {
-          closeSnackbar();
-        }}
-      >
-        <MySnackbarContentWrapper
-          onClose={() => {
-            closeSnackbar();
-          }}
-          variant="error"
-          message={t("failedMsg")}
-        />
-      </Snackbar>
-      <CustomizedDialogs
-        showDialog={showDialog}
-        dialogText={t("loginText")}
-        loginModal
-      />
-    </div>
-  );
-};
-
+              <Divider style={{ margin: "15px 0 0 0" }} />
+            </div>
+            <Grid container justifyContent="flex-end">
+              <div
+                className={jobsToRender.logo ? classes.logo : null}
+                style={{
+                  backgroundImage: `url(${
+                    jobsToRender.logo ? jobsToRender.logo[0].path : null
+                  })`,
+                }}
+              />
+            </Grid>
+            <div className={classes.jobDetail}>
+              {jobsToRender.logo && (
+                <div className={classes.companyImgFrame}>
+                  <img
+                    src={heroImage}
+                    alt="company-img"
+                    className={jobsToRender.logo ? classes.companyImage : ""}
+                  />
+                </div>
+              )}
+              <div
+                className={classes.jobDesc}
+                dangerouslySetInnerHTML={{ __html: jobsToRender.jobDescription }} // To convert rte string into html
+              />
+              {jobsToRender.profile_description &&
+                !isRteEmpty(jobsToRender.profile_description) && (
+                  <div className={classes.additionalInfo}>
+                    <p>
+                      <strong>{t("aboutUs")}</strong>
+                    </p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: jobDetails.profile_description,
+                      }} // To convert rte string into html
+                    />
+                  </div>
+                )}
+              {jobsToRender.companyPageUrl && (
+                <p className={classes.additionalInfo}>
+                  {`${t("readMore")} : `}
+                  <a
+                    href={jobsToRender.companyPageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {`${jobsToRender.companyPageUrl}`}
+                  </a>
+                </p>
+              )}
+              {!!jobsToRender?.url && (
+                <p className={classes.sourceInfo}>
+                  <em>
+                    {t("source")}
+                    <a
+                      href={`${jobsToRender?.url}`}
+                      className={classes.metaData}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {t("mol")}
+                    </a>
+                  </em>
+                </p>
+              )}
+            </div>
+            <Grid container spacing={4} alignItems="center">
+              <Hidden smDown>
+                <Grid item sm={12} md={7} />
+              </Hidden>
+              <Grid item sm={12} md={5}>
+                {jobDetails.status === 1 && (
+                  <Grid container spacing={2} className={classes.ctaBtn}>
+                    <Grid item>
+                      <Button color='primary' variant='outlined'>
+                        {t('shareBtn')}
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <FavBtn
+                        isFav={!!jobsToRender.favourite}
+                        handleFav={() =>
+                          toggleFavoriteJobs(
+                            jobsToRender.companyBusinessId,
+                            jobsToRender.id,
+                            !favBtnstatus
+                          )
+                        }
+                        btnText={
+                          !jobsToRender.favourite ? t("addFav") : t("deleteFav")
+                        }
+                      />
+                    </Grid>
+                    <Grid item>
+                      {jobsToRender.urlToApplyJob ? (
+                        <a
+                          className="btnLink"
+                          href={jobsToRender.urlToApplyJob}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button color="primary" variant="contained">
+                            <DescriptionIcon />
+                            <span style={{ marginLeft: 8 }}>{t("applyBtn")}</span>
+                          </Button>
+                        </a>
+                      ) : (
+                        <Link
+                          className="btnLink"
+                          to={customURL(jobsToRender.urlToApplyJob, "application")}
+                        >
+                          <Button color="primary" variant="contained">
+                            <DescriptionIcon />
+                            <span style={{ marginLeft: 8 }}>{t("applyBtn")}</span>
+                          </Button>
+                        </Link>
+                      )}
+                    </Grid>
+                  </Grid>
+                )}
+              </Grid>
+            </Grid>
+          </div>
+          )
+          {/* Display structure for mol ads --Copy code from molAds.js if needed in future otherwise delete that file */}
+          {/* <Loader showSpinner={showSpinner} /> */}
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+            open={showSuccessSnackbar}
+            autoHideDuration={2000}
+            onClose={() => {
+              closeSnackbar();
+            }}
+          >
+            <MySnackbarContentWrapper
+              variant="success"
+              message={t("successMsg")}
+              onClose={() => {
+                closeSnackbar();
+              }}
+            />
+          </Snackbar>
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+            open={showFailedSnackbar}
+            autoHideDuration={2000}
+            onClose={() => {
+              closeSnackbar();
+            }}
+          >
+            <MySnackbarContentWrapper
+              onClose={() => {
+                closeSnackbar();
+              }}
+              variant="error"
+              message={t("failedMsg")}
+            />
+          </Snackbar>
+          <CustomizedDialogs
+            showDialog={showDialog}
+            dialogText={t("loginText")}
+            loginModal
+          />
+        </div>
+      );
+    };
+  
 export default withStyles(styles)(JobDetailsComponent);
