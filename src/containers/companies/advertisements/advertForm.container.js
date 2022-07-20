@@ -13,6 +13,7 @@ import {
 } from '../../../actions';
 import store from '../../../store';
 import { jobPostFormValidate as validate } from '../../validate';
+import { SettingsEthernet } from '@material-ui/icons';
 
 const AdvertFormContainer = reduxForm({
   form: 'vacancy',
@@ -35,7 +36,8 @@ const mapStateToProps = state => {
     synchronousError: state.form && state.form.vacancy && state.form.vacancy.syncErrors,
     showPaymentDialog: state.asyncActions.showPaymentDialog,
     extraService: state.advertisement.extraService,
-
+    postRequestSucces:store.getState().advertisement.postRequesSucces,
+    postRequestFailure:store.getState().advertisement.postRequesFailure
     // initialValues: {
     //   notice_frequency: '7',
     //   email_language: [

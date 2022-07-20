@@ -108,7 +108,15 @@ const AdDetails = ({
     
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data);
-      setDateOfApplication(dateFormat(res.data.dateOfApplication))
+      let date = res.data.dateOfApplication.split('.')
+
+      if(date.length === 3 )
+      {
+        setDateOfApplication(res.data.dateOfApplication)
+      }
+      else{
+        setDateOfApplication(dateFormat(res.data.dateOfApplication))
+      }
       setAddress(res.data.jobPostAddress.address)
     });
   }, []);

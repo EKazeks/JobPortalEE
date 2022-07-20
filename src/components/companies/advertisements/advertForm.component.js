@@ -132,6 +132,8 @@ const AdvertFormComponent = ({
   submitFailed,
   extraService,
   changeRoute,
+  postRequestSucces,
+  postRequestFailure
 }) => {
   const { t } = useTranslation('advertForm', 'campaigns');
   const storedPath =
@@ -340,7 +342,7 @@ const AdvertFormComponent = ({
       >
         <MySnackbarContentWrapper
           variant="error"
-          message={apiFailed ? t('apiErrorMsg') : t('errorMsg')}
+          message={postRequestFailure ? t('apiErrorMsg') : t('errorMsg')}
           onClose={() => {
             closeSnackbar();
           }}

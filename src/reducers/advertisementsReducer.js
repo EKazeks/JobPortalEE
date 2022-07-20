@@ -35,6 +35,8 @@ import {
 } from '../constants';
 
 const initialState = {
+  postRequesSucces:false,
+  postRequesFailure:false,
   showSpinner: false,
   isSaveAndPublishAdvertisement: false,
   isSaveAdvertisementAsDraft: false,
@@ -83,7 +85,8 @@ export default function advertisementsReducer(state = initialState, action) {
     case SAVE_AND_PUBLISH_ADVERTISEMENT:
       return {
         ...state,
-        showSpinner: true,
+        showSpinner: false,
+        apiSuccess: true,
       };
     case UPDATE_AND_PUBLISH_ADVERTISEMENT:
       return {

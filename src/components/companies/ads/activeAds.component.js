@@ -50,16 +50,24 @@ const ActiveAdsComponent = ({
       .then((response) => response.json())
       .catch((error) => error.message);
   };
-  
- const dateFormat = (date) => {
-    const formatedDate = date.split('T', 10)[0].split('-')
-    const newDateFormat = formatedDate[2] + '.' + formatedDate[1] + '.' + formatedDate[0]
-      if (newDateFormat == 'undefined.undefined.' || newDateFormat == 'undefined.undefined.string') {
-        return 'Date'
-      } else {
-        return newDateFormat
-      }
-  }
+
+  const dateFormat = (date) => {
+    let arrivedDate = date.split(".");
+    if (arrivedDate.length === 3) {
+      return date;
+    }
+    const formatedDate = date.split("T", 10)[0].split("-");
+    const newDateFormat =
+      formatedDate[2] + "." + formatedDate[1] + "." + formatedDate[0];
+    if (
+      newDateFormat == "undefined.undefined." ||
+      newDateFormat == "undefined.undefined.string"
+    ) {
+      return "Date";
+    } else {
+      return newDateFormat;
+    }
+  };
 
   return (
     //  <div>
@@ -192,9 +200,7 @@ const ActiveAdsComponent = ({
                   </Grid>
                   <Grid item md={3} style={{ color: "#34495E " }}>
                     <div>
-                      <h5>
-                        {dateFormat(item.dateOfApplication)}
-                      </h5>
+                      <h5>{dateFormat(item.dateOfApplication)}</h5>
                     </div>
                   </Grid>
                   <Grid item md={4}>
