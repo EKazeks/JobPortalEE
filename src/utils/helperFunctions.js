@@ -1,8 +1,16 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import store from "../store";
 
 export const customURL = (url, type) => {
+
+  const {id} = store.getState().jobs
   if (url === undefined) {
     return;
+  }
+  if(url === null)
+  {
+    return `/jobpost/some-internal-created-offer/${id}`
   }
   // url comes from backend in this format - "https://vpt-ui-dev.azurewebsites.net/tyopaikat/Nordic-C-Creditor-Oy/67289/Kirjanpitäjä-Controller/14"
   let path = [];

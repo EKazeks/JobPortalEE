@@ -1,3 +1,6 @@
+//Edit offer
+export const EDIT_OFFER = 'EDIT_OFFER'
+
 // OPEN JOBS COMPONENT
 
 export const FILTER_JOBS = 'FILTER_JOBS';

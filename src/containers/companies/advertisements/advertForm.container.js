@@ -37,7 +37,9 @@ const mapStateToProps = state => {
     showPaymentDialog: state.asyncActions.showPaymentDialog,
     extraService: state.advertisement.extraService,
     postRequestSucces:store.getState().advertisement.postRequesSucces,
-    postRequestFailure:store.getState().advertisement.postRequesFailure
+    postRequestFailure:store.getState().advertisement.postRequesFailure,
+    idToCopy:store.getState().jobs.idToCopy,
+    isOfferCopied:store.getState().jobs.isOfferCopied
     // initialValues: {
     //   notice_frequency: '7',
     //   email_language: [

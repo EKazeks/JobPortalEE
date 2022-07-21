@@ -151,6 +151,7 @@ import {
   GET_ALL_JOB_CATEGORY_FROM_ESTONIA_SUCCESS,
   SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE,
   SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS,
+  EDIT_OFFER
 } from "../constants";
 
 // get jobs offers
@@ -162,6 +163,11 @@ export const fetchJobById = (id) => ({
   type: FETCH_JOB_BY_ID,
   id,
 });
+
+export const editOffer = (id) => ({
+  type:EDIT_OFFER,
+  id,
+})
 
 // export const getJobsOffersSuccess = () => ({
 //   type: GET_JOBS_OFFERS_SUCCESS,

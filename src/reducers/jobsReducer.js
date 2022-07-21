@@ -13,7 +13,8 @@ import {
   TOGGLE_EMAIL_NOTIFICATION,
   GET_WORK_START_SUCCESS,
   SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE,
-  SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS
+  SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS,
+  EDIT_OFFER
 } from "../constants";
 
 const initialState = {
@@ -22,6 +23,8 @@ const initialState = {
   apiFailed: false,
   isToEdit: false,
   id: 0,
+  idToCopy:0,
+  isOfferCopied:false,
   jobPostNumber:[],
   jobDetails: [],
   selectedPage: {
@@ -42,6 +45,12 @@ const jobsReducer = (state = initialState, action) => {
       return {
         ...state,
         showSpinner: true
+      }
+    case EDIT_OFFER:
+      return{
+        ...state,
+        idToCopy:action.id,
+        isOfferCopied:true
       }
     case SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS:
       return {

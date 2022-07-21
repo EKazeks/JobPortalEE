@@ -24,6 +24,7 @@ const ActiveAdsComponent = ({
   showDialog,
   isToDeleteAdvertisementId,
   fetchJobById,
+  editOffer
 }) => {
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
@@ -226,9 +227,7 @@ const ActiveAdsComponent = ({
                             variant="contained"
                             color="secondary"
                             onClick={() => {
-                              populateVacancyForm(item.id, false) === null
-                                ? populateVacancyForm(item.id, false)
-                                : populateVacancyForm(item.id, false);
+                              editOffer(item.id)
                             }}
                           >
                             {t("common:copyBtn")}
