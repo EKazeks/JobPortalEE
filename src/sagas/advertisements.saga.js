@@ -67,6 +67,7 @@ import { customTranslateCampaign } from '../utils/customTranslate';
 import browserHistory from '../history';
 import { messageTemplate } from '../components/companies/advertisements/automaticMessageToApplicants/messages';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 function* getAllCampaignsSaga() {
   try {
@@ -133,7 +134,7 @@ function* saveAndPublishAdvertisementSaga() {
     const refinedFormValues = filterObj('image_document', formValues);
 
     if (isToEdit) {
-      url = `${API_SERVER}/UpdateJobPost`;
+      url = `${API_SERVER_EST}/updateJobOffer`;
     } else {
       url = `${API_SERVER_EST}/postJob`;
     }
@@ -463,7 +464,10 @@ function* updateAndPublishAdvertisementSaga() {
       });
     }
 
-    const result = yield call(apiManualPost, url, body);
+    // const result = yield call(apiManualPost, url, body);
+    const result = axios.patch(url,body).finally(res=> 
+    res.data
+   )
     const parsedResult = JSON.parse(result.data);
     if (parsedResult) {
       yield put(updateAndPublishAdvertisementSuccess());
@@ -486,27 +490,28 @@ function* updateCampaignSaga({ id }) {
   try {
     yield put(closeDialog());
 
-    const { advertisement, client, companyProfile } = store.getState();
+    const { advertisement, client, companyProfile,jobs } = store.getState();
     const paymentInfoForm = getFormValues('paymentInfo')(store.getState());
     const payment_method = paymentInfoForm && paymentInfoForm.payment_method;
 
     // Upgrade campaign
-    const url = `${API_SERVER}/HandleCampaignUpgrade`;
+    const url = `${API_SERVER_EST}/updateJobOfferCampaignType`;
     const uuid = store.getState().client.user.data[2];
     const { type, includes_mktbudget } = advertisement.selectedCampaign;
     const campaign_id = advertisement.selectedCampaign.id;
     const userRole = client.user.data[6].user_type;
+    const {id} = jobs
     const post_id = userRole === 'admin' ? id.split('admin')[0] : id;
     const companyId = userRole === 'admin' ? id.split('admin')[1] : companyProfile.profile.company_id;
-    const due_date = formValueSelector('campaign')(store.getState(), 'due_date');
+    const campaignDate = formValueSelector('campaign')(store.getState(), 'due_date');
     let parsedCompany = {};
 
     const body = {
-      campaign_type: type,
-      uuid,
-      post_id,
-      company_id: companyId,
-      due_date,
+      campaignType: type,
+      //uuid,
+      id,
+      //company_id: companyId,
+      campaignDate,
     };
 
     if (includes_mktbudget) {
@@ -517,7 +522,10 @@ function* updateCampaignSaga({ id }) {
       body.marketing_budget = !!marketing_budget ? parseInt(marketing_budget) : 0;
     }
 
-    const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
+    // const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
+      const result = axios.patch(url,body).finally((res) =>
+        res
+     )
     const resultParsed = JSON.parse(result.data);
 
     if (resultParsed) {

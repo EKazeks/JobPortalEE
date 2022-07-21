@@ -60,12 +60,14 @@ const SideBar = ({
   const { t } = useTranslation("navbar");
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [jobsToRender, setJobsToRender] = useState([]);
+  const [applicant, setApplicant] = useState({})
   const { id } = useSelector((state) => state.jobs);
   const selectedPage = 1;
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data);
+      setApplicant(res.data.jobPostApplications)
     });
   }, []);
 
@@ -111,7 +113,7 @@ const SideBar = ({
             >
               <ListItemText
                 primary={`${t("applications")} (${
-                  jobsToRender.totalApplicants
+                  applicant.length
                 })`}
                 className={classes.sideBarText}
               />

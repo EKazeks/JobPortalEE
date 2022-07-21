@@ -12,6 +12,7 @@ import {
   convertJobTypeToStr,
   convertJobWorksStartToStr,
   customURL,
+  dateFormat,
 } from "../../utils/helperFunctions";
 import CustomizedDialogs from "../../utils/customizedDialog";
 import Loader from "../../utils/loader";
@@ -110,11 +111,24 @@ const JobDetailsComponent = ({
 }) => {
   const [jobsToRender, setJobsToRender] = useState([]);
   const { id } = useSelector((state) => state.jobs);
+  const [dateOfApplication, setDateOfApplication] = useState();
+  const [address, setAddress] = useState();
+  const [urlToApplyJob, setUrlToApplyJob] = useState()
+  const [jobDuration, setJobDuration] = useState([
+    'Valid until further notice', 'Temporary'
+  ]);
+  const [jobType, setJobType] = useState([
+    'shift work','Evening and weekend work',''
+  ])
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
-      setJobsToRender(res.data);
-      console.log(jobsToRender);
+      setJobsToRender(res.data)
+      setDateOfApplication(dateFormat(res.data.dateOfApplication))
+      setAddress(res.data.jobPostAddress.address)
+      setJobDuration(res.data.isPermanentPlace[0])
+      setJobType(res.data.isNightShift[1])
+      setUrlToApplyJob(res.data.url)
     });
   }, []);
 
@@ -122,16 +136,6 @@ const JobDetailsComponent = ({
   const heroImage = jobsToRender.logo && jobsToRender.logo[0].path;
   const title = `${jobsToRender?.jobName} - ${jobsToRender?.companyName} | Avoimet työpaikat`;
   const selectedPage = 1;
-
-  const dateFormat = (date) => {
-    const formatedDate = date.split('T', 10)[0].split('-')
-    const newDateFormat = formatedDate[2] + '.' + formatedDate[1] + '.' + formatedDate[0]
-      if (newDateFormat == 'undefined.undefined.' || newDateFormat == 'undefined.undefined.string') {
-        return 'Date'
-      } else {
-        return newDateFormat
-      }
-  }
   
       return (
         <div>
@@ -155,12 +159,12 @@ const JobDetailsComponent = ({
               </div>
               <Grid container spacing={4} alignItems="center">
                 <Grid item sm={12} md={7}>
-                  <h2 className="ad_title_1">{`${jobsToRender.jobName}`}</h2>
+                  <h2 className="ad_title_1">{`${jobsToRender.jobName},${address}`}</h2>
                   <h6>
                     <strong className={classes.metaDataTitle}>
                       <span>{t("applyPeriod")}: </span>
                       <span className={classes.metaData}>
-                        {jobsToRender.dateOfApplication}
+                        {dateOfApplication}
                       </span>
                     </strong>
                   </h6>
@@ -168,7 +172,7 @@ const JobDetailsComponent = ({
                     <strong className={classes.metaDataTitle}>
                       <span>{t("jobtype:jobTypeLabel")}: </span>
                       <span className={classes.metaData}>
-                        {jobsToRender.durationOfEmployment}
+                        {jobDuration}
                       </span>
                     </strong>
                   </h6>
@@ -176,7 +180,7 @@ const JobDetailsComponent = ({
                     <strong className={classes.metaDataTitle}>
                       <span>{t("jobhours:jobHoursLabel")}: </span>
                       <span className={classes.metaData}>
-                        {convertJobHoursToStr(t, jobsToRender.workingTime)}
+                        {convertJobHoursToStr(t, jobType)}
                       </span>
                     </strong>
                   </h6>
@@ -205,23 +209,23 @@ const JobDetailsComponent = ({
                       <Grid item>
                         <FavBtn
                           isFav={!!jobsToRender.favourite}
-                          handleFav={() =>
-                            toggleFavoriteJobs(
-                              jobsToRender.companyBusinessId,
-                              jobsToRender.id,
-                              !favBtnstatus
-                            )
-                          }
+                          // handleFav={() =>
+                          //   toggleFavoriteJobs(
+                          //     jobsToRender.companyBusinessId,
+                          //     jobsToRender.id,
+                          //     !favBtnstatus
+                          //   )
+                          // }
                           btnText={
                             !jobsToRender.favourite ? t("addFav") : t("deleteFav")
                           }
                         />
                       </Grid>
                       <Grid item>
-                        {jobsToRender.urlToApplyJob ? (
+                        {urlToApplyJob ? (
                               <a
                                 className="btnLink"
-                                href={jobsToRender.urlToApplyJob}
+                                href={urlToApplyJob}
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >
@@ -233,7 +237,7 @@ const JobDetailsComponent = ({
                             ) : (
                               <Link
                                 className="btnLink"
-                                to={customURL(jobsToRender.urlToApplyJob, "application")}
+                                to={customURL('link', "application")}
                               >
                                 <Button color="primary" variant="contained">
                                   <DescriptionIcon />
@@ -259,7 +263,7 @@ const JobDetailsComponent = ({
               />
             </Grid>
             <div className={classes.jobDetail}>
-              {jobsToRender.logo && (
+              {/* {jobsToRender.logo && (
                 <div className={classes.companyImgFrame}>
                   <img
                     src={heroImage}
@@ -267,20 +271,20 @@ const JobDetailsComponent = ({
                     className={jobsToRender.logo ? classes.companyImage : ""}
                   />
                 </div>
-              )}
+              )} */}
               <div
                 className={classes.jobDesc}
                 dangerouslySetInnerHTML={{ __html: jobsToRender.jobDescription }} // To convert rte string into html
               />
-              {jobsToRender.profile_description &&
-                !isRteEmpty(jobsToRender.profile_description) && (
+              {jobsToRender.companyDescription &&
+                !isRteEmpty(jobsToRender.companyDescription) && (
                   <div className={classes.additionalInfo}>
                     <p>
                       <strong>{t("aboutUs")}</strong>
                     </p>
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: jobDetails.profile_description,
+                        __html: jobDetails.companyDescription,
                       }} // To convert rte string into html
                     />
                   </div>
@@ -341,10 +345,10 @@ const JobDetailsComponent = ({
                       />
                     </Grid>
                     <Grid item>
-                      {jobsToRender.urlToApplyJob ? (
+                      {urlToApplyJob ? (
                         <a
                           className="btnLink"
-                          href={jobsToRender.urlToApplyJob}
+                          href={urlToApplyJob}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -356,7 +360,7 @@ const JobDetailsComponent = ({
                       ) : (
                         <Link
                           className="btnLink"
-                          to={customURL(jobsToRender.urlToApplyJob, "application")}
+                          to={customURL('link', "application")}
                         >
                           <Button color="primary" variant="contained">
                             <DescriptionIcon />

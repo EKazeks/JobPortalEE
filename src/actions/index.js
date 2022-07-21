@@ -775,15 +775,15 @@ export const resetApplicationSent = () => ({
 
 // GET APPLICATION
 export const getApplicationDetailsById = (
-  application_id,
-  company_id,
-  post_id,
+  id,
+  //company_id,
+  jobpostId,
   email
 ) => ({
   type: GET_APPLICATION_DETAILS_BY_ID,
-  application_id,
-  company_id,
-  post_id,
+  id,
+  //company_id,
+  jobpostId,
   email,
 });
 export const getApplicationDetailsByIdSuccess = (response) => ({
