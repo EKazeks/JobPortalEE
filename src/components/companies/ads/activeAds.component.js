@@ -5,7 +5,7 @@ import ReactPaginate from "react-paginate";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import { useTranslation } from "react-i18next";
-import { customURL } from "../../../utils/helperFunctions";
+import { customURL, dateFormat } from "../../../utils/helperFunctions";
 import CustomizedDialogs from "../../../utils/customizedDialog";
 import i18n from "../../../utils/i18n";
 import axios from "axios";
@@ -28,14 +28,16 @@ const ActiveAdsComponent = ({
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
+  const [applicants, setApplicants] = useState({})
   const { id } = useSelector((state) => state.jobs);
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn`).then((res) => {
       setJobsToRender(res.data);
+      setApplicants(res.data.jobPostApplication)
     });
   }, []);
-
+  
   const updateSize = () => {
     setIsDesktop(window.innerWidth >= 1440);
   };
@@ -51,35 +53,24 @@ const ActiveAdsComponent = ({
       .catch((error) => error.message);
   };
 
-  const dateFormat = (date) => {
-    let arrivedDate = date.split(".");
-    if (arrivedDate.length === 3) {
-      return date;
-    }
-    const formatedDate = date.split("T", 10)[0].split("-");
-    const newDateFormat =
-      formatedDate[2] + "." + formatedDate[1] + "." + formatedDate[0];
-    if (
-      newDateFormat == "undefined.undefined." ||
-      newDateFormat == "undefined.undefined.string"
-    ) {
-      return "Date";
-    } else {
-      return newDateFormat;
-    }
-  };
-
   return (
     //  <div>
     //   {jobsToRender.map(job => {
 
     //     return (
-    //       <div key={job.jobPostNumber}>
+    //       <div key={job.id}>
     //       <Grid>
     //         <div>
     //           <h1>
-    //             {job.jobName} + <br /> + {job.jobPostAddress.address}
-    //             {console.log(job.jobPostAddress.address)}
+    //             {applicants && applicants.map((applicant) => {
+    //               return (
+    //                 <h1>
+    //                   {applicant.firstName}
+
+    //                 </h1>
+    //               )
+    //             })}
+    //             {/* {console.log(applicants.length)} */}
     //           </h1>
     //         </div>
     //       </Grid>
@@ -181,9 +172,9 @@ const ActiveAdsComponent = ({
                         <span style={{ color: "red", margin: "0 5px" }}>
                           (
                           {`${
-                            item.totalApplicants === null
-                              ? item.totalApplicants
-                              : item.totalApplicants
+                            applicants === null
+                              ? applicants.length
+                              : applicants
                           }`}
                           )
                         </span>

@@ -70,19 +70,6 @@ export const dateFormat = (date) => {
   }
 };
 
-// export const dateFormat = (date) => {
-//   const formatedDate = date.split("T", 10)[0].split("-");
-//   const newDateFormat =
-//     formatedDate[2] + "." + formatedDate[1] + "." + formatedDate[0];
-//   if (
-//     newDateFormat == "undefined.undefined." ||
-//     newDateFormat == "undefined.undefined.string"
-//   ) {
-//     return ("Date");
-//   } else {
-//     return (newDateFormat);
-//   }
-
 export const convertJobHoursToStr = (t, type) => {
   return (
     <>

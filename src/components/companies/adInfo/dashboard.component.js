@@ -51,6 +51,7 @@ const DashboardComponent = ({
   const { t } = useTranslation("campaigns", "adDetails");
   const [jobsToRender, setJobsToRender] = useState([]);
   const [dateOfApplication,setDateOfApplication] = useState();
+  const [applicant, setApplicant] = useState({})
   const [address,setAddress] = useState();
   const selectedPage = 1; 
   const dispatch = useDispatch();
@@ -61,6 +62,7 @@ const DashboardComponent = ({
       setJobsToRender(res.data);
       setDateOfApplication(dateFormat(res.data.dateOfApplication))
       setAddress(res.data.jobPostAddress.address)
+      setApplicant(res.data.jobPostApplications)
     });
   }, []);
 
@@ -202,7 +204,7 @@ const DashboardComponent = ({
                 <CardContent className={classes.cardContent}>
                   <div>
                     <h3>
-                      <strong>{'0'}</strong>
+                      <strong>{applicant.length}</strong>
                     </h3>
                   </div>
                   <div>{t("adDetails:totalApplication")}</div>
