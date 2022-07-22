@@ -113,7 +113,7 @@ const JobDetailsComponent = ({
   const { id } = useSelector((state) => state.jobs);
   const [dateOfApplication, setDateOfApplication] = useState();
   const [address, setAddress] = useState();
-  const [urlToApplyJob, setUrlToApplyJob] = useState()
+ // const [urlToApplyJob, setUrlToApplyJob] = useState()
   const [jobDuration, setJobDuration] = useState([
     'Valid until further notice', 'Temporary'
   ]);
@@ -128,7 +128,7 @@ const JobDetailsComponent = ({
       setAddress(res.data.jobPostAddress.address)
       setJobDuration(res.data.isPermanentPlace[0])
       setJobType(res.data.isNightShift[1])
-      setUrlToApplyJob(res.data.url)
+     // setUrlToApplyJob(res.data.url)
     });
   }, []);
 
@@ -222,10 +222,10 @@ const JobDetailsComponent = ({
                         />
                       </Grid>
                       <Grid item>
-                        {urlToApplyJob ? (
+                        {jobsToRender.url ? (
                               <a
                                 className="btnLink"
-                                href={urlToApplyJob}
+                                href={jobsToRender.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >
@@ -345,10 +345,10 @@ const JobDetailsComponent = ({
                       />
                     </Grid>
                     <Grid item>
-                      {urlToApplyJob ? (
+                      {jobsToRender.url ? (
                         <a
                           className="btnLink"
-                          href={urlToApplyJob}
+                          href={jobsToRender.url}
                           target="_blank"
                           rel="noopener noreferrer"
                         >

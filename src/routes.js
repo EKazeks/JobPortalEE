@@ -86,7 +86,7 @@ export default class Routes extends React.Component {
                 {/* The following routes for applicants */}
 
                 <Route exact path="/profile" component={isUserAuthenticated(JobseekerProfileContainer)} />
-                <Route exact path="/haetut-tyopaikat" component={isUserAuthenticated(AppliedJobsContainer)} />
+                <Route exact path="/toopakkumised" component={isUserAuthenticated(AppliedJobsContainer)} />
                 <Route exact path="/suosikit" component={isUserAuthenticated(FavoriteJobsContainer)} />
                 <Route exact path="/etusivu" component={isUserAuthenticated(HomePageContainer)} />
 

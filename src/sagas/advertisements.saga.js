@@ -495,7 +495,7 @@ function* updateCampaignSaga({ id }) {
     const payment_method = paymentInfoForm && paymentInfoForm.payment_method;
 
     // Upgrade campaign
-    const url = `${API_SERVER_EST}/updateJobOfferCampaignType`;
+    const url = `https://localhost:7262/updateJobOfferCampaignType`;
     const uuid = store.getState().client.user.data[2];
     const { type, includes_mktbudget } = advertisement.selectedCampaign;
     const campaign_id = advertisement.selectedCampaign.id;

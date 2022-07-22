@@ -28,13 +28,11 @@ const ActiveAdsComponent = ({
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
-  const [applicants, setApplicants] = useState({})
   const { id } = useSelector((state) => state.jobs);
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn`).then((res) => {
       setJobsToRender(res.data);
-      setApplicants(res.data.jobPostApplication)
     });
   }, []);
   
@@ -172,9 +170,7 @@ const ActiveAdsComponent = ({
                         <span style={{ color: "red", margin: "0 5px" }}>
                           (
                           {`${
-                            applicants === null
-                              ? applicants.length
-                              : applicants
+                            item.jobPostApplications.length
                           }`}
                           )
                         </span>

@@ -274,7 +274,7 @@ const HomePageComponent = ({
           <Card>
             <CardContent className={classes.cardContent}>
               <div>
-                <Link to="/haetut-tyopaikat">
+                <Link to="/toopakkumised">
                   <h3>{t('appliedJobs')}</h3>
                 </Link>
               </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-export const customURL = (url, type) => {
+export const customURL = (url = 'https://www.tootukassa.ee/et/toopakkumised/pagar-658247', type) => {
   if (url === undefined) {
     return;
   }

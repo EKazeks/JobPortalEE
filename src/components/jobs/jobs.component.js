@@ -180,339 +180,315 @@ const JobsComponent = ({
 }) => {
   const { t } = useTranslation("jobsList", "jobs");
   const [jobsToRender, setJobsToRender] = useState([]);
-  const [dateOfApplication, setDateOfApplication] = useState()
   const [address,setAddress] = useState();
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn`).then((res) => {
       setJobsToRender(res.data);
-      // let date = res.data.dateOfApplication.split('.')
-
-      // if(date.length === 3 )
-      // {
-      //   setDateOfApplication(res.data.dateOfApplication)
-      // }
-      // else{
-      //   setDateOfApplication(dateFormat(res.data.dateOfApplication))
-      // } 
-        setAddress(res.data.jobPostAddress)
-      setDateOfApplication(res.data.dateOfApplication)
-      // setDateOfApplication(res.data.dateOfApplication)
-      // setAddress(res.data.jobPostAddress)
     });
   }, [])
 
   return ( 
-    jobsToRender.map((item,id) => {
-      return (
-    <div key={id}>
-      <h1>{address}</h1>
-      <h1>{item.jobName}</h1>
-      <h1>{dateOfApplication}</h1>
-      {console.log(dateOfApplication)}
+
+    <div>
+      <SEO title="Töökohad | Jobportal" />
+      <div className={classes.heroImage}>
+        <div className={classes.titleSpacer} />
+        <h1 className={classes.heroImageTitle}>{t("heroTitle")}</h1>
+      </div>
+      <div>
+        <Grid
+          container
+          justifyContent="space-around"
+          className={jobsToRender.length !== 0 ? classes.listContainer : null}
+        >
+          <Grid item md={3} xs={10} xl={2}>
+            <div className={classes.searchForm}>
+              <SearchFormContainer />
+            </div>
+          </Grid>
+          <Grid item md={8} xs={12} sm={10} xl={8}>
+            {jobsToRender &&
+              jobsToRender.length === 0 &&
+              showSpinner === false && (
+                <p className={classes.emptyResult}>
+                  <strong>{t("noJobsFound")}</strong>
+                </p>
+              )}
+            <Loader showSpinner={showSpinner} />
+
+            {jobsToRender &&
+              jobsToRender
+                .slice(selectedPage * 10, selectedPage * 10 + 10)
+                .map((item) => {
+                  return (
+                    <div key={`${item.companyBusinessId}${item.id}`}>
+                      <Paper className={classes.paper}>
+                        <Grid
+                          container
+                          style={{ padding: 8 }}
+                          spacing={1}
+                          alignItems="center"
+                          justifyContent="space-around"
+                        >
+                          {userRole === "admin" ? ( // To give the admins same view as Companies so they can edit ads!
+                            <Link
+                              className={classes.jobContainerHover}
+                              to={customURL(item.url, "open_position")}
+                              onClick={() => fetchJobById(item.id)}
+                            />
+                          ) : (
+                            <Link
+                              onClick={() => fetchJobById(item.id)}
+                              className={classes.jobContainerHover}
+                              to={customURL(item.url, "open_position")}
+                            />
+                          )}
+                          <Grid
+                            item
+                            sm={2}
+                            xs={4}
+                            lg={2}
+                            xl={1}
+                            style={{ display: "contents" }}
+                          >
+                            <div className={classes.logoContainer}>
+                              {item.logo ? (
+                                // <div
+                                //   className={classes.logoDiv}
+                                //   style={{
+                                //     backgroundImage: `url(${item.logo[0].path})`,
+                                //   }}
+                                // />
+                                <span className={classes.companyName}>
+                                  {item.companyName.length > 9
+                                    ? `${item.companyName.slice(0, 9)}...`
+                                    : item.companyName}
+                                </span>
+                              ) : (
+                                <span className={classes.companyName}>
+                                  {item.companyName.length > 9
+                                    ? `${item.companyName.slice(0, 9)}...`
+                                    : item.companyName}
+                                </span>
+                              )}
+                            </div>
+                          </Grid>
+                          <Grid
+                            item
+                            sm={6}
+                            xs={8}
+                            lg={7}
+                            xl={5}
+                            className={classes.jobInfobody}
+                          >
+                            <div>
+                              <h3
+                                className={classNames(
+                                  classes.jobTitle,
+                                  classes.jobInfo
+                                )}
+                              >
+                                {item.jobName}
+                              </h3>
+                            </div>
+
+                            <div>
+                              <h5 className={classes.companyInfo}>
+                                {item.companyName},
+                                {item.jobPostAddress.address}
+                              </h5>
+                            </div>
+                            <Hidden only={"xl"}>
+                              <Grid container className={classes.dateInfo}>
+                                <Grid item>
+                                  <span>
+                                    {t("publishedDate")}:
+                                    {/* {item.dateOfApplication} */}
+                                    'At the moment'
+                                  </span>
+                                </Grid>
+                                <Grid item>
+                                  <span>
+                                    {t("applicationDueDate")}:
+                                    {dateFormat(item.dateOfApplication)}
+                                  </span>
+                                </Grid>
+                              </Grid>
+                            </Hidden>
+                          </Grid>
+                          <Grid item xl={2}>
+                            <Hidden only={["xs", "sm", "md", "lg"]}>
+                              <Grid item>
+                                <span>
+                                  {t("publishedDate")}:
+                                  {/* {item.dateOfApplication} */}
+                                  'At the moment'
+                                </span>
+                              </Grid>
+                              <Grid item>
+                                <span>
+                                  {t("applicationDueDate")}:
+                                  {dateFormat(item.dateOfApplication)}
+                                </span>
+                              </Grid>
+                            </Hidden>
+                          </Grid>
+                          <Grid item xl={2} lg={3} md={4} sm={4} xs={12}>
+                            <Grid
+                              container
+                              justifyContent="space-between"
+                              spacing={2}
+                            >
+                              <Grid item sm={5} xs={6}>
+                                {userRole === "admin" ? ( // For admins show deleteBtn instead of FavBtn
+                                  <Button
+                                    variant="outlined"
+                                    color="secondary"
+                                    onClick={() =>
+                                      warnToDelete(
+                                        `${item.id}admin${item.companyBusinessId}`
+                                      )
+                                    }
+                                  >
+                                    {t("common:deleteBtn")}
+                                  </Button>
+                                ) : (
+                                  <FavBtn
+                                    className={classes.favBtn}
+                                    handleFav={() => {
+                                      toggleFavoriteJobs(
+                                        item.companyBusinessId,
+                                        item.id,
+                                        !favoriteJobs.some(
+                                          (favList) =>
+                                            favList.companyBusinessId ===
+                                              item.companyBusinessId &&
+                                            favList.id ===
+                                              item.id
+                                        )
+                                      );
+                                    }}
+                                    isFav={favoriteJobs.some(
+                                      (favList) =>
+                                        favList.companyBusinessId ===
+                                          item.companyBusinessId &&
+                                        favList.id ===
+                                          item.id
+                                    )} // checking from the favoriteJobs list
+                                    btnText={
+                                      !favoriteJobs.some(
+                                        (favList) =>
+                                          favList.companyBusinessId ===
+                                            item.companyBusinessId &&
+                                          favList.id ===
+                                            item.id
+                                      )
+                                        ? t("addFav")
+                                        : t("delFav")
+                                    }
+                                  />
+                                )}
+                              </Grid>
+                              <Grid item sm={5} xs={6}>
+                                <div>
+                                  {userRole === "admin" ? ( // To show the company view so admins can edit the ads.
+                                    <Link
+                                      className="btnLink"
+                                      to={customURL(item.url, "internal")}
+                                    >
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() =>
+                                          fetchJobById(item.id)
+                                        }
+                                      >
+                                        {t("common:openBtn")}
+                                      </Button>
+                                    </Link>
+                                  ) : (
+                                    <Link
+                                      className="btnLink"
+                                      to={customURL(item.url, "open_position")}
+                                    >
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className="fullWidthBtn"
+                                        onClick={() =>
+                                          fetchJobById(item.id)
+                                        }
+                                      >
+                                        {t("watchBtn")}
+                                      </Button>
+                                    </Link>
+                                  )}
+                                </div>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Paper>
+                    </div>
+                  );
+                })}
+          </Grid>
+        </Grid>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+          open={showSuccessSnackbar}
+          autoHideDuration={2000}
+          onClose={() => {
+            closeSnackbar();
+          }}
+        >
+          <MySnackbarContentWrapper
+            variant="success"
+            message={t("successMsg")}
+            onClose={() => {
+              closeSnackbar();
+            }}
+          />
+        </Snackbar>
+        <CustomizedDialog
+          showDialog={showDialog}
+          dialogText={t("loginText")}
+          loginModal
+        />
+        <CustomizedDialog
+          showDialog={showDialog && isWarnToDelete}
+          dialogText={t("jobs:warnToDeletePostText")}
+          warnToDeleteModal
+          handleClick={() => deleteAdvertisement(isToDeleteAdvertisementId)}
+        />
+      </div>
+      <div className={classes.paginationBody}>
+        <ReactPaginate
+          previousLabel={<NavigateBeforeIcon />}
+          nextLabel={<NavigateNextIcon />}
+          breakLabel="..."
+          breakClassName="break-me"
+          pageCount={3000}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={(data) => {
+            changeAdvertPage({
+              selected: data.selected,
+            });
+            filterJobs(true);
+          }}
+          containerClassName="pagination"
+          subContainerClassName="pages pagination"
+          activeClassName="active"
+          forcePage={selectedPage}
+          // style={{backgroundColor: '#F9FAFB'}}
+        />
+      </div>
     </div>
-      )
-    })
-
-    // <div>
-    //   <SEO title="Töökohad | Jobportal" />
-    //   <div className={classes.heroImage}>
-    //     <div className={classes.titleSpacer} />
-    //     <h1 className={classes.heroImageTitle}>{t("heroTitle")}</h1>
-    //   </div>
-    //   <div>
-    //     <Grid
-    //       container
-    //       justifyContent="space-around"
-    //       className={jobsToRender.length !== 0 ? classes.listContainer : null}
-    //     >
-    //       <Grid item md={3} xs={10} xl={2}>
-    //         <div className={classes.searchForm}>
-    //           <SearchFormContainer />
-    //         </div>
-    //       </Grid>
-    //       <Grid item md={8} xs={12} sm={10} xl={8}>
-    //         {jobsToRender &&
-    //           jobsToRender.length === 0 &&
-    //           showSpinner === false && (
-    //             <p className={classes.emptyResult}>
-    //               <strong>{t("noJobsFound")}</strong>
-    //             </p>
-    //           )}
-    //         <Loader showSpinner={showSpinner} />
-
-    //         {jobsToRender &&
-    //           jobsToRender
-    //             .slice(selectedPage * 10, selectedPage * 10 + 10)
-    //             .map((item) => {
-    //               return (
-    //                 <div key={`${item.companyBusinessId}${item.id}`}>
-    //                   <Paper className={classes.paper}>
-    //                     <Grid
-    //                       container
-    //                       style={{ padding: 8 }}
-    //                       spacing={1}
-    //                       alignItems="center"
-    //                       justifyContent="space-around"
-    //                     >
-    //                       {userRole === "admin" ? ( // To give the admins same view as Companies so they can edit ads!
-    //                         <Link
-    //                           className={classes.jobContainerHover}
-    //                           to={customURL(item.url, "open_position")}
-    //                           onClick={() => fetchJobById(item.id)}
-    //                         />
-    //                       ) : (
-    //                         <Link
-    //                           onClick={() => fetchJobById(item.id)}
-    //                           className={classes.jobContainerHover}
-    //                           to={customURL(item.url, "open_position")}
-    //                         />
-    //                       )}
-    //                       <Grid
-    //                         item
-    //                         sm={2}
-    //                         xs={4}
-    //                         lg={2}
-    //                         xl={1}
-    //                         style={{ display: "contents" }}
-    //                       >
-    //                         <div className={classes.logoContainer}>
-    //                           {item.logo ? (
-    //                             // <div
-    //                             //   className={classes.logoDiv}
-    //                             //   style={{
-    //                             //     backgroundImage: `url(${item.logo[0].path})`,
-    //                             //   }}
-    //                             // />
-    //                             <span className={classes.companyName}>
-    //                               {item.companyName.length > 9
-    //                                 ? `${item.companyName.slice(0, 9)}...`
-    //                                 : item.companyName}
-    //                             </span>
-    //                           ) : (
-    //                             <span className={classes.companyName}>
-    //                               {item.companyName.length > 9
-    //                                 ? `${item.companyName.slice(0, 9)}...`
-    //                                 : item.companyName}
-    //                             </span>
-    //                           )}
-    //                         </div>
-    //                       </Grid>
-    //                       <Grid
-    //                         item
-    //                         sm={6}
-    //                         xs={8}
-    //                         lg={7}
-    //                         xl={5}
-    //                         className={classes.jobInfobody}
-    //                       >
-    //                         <div>
-    //                           <h3
-    //                             className={classNames(
-    //                               classes.jobTitle,
-    //                               classes.jobInfo
-    //                             )}
-    //                           >
-    //                             {item.jobName}
-    //                           </h3>
-    //                         </div>
-
-    //                         <div>
-    //                           <h5 className={classes.companyInfo}>
-    //                             {item.companyName},
-    //                             {address}
-    //                           </h5>
-    //                         </div>
-    //                         <Hidden only={"xl"}>
-    //                           <Grid container className={classes.dateInfo}>
-    //                             <Grid item>
-    //                               <span>
-    //                                 {t("publishedDate")}:
-    //                                 {/* {item.dateOfApplication} */}
-    //                                 'At the moment'
-    //                               </span>
-    //                             </Grid>
-    //                             <Grid item>
-    //                               <span>
-    //                                 {t("applicationDueDate")}:
-    //                                 {dateOfApplication}
-    //                               </span>
-    //                             </Grid>
-    //                           </Grid>
-    //                         </Hidden>
-    //                       </Grid>
-    //                       <Grid item xl={2}>
-    //                         <Hidden only={["xs", "sm", "md", "lg"]}>
-    //                           <Grid item>
-    //                             <span>
-    //                               {t("publishedDate")}:
-    //                               {/* {item.dateOfApplication} */}
-    //                               'At the moment'
-    //                             </span>
-    //                           </Grid>
-    //                           <Grid item>
-    //                             <span>
-    //                               {t("applicationDueDate")}:
-    //                               {dateOfApplication}
-    //                             </span>
-    //                           </Grid>
-    //                         </Hidden>
-    //                       </Grid>
-    //                       <Grid item xl={2} lg={3} md={4} sm={4} xs={12}>
-    //                         <Grid
-    //                           container
-    //                           justifyContent="space-between"
-    //                           spacing={2}
-    //                         >
-    //                           <Grid item sm={5} xs={6}>
-    //                             {userRole === "admin" ? ( // For admins show deleteBtn instead of FavBtn
-    //                               <Button
-    //                                 variant="outlined"
-    //                                 color="secondary"
-    //                                 onClick={() =>
-    //                                   warnToDelete(
-    //                                     `${item.id}admin${item.companyBusinessId}`
-    //                                   )
-    //                                 }
-    //                               >
-    //                                 {t("common:deleteBtn")}
-    //                               </Button>
-    //                             ) : (
-    //                               <FavBtn
-    //                                 className={classes.favBtn}
-    //                                 handleFav={() => {
-    //                                   toggleFavoriteJobs(
-    //                                     item.companyBusinessId,
-    //                                     item.id,
-    //                                     !favoriteJobs.some(
-    //                                       (favList) =>
-    //                                         favList.companyBusinessId ===
-    //                                           item.companyBusinessId &&
-    //                                         favList.id ===
-    //                                           item.id
-    //                                     )
-    //                                   );
-    //                                 }}
-    //                                 isFav={favoriteJobs.some(
-    //                                   (favList) =>
-    //                                     favList.companyBusinessId ===
-    //                                       item.companyBusinessId &&
-    //                                     favList.id ===
-    //                                       item.id
-    //                                 )} // checking from the favoriteJobs list
-    //                                 btnText={
-    //                                   !favoriteJobs.some(
-    //                                     (favList) =>
-    //                                       favList.companyBusinessId ===
-    //                                         item.companyBusinessId &&
-    //                                       favList.id ===
-    //                                         item.id
-    //                                   )
-    //                                     ? t("addFav")
-    //                                     : t("delFav")
-    //                                 }
-    //                               />
-    //                             )}
-    //                           </Grid>
-    //                           <Grid item sm={5} xs={6}>
-    //                             <div>
-    //                               {userRole === "admin" ? ( // To show the company view so admins can edit the ads.
-    //                                 <Link
-    //                                   className="btnLink"
-    //                                   to={customURL(item.url, "internal")}
-    //                                 >
-    //                                   <Button
-    //                                     variant="contained"
-    //                                     color="primary"
-    //                                     onClick={() =>
-    //                                       fetchJobById(item.id)
-    //                                     }
-    //                                   >
-    //                                     {t("common:openBtn")}
-    //                                   </Button>
-    //                                 </Link>
-    //                               ) : (
-    //                                 <Link
-    //                                   className="btnLink"
-    //                                   to={customURL(item.url, "open_position")}
-    //                                 >
-    //                                   <Button
-    //                                     variant="contained"
-    //                                     color="primary"
-    //                                     className="fullWidthBtn"
-    //                                     onClick={() =>
-    //                                       fetchJobById(item.id)
-    //                                     }
-    //                                   >
-    //                                     {t("watchBtn")}
-    //                                   </Button>
-    //                                 </Link>
-    //                               )}
-    //                             </div>
-    //                           </Grid>
-    //                         </Grid>
-    //                       </Grid>
-    //                     </Grid>
-    //                   </Paper>
-    //                 </div>
-    //               );
-    //             })}
-    //       </Grid>
-    //     </Grid>
-    //     <Snackbar
-    //       anchorOrigin={{
-    //         vertical: "bottom",
-    //         horizontal: "center",
-    //       }}
-    //       open={showSuccessSnackbar}
-    //       autoHideDuration={2000}
-    //       onClose={() => {
-    //         closeSnackbar();
-    //       }}
-    //     >
-    //       <MySnackbarContentWrapper
-    //         variant="success"
-    //         message={t("successMsg")}
-    //         onClose={() => {
-    //           closeSnackbar();
-    //         }}
-    //       />
-    //     </Snackbar>
-    //     <CustomizedDialog
-    //       showDialog={showDialog}
-    //       dialogText={t("loginText")}
-    //       loginModal
-    //     />
-    //     <CustomizedDialog
-    //       showDialog={showDialog && isWarnToDelete}
-    //       dialogText={t("jobs:warnToDeletePostText")}
-    //       warnToDeleteModal
-    //       handleClick={() => deleteAdvertisement(isToDeleteAdvertisementId)}
-    //     />
-    //   </div>
-    //   <div className={classes.paginationBody}>
-    //     <ReactPaginate
-    //       previousLabel={<NavigateBeforeIcon />}
-    //       nextLabel={<NavigateNextIcon />}
-    //       breakLabel="..."
-    //       breakClassName="break-me"
-    //       pageCount={3000}
-    //       marginPagesDisplayed={2}
-    //       pageRangeDisplayed={5}
-    //       onPageChange={(data) => {
-    //         changeAdvertPage({
-    //           selected: data.selected,
-    //         });
-    //         filterJobs(true);
-    //       }}
-    //       containerClassName="pagination"
-    //       subContainerClassName="pages pagination"
-    //       activeClassName="active"
-    //       forcePage={selectedPage}
-    //       // style={{backgroundColor: '#F9FAFB'}}
-    //     />
-    //   </div>
-    // </div>
   );
 };
 
