@@ -361,19 +361,19 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
         yield put(change('vacancy', 'image_id', image_id));
       }
     }
-    yield put(change('advertForm', 'jobTitle', jobName));
-    yield put(change('advertForm', 'jobType', titleSpecification));
-    yield put(change('advertForm', 'jobDuration', workingTime));
-    yield put(change('advertForm', 'jobCategory', jobTags));
-    yield put(change('advertForm', 'jobLocation', resultParsed.jobPostAddress.address));
-    yield put(change('advertForm', 'jobDescription', jobDescription));
-    yield put(change('advertForm', 'is_agreement', true));
-    yield put(change('advertForm', 'applicationUrl', resultParsed.url));
+    yield put(change('vacancy', 'jobTitle', jobName));
+    yield put(change('vacancy', 'jobType', titleSpecification));
+    yield put(change('vacancy', 'jobDuration', workingTime));
+    yield put(change('vacancy', 'jobCategory', jobTags));
+    yield put(change('vacancy', 'jobLocation', resultParsed.jobPostAddress.address));
+    yield put(change('vacancy', 'jobDescription', jobDescription));
+    yield put(change('vacancy', 'is_agreement', true));
+    yield put(change('vacancy', 'applicationUrl', resultParsed.url));
 
-    yield put(change('advertForm', 'lastApplicationDate', dateOfApplication));
-    yield put(change('advertForm', 'is_email_notification', is_email_notification));
-    yield put(change('advertForm', 'email', email));
-    yield put(change('advertForm', 'notice_frequency', notice_frequency));
+    yield put(change('vacancy', 'lastApplicationDate', dateOfApplication));
+    yield put(change('vacancy', 'is_email_notification', is_email_notification));
+    yield put(change('vacancy', 'email', email));
+    yield put(change('vacancy', 'notice_frequency', notice_frequency));
 
     const postCampaign = campaigns.find(campaign => campaign.id === campaign_id);
 
