@@ -166,7 +166,6 @@ const AdvertFormComponent = ({
     if (isOfferCopied) {
       axios.get(`https://localhost:7262/jobsEn/${idToCopy}`).then((res) => {
         setCopiedJob(res.data);
-        alert('i copied work')
       });
     }
   }, []);
@@ -207,7 +206,6 @@ const AdvertFormComponent = ({
                   label={t("field1")}
                   name="jobTitle"
                   required
-                  defaultValue={"123"}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>

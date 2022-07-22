@@ -29,13 +29,12 @@ const ActiveAdsComponent = ({
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
-  const [applicants, setApplicants] = useState({})
+  const [toEdit,setToEdit] = useState()
   const { id } = useSelector((state) => state.jobs);
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn`).then((res) => {
       setJobsToRender(res.data);
-      setApplicants(res.data.jobPostApplication)
     });
   }, []);
   
@@ -171,13 +170,7 @@ const ActiveAdsComponent = ({
                       <span>
                         {t("applicationsInTotal")}:
                         <span style={{ color: "red", margin: "0 5px" }}>
-                          (
-                          {`${
-                            applicants === null
-                              ? applicants.length
-                              : applicants
-                          }`}
-                          )
+                         ({item.jobPostApplications.length})
                         </span>
                       </span>
                       <span />
@@ -218,7 +211,9 @@ const ActiveAdsComponent = ({
                             variant="contained"
                             color="secondary"
                             onClick={() => {
+                              setToEdit(true)
                               editOffer(item.id)
+                              populateVacancyForm(item.id,true)
                             }}
                           >
                             {t("common:copyBtn")}

@@ -16,7 +16,7 @@ import { jobPostFormValidate as validate } from '../../validate';
 import { SettingsEthernet } from '@material-ui/icons';
 
 const AdvertFormContainer = reduxForm({
-  form: 'vacancy',
+  form: 'advertForm',
 
   validate,
 })(AdvertFormComponent);
