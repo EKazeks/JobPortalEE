@@ -24,10 +24,12 @@ const ActiveAdsComponent = ({
   showDialog,
   isToDeleteAdvertisementId,
   fetchJobById,
+  editOffer
 }) => {
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
+  const [toEdit,setToEdit] = useState()
   const { id } = useSelector((state) => state.jobs);
 
   useEffect(() => {
@@ -168,11 +170,7 @@ const ActiveAdsComponent = ({
                       <span>
                         {t("applicationsInTotal")}:
                         <span style={{ color: "red", margin: "0 5px" }}>
-                          (
-                          {`${
-                            item.jobPostApplications.length
-                          }`}
-                          )
+                         ({item.jobPostApplications.length})
                         </span>
                       </span>
                       <span />
@@ -213,9 +211,9 @@ const ActiveAdsComponent = ({
                             variant="contained"
                             color="secondary"
                             onClick={() => {
-                              populateVacancyForm(item.id, false) === null
-                                ? populateVacancyForm(item.id, false)
-                                : populateVacancyForm(item.id, false);
+                              setToEdit(true)
+                              editOffer(item.id)
+                              populateVacancyForm(item.id,true)
                             }}
                           >
                             {t("common:copyBtn")}

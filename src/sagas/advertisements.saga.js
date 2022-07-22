@@ -324,8 +324,9 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       jobPostNumber: userRole === 'admin' ? id.split('admin')[0] : id,
       //companyBusinessId: userRole === 'admin' ? id.split('admin')[1] : companyBusinessId,
     });
-    const result = yield call(apiManualRequest, url, body);
-    const resultParsed = JSON.parse(result.data);
+    const result = yield call(apiManualRequest, url);
+    const resultParsed = result.data;
+    console.log(resultParsed)
     // console.log('resultParsed', resultParsed);
     // If we are populating from Draft Component, we are editing--> call UpdateJobPost API, it needs company_id && post_id which is being sent along with the vacancy form!
 
@@ -334,14 +335,14 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       //companyBusinessId,
       company_image,
       image_id,
-      job_title,
-      job_type,
-      job_hours,
-      job_category,
+      jobName,
+      titleSpecification,
+      workingTime,
+      jobTags,
       job_location,
-      job_description,
+      jobDescription,
       is_agreement,
-      due_date,
+      dateOfApplication,
       is_email_notification,
       email,
       notice_frequency,
@@ -349,8 +350,8 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       marketing_platform,
       more_budget,
       marketing_budget,
-      application_link,
-    } = resultParsed[0];
+      application_url,
+    } = resultParsed;
 
     if (isToEdit) {
       yield put(change('vacancy', 'jobPostNumber', jobPostNumber));
@@ -360,19 +361,19 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
         yield put(change('vacancy', 'image_id', image_id));
       }
     }
-    yield put(change('vacancy', 'job_title', job_title));
-    yield put(change('vacancy', 'job_type', job_type));
-    yield put(change('vacancy', 'job_hours', job_hours));
-    yield put(change('vacancy', 'job_category', job_category));
-    yield put(change('vacancy', 'job_location', job_location));
-    yield put(change('vacancy', 'job_description', job_description));
-    yield put(change('vacancy', 'is_agreement', is_agreement));
-    yield put(change('vacancy', 'application_link', application_link));
+    yield put(change('advertForm', 'jobTitle', jobName));
+    yield put(change('advertForm', 'jobType', titleSpecification));
+    yield put(change('advertForm', 'jobDuration', workingTime));
+    yield put(change('advertForm', 'jobCategory', jobTags));
+    yield put(change('advertForm', 'jobLocation', resultParsed.jobPostAddress.address));
+    yield put(change('advertForm', 'jobDescription', jobDescription));
+    yield put(change('advertForm', 'is_agreement', true));
+    yield put(change('advertForm', 'applicationUrl', resultParsed.url));
 
-    yield put(change('vacancy', 'due_date', due_date));
-    yield put(change('vacancy', 'is_email_notification', is_email_notification));
-    yield put(change('vacancy', 'email', email));
-    yield put(change('vacancy', 'notice_frequency', notice_frequency));
+    yield put(change('advertForm', 'lastApplicationDate', dateOfApplication));
+    yield put(change('advertForm', 'is_email_notification', is_email_notification));
+    yield put(change('advertForm', 'email', email));
+    yield put(change('advertForm', 'notice_frequency', notice_frequency));
 
     const postCampaign = campaigns.find(campaign => campaign.id === campaign_id);
 

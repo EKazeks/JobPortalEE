@@ -8,7 +8,8 @@ import {
   warnToDelete,
   populateVacancyForm,
   deleteAdvertisement,
-  fetchJobById
+  fetchJobById,
+  editOffer
 } from '../../../actions';
 
 const mapStateToProps = state => {
@@ -30,6 +31,7 @@ const mapDispatchToProps = {
   warnToDelete,
   populateVacancyForm,
   deleteAdvertisement,
-  fetchJobById
+  fetchJobById,
+  editOffer
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ActiveAdsComponent);

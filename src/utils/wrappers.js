@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   TextField,
   FormControl,
@@ -11,18 +11,21 @@ import {
   Switch,
   FormGroup,
   LinearProgress,
-} from '@material-ui/core';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
-import moment from '../../node_modules/moment';
+} from "@material-ui/core";
+import DateFnsUtils from "@date-io/date-fns";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
+import moment from "../../node_modules/moment";
 
-export const renderTextField = props => {
+export const renderTextField = (props) => {
   const {
     input,
     meta: { touched, invalid, error },
     endAdornment,
     ...restProps
   } = props;
+
+  const defaultValue="123"
+
   return (
     <TextField
       {...input}
@@ -30,12 +33,14 @@ export const renderTextField = props => {
       variant="outlined"
       error={touched && invalid}
       helperText={touched && error}
-      InputProps={{ endAdornment }}
+      defaultValue={defaultValue}
+      InputProps={{inputProps:{defaultValue:"test"}}}
       // margin='dense'
     />
   );
 };
-export const renderDenseTextField = props => {
+
+export const renderDenseTextField = (props) => {
   const {
     input,
     meta: { touched, invalid, error },
@@ -55,19 +60,32 @@ export const renderDenseTextField = props => {
       inputProps={{ maxLength }}
       InputProps={{
         endAdornment,
-        style: searchForm ? { borderRadius: 0, backgroundColor: '#ffffff' } : { borderRadius: '4px' }, // if used in searchForm.component, no radius should be given to match other fields
+        style: searchForm
+          ? { borderRadius: 0, backgroundColor: "#ffffff" }
+          : { borderRadius: "4px" }, // if used in searchForm.component, no radius should be given to match other fields
       }}
     />
   );
 };
 
-export const renderSelectField = ({ input, label, meta: { touched, error, invalid }, children, id, name, placeholder, viewBy, marginLeft, ...custom }) => {
+export const renderSelectField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  children,
+  id,
+  name,
+  placeholder,
+  viewBy,
+  marginLeft,
+  ...custom
+}) => {
   return (
     <FormControl variant="outlined">
       <InputLabel
         htmlFor={id}
         style={{
-          backgroundColor: viewBy === 'admin' ? 'transparent' : 'white', // For select element, label shows on top of the border, so giving background color to hide that
+          backgroundColor: viewBy === "admin" ? "transparent" : "white", // For select element, label shows on top of the border, so giving background color to hide that
         }}
       >
         {label}
@@ -89,16 +107,26 @@ export const renderSelectField = ({ input, label, meta: { touched, error, invali
   );
 };
 
-export const renderSearchSelectField = ({ input, label, meta: { touched, error, invalid }, children, id, name, placeholder, searchForm, ...custom }) => (
+export const renderSearchSelectField = ({
+  input,
+  label,
+  meta: { touched, error, invalid },
+  children,
+  id,
+  name,
+  placeholder,
+  searchForm,
+  ...custom
+}) => (
   <FormControl variant="outlined">
     <InputLabel
       htmlFor={id}
-      style={{ backgroundColor: 'white', color: '#999' }}
+      style={{ backgroundColor: "white", color: "#999" }}
       classes={{
         outlined: searchForm,
       }}
     >
-      {' '}
+      {" "}
       {/* To match the stylings in search form passing searchForm props */}
       {label}
     </InputLabel>
@@ -122,21 +150,44 @@ export const renderSearchSelectField = ({ input, label, meta: { touched, error, 
   </FormControl>
 );
 
-export const renderRadioButton = ({ input, label, meta: { touched, error }, ...props }) => (
+export const renderRadioButton = ({
+  input,
+  label,
+  meta: { touched, error },
+  ...props
+}) => (
   <FormControl>
-    <RadioGroup {...input} {...props} value={input.value} onChange={(e, value) => input.onChange(value)} />
+    <RadioGroup
+      {...input}
+      {...props}
+      value={input.value}
+      onChange={(e, value) => input.onChange(value)}
+    />
 
     {renderFormHelper({ touched, error })}
   </FormControl>
 );
 
-export const renderCheckbox = ({ input, label, meta: { error, touched }, isChecked, margin, ...props }) => {
+export const renderCheckbox = ({
+  input,
+  label,
+  meta: { error, touched },
+  isChecked,
+  margin,
+  ...props
+}) => {
   return (
     <div>
       <FormControlLabel
-        control={<Checkbox checked={!!input.value} onChange={input.onChange} {...props} />}
+        control={
+          <Checkbox
+            checked={!!input.value}
+            onChange={input.onChange}
+            {...props}
+          />
+        }
         label={label}
-        error={touched && error ? 'true' : 'false'}
+        error={touched && error ? "true" : "false"}
         style={{ margin }}
       />
       {renderFormHelper({ touched, error })}
@@ -144,7 +195,12 @@ export const renderCheckbox = ({ input, label, meta: { error, touched }, isCheck
   );
 };
 
-export const renderDatePicker = ({ input: { onChange, value, name }, meta: { touched, error, invalid }, label, dense }) => {
+export const renderDatePicker = ({
+  input: { onChange, value, name },
+  meta: { touched, error, invalid },
+  label,
+  dense,
+}) => {
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <DatePicker
@@ -152,14 +208,16 @@ export const renderDatePicker = ({ input: { onChange, value, name }, meta: { tou
         variant="inline"
         inputVariant="outlined"
         format="dd.MM.yyyy"
-        helperText={touched && error ? <p style={{ color: '#f44336' }}>{error}</p> : ''}
+        helperText={
+          touched && error ? <p style={{ color: "#f44336" }}>{error}</p> : ""
+        }
         error={touched && invalid}
         disableToolbar
         label={label}
         value={value || null}
         // maxDate={new Date().setDate(new Date().getDate() + 4 * 7 + 1)}
-        maxDate={moment().add(29, 'days')} // maximum about 4 weeks
-        minDate={moment().add(1, 'days')}
+        maxDate={moment().add(29, "days")} // maximum about 4 weeks
+        minDate={moment().add(1, "days")}
         name={name}
         onChange={onChange}
         /* KeyboardButtonProps={{
@@ -171,7 +229,13 @@ export const renderDatePicker = ({ input: { onChange, value, name }, meta: { tou
     </MuiPickersUtilsProvider>
   );
 };
-export const renderAdminDatePicker = ({ input: { onChange, value, name }, meta: { touched, error, invalid }, label, role, disabled }) => {
+export const renderAdminDatePicker = ({
+  input: { onChange, value, name },
+  meta: { touched, error, invalid },
+  label,
+  role,
+  disabled,
+}) => {
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <DatePicker
@@ -185,20 +249,24 @@ export const renderAdminDatePicker = ({ input: { onChange, value, name }, meta: 
         label={label}
         value={value || null}
         name={name}
-        minDate={role === 'interview' && new Date()}
+        minDate={role === "interview" && new Date()}
         onChange={onChange}
         error={touched && invalid}
         style={{
-          backgroundColor: 'white',
-          width: role === 'interview' ? '100%' : 200,
-          margin: role === 'interview' ? '8px 0' : 10,
+          backgroundColor: "white",
+          width: role === "interview" ? "100%" : 200,
+          margin: role === "interview" ? "8px 0" : 10,
         }}
         disabled={disabled}
       />
     </MuiPickersUtilsProvider>
   );
 };
-export const renderTimePicker = ({ input: { onChange, value }, meta: { touched, error, invalid }, disabled }) => {
+export const renderTimePicker = ({
+  input: { onChange, value },
+  meta: { touched, error, invalid },
+  disabled,
+}) => {
   return (
     <TextField
       variant="outlined"
@@ -209,7 +277,7 @@ export const renderTimePicker = ({ input: { onChange, value }, meta: { touched, 
       inputProps={{
         step: 300, // 5 min
       }}
-      value={value || ''}
+      value={value || ""}
       onChange={onChange}
       error={touched && invalid}
       helperText={touched && error}
@@ -234,13 +302,22 @@ export const renderInterviewDatePicker = ({ input: { onChange, value } }) => {
 export const renderFormHelper = ({ touched, error, marginLeft }) => {
   if (!(touched && error)) {
   } else {
-    return <FormHelperText style={{ color: '#ff0000', marginLeft: marginLeft }}>{touched && error}</FormHelperText>;
+    return (
+      <FormHelperText style={{ color: "#ff0000", marginLeft: marginLeft }}>
+        {touched && error}
+      </FormHelperText>
+    );
   }
 };
 
-export const renderSwitchLabels = ({ isNotificationOn, toggleChecked, label, switchBaseStyle }) => {
+export const renderSwitchLabels = ({
+  isNotificationOn,
+  toggleChecked,
+  label,
+  switchBaseStyle,
+}) => {
   return (
-    <FormGroup row style={{ justifyContent: 'center' }}>
+    <FormGroup row style={{ justifyContent: "center" }}>
       <FormControlLabel
         control={
           <Switch
@@ -267,12 +344,19 @@ export function filterObj(keys, obj) {
   return newObj;
 }
 
-export const PaymentCheckBox = ({ isToCheck, onChange, disabled, orderDetails, paymentToUpdateDetails }) => {
+export const PaymentCheckBox = ({
+  isToCheck,
+  onChange,
+  disabled,
+  orderDetails,
+  paymentToUpdateDetails,
+}) => {
   return (
     <div>
       {orderDetails?.company_id === paymentToUpdateDetails?.company_id &&
       orderDetails?.post_id === paymentToUpdateDetails?.post_id &&
-      orderDetails?.payment_reference === paymentToUpdateDetails?.payment_reference ? (
+      orderDetails?.payment_reference ===
+        paymentToUpdateDetails?.payment_reference ? (
         <LinearProgress color="primary" />
       ) : (
         <Checkbox checked={isToCheck} onChange={onChange} disabled={disabled} />
