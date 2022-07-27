@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,6 +13,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import { IconButton } from '@material-ui/core';
 import AdminContactFormContainer from '../../containers/admin/admin.contactForm.container';
 import AdminSearchFormContainer from '../../containers/admin/admin.searchForm.container';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const styles = theme => ({
   tableHead: {
@@ -39,7 +41,7 @@ const styles = theme => ({
 
 const AdminApplicantComponent = ({
   adminSearchApplicant,
-  applicants,
+  //applicants,
   classes,
   advertPages,
   changeAdvertPage,
@@ -49,6 +51,17 @@ const AdminApplicantComponent = ({
   editContactDetails,
 }) => {
   const { t } = useTranslation('common');
+  const [jobsToRender, setJobsToRender] = useState([]);
+  const [applicants, setApplicants] = useState({})
+  const {id} = useSelector((state) => state.jobs)
+
+  useEffect(() => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
+      setJobsToRender(res.data);
+      setApplicants(res.data.jobPostApplication)
+    });
+  }, []);
+
   const header = [
     {
       name: t('firstName'),
@@ -102,15 +115,15 @@ const AdminApplicantComponent = ({
           <TableBody>
             {applicants.map(applicant => {
               const details = {
-                firstname: applicant.firstname,
-                lastname: applicant.lastname,
+                firstname: applicant.firstName,
+                lastname: applicant.lastName,
                 email: applicant.email,
-                contact_number: applicant.contact_number,
-                linkedin: applicant.linkedin,
+                contact_number: applicant.phone,
+                linkedin: applicant.linkedIn,
                 portfolio: applicant.portfolio,
-                applicant_id: applicant.applicant_id,
+                applicant_id: applicant.applicant.id,
               };
-              return isEdit && isToEditId === applicant.applicant_id ? (
+              return isEdit && isToEditId === applicant.applicant.id ? (
                 <AdminContactFormContainer user="applicant" key={applicant.applicant_id} />
               ) : (
                 <TableRow key={applicant.applicant_id} className={classes.applicantsRow}>

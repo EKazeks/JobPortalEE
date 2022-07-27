@@ -45,7 +45,7 @@ export const signInValidate = values => {
 export const jobPostFormValidate = values => {
   const errors = {};
   const extra_service = store.getState().advertisement.extraService;
-  const requiredFields = ['job_title', 'job_category', 'job_type', 'due_date', 'job_hours', 'job_location', 'is_agreement'];
+  const requiredFields = ['jobName', 'job_category', 'job_type', 'due_date', 'job_hours', 'job_location', 'is_agreement'];
 
   if (!extra_service.sos) {
     requiredFields.push('job_description');

@@ -18,9 +18,10 @@ const getManualAuthHeaders = () => {
 export const apiGetJobsOffers = () => {
     axios
     .get('https://localhost:7262/jobsEn')
-    .then(data => ({
-      data
-    }))
+    .then(res => (
+      res.json()
+    ))
+    .then(data => ({data}))
     .catch(error => ({
       error
     }))
@@ -56,6 +57,23 @@ export const apiManualPost = (url = 'https://localhost:7262/jobsEn', body, metho
     .then(data => ({ data }))
     .catch(error => ({ error }));
 };
+export const apiManualDelete = (url = 'https://localhost:7262/jobsEn', body, method = 'DELETE') => {
+  const headers = getManualAuthHeaders();
+  headers.append('Content-Type', 'application/json');
+
+  const options = {
+    method,
+    headers,
+    body,
+  };
+
+
+  return fetch(url, options)
+    .then(res => res.json())
+    .then(data => ({ data }))
+    .catch(error => ({ error }));
+};
+
 
 export const registerPost = (url, body, method = 'POST') => {
   const headers = new Headers();

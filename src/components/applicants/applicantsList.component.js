@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Paper, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -9,12 +9,12 @@ import ReactPaginate from 'react-paginate';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import store from '../../store';
-import { fetchJobById, getApplicationDetailsById, warnToDeleteApplication } from '../../actions';
+import { fetchJobApplicants, fetchJobById, getApplicationDetailsById, warnToDeleteApplication } from '../../actions';
 import CustomizedDialogs from '../../utils/customizedDialog';
 import DropDownPagination from '../../utils/dropDownPagination';
 import noProfileImg from '../../images/no_profile_pic.png';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const styles = theme => ({
   titleMargin: {
@@ -100,12 +100,14 @@ const ApplicantsList = ({ viewSelectedAd, applications, classes, showDialog, del
   const [jobsToRender, setJobsToRender] = useState([]);
   const [applicants, setApplicants] = useState([])
   const {id} = useSelector((state) => state.jobs)
+  const dispatch = useDispatch()
   selectedPage = 1;
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn/${id}`).then(res => {
       setJobsToRender(res.data);
       setApplicants(res.data.jobPostApplications)
+      dispatch(fetchJobApplicants(applicants.id))
     });
   }, []);
 
@@ -159,6 +161,7 @@ const ApplicantsList = ({ viewSelectedAd, applications, classes, showDialog, del
         </Grid>
         <ApplicationsList
           applicants={applicants}
+          jobsToRender={jobsToRender}
           classes={classes}
           advertPages={1}
           // advertPages={advertPages}
@@ -179,7 +182,7 @@ const ApplicantsList = ({ viewSelectedAd, applications, classes, showDialog, del
   );
 };
 
-const ApplicationsList = ({ applicants, classes, selectedPage, advertPages, changeAdvertPage, showPagination, rowsPerPage }) => {
+const ApplicationsList = ({ applicants,jobsToRender, classes, selectedPage, advertPages, changeAdvertPage, showPagination, rowsPerPage }) => {
   const { t } = useTranslation('applicant');
   return (
 
@@ -269,20 +272,23 @@ const ApplicationsList = ({ applicants, classes, selectedPage, advertPages, chan
                             variant="outlined"
                             color="secondary"
                             className={classes.removeBtn}
-                            onClick={() => store.dispatch(warnToDeleteApplication(applicationDetails))}
+                            onClick={() => {
+                              store.dispatch(warnToDeleteApplication())
+                              store.dispatch(fetchJobApplicants(applicants.id))
+                            }
+                            }
                           >
                             {t('common:deleteBtn')}
                           </Button>
                           <div>
-                            <Link to={`/applicants/${applicants.jobpostId}${applicants.id}`} className="btnLink_white">
+                            <Link to={`/applicants/${applicants.id}`} className="btnLink_white">
                               <Button
                                 variant="contained"
                                 color="primary"
                                 onClick={() =>
-                                  // store.dispatch(
-                                  //   getApplicationDetailsById(applicants.id, applicants.company_id, applicants.jobpostId, applicants.email),
-                                  // )
-                                  fetchJobById()
+                                  store.dispatch(
+                                    getApplicationDetailsById(applicants.id),
+                                  )
                                 }
                               >
                                 {t('common:viewBtn')}

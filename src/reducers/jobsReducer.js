@@ -14,7 +14,10 @@ import {
   GET_WORK_START_SUCCESS,
   SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE,
   SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS,
-  EDIT_OFFER
+  EDIT_OFFER,
+  WARN_TO_DELETE,
+  DELETE_JOB_OFFER,
+  GET_JOB_APPLICANTS
 } from "../constants";
 
 const initialState = {
@@ -25,8 +28,10 @@ const initialState = {
   id: 0,
   idToCopy:0,
   isOfferCopied:false,
+  isOfferEdited: false,
   jobPostNumber:[],
   jobDetails: [],
+  jobApplicantsId: 0,
   selectedPage: {
     selected: 0,
   },
@@ -37,6 +42,8 @@ const initialState = {
   dashboard: [],
   notificationToggleBtn: false,
   workStart: null,
+  warnToDelete: false,
+  isToDeleteAdvertisementId: 0,
 };
 
 const jobsReducer = (state = initialState, action) => {
@@ -46,11 +53,23 @@ const jobsReducer = (state = initialState, action) => {
         ...state,
         showSpinner: true
       }
+    case DELETE_JOB_OFFER:
+      return {
+        ...state,
+        warnToDelete: false,
+      }
+      case WARN_TO_DELETE:
+        return {
+          ...state,
+          warnToDelete: true,
+          isToDeleteAdvertisementId: action.id,
+        };
     case EDIT_OFFER:
       return{
         ...state,
         idToCopy:action.id,
-        isOfferCopied:true
+        isOfferCopied:true,
+        isOfferEdited: true
       }
     case SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS:
       return {
@@ -63,7 +82,12 @@ const jobsReducer = (state = initialState, action) => {
         ...state,
         id: action.id,
       };
-
+    case GET_JOB_APPLICANTS:
+      return {
+        ...state,
+        jobApplicantsId: action.id,
+        //payload: action.payload
+      };
     case FILTER_JOBS:
       return {
         ...state,

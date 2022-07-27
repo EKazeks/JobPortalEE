@@ -9,13 +9,11 @@ import { customURL, dateFormat } from "../../../utils/helperFunctions";
 import CustomizedDialogs from "../../../utils/customizedDialog";
 import i18n from "../../../utils/i18n";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { deleteJobOfferRequest } from "../../../utils/request";
 
 const ActiveAdsComponent = ({
   warnToDelete,
   populateVacancyForm,
-  deleteAdvertisement,
+  deleteJobOffer,
   changeAdvertPage,
   selectedPage,
   advertPages,
@@ -26,13 +24,22 @@ const ActiveAdsComponent = ({
   fetchJobById,
   editOffer
 }) => {
+  
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
   const [toEdit,setToEdit] = useState()
-  const { id } = useSelector((state) => state.jobs);
+  const [jobCategorys, setJobCategorys] = useState([])
+
+  // useEffect(() => {
+  //     axios.get('https://www.tootukassa.ee/api/toopakkumised').then((res) => {
+  //         setJobCategorys(res.data)
+  //     })
+  //     console.log(jobCategorys);
+  // },[])
 
   useEffect(() => {
+
     axios.get(`https://localhost:7262/jobsEn`).then((res) => {
       setJobsToRender(res.data);
     });
@@ -45,13 +52,6 @@ const ActiveAdsComponent = ({
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
   });
-
-  const deleteJobOfferHandler = (response) => {
-    axios
-      .delete(`https://localhost:7262/jobsEn/${id}`)
-      .then((response) => response.json())
-      .catch((error) => error.message);
-  };
 
   return (
     //  <div>
@@ -194,12 +194,11 @@ const ActiveAdsComponent = ({
                         <Button
                           variant="outlined"
                           color="secondary"
-                          // onClick={() =>
-                          //   warnToDelete(item.id) === null
-                          //     ? warnToDelete(item.id)
-                          //     : warnToDelete(item.id)
-                          // }
-                          onClick={deleteJobOfferHandler}
+                          onClick={() =>
+                            warnToDelete(item.id) === null
+                              ? warnToDelete(item.id)
+                              : warnToDelete(item.id)
+                          }
                         >
                           {t("common:deleteBtn")}
                         </Button>
@@ -256,7 +255,7 @@ const ActiveAdsComponent = ({
         showDialog={showDialog}
         dialogText={t("warnToDeletePostText")}
         warnToDeleteModal
-        handleClick={() => deleteAdvertisement(isToDeleteAdvertisementId)}
+        handleClick={() => deleteJobOffer(isToDeleteAdvertisementId)}
       />
       <div className="pagination-body">
         <ReactPaginate

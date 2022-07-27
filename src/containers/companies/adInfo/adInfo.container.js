@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import AdInfoComponent from '../../../components/companies/adInfo/adInfo.component';
-import { openAdToSeeAdInfo, deleteApplication, changeAdvertPage, closeSnackbar } from '../../../actions';
+import { openAdToSeeAdInfo, deleteApplication, changeAdvertPage, closeSnackbar, fetchJobById } from '../../../actions';
 
 class AdInfoContainer extends React.Component {
   componentDidMount() {
@@ -36,6 +36,7 @@ const mapDispatchToProps = {
   deleteApplication,
   changeAdvertPage,
   closeSnackbar,
+  fetchJobById
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdInfoContainer);

@@ -151,7 +151,10 @@ import {
   GET_ALL_JOB_CATEGORY_FROM_ESTONIA_SUCCESS,
   SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE,
   SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS,
-  EDIT_OFFER
+  EDIT_OFFER,
+  EDIT_VACANCY_FORM,
+  DELETE_JOB_OFFER,
+  GET_JOB_APPLICANTS
 } from "../constants";
 
 // get jobs offers
@@ -167,6 +170,12 @@ export const fetchJobById = (id) => ({
 export const editOffer = (id) => ({
   type:EDIT_OFFER,
   id,
+})
+
+export const fetchJobApplicants = (id,payload) => ({
+  type: GET_JOB_APPLICANTS,
+  id,
+  //payload
 })
 
 // export const getJobsOffersSuccess = () => ({
@@ -451,16 +460,12 @@ export const populateVacancyFormSuccess = (campaignDetails, isToEdit) => ({
   campaignDetails,
   isToEdit,
 });
-export const populateVacancyFormForEe = (id, isToEdit) => ({
-  type: POPULATE_VACANCY_FORM,
+
+export const editVacancyForm = (id, isToEdit) => ({
+  type: EDIT_VACANCY_FORM,
   id,
-  isToEdit,
-});
-export const populateVacancyFormForEeSuccess = (campaignDetails, isToEdit) => ({
-  type: POPULATE_VACANCY_FORM_SUCCESS,
-  campaignDetails,
-  isToEdit,
-});
+  isToEdit
+})
 
 
 
@@ -472,8 +477,10 @@ export const populateSignupForm = (applicantData) => ({
 
 // UPDATE ADVERTISEMENT
 
-export const updateAdvertisement = () => ({
+export const updateAdvertisement = (id,isToEdit) => ({
   type: UPDATE_ADVERTISEMENT,
+  id,
+  isToEdit
 });
 export const changeCampaign = (campaign) => ({
   type: CHANGE_CAMPAIGN,
@@ -492,6 +499,11 @@ export const changeActivePostToInactive = (id) => ({
 });
 
 // DELETE ADVERTISEMENT
+export const deleteJobOffer = (id) => ({
+  type: DELETE_JOB_OFFER,
+  id,
+})
+
 export const deleteAdvertisement = (id) => ({
   type: DELETE_ADVERTISEMENT,
   id,
@@ -821,14 +833,15 @@ export const updateJobApplicationDetails = (
   update,
 });
 
-export const editInterviewDetails = (isToEdit) => ({
+export const editInterviewDetails = (isToEdit,id) => ({
   type: EDIT_INTERVIEW_DETAILS,
   isToEdit,
+  id
 });
 
-export const warnToDeleteApplication = (applicationDetails) => ({
+export const warnToDeleteApplication = (id) => ({
   type: WARN_TO_DELETE_APPLICATION,
-  applicationDetails,
+  id,
 });
 
 export const deleteApplication = () => ({

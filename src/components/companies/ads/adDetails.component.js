@@ -9,9 +9,9 @@ import { customURL,dateFormat } from "../../../utils/helperFunctions";
 import {
   updateAdvertisement,
   changeCampaign,
-  populateVacancyForm,
   changeActivePostToInactive,
   closeSnackbar,
+  populateVacancyForm
 } from "../../../actions";
 import { MySnackbarContentWrapper } from "../../../utils/snackbar.utils";
 import {
@@ -101,9 +101,11 @@ const AdDetails = ({
   const { id, jobDetails } = useSelector((state) => state.jobs);
   const [dateOfApplication,setDateOfApplication] = useState();
   const [address,setAddress] = useState();
+  const [toEdit,setToEdit] = useState()
   const [jobsToRender, setJobsToRender] = useState({});
+  const dispatch = useDispatch()
   selectedPage = 1;
-
+  
   useEffect(() => {
     
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
@@ -120,28 +122,6 @@ const AdDetails = ({
       setAddress(res.data.jobPostAddress.address)
     });
   }, []);
-
-  
-
-
-  const updateJobOffer = (res, req) => {
-    const {
-      jobTitle,
-      jobCategory,
-      jobType,
-      jobDuration,
-      jobLocation,
-      applicationUrl,
-      lastApplicationDate,
-      jobDescription,
-      campaignLevel,
-    } = req.body;
-    const jobOffer = axios
-      .patch(`https://localhost:7262/updateJobOffer`, {
-        ...req.body,
-      })
-      .then((res) => res.json(jobOffer));
-  };
 
   return (
     // <div>
@@ -206,10 +186,8 @@ const AdDetails = ({
                         variant="outlined"
                         color="primary"
                         onClick={() => {
-                          store.dispatch(
-                            populateVacancyForm(jobsToRender.id, false)
-                          );
-                        }}
+                          store.dispatch(populateVacancyForm(jobsToRender.id, false));
+                        }} 
                       >
                         {t("common:copyBtn")}
                       </Button>
@@ -244,8 +222,7 @@ const AdDetails = ({
                       <Button
                         variant="outlined"
                         color="primary"
-                        onClick={() => store.dispatch(updateAdvertisement())}
-                        //onClick={() => updateJobOffer()}
+                        onClick={() => store.dispatch(updateAdvertisement(jobsToRender.id))}
                       >
                         {t("editBtn")}
                       </Button>
@@ -336,11 +313,9 @@ const AdDetails = ({
                     <Button
                       variant="outlined"
                       color="primary"
-                      onClick={() => {
-                        store.dispatch(
-                          populateVacancyForm(jobsToRender.id, false)
-                        );
-                      }}
+                        onClick={() => {
+                          store.dispatch(populateVacancyForm(jobsToRender.id, false));
+                        }}
                     >
                       {t("common:copyBtn")}
                     </Button>
@@ -374,8 +349,8 @@ const AdDetails = ({
                     <Button
                       variant="outlined"
                       color="primary"
-                      onClick={() => store.dispatch(updateAdvertisement())}
-                      //onClick={() => updateJobOffer()}
+                      onClick={() => 
+                        store.dispatch(updateAdvertisement(jobsToRender.id))}
                     >
                       {t("editBtn")}
                     </Button>
