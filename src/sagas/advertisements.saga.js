@@ -119,6 +119,7 @@ function* saveAndPublishAdvertisementSaga() {
   try {
     let url;
     let body;
+    let response;
     let parsedCompany = {};
 
     const { advertisement, client, companyProfile } = store.getState();
@@ -236,11 +237,19 @@ function* saveAndPublishAdvertisementSaga() {
         : 0;
     }
     // SAVING AND PUBLISHING JOBPOST
-    // const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
+    axios.post(url,body).then((res)=>{response=res})
+    if(response === 400)
+    {
+      saveAndPublishAdvertisement()
+    }
+    else{
+      saveAndPublishAdvertisementSuccess()
+    }
+    // response = result.data.status
+    
+
     // const parsedResult = JSON.parse(result.data);
-    const result = axios.post(url, body).finally((res) => {
-      saveAndPublishAdvertisementSuccess();
-    });
+
     // If publishing post, Generate invoice under the hood via Talousvirta API or online payment via NETS
 
     // if (parsedResult) {
@@ -409,7 +418,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     }
     yield put(change("vacancy", "jobTitle", jobName));
     yield put(change("vacancy", "jobType", titleSpecification));
-    yield put(change("vacancy", "jobDuration", workingTime));
+    yield put(change("vacancy", "jobLocation", workingTime));
     yield put(change("vacancy", "jobCategory", jobTags));
     yield put(
       change("vacancy", "jobLocation", resultParsed.jobPostAddress.address)
@@ -561,13 +570,17 @@ function* updateJobPostSaga({ isToEdit, id }) {
     yield put(change("editVacancy", "titleSpecification", titleSpecification));
     yield put(change("editVacancy", "jobDuration", workingTime));
     yield put(change("editVacancy", "jobCategory", jobTags));
-    yield put(change("editVacancy", "jobLocation", resultParsed.jobPostAddress.address));
+    yield put(
+      change("editVacancy", "jobLocation", resultParsed.jobPostAddress.address)
+    );
     yield put(change("editVacancy", "jobDescription", jobDescription));
     yield put(change("editVacancy", "is_agreement", true));
     yield put(change("editVacancy", "applicationUrl", urlToApplyJob));
 
     yield put(change("editVacancy", "lastApplicationDate", dateOfApplication));
-    yield put(change("editVacancy", "is_email_notification", is_email_notification));
+    yield put(
+      change("editVacancy", "is_email_notification", is_email_notification)
+    );
     yield put(change("editVacancy", "email", email));
     yield put(change("editVacancy", "notice_frequency", notice_frequency));
   } catch (error) {
@@ -835,7 +848,7 @@ function* saveAdvertisementAsDraft() {
   yield put(saveAndPublishAdvertisement());
 }
 
-function* getApplicationDetailsByIdSaga({jobpostId, id}) {
+function* getApplicationDetailsByIdSaga({ jobpostId, id }) {
   try {
     const url = `https://localhost:7262/jobsApplication/${id}`;
 
