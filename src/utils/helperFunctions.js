@@ -4,10 +4,10 @@ import store from "../store";
 export const customURL = (url, type) => {
 
   const {id} = store.getState().jobs
-  if (url === undefined) {
+  if (url === undefined ) {
     return;
   }
-  if(url === null)
+  if(url === null || url === "string" )
   {
     return `/jobpost/some-internal-created-offer/${id}`
   }

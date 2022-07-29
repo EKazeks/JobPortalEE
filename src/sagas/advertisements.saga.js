@@ -240,10 +240,10 @@ function* saveAndPublishAdvertisementSaga() {
     axios.post(url,body).then((res)=>{response=res})
     if(response === 400)
     {
-      saveAndPublishAdvertisement()
+      yield put(saveAndPublishAdvertisement())
     }
     else{
-      saveAndPublishAdvertisementSuccess()
+      yield put(saveAndPublishAdvertisementSuccess())
     }
     // response = result.data.status
     
@@ -592,6 +592,7 @@ function* updateAndPublishAdvertisementSaga() {
   try {
     const url = `https://localhost:7262/updateJobOffer`;
     const id = store.getState().jobs.id;
+    let response;
     const campaignLevel = store.getState().advertisement.campaigns[0].type;
     const {
       jobName,
@@ -616,14 +617,14 @@ function* updateAndPublishAdvertisementSaga() {
       campaignLevel,
     };
 
-    const result = axios
-      .patch(url, body)
-      .then((res) => {
-        updateAndPublishAdvertisementSuccess();
-      })
-      .catch(() => {
-        saveAndPublishAdvertisementFailed();
-      });
+    axios.patch(url,body).then((res)=>{response=res})
+    if(response === 400)
+    {
+      yield put(saveAndPublishAdvertisementFailed())
+    }
+    else{
+      yield put(updateAndPublishAdvertisementSuccess())
+    }
   } catch (e) {
     console.log(e);
   }
