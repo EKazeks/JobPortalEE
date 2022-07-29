@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Paper, Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
@@ -9,6 +9,7 @@ import { customURL, dateFormat } from "../../../utils/helperFunctions";
 import CustomizedDialogs from "../../../utils/customizedDialog";
 import i18n from "../../../utils/i18n";
 import axios from "axios";
+import { changeRoute } from "../../../actions";
 
 const ActiveAdsComponent = ({
   warnToDelete,
@@ -22,14 +23,13 @@ const ActiveAdsComponent = ({
   showDialog,
   isToDeleteAdvertisementId,
   fetchJobById,
-  editOffer
+  editOffer,
 }) => {
-  
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
-  const [toEdit,setToEdit] = useState()
-  const [jobCategorys, setJobCategorys] = useState([])
+  const [toEdit, setToEdit] = useState();
+  const [jobCategorys, setJobCategorys] = useState([]);
 
   // useEffect(() => {
   //     axios.get('https://www.tootukassa.ee/api/toopakkumised').then((res) => {
@@ -39,12 +39,11 @@ const ActiveAdsComponent = ({
   // },[])
 
   useEffect(() => {
-
     axios.get(`https://localhost:7262/jobsEn`).then((res) => {
       setJobsToRender(res.data);
     });
   }, []);
-  
+
   const updateSize = () => {
     setIsDesktop(window.innerWidth >= 1440);
   };
@@ -170,7 +169,7 @@ const ActiveAdsComponent = ({
                       <span>
                         {t("applicationsInTotal")}:
                         <span style={{ color: "red", margin: "0 5px" }}>
-                         ({item.jobPostApplications.length})
+                          ({item.jobPostApplications.length})
                         </span>
                       </span>
                       <span />
@@ -210,9 +209,9 @@ const ActiveAdsComponent = ({
                             variant="contained"
                             color="secondary"
                             onClick={() => {
-                              setToEdit(true)
-                              editOffer(item.id)
-                              populateVacancyForm(item.id,true)
+                              setToEdit(true);
+                              editOffer(item.id);
+                              populateVacancyForm(item.id, true);
                             }}
                           >
                             {t("common:copyBtn")}
@@ -255,7 +254,10 @@ const ActiveAdsComponent = ({
         showDialog={showDialog}
         dialogText={t("warnToDeletePostText")}
         warnToDeleteModal
-        handleClick={() => deleteJobOffer(isToDeleteAdvertisementId)}
+        handleClick={() => {
+          deleteJobOffer(isToDeleteAdvertisementId);
+          changeRoute();
+        }}
       />
       <div className="pagination-body">
         <ReactPaginate

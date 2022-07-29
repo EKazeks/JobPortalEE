@@ -632,6 +632,7 @@ function* updateAndPublishAdvertisementSaga() {
 // Update campaign
 function* updateCampaignSaga({ id }) {
   try {
+    let response;
     yield put(closeDialog());
 
     const { advertisement, client, companyProfile, jobs } = store.getState();
@@ -681,10 +682,14 @@ function* updateCampaignSaga({ id }) {
     }
 
     // const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
-    const result = axios.patch(url, body).finally((res) => {
-      showSuccessSnackbar(res);
-    });
-    const resultParsed = JSON.parse(result.data);
+    axios.patch(url,body).then((res)=>{response=res})
+    if(response === 400)
+    {
+      yield put(showFailedSnackbar())
+    }
+    else{
+      yield put(showSuccessSnackbar())
+    }
 
     // if (resultParsed) {
     //   //If admin is upgrading post or updating jobpost on behalf of companies:
@@ -914,7 +919,6 @@ function* updateJobApplicationDetailsSaga({
       interview_time,
       interview_place,
     } = formValues;
-
     if (update === "note") {
       body = JSON.stringify({
         application_id,
