@@ -12,7 +12,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Line } from "react-chartjs-2";
-import { customURL } from "../../../utils/helperFunctions";
+import { customURL,dateFormat } from "../../../utils/helperFunctions";
 import { customTranslateCampaign } from "../../../utils/customTranslate";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import axios from "axios";
@@ -50,16 +50,23 @@ const DashboardComponent = ({
 }) => {
   const { t } = useTranslation("campaigns", "adDetails");
   const [jobsToRender, setJobsToRender] = useState([]);
-  const selectedPage = 1;
+  const [dateOfApplication,setDateOfApplication] = useState();
+  const [applicant, setApplicant] = useState({})
+  const [address,setAddress] = useState();
+  const selectedPage = 1; 
   const dispatch = useDispatch();
-  const { jobPostNumber } = useSelector((state) => state.jobs);
+  const { id } = useSelector((state) => state.jobs);
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${jobPostNumber}`).then((res) => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data);
-      console.log(jobsToRender);
+      setDateOfApplication(dateFormat(res.data.dateOfApplication))
+      setAddress(res.data.jobPostAddress.address)
+      setApplicant(res.data.jobPostApplications)
     });
   }, []);
+
+  
 
   return (
     <div>
@@ -85,7 +92,7 @@ const DashboardComponent = ({
                   } else return address.address;
                 }
               })} */}
-              {'Adress'}
+              {address}
             </strong>
           </h6>
           <Divider />
@@ -93,14 +100,14 @@ const DashboardComponent = ({
         <div className="ad_title_3">
           <Grid container spacing={1}>
             <Grid item>
-              <h3>{t("campaign")}: </h3>
+              <h3>{t("campaign")}: {jobsToRender.campaignType}</h3>
             </Grid>
             <Grid item>
               <h3>{customTranslateCampaign("Free")}</h3>
             </Grid>
           </Grid>
           <strong style={{ color: "#34495e" }}>
-            {jobsToRender && jobsToRender.dateOfApplication}
+            {jobsToRender && dateOfApplication}
           </strong>{" "}
         </div>
         <div>
@@ -118,7 +125,7 @@ const DashboardComponent = ({
                   </div>
                   <div>
                     <h3 className="ad_title_1">
-                      {customTranslateCampaign("Free")}
+                      {jobsToRender.campaignType}
                     </h3>
                   </div>
                 </Grid>
@@ -155,7 +162,8 @@ const DashboardComponent = ({
                 <CardContent className={classes.cardContent}>
                   <div>
                     <h3>
-                      <strong>{jobsToRender.totalLikes}</strong>
+                      {/* <strong>{jobsToRender.totalLikes}</strong> */}
+                      <strong>{'0'}</strong>
                     </h3>
                   </div>
                   <div>{t("adDetails:totalFavs")}</div>
@@ -167,7 +175,8 @@ const DashboardComponent = ({
                 <CardContent className={classes.cardContent}>
                   <div>
                     <h3>
-                      <strong>{jobsToRender.totalViewed}</strong>
+                      {/* <strong>{jobsToRender.totalViewed}</strong> */}
+                      <strong>{'0'}</strong>
                     </h3>
                   </div>
                   <div>{t("adDetails:totalViewed")}</div>
@@ -183,7 +192,7 @@ const DashboardComponent = ({
                 <CardContent className={classes.cardContent}>
                   <div>
                     <h3>
-                      <strong>{"2"}</strong>
+                      <strong>{"0"}</strong>
                     </h3>
                   </div>
                   <div>{t("adDetails:totalLinkClicks")}</div>
@@ -195,7 +204,7 @@ const DashboardComponent = ({
                 <CardContent className={classes.cardContent}>
                   <div>
                     <h3>
-                      <strong>{jobsToRender.totalApplicants}</strong>
+                      <strong>{applicant.length}</strong>
                     </h3>
                   </div>
                   <div>{t("adDetails:totalApplication")}</div>

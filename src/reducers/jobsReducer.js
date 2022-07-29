@@ -12,13 +12,26 @@ import {
   GET_APPLICANT_DASHBOARD_INFO_SUCCESS,
   TOGGLE_EMAIL_NOTIFICATION,
   GET_WORK_START_SUCCESS,
+  SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE,
+  SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS,
+  EDIT_OFFER,
+  WARN_TO_DELETE,
+  DELETE_JOB_OFFER,
+  GET_JOB_APPLICANTS
 } from "../constants";
 
 const initialState = {
   jobsList: [],
+  apiSuccess: false,
+  apiFailed: false,
+  isToEdit: false,
   id: 0,
+  idToCopy:0,
+  isOfferCopied:false,
+  isOfferEdited: false,
   jobPostNumber:[],
   jobDetails: [],
+  jobApplicantsId: 0,
   selectedPage: {
     selected: 0,
   },
@@ -29,16 +42,52 @@ const initialState = {
   dashboard: [],
   notificationToggleBtn: false,
   workStart: null,
+  warnToDelete: false,
+  isToDeleteAdvertisementId: 0,
 };
 
 const jobsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE: 
+      return {
+        ...state,
+        showSpinner: true
+      }
+    case DELETE_JOB_OFFER:
+      return {
+        ...state,
+        warnToDelete: false,
+      }
+      case WARN_TO_DELETE:
+        return {
+          ...state,
+          warnToDelete: true,
+          isToDeleteAdvertisementId: action.id,
+        };
+    case EDIT_OFFER:
+      return{
+        ...state,
+        idToCopy:action.id,
+        isOfferCopied:true,
+        isOfferEdited: true
+      }
+    case SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS:
+      return {
+        ...state,
+        showSpinner: false,
+        apiSuccess: true,
+      }
     case FETCH_JOB_BY_ID:
       return {
         ...state,
         id: action.id,
       };
-
+    case GET_JOB_APPLICANTS:
+      return {
+        ...state,
+        jobApplicantsId: action.id,
+        //payload: action.payload
+      };
     case FILTER_JOBS:
       return {
         ...state,

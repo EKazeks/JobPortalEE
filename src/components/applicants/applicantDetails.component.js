@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 import { Button, Card, CardContent, CardActions, Grid, Divider, Snackbar, CircularProgress } from '@material-ui/core';
@@ -11,8 +11,11 @@ import { renderAdminDatePicker, renderDenseTextField, renderTimePicker } from '.
 import SideBar from '../../containers/layout/sideBar.container';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import { customURL } from '../../utils/helperFunctions';
+import { customURL, dateFormat } from '../../utils/helperFunctions';
 import TextEditor from '../../utils/textEditor';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { fetchJobApplicants } from '../../actions';
 
 const styles = theme => ({
   formBtn: {
@@ -130,20 +133,38 @@ const ApplicantDetails = ({
   const applicant_cv = viewApplication.applicant_cv && viewApplication.applicant_cv[0].path;
   const cv_filename = viewApplication.applicant_cv && viewApplication.applicant_cv[0].filename;
   const { t } = useTranslation('applicant', 'common');
+  const [jobsToRender, setJobsToRender] = useState([]);
+  const [applicants, setApplicants] = useState([])
+  const [address, setAddress] = useState()
+  const {id} = useSelector((state) => state.jobs)
+  const dispatch = useDispatch()
+  //const {jobpostId} = useSelector((state) => state.jobs.jobApplicants)
 
+  useEffect(() => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then(res => {
+      setJobsToRender(res.data);
+      setApplicants(res.data.jobPostApplications)
+      setAddress(res.data.jobPostAddress.address)
+    });
+  }, []);
+
+  // useEffect(() => {
+  //   dispatch(fetchJobApplicants(applicants.id))
+  //   console.log(applicantId);
+  // },[])
   return (
     <div className="job-application">
       <SideBar />
       <div className={classes.adContent}>
         <div className="container">
           <div className={classes.backBtnContainer}>
-            <Link to={`${customURL(viewSelectedAd.job_post_link, 'internal')}`} className={classes.backBtnText}>
+            <Link to={`${customURL(jobsToRender.url, 'internal')}`} className={classes.backBtnText}>
               <ArrowBackIosIcon /> {t('jobs:backButton')}
             </Link>
           </div>
           <div className={classes.title}>
             <h3>
-              {viewSelectedAd.job_title}, {viewSelectedAd.job_location}
+              {jobsToRender.jobName}, {address}
             </h3>
             <Divider />
           </div>
@@ -155,22 +176,22 @@ const ApplicantDetails = ({
                     <div>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label htmlFor="firstname" className={classes.fieldLabel}>
+                          <label htmlFor="firstName" className={classes.fieldLabel}>
                             {t('common:firstName')}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="firstname" id="firstname" disabled />
+                          <Field component={renderDenseTextField} name="firstName" id="firstName" disabled />
                         </Grid>
                       </Grid>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label htmlFor="lastname" className={classes.fieldLabel}>
+                          <label htmlFor="lastName" className={classes.fieldLabel}>
                             {t('common:lastName')}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="lastname" id="lastname" disabled />
+                          <Field component={renderDenseTextField} name="lastName" id="lastName" disabled />
                         </Grid>
                       </Grid>
 
@@ -186,32 +207,32 @@ const ApplicantDetails = ({
                       </Grid>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label htmlFor="contact_number" className={classes.fieldLabel}>
+                          <label htmlFor="phone" className={classes.fieldLabel}>
                             {t('common:phone')}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="contact_number" id="contact_number" disabled />
+                          <Field component={renderDenseTextField} name="phone" id="phone" disabled />
                         </Grid>
                       </Grid>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label htmlFor="linkedin" className={classes.fieldLabel}>
+                          <label htmlFor="linkedIn" className={classes.fieldLabel}>
                             {t('common:LinkedIn')}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="linkedin" id="linkedin" disabled />
+                          <Field component={renderDenseTextField} name="linkedIn" id="linkedIn" disabled />
                         </Grid>
                       </Grid>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label htmlFor="portfolio" className={classes.fieldLabel}>
+                          <label htmlFor="description" className={classes.fieldLabel}>
                             {t('common:portfolio')}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="portfolio" id="portfolio" disabled />
+                          <Field component={renderDenseTextField} name="description" id="description" disabled />
                         </Grid>
                       </Grid>
                       <Grid container alignItems="center">
@@ -221,9 +242,9 @@ const ApplicantDetails = ({
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <a href={applicant_cv} target="_blank" rel="noopener noreferrer">
+                          {/* <a href={applicant_cv} target="_blank" rel="noopener noreferrer">
                             {cv_filename}
-                          </a>
+                          </a> */}
                         </Grid>
                       </Grid>
                     </div>
@@ -249,7 +270,7 @@ const ApplicantDetails = ({
                 </Grid>
                 <Grid container alignItems="center" style={{ marginTop: 15 }}>
                   <Grid item sm={4}>
-                    <label className={classes.fieldLabel} htmlFor="application_description">
+                    <label className={classes.fieldLabel} htmlFor="description">
                       {t('applicationMsg')}:
                     </label>
                   </Grid>
@@ -257,8 +278,8 @@ const ApplicantDetails = ({
                     <Field
                       className={classes.rte}
                       component={TextEditor}
-                      name="application_description"
-                      id="application_description"
+                      name="description"
+                      id="description"
                       disabled
                       // placeholder={t('descPlaceholder')}
                     />
@@ -271,12 +292,12 @@ const ApplicantDetails = ({
                     <Grid item className="fullWidthBtn">
                       <Button
                         variant="contained"
-                        className={classNames(viewApplication.status === 1 ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
-                        startIcon={viewApplication.status === 1 && <DoneIcon />}
-                        disabled={viewApplication.status === 1}
+                        //className={classNames(viewApplication.status === 1 ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
+                        //startIcon={viewApplication.status === 1 && <DoneIcon />}
+                        //disabled={viewApplication.status === 1}
                         color="primary"
                         onClick={() =>
-                          updateApplicantStatus(viewApplication.application_id, viewApplication.company_id, viewApplication.post_id, viewApplication.email, 1)
+                          updateApplicantStatus(applicants.id, applicants.jobpostId, applicants.email, 1)
                         }
                       >
                         {t('call')} / {t('interview')}
@@ -285,12 +306,12 @@ const ApplicantDetails = ({
                     <Grid item className="fullWidthBtn">
                       <Button
                         variant="contained"
-                        className={classNames(viewApplication.status === 4 ? classes.rejectStatus : classes.inactiveStatus, 'fullWidthBtn')}
-                        startIcon={viewApplication.status === 4 && <DoneIcon />}
-                        disabled={viewApplication.status === 4}
+                        className={classNames(applicants.status === 4 ? classes.rejectStatus : classes.inactiveStatus, 'fullWidthBtn')}
+                        startIcon={applicants.status === 4 && <DoneIcon />}
+                        disabled={applicants.status === 4}
                         color="secondary"
                         onClick={() =>
-                          updateApplicantStatus(viewApplication.application_id, viewApplication.company_id, viewApplication.post_id, viewApplication.email, 4)
+                          updateApplicantStatus(applicants.id, applicants.jobpostId, applicants.email, 4)
                         }
                       >
                         {t('dontCall')}
@@ -299,12 +320,12 @@ const ApplicantDetails = ({
                     <Grid item className="fullWidthBtn">
                       <Button
                         variant="contained"
-                        className={classNames(viewApplication.status === 2 ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
-                        startIcon={viewApplication.status === 2 && <DoneIcon />}
-                        disabled={viewApplication.status === 2}
+                        className={classNames(applicants.status === 2 ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
+                        startIcon={applicants.status === 2 && <DoneIcon />}
+                        disabled={applicants.status === 2}
                         color="primary"
                         onClick={() =>
-                          updateApplicantStatus(viewApplication.application_id, viewApplication.company_id, viewApplication.post_id, viewApplication.email, 2)
+                          updateApplicantStatus(applicants.id, applicants.jobpostId, applicants.email, 2)
                         }
                       >
                         {t('interviewBooked')}
@@ -313,11 +334,11 @@ const ApplicantDetails = ({
                     <Grid item className="fullWidthBtn">
                       <Button
                         variant="contained"
-                        className={classNames(viewApplication.is_fav ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
-                        startIcon={viewApplication.is_fav && <DoneIcon />}
+                        className={classNames(applicants.is_fav ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
+                        startIcon={applicants.is_fav && <DoneIcon />}
                         color="secondary"
                         onClick={() =>
-                          updateApplicantStatus(viewApplication.application_id, viewApplication.company_id, viewApplication.post_id, viewApplication.email, 3)
+                          updateApplicantStatus(applicants.id,applicants.jobpostId, applicants.email, 3)
                         }
                       >
                         {t('addToFavorites')}

@@ -121,7 +121,7 @@ const JobseekerNavBarComponent = ({ classes, isUserLoggedIn, logout }) => {
                 {t('vacancies')}
               </NavLink>
 
-              <NavLink to="/haetut-tyopaikat" className={classes.secondaryMenu} activeClassName={classes.activeNav}>
+              <NavLink to="/toopakkumised" className={classes.secondaryMenu} activeClassName={classes.activeNav}>
                 {t('appliedJobs')}
               </NavLink>
             </Toolbar>

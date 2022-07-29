@@ -103,7 +103,7 @@ const EditAdvertFormComponent = ({
           <div className={classes.paper}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <Field component={renderTextField} id="job_title" label={t('field1')} name="job_title" fullWidth required />
+                <Field component={renderTextField} id="jobName" label={t('field1')} name="jobName" fullWidth required />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <JobCategoriesComponent jobCategories={jobCategories} />
@@ -115,14 +115,14 @@ const EditAdvertFormComponent = ({
                 <JobHoursComponent />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Field component={AutoCompleteLocationInput} name="job_location" label={t('field3')} id="job_location" required />
+                <Field component={AutoCompleteLocationInput} name="jobLocation" label={t('field3')} id="jobLocation" required />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Field component={renderDatePicker} id="due_date" label={t('advertForm:field5')} name="due_date" required />
+                <Field component={renderDatePicker} id="lastApplicationDate" label={t('advertForm:field5')} name="lastApplicationDate" required />
               </Grid>
               <Grid item xs={12}>
                 <p style={{ color: '#6c757d' }}>{t('linkInfoMsg')}</p>
-                <Field component={renderTextField} label={t('field6')} name="application_link" id="application_link" />
+                <Field component={renderTextField} label={t('field6')} name="applicationUrl" id="applicationUrl" />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Field
@@ -131,7 +131,7 @@ const EditAdvertFormComponent = ({
                   imagefile={image && !image.path && !Array.isArray(image) ? image : Array.isArray(image) ? image[0].path : ''}
                   btnText={t('addPic')}
                   name="image_document"
-                  id="image_document"
+                  id="image_id"
                   fullWidth
                   isImage
                 />
@@ -160,7 +160,7 @@ const EditAdvertFormComponent = ({
               </Grid>
 
               <Grid item xs={12}>
-                <Field component={TextEditor} fullWidth name="job_description" label={t('field4')} id="job_description" placeholder={t('field4')} required />
+                <Field component={TextEditor} fullWidth name="jobDescription" label={t('field4')} id="jobDescription" placeholder={t('field4')} required />
               </Grid>
               <Grid container spacing={1} alignItems="center" justifyContent="space-between" className={classes.emailNoti}>
                 <Grid item xs={12} md={6}>

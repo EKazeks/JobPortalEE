@@ -7,7 +7,7 @@ import ReactPaginate from "react-paginate";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import { useTranslation } from "react-i18next";
-import { customURL } from "../../utils/helperFunctions";
+import { customURL, dateFormat } from "../../utils/helperFunctions";
 import { FavBtn } from "../../utils/favBtn.js";
 import SearchFormContainer from "../../containers/jobs/searchForm.container.js";
 import { MySnackbarContentWrapper } from "../../utils/snackbar.utils";
@@ -180,15 +180,15 @@ const JobsComponent = ({
 }) => {
   const { t } = useTranslation("jobsList", "jobs");
   const [jobsToRender, setJobsToRender] = useState([]);
+  const [address,setAddress] = useState();
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn`).then((res) => {
       setJobsToRender(res.data);
-      console.log(jobsToRender);
     });
-  }, []);
+  }, [])
 
-  return (
+  return ( 
 
     <div>
       <SEO title="Töökohad | Jobportal" />
@@ -289,24 +289,14 @@ const JobsComponent = ({
                                   classes.jobInfo
                                 )}
                               >
-                                {" "}
-                                {item.companyName}{" "}
+                                {item.jobName}
                               </h3>
                             </div>
 
                             <div>
                               <h5 className={classes.companyInfo}>
                                 {item.companyName},
-                                {item.jobPostAsukohaAddress.map((address) => {
-                                  {
-                                    if (address.address[17] === null) {
-                                      return address.address
-                                        .split(",")
-                                        .splice(1)
-                                        .toString();
-                                    } else return address.address;
-                                  }
-                                })}
+                                {item.jobPostAddress.address}
                               </h5>
                             </div>
                             <Hidden only={"xl"}>
@@ -321,7 +311,7 @@ const JobsComponent = ({
                                 <Grid item>
                                   <span>
                                     {t("applicationDueDate")}:
-                                    {item.dateOfApplication}
+                                    {dateFormat(item.dateOfApplication)}
                                   </span>
                                 </Grid>
                               </Grid>
@@ -339,7 +329,7 @@ const JobsComponent = ({
                               <Grid item>
                                 <span>
                                   {t("applicationDueDate")}:
-                                  {item.dateOfApplication}
+                                  {dateFormat(item.dateOfApplication)}
                                 </span>
                               </Grid>
                             </Hidden>

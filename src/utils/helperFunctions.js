@@ -1,8 +1,15 @@
 import React from "react";
+import store from "../store";
 
 export const customURL = (url, type) => {
-  if (url === undefined) {
+
+  const {id} = store.getState().jobs
+  if (url === undefined ) {
     return;
+  }
+  if(url === null || url === "string" )
+  {
+    return `/jobpost/some-internal-created-offer/${id}`
   }
   // url comes from backend in this format - "https://vpt-ui-dev.azurewebsites.net/tyopaikat/Nordic-C-Creditor-Oy/67289/Kirjanpitäjä-Controller/14"
   let path = [];
@@ -50,6 +57,24 @@ export const convertJobTypeToStr = (t, type) => {
       {type === "15" && t("jobtype:jobType15")}
     </>
   );
+};
+
+export const dateFormat = (date) => {
+  const formatedDate = date.split("T", 10)[0].split("-");
+  const newDateFormat =
+    formatedDate[2] + "." + formatedDate[1] + "." + formatedDate[0];
+  if (
+    newDateFormat == "undefined.undefined." ||
+    newDateFormat == "undefined.undefined.string"
+  ) {
+    return (
+      <>
+        <p>"Date"</p>
+      </>
+    );
+  } else {
+    return <>{newDateFormat}</>;
+  }
 };
 
 export const convertJobHoursToStr = (t, type) => {

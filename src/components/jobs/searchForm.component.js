@@ -1,46 +1,55 @@
-import React from 'react';
-import { Field } from 'redux-form';
-import { useTranslation } from 'react-i18next';
-import { Container, Button, Grid } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { renderMultiselect, jobHours, jobType, publishedTimes } from '../../utils/customSelectField';
-import { renderDenseTextField, renderSearchSelectField } from '../../utils/wrappers';
-import autoCompleteLocation from '../../utils/autoCompleteLocation';
+import React, { useEffect, useState } from "react";
+import { Field } from "redux-form";
+import { useTranslation } from "react-i18next";
+import { Container, Button, Grid } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import {
+  renderMultiselect,
+  jobHours,
+  jobType,
+  publishedTimes,
+} from "../../utils/customSelectField";
+import {
+  renderDenseTextField,
+  renderSearchSelectField,
+} from "../../utils/wrappers";
+import autoCompleteLocation from "../../utils/autoCompleteLocation";
+import axios from "axios";
 
 const _onFormSubmit = () => {
   return false;
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   searchField: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   searchSelectField: {
-    transform: 'translate(14px, 14px) scale(1)',
+    transform: "translate(14px, 14px) scale(1)",
   },
   title: {
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
   },
   searchBtn: {
     color: theme.palette.primary.main,
-    float: 'right',
-    margin: '20px auto',
-    width: '100%',
-    '&:hover': {
+    float: "right",
+    margin: "20px auto",
+    width: "100%",
+    "&:hover": {
       color: theme.palette.custom.jobListHoverColor,
     },
   },
   multiSelectSearch: {
-    '& .rw-widget-container': {
+    "& .rw-widget-container": {
       borderRadius: 0,
-      border: 'none',
+      border: "none",
     },
-    '& .rw-widget': {
-      margin: '8px 0',
+    "& .rw-widget": {
+      margin: "8px 0",
     },
-    '& .rw-multiselect .rw-input-reset': {
-      width: '100%',
+    "& .rw-multiselect .rw-input-reset": {
+      width: "100%",
     },
     // '& .rw-multiselect-tag': {
     //   width: '100%'
@@ -50,14 +59,37 @@ const styles = theme => ({
     } */
   },
 });
-const SearchFormComponent = ({ handleSubmit, jobCategories, filterJobs, classes }) => {
-  const { t } = useTranslation('searchForm', 'publishedTimes');
+const SearchFormComponent = ({
+  handleSubmit,
+  filterJobs,
+  classes,
+}) => {
+  const { t } = useTranslation("searchForm", "publishedTimes");
+  const [jobsToRender, setJobsToRender] = useState([]);
 
+  const categorys = jobsToRender.map((category) => category.jobTags);
+  const sortCategorys = Array.from(new Set(categorys));
+
+  useEffect(() => {
+    axios.get("https://localhost:7262/jobsEn").then((res) => {
+      setJobsToRender(res.data);
+    });
+  }, []);
+  const objCategory = sortCategorys.map((str, index) => ({
+    value: str,
+    id: index + 1,
+  }));
+  if ((objCategory.length = 23)) {
+    //console.log(objCategory)
+  }
   return (
     <div>
-      <h2 className={classes.title}>{t('title')}</h2>
+      <h2 className={classes.title}>{t("title")}</h2>
       <Container>
-        <form className={classes.multiSelectSearch} onSubmit={handleSubmit(_onFormSubmit)}>
+        <form
+          className={classes.multiSelectSearch}
+          onSubmit={handleSubmit(_onFormSubmit)}
+        >
           <Grid>
             <Grid item xs={12}>
               <Field
@@ -66,7 +98,7 @@ const SearchFormComponent = ({ handleSubmit, jobCategories, filterJobs, classes 
                 name="search_phrase"
                 fullWidth
                 id="searchPhrase"
-                placeholder={t('searchPhrase')}
+                placeholder={t("searchPhrase")}
                 className={classes.searchField}
                 style={{ marginBottom: 0 }}
                 searchForm
@@ -80,7 +112,7 @@ const SearchFormComponent = ({ handleSubmit, jobCategories, filterJobs, classes 
                 variant="outlined"
                 id="jobLocation"
                 fullWidth
-                placeholder={t('jobLocation')}
+                placeholder={t("jobLocation")}
                 className={classes.searchField}
                 margin="dense"
                 searchForm
@@ -90,16 +122,16 @@ const SearchFormComponent = ({ handleSubmit, jobCategories, filterJobs, classes 
               <Field
                 name="portal_category_id"
                 component={renderMultiselect}
-                data={jobCategories.map(category => {
+                data={objCategory.map((category) => {
                   return {
                     id: category.id,
-                    type: category.type,
+                    value: category.value,
                     label: t(`category:${category.id}`),
                   };
                 })}
                 valueField="type"
                 textField="label"
-                placeholder={t('chooseCategory')}
+                placeholder={t("chooseCategory")}
                 className={classes.searchField}
               />
             </Grid>
@@ -107,7 +139,7 @@ const SearchFormComponent = ({ handleSubmit, jobCategories, filterJobs, classes 
               <Field
                 name="job_type"
                 component={renderMultiselect}
-                data={jobType.map(jobType => {
+                data={jobType.map((jobType) => {
                   return {
                     value: jobType.value,
                     label: t(`jobtype:jobType${jobType.value}`),
@@ -115,7 +147,7 @@ const SearchFormComponent = ({ handleSubmit, jobCategories, filterJobs, classes 
                 })}
                 valueField="value"
                 textField="label"
-                placeholder={t('chooseJobType')}
+                placeholder={t("chooseJobType")}
                 className={classes.searchField}
               />
             </Grid>
@@ -123,7 +155,7 @@ const SearchFormComponent = ({ handleSubmit, jobCategories, filterJobs, classes 
               <Field
                 name="job_hours"
                 component={renderMultiselect}
-                data={jobHours.map(hour => {
+                data={jobHours.map((hour) => {
                   return {
                     value: hour.value,
                     label: t(`jobhours:jobHours${hour.value}`),
@@ -131,7 +163,7 @@ const SearchFormComponent = ({ handleSubmit, jobCategories, filterJobs, classes 
                 })}
                 valueField="value"
                 textField="label"
-                placeholder={t('chooseJobHours')}
+                placeholder={t("chooseJobHours")}
                 className={classes.searchField}
               />
             </Grid>
@@ -141,13 +173,13 @@ const SearchFormComponent = ({ handleSubmit, jobCategories, filterJobs, classes 
                 name="published"
                 variant="outlined"
                 className={classes.searchField}
-                label={t('publishedTimes:publishLabel')}
+                label={t("publishedTimes:publishLabel")}
                 searchForm={classes.searchSelectField}
               >
                 {/* <option value="" disabled>
                   {t('publishedTimes:publishLabel')}
                 </option> */}
-                {publishedTimes.map(item => {
+                {publishedTimes.map((item) => {
                   return (
                     <option value={item.value} key={item.value}>
                       {t(`publishedTimes:${item.value}`)}
@@ -157,8 +189,14 @@ const SearchFormComponent = ({ handleSubmit, jobCategories, filterJobs, classes 
               </Field>
             </Grid>
             <Grid item xs={12}>
-              <Button type="submit" variant="contained" color="secondary" className={classes.searchBtn} onClick={() => filterJobs(false)}>
-                {t('searchBtn')}
+              <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                className={classes.searchBtn}
+                onClick={() => filterJobs(false)}
+              >
+                {t("searchBtn")}
               </Button>
             </Grid>
           </Grid>

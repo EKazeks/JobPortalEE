@@ -22,7 +22,7 @@ import {
   POST_ADVERTISEMENT,
   GET_APPLICATION_DETAILS_BY_ID_SUCCESS,
   GET_JOBPOST_VIEWS_BY_DATE_SUCCESS,
-  WARN_TO_DELETE,
+  //WARN_TO_DELETE,
   CLOSE_DIALOG,
   HIDE_SPINNER,
   EDIT_INTERVIEW_DETAILS,
@@ -35,6 +35,8 @@ import {
 } from '../constants';
 
 const initialState = {
+  postRequesSucces:false,
+  postRequesFailure:false,
   showSpinner: false,
   isSaveAndPublishAdvertisement: false,
   isSaveAdvertisementAsDraft: false,
@@ -83,7 +85,8 @@ export default function advertisementsReducer(state = initialState, action) {
     case SAVE_AND_PUBLISH_ADVERTISEMENT:
       return {
         ...state,
-        showSpinner: true,
+        showSpinner: false,
+        apiSuccess: true,
       };
     case UPDATE_AND_PUBLISH_ADVERTISEMENT:
       return {
@@ -184,12 +187,12 @@ export default function advertisementsReducer(state = initialState, action) {
         isToEdit: action.isToEdit,
       };
 
-    case WARN_TO_DELETE:
-      return {
-        ...state,
-        warnToDelete: true,
-        isToDeleteAdvertisementId: action.id,
-      };
+    // case WARN_TO_DELETE:
+    //   return {
+    //     ...state,
+    //     warnToDelete: true,
+    //     isToDeleteAdvertisementId: action.id,
+    //   };
 
     case DELETE_ADVERTISEMENT:
       return {

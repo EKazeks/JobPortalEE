@@ -1,4 +1,5 @@
 import { id } from "date-fns/locale";
+import { actionChannel } from "redux-saga/effects";
 import {
   SAVE_AND_PUBLISH_ADVERTISEMENT,
   UPDATE_AND_PUBLISH_ADVERTISEMENT,
@@ -148,6 +149,12 @@ import {
   GET_JOBS_OFFERS,
   GET_JOBS_OFFERS_SUCCESS,
   GET_ALL_JOB_CATEGORY_FROM_ESTONIA_SUCCESS,
+  SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE,
+  SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS,
+  EDIT_OFFER,
+  EDIT_VACANCY_FORM,
+  DELETE_JOB_OFFER,
+  GET_JOB_APPLICANTS
 } from "../constants";
 
 // get jobs offers
@@ -159,6 +166,17 @@ export const fetchJobById = (id) => ({
   type: FETCH_JOB_BY_ID,
   id,
 });
+
+export const editOffer = (id) => ({
+  type:EDIT_OFFER,
+  id,
+})
+
+export const fetchJobApplicants = (id,payload) => ({
+  type: GET_JOB_APPLICANTS,
+  id,
+  //payload
+})
 
 // export const getJobsOffersSuccess = () => ({
 //   type: GET_JOBS_OFFERS_SUCCESS,
@@ -319,6 +337,9 @@ export const postAdvertisement = () => ({
 export const saveAndPublishAdvertisement = () => ({
   type: SAVE_AND_PUBLISH_ADVERTISEMENT,
 });
+export const saveAndPublishAdvertisementToEe = () => ({
+  type: SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE,
+});
 export const updateAndPublishAdvertisement = () => ({
   type: UPDATE_AND_PUBLISH_ADVERTISEMENT,
 });
@@ -326,8 +347,12 @@ export const updateAndPublishAdvertisementSuccess = () => ({
   type: UPDATE_AND_PUBLISH_ADVERTISEMENT_SUCCESS,
 });
 
-export const saveAndPublishAdvertisementSuccess = () => ({
+export const saveAndPublishAdvertisementSuccess = (payload) => ({
   type: SAVE_AND_PUBLISH_ADVERTISEMENT_SUCCESS,
+  payload: payload
+});
+export const saveAndPublishAdvertisementToEeSuccess = (action,payload) => ({
+  type: SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS,
 });
 
 export const saveAdvertisementAsDraft = () => ({
@@ -435,16 +460,12 @@ export const populateVacancyFormSuccess = (campaignDetails, isToEdit) => ({
   campaignDetails,
   isToEdit,
 });
-export const populateVacancyFormForEe = (id, isToEdit) => ({
-  type: POPULATE_VACANCY_FORM,
+
+export const editVacancyForm = (id, isToEdit) => ({
+  type: EDIT_VACANCY_FORM,
   id,
-  isToEdit,
-});
-export const populateVacancyFormForEeSuccess = (campaignDetails, isToEdit) => ({
-  type: POPULATE_VACANCY_FORM_SUCCESS,
-  campaignDetails,
-  isToEdit,
-});
+  isToEdit
+})
 
 
 
@@ -456,8 +477,10 @@ export const populateSignupForm = (applicantData) => ({
 
 // UPDATE ADVERTISEMENT
 
-export const updateAdvertisement = () => ({
+export const updateAdvertisement = (id,isToEdit) => ({
   type: UPDATE_ADVERTISEMENT,
+  id,
+  isToEdit
 });
 export const changeCampaign = (campaign) => ({
   type: CHANGE_CAMPAIGN,
@@ -476,6 +499,11 @@ export const changeActivePostToInactive = (id) => ({
 });
 
 // DELETE ADVERTISEMENT
+export const deleteJobOffer = (id) => ({
+  type: DELETE_JOB_OFFER,
+  id,
+})
+
 export const deleteAdvertisement = (id) => ({
   type: DELETE_ADVERTISEMENT,
   id,
@@ -609,12 +637,12 @@ export const updateEmailNotification = () => ({
 // FAVORITE JOBS
 export const toggleFavoriteJobs = (
   companyBusinessId,
-  jobPostNumber,
+  id,
   status
 ) => ({
   type: TOGGLE_FAVORITE_JOBS,
   companyBusinessId,
-  jobPostNumber,
+  id,
   status,
 });
 export const deleteFavoriteJobs = (
@@ -759,15 +787,15 @@ export const resetApplicationSent = () => ({
 
 // GET APPLICATION
 export const getApplicationDetailsById = (
-  application_id,
-  company_id,
-  post_id,
+  id,
+  //company_id,
+  jobpostId,
   email
 ) => ({
   type: GET_APPLICATION_DETAILS_BY_ID,
-  application_id,
-  company_id,
-  post_id,
+  id,
+  //company_id,
+  jobpostId,
   email,
 });
 export const getApplicationDetailsByIdSuccess = (response) => ({
@@ -805,14 +833,15 @@ export const updateJobApplicationDetails = (
   update,
 });
 
-export const editInterviewDetails = (isToEdit) => ({
+export const editInterviewDetails = (isToEdit,id) => ({
   type: EDIT_INTERVIEW_DETAILS,
   isToEdit,
+  id
 });
 
-export const warnToDeleteApplication = (applicationDetails) => ({
+export const warnToDeleteApplication = (id) => ({
   type: WARN_TO_DELETE_APPLICATION,
-  applicationDetails,
+  id,
 });
 
 export const deleteApplication = () => ({

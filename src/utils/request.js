@@ -1,6 +1,8 @@
 import axios from 'axios';
 import store from '../store';
 import { useEffect, useState } from 'react';
+import jobsReducer from '../reducers/jobsReducer';
+import { useSelector } from 'react-redux';
 
 
 const getManualAuthHeaders = () => {
@@ -16,9 +18,10 @@ const getManualAuthHeaders = () => {
 export const apiGetJobsOffers = () => {
     axios
     .get('https://localhost:7262/jobsEn')
-    .then(data => ({
-      data
-    }))
+    .then(res => (
+      res.json()
+    ))
+    .then(data => ({data}))
     .catch(error => ({
       error
     }))
@@ -54,6 +57,23 @@ export const apiManualPost = (url = 'https://localhost:7262/jobsEn', body, metho
     .then(data => ({ data }))
     .catch(error => ({ error }));
 };
+export const apiManualDelete = (url = 'https://localhost:7262/jobsEn', body, method = 'DELETE') => {
+  const headers = getManualAuthHeaders();
+  headers.append('Content-Type', 'application/json');
+
+  const options = {
+    method,
+    headers,
+    body,
+  };
+
+
+  return fetch(url, options)
+    .then(res => res.json())
+    .then(data => ({ data }))
+    .catch(error => ({ error }));
+};
+
 
 export const registerPost = (url, body, method = 'POST') => {
   const headers = new Headers();
@@ -108,7 +128,7 @@ export const apiOpenRequest = (url = `https://localhost:7262/jobsEn`, method = '
     .catch(error => ({ error }));
 };
 
-export const apiOpenPost = (url = 'https://localhost:7262/jobsEn/postJob', body, method = 'POST') => {
+export const apiOpenPost = (url = 'https://localhost:7262/jobsEn', body, method = 'POST') => {
   const headers = new Headers();
   headers.append('Content-Type', 'application/json');
 
@@ -123,10 +143,3 @@ export const apiOpenPost = (url = 'https://localhost:7262/jobsEn/postJob', body,
     .then(data => ({ data }))
     .catch(error => ({ error }));
 };
-
-export const fetchJobTags = (req, res) => {
-  return fetch('https://localhost:7262/jobsEn',{
-    method:'GET',
-  })
-  .then(res => res.json())
-}

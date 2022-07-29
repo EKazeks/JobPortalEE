@@ -37,7 +37,6 @@ import {
   watchChangeRouteSaga,
   watchAdminGetUserCompanyProfileSaga,
   watchPopulateEmailMessageSaga,
-  watchGetJobsOffersSaga,
 } from './advertisements.saga';
 import { watchAddCompanyProfile, watchGetCompanyProfile, watchAddApplicantProfile, watchGetApplicantProfile, watchAddNewCompany } from './profile.saga';
 import { watchChangeLanguageSaga } from './lang.saga';
@@ -69,7 +68,7 @@ export default function* rootSaga() {
     watchgetAppliedJobsSaga(),
     watchgetFavoriteJobsSaga(),
     watchdeleteFavoriteJobsSaga(),
-    watchGetJobDetailsById(),
+    //watchGetJobDetailsById(),
     watchgetApplicantDashboardInfoSaga(),
     watchtoggleEmailNotificationSaga(),
     watchupdateEmailNotificationSaga(),
@@ -82,7 +81,7 @@ export default function* rootSaga() {
     watchupdateAndPublishAdvertisementSaga(),
     watchSaveAdvertisementAsDraft(),
     watchgetAllCampaignsSaga(),
-    watchgetAllAdsByStatusSaga(),
+    //watchgetAllAdsByStatusSaga(),
     watchgetApplicationDetailsByIdSaga(),
     watchEditInterviewDetailsSaga(),
     watchupdateApplicantStatusSaga(),

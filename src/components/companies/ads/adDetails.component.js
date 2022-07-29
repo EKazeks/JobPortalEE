@@ -5,13 +5,13 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import store from "../../../store";
-import { customURL } from "../../../utils/helperFunctions";
+import { customURL,dateFormat } from "../../../utils/helperFunctions";
 import {
   updateAdvertisement,
   changeCampaign,
-  populateVacancyForm,
   changeActivePostToInactive,
   closeSnackbar,
+  populateVacancyForm
 } from "../../../actions";
 import { MySnackbarContentWrapper } from "../../../utils/snackbar.utils";
 import {
@@ -98,14 +98,28 @@ const AdDetails = ({
   props,
 }) => {
   const { t } = useTranslation("adDetails");
-  const dispatch = useDispatch();
-  const { id } = useSelector((state) => state.jobs);
-  const [jobsToRender, setJobsToRender] = useState([]);
+  const { id, jobDetails } = useSelector((state) => state.jobs);
+  const [dateOfApplication,setDateOfApplication] = useState();
+  const [address,setAddress] = useState();
+  const [toEdit,setToEdit] = useState()
+  const [jobsToRender, setJobsToRender] = useState({});
+  const dispatch = useDispatch()
   selectedPage = 1;
-
+  
   useEffect(() => {
+    
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data);
+      let date = res.data.dateOfApplication.split('.')
+
+      if(date.length === 3 )
+      {
+        setDateOfApplication(res.data.dateOfApplication)
+      }
+      else{
+        setDateOfApplication(dateFormat(res.data.dateOfApplication))
+      }
+      setAddress(res.data.jobPostAddress.address)
     });
   }, []);
 
@@ -115,9 +129,15 @@ const AdDetails = ({
     //     <Grid>
     //       <div>
     //         <h1>
-    //           {jobsToRender.jobPostNumber}
-    //           {jobsToRender.jobName}
-    //           {console.log(jobsToRender.jobPostNumber)}
+    //           {jobsToRender.map((job) => {
+    //             return (
+    //               <div>
+    //                 <h1>
+    //                   {job.jobPostAddress.address}
+    //                 </h1>
+    //               </div>
+    //             )
+    //           })}
     //         </h1>
     //       </div>
     //     </Grid>
@@ -125,6 +145,7 @@ const AdDetails = ({
 
     //   <h1>Test</h1>
     // </div>
+
     <div>
       <div className="container" key={jobsToRender.id}>
         <div className={classes.backBtnContainer}>
@@ -139,17 +160,7 @@ const AdDetails = ({
           <Grid container>
             <Grid item sm={12} md={7}>
               <h2 className="ad_title_1">
-                {/* {`${jobsToRender.jobName}, ${jobsToRender.jobPostAsukohaAddress.map(address => {
-                    {
-                      if (address.address[17]) {
-                        return address.address
-                          .split(',')
-                          .splice(1)
-                          .toString();
-                      } else return address.address;
-                    }
-                  })}`} */}
-                {jobsToRender.jobName} 
+                {jobsToRender.jobName}, {address}
               </h2>
               <h6 className="ad_title_2">
                 <strong style={{ marginRight: 10 }}>
@@ -162,31 +173,26 @@ const AdDetails = ({
                   }`}
                   :
                 </strong>
-                <strong>{jobsToRender.dateOfApplication}</strong>
+                <strong>{dateOfApplication}</strong>
               </h6>
             </Grid>
             <Grid item sm={12} md={5}>
               <Grid container spacing={2} className={classes.ctaBtn}>
                 <Grid item>
                   {/* If post is active post, show Inactive btn. If it is inactive post, show copy btn in Addetails */}
-                  {jobsToRender.campaignType === "Free" ? (
+                  {jobsToRender.campaignType === "free" ? (
                     <Link to="/tyopaikkailmoitus/" className="btnLink">
                       <Button
                         variant="outlined"
                         color="primary"
                         onClick={() => {
-                          store.dispatch(
-                            populateVacancyForm(
-                              jobsToRender.id,
-                              false
-                            )
-                          );
-                        }}
+                          store.dispatch(populateVacancyForm(jobsToRender.id, false));
+                        }} 
                       >
                         {t("common:copyBtn")}
                       </Button>
                     </Link>
-                  ) : jobsToRender.campaignType === "Free" ? (
+                  ) : jobsToRender.campaignLevel === "free" ? (
                     <Button
                       variant="outlined"
                       color="primary"
@@ -207,7 +213,7 @@ const AdDetails = ({
                     ""
                   )}
                 </Grid>
-                {jobsToRender.campaignType === "Free" && (
+                {jobsToRender.campaignType === "free" && (
                   <Grid item>
                     <Link
                       to={`/tyopaikkailmoitus/${jobsToRender.id}`}
@@ -216,7 +222,7 @@ const AdDetails = ({
                       <Button
                         variant="outlined"
                         color="primary"
-                        onClick={() => store.dispatch(updateAdvertisement())}
+                        onClick={() => store.dispatch(updateAdvertisement(jobsToRender.id))}
                       >
                         {t("editBtn")}
                       </Button>
@@ -288,13 +294,6 @@ const AdDetails = ({
         </div>
         <div className={classes.adDetail}>
           <div className={classes.companyImgFrame}>
-            <img
-              src={jobsToRender.logo && jobsToRender.logo[0].path}
-              alt={
-                jobsToRender.logo ? `${jobsToRender.jobName} Company-Image` : ""
-              }
-              className={jobsToRender.company_image ? classes.companyImage : ""}
-            />
           </div>
           <div
             className={classes.jobDesc}
@@ -309,21 +308,19 @@ const AdDetails = ({
             <Grid container spacing={2} className={classes.ctaBtn}>
               <Grid item>
                 {/* If post is active post, show Inactive btn. If it is inactive post, show copy btn in Addetails */}
-                {jobsToRender.campaignType === "Free" ? (
+                {jobsToRender.campaignType === "free" ? (
                   <Link to="/tyopaikkailmoitus/" className="btnLink">
                     <Button
                       variant="outlined"
                       color="primary"
-                      onClick={() => {
-                        store.dispatch(
-                          populateVacancyForm(jobsToRender.id, false)
-                        );
-                      }}
+                        onClick={() => {
+                          store.dispatch(populateVacancyForm(jobsToRender.id, false));
+                        }}
                     >
                       {t("common:copyBtn")}
                     </Button>
                   </Link>
-                ) : jobsToRender.campaignType === "Free" ? (
+                ) : jobsToRender.campaignType === "free" ? (
                   <Button
                     variant="outlined"
                     color="primary"
@@ -343,7 +340,7 @@ const AdDetails = ({
                   ""
                 )}
               </Grid>
-              {jobsToRender.campaignType === "Free" && (
+              {jobsToRender.campaignType === "free" && (
                 <Grid item>
                   <Link
                     to={`/tyopaikkailmoitus/${jobsToRender.id}`}
@@ -352,7 +349,8 @@ const AdDetails = ({
                     <Button
                       variant="outlined"
                       color="primary"
-                      onClick={() => store.dispatch(updateAdvertisement())}
+                      onClick={() => 
+                        store.dispatch(updateAdvertisement(jobsToRender.id))}
                     >
                       {t("editBtn")}
                     </Button>

@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Paper, Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import { useTranslation } from "react-i18next";
-import { customURL } from "../../../utils/helperFunctions";
+import { customURL, dateFormat } from "../../../utils/helperFunctions";
 import CustomizedDialogs from "../../../utils/customizedDialog";
 import i18n from "../../../utils/i18n";
 import axios from "axios";
+import { changeRoute } from "../../../actions";
 
 const ActiveAdsComponent = ({
   warnToDelete,
   populateVacancyForm,
-  deleteAdvertisement,
+  deleteJobOffer,
   changeAdvertPage,
   selectedPage,
   advertPages,
@@ -22,10 +23,20 @@ const ActiveAdsComponent = ({
   showDialog,
   isToDeleteAdvertisementId,
   fetchJobById,
+  editOffer,
 }) => {
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
+  const [toEdit, setToEdit] = useState();
+  const [jobCategorys, setJobCategorys] = useState([]);
+
+  // useEffect(() => {
+  //     axios.get('https://www.tootukassa.ee/api/toopakkumised').then((res) => {
+  //         setJobCategorys(res.data)
+  //     })
+  //     console.log(jobCategorys);
+  // },[])
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn`).then((res) => {
@@ -43,21 +54,22 @@ const ActiveAdsComponent = ({
 
   return (
     //  <div>
-    //   {jobsToRender.slice(1 * 30, 1 * 30 + 30).map(job => {
-    //     {job.jobPostHaridus.map((valdkond) => {
-    //       return (
-    //         <div>
-    //           {/* {console.log(jobPostHaridus)} */}
+    //   {jobsToRender.map(job => {
 
-    //         </div>
-    //       )
-    //     })}
     //     return (
-    //       <div key={job.jobPostNumber}>
+    //       <div key={job.id}>
     //       <Grid>
     //         <div>
     //           <h1>
-    //             {console.log(job.jobPostHaridus)}
+    //             {applicants && applicants.map((applicant) => {
+    //               return (
+    //                 <h1>
+    //                   {applicant.firstName}
+
+    //                 </h1>
+    //               )
+    //             })}
+    //             {/* {console.log(applicants.length)} */}
     //           </h1>
     //         </div>
     //       </Grid>
@@ -109,13 +121,7 @@ const ActiveAdsComponent = ({
         .slice(selectedPage * 10, selectedPage * 10 + 10)
         .map((item) => {
           return (
-            <div
-              key={
-                item.id === null
-                  ? item.id
-                  : item.id
-              }
-            >
+            <div key={item.id === null ? item.id : item.id}>
               <Paper style={{ marginTop: 20 }}>
                 <Grid
                   container
@@ -131,7 +137,6 @@ const ActiveAdsComponent = ({
                       >
                         <h4
                           onClick={() => {
-                            // openAdToSeeAdInfo(item.jobPostNumber)
                             fetchJobById(item.id);
                           }}
                         >
@@ -145,7 +150,18 @@ const ActiveAdsComponent = ({
                                   .toString();
                               } else return address.address;
                             }
-                          })}
+                          }) === null || undefined
+                            ? item.jobPostAsukohaAddress.map((address) => {
+                                {
+                                  if (address.address[17] === null) {
+                                    return address.address
+                                      .split(",")
+                                      .splice(1)
+                                      .toString();
+                                  } else return address.address;
+                                }
+                              })
+                            : item.jobPostAddress.address}
                         </h4>
                       </Link>
                     </div>
@@ -153,13 +169,7 @@ const ActiveAdsComponent = ({
                       <span>
                         {t("applicationsInTotal")}:
                         <span style={{ color: "red", margin: "0 5px" }}>
-                          (
-                          {`${
-                            item.totalApplicants === null
-                              ? item.totalApplicants
-                              : item.totalApplicants
-                          }`}
-                          )
+                          ({item.jobPostApplications.length})
                         </span>
                       </span>
                       <span />
@@ -174,11 +184,7 @@ const ActiveAdsComponent = ({
                   </Grid>
                   <Grid item md={3} style={{ color: "#34495E " }}>
                     <div>
-                      <h5>
-                        {item.dateOfApplication === null
-                          ? item.dateOfApplication
-                          : item.dateOfApplication}
-                      </h5>
+                      <h5>{dateFormat(item.dateOfApplication)}</h5>
                     </div>
                   </Grid>
                   <Grid item md={4}>
@@ -203,13 +209,9 @@ const ActiveAdsComponent = ({
                             variant="contained"
                             color="secondary"
                             onClick={() => {
-                              populateVacancyForm(item.id, false) ===
-                              null
-                                ? populateVacancyForm(item.id, false)
-                                : populateVacancyForm(
-                                    item.id,
-                                    false
-                                  );
+                              setToEdit(true);
+                              editOffer(item.id);
+                              populateVacancyForm(item.id, true);
                             }}
                           >
                             {t("common:copyBtn")}
@@ -252,7 +254,10 @@ const ActiveAdsComponent = ({
         showDialog={showDialog}
         dialogText={t("warnToDeletePostText")}
         warnToDeleteModal
-        handleClick={() => deleteAdvertisement(isToDeleteAdvertisementId)}
+        handleClick={() => {
+          deleteJobOffer(isToDeleteAdvertisementId);
+          changeRoute();
+        }}
       />
       <div className="pagination-body">
         <ReactPaginate
@@ -260,7 +265,7 @@ const ActiveAdsComponent = ({
           nextLabel={<NavigateNextIcon />}
           breakLabel="..."
           breakClassName="break-me"
-          pageCount={5}
+          pageCount={6}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={changeAdvertPage}

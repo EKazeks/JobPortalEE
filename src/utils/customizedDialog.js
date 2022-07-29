@@ -120,7 +120,7 @@ function CustomizedDialogs({
                       handleClose();
                     }}
                   >
-                    {t('register:registerNow')}
+                    {t('register:registerNow')}x
                   </Button>
                 </Link>
                 <Link to="/login" className="btnLink">

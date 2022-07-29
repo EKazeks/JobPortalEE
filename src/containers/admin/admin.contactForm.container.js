@@ -7,7 +7,7 @@ import { usersProfileValidate as validate } from '../validate';
 
 class AdminContactFormContainer extends React.Component {
   componentDidMount() {
-     this.props.getAllJobCategory();
+     //this.props.getAllJobCategory();
   }
 
   render() {

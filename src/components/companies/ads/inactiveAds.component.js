@@ -30,7 +30,8 @@ const InactiveAds = ({
         <Grid container style={{ margin: '30px 0px' }}>
           <Grid item sm={10}>
             <h3>
-              {t('inactiveJobsTitle')} ({`${jobsToRender && jobsToRender.length}`}
+              {/* {t('inactiveJobsTitle')} ({`${jobsToRender && jobsToRender.length}`} */}
+              {t('inactiveJobsTitle')} ({`0`}
               ):
             </h3>
           </Grid>

@@ -263,7 +263,8 @@ const HomePageComponent = ({
                 </Link>
               </div>
               <p className={classes.cardContentInfo}>
-                <span className={classes.cardContentDynamicInfo}>{dashboard && dashboard.favourite}</span>
+                {/* <span className={classes.cardContentDynamicInfo}>{dashboard && dashboard.favourite}</span> */}
+                <span className={classes.cardContentDynamicInfo}>{'0'}</span>
                 {t('totalFavs')}
               </p>
             </CardContent>
@@ -273,7 +274,7 @@ const HomePageComponent = ({
           <Card>
             <CardContent className={classes.cardContent}>
               <div>
-                <Link to="/haetut-tyopaikat">
+                <Link to="/toopakkumised">
                   <h3>{t('appliedJobs')}</h3>
                 </Link>
               </div>
