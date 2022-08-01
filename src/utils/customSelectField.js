@@ -170,41 +170,25 @@ export const MarketingPlatform = ({ viewBy }) => {
 export const JobCategoriesComponent = ({
   margin,
   hideLabel,
-  selectedPage
+  selectedPage,
+  jobCategories
 }) => {
-  const { t } = useTranslation("category");
-  const [jobsToRender, setJobsToRender] = useState([]);
-
-  const categorys = jobsToRender.map((category) => category.jobTags)
-  const sortCategorys = Array.from(new Set(categorys))
-
-  useEffect(() => {
-    axios.get("https://localhost:7262/jobsEn").then((res) => {
-      setJobsToRender(res.data);
-    });
-  }, []);
-  const objCategory = sortCategorys.map((str, index) => ({
-    value: str,
-    id: index + 1
-  }));
-  if (objCategory.length = 23) {
-     //console.log(objCategory)
-  }
+  const { t } = useTranslation('category');
   return (
     <div>
       <Field
         component={renderSelectField}
-        name="jobCategory"
-        label={hideLabel ? "" : `${t("category")} *`}
+        name="job_category"
+        label={hideLabel ? '' : `${t('category')} *`}
         id="job_category"
         fullWidth
         margin={margin}
         required
       >
-        {objCategory.map((category) => {
+        {jobCategories.map(category => {
           return (
             <option
-              value={category.id === 1 ? "" : category.id} // id:1 is empty -- required for validation
+              value={category.id === 1 ? '' : category.id} // id:1 is empty -- required for validation
               key={category.id}
             >
               {t(`${category.id}`)}
@@ -214,6 +198,49 @@ export const JobCategoriesComponent = ({
       </Field>
     </div>
   );
+
+  // const { t } = useTranslation("category");
+  // const [jobsToRender, setJobsToRender] = useState([]);
+
+  // const categorys = jobsToRender.map((category) => category.jobTags)
+  // const sortCategorys = Array.from(new Set(categorys))
+
+  // useEffect(() => {
+  //   axios.get("https://localhost:7262/jobsEn").then((res) => {
+  //     setJobsToRender(res.data);
+  //   });
+  // }, []);
+  // const objCategory = sortCategorys.map((str, index) => ({
+  //   value: str,
+  //   id: index + 1
+  // }));
+  // if (objCategory.length = 23) {
+  //    //console.log(objCategory)
+  // }
+  // return (
+  //   <div>
+  //     <Field
+  //       component={renderSelectField}
+  //       name="jobCategory"
+  //       label={hideLabel ? "" : `${t("category")} *`}
+  //       id="job_category"
+  //       fullWidth
+  //       margin={margin}
+  //       required
+  //     >
+  //       {objCategory.map((category) => {
+  //         return (
+  //           <option
+  //             value={category.id === 1 ? "" : category.id} // id:1 is empty -- required for validation
+  //             key={category.id}
+  //           >
+  //             {t(`${category.id}`)}
+  //           </option>
+  //         );
+  //       })}
+  //     </Field>
+  //   </div>
+  // );
 };
 
 export const renderMultiselect = ({
