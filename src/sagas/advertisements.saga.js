@@ -164,11 +164,9 @@ function* saveAndPublishAdvertisementSaga() {
       uploadedImage.name.replace(/\s+\(\d+\)/g, "JP"); // If stored filename has (int), dropzone doesn't understand the path..so changing such names before sending to db.
     const refinedFormValues = filterObj("image_document", formValues);
 
-    if (isToEdit) {
-      url = `${API_SERVER_EST}/updateJobOffer`;
-    } else {
-      url = `${API_SERVER_EST}/postJob`;
-    }
+   
+    url = `${API_SERVER_EST}/postJob`;
+
 
     const statusToUpdate =
       isDraft || extraService.help || extraService.sos
@@ -445,7 +443,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       marketing_budget,
     };
 
-    // yield put(populateVacancyFormSuccess(campaignDetails, isToEdit));
+     yield put(populateVacancyFormSuccess(campaignDetails, isToEdit));
   } catch (e) {
     console.log(e);
   }

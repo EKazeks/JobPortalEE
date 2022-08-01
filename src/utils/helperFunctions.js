@@ -4,25 +4,37 @@ import store from "../store";
 export const customURL = (url, type) => {
 
   const {id} = store.getState().jobs
-  if (url === undefined ) {
-    return;
-  }
-  if(url === null || url === "string" )
-  {
-    return `/jobpost/some-internal-created-offer/${id}`
-  }
+
+ 
   // url comes from backend in this format - "https://vpt-ui-dev.azurewebsites.net/tyopaikat/Nordic-C-Creditor-Oy/67289/Kirjanpitäjä-Controller/14"
   let path = [];
   let connectString;
-  const pathname = url && url.split("/toopakkumised/")[1]; // work
-  const splittedPath = pathname && pathname.split("/"); // work
-  // const slicedPath = splittedPath.slice(2); // work
-  path = splittedPath[0].split("-"); // work
+  let pathName;
+  let splittedPath;
+
+  // const pathname = url && url.split("/toopakkumised/")[1]; 
+
+  if(url === undefined || url === null)
+  {
+    pathName = id
+    splittedPath = 'testingYolo'
+    path = [pathName,splittedPath]
+  }else{
+    pathName = url.split("/toopakkumised/")[1];
+    splittedPath = pathName.split("/"); 
+    path = splittedPath[0].split("-"); 
+  }
+
+  // const splittedPath = pathname && pathname.split("/"); 
+
+
+
   if (path.length >= 3) {
     connectString = path[0] + "-" + path[1] + "/" + path[2];
   } else {
     connectString = path[0] + "/" + path[1]; // work
   }
+
   const companyName = path[0]; // work
   const companyId = path[1]; // work
   const jobTitle = path && path[0]; // work
