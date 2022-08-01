@@ -154,7 +154,8 @@ import {
   EDIT_OFFER,
   EDIT_VACANCY_FORM,
   DELETE_JOB_OFFER,
-  GET_JOB_APPLICANTS
+  GET_JOB_APPLICANTS,
+  FETCH_JOB_NAME_BY_ID
 } from "../constants";
 
 // get jobs offers
@@ -165,6 +166,11 @@ export const getJobsOffers = () => ({
 export const fetchJobById = (id) => ({
   type: FETCH_JOB_BY_ID,
   id,
+});
+export const fetchJobNameById = (jobName,jobPostNumber) => ({
+  type: FETCH_JOB_NAME_BY_ID,
+  jobName,
+  jobPostNumber
 });
 
 export const editOffer = (id) => ({

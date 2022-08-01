@@ -17,7 +17,8 @@ import {
   EDIT_OFFER,
   WARN_TO_DELETE,
   DELETE_JOB_OFFER,
-  GET_JOB_APPLICANTS
+  GET_JOB_APPLICANTS,
+  FETCH_JOB_NAME_BY_ID
 } from "../constants";
 
 const initialState = {
@@ -26,10 +27,11 @@ const initialState = {
   apiFailed: false,
   isToEdit: false,
   id: 0,
+  jobName: '',
   idToCopy:0,
   isOfferCopied:false,
   isOfferEdited: false,
-  jobPostNumber:[],
+  jobPostNumber: 0,
   jobDetails: [],
   jobApplicantsId: 0,
   selectedPage: {
@@ -80,7 +82,13 @@ const jobsReducer = (state = initialState, action) => {
     case FETCH_JOB_BY_ID:
       return {
         ...state,
-        id: action.id,
+        id: action.id
+      };
+    case FETCH_JOB_NAME_BY_ID:
+      return {
+        ...state,
+        jobName: action.jobName,
+        jobPostNumber: action.jobPostNumber
       };
     case GET_JOB_APPLICANTS:
       return {

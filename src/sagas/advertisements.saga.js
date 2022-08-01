@@ -336,35 +336,35 @@ function* getJobPostByPostIdSaga({}) {
   }
 }
 
-// function* getAllAdsByStatusSaga({ status }) {
-//   try {
-//     const url = `${API_SERVER}/SearchJobPosts`;
-//     const { client, usersCompanyList, companyProfile } = store.getState();
-//     const uuid = client.user.data[2];
-//     const roleId = client.user.data[5];
-//     let selectedCompanyId;
-//     selectedCompanyId = usersCompanyList.selectedCompany.company_id;
-//     const assignedCompanyId = client.user.data[6].company_id;
+function* getAllAdsByStatusSaga({ status }) {
+  try {
+    const url = `${API_SERVER}/SearchJobPosts`;
+    const { client, usersCompanyList, companyProfile } = store.getState();
+    const uuid = client.user.data[2];
+    const roleId = client.user.data[5];
+    let selectedCompanyId;
+    selectedCompanyId = usersCompanyList.selectedCompany.company_id;
+    const assignedCompanyId = client.user.data[6].company_id;
 
-//     if (!selectedCompanyId) {
-//       // For first time registered users, client company_id is null since user profile is not updated
-//       selectedCompanyId = companyProfile.profile.company_id;
-//     }
+    if (!selectedCompanyId) {
+      // For first time registered users, client company_id is null since user profile is not updated
+      selectedCompanyId = companyProfile.profile.company_id;
+    }
 
-//     const company_id = roleId === 0 ? selectedCompanyId : assignedCompanyId; //super user with many companies
-//     const body = JSON.stringify({
-//       status,
-//       uuid,
-//       company_id,
-//     });
+    const company_id = roleId === 0 ? selectedCompanyId : assignedCompanyId; //super user with many companies
+    const body = JSON.stringify({
+      status,
+      uuid,
+      company_id,
+    });
 
-//     const result = yield call(apiManualPost, url, body);
-//     const resultParsed = JSON.parse(result.data);
-//     yield put(getAllAdsByStatusSuccess(status, resultParsed));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+    const result = yield call(apiManualPost, url, body);
+    const resultParsed = JSON.parse(result.data);
+    yield put(getAllAdsByStatusSuccess(status, resultParsed));
+  } catch (error) {
+    console.log(error);
+  }
+}
 // Populating vacancy form when editing or copying
 function* populateVacancyFormSaga({ id, isToEdit }) {
   try {
@@ -1082,9 +1082,9 @@ export function* watchgetAllJobCategorysSaga() {
   yield takeEvery(GET_ALL_JOB_CATEGORY, getAllJobCategorySaga);
 }
 
-// export function* watchgetAllAdsByStatusSaga() {
-//   yield takeEvery(GET_ALL_ADS_BY_STATUS, getAllAdsByStatusSaga);
-// }
+export function* watchgetAllAdsByStatusSaga() {
+  yield takeEvery(GET_ALL_ADS_BY_STATUS, getAllAdsByStatusSaga);
+}
 export function* watchgetJobPostByPostIdSaga() {
   yield takeEvery(OPEN_AD_TO_SEE_AD_INFO, getJobPostByPostIdSaga);
 }
