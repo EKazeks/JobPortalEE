@@ -199,7 +199,7 @@ const JobDetailsComponent = ({
                   )}
                 </Grid>
                 <Grid item sm={12} md={5}>
-                  {jobsToRender.status === 1 && (
+                  {/* {jobsToRender.status === 1 && ( */}
                     <Grid container spacing={2} className={classes.ctaBtn}>
                       {/* <Grid item>
                         <Button color="primary" variant="outlined">
@@ -237,7 +237,7 @@ const JobDetailsComponent = ({
                             ) : (
                               <Link
                                 className="btnLink"
-                                to={customURL('link', "application")}
+                                to={customURL(jobsToRender.url, "application")}
                               >
                                 <Button color="primary" variant="contained">
                                   <DescriptionIcon />
@@ -247,7 +247,7 @@ const JobDetailsComponent = ({
                             )}
                       </Grid>
                     </Grid>
-                  )}
+                  {/* )} */}
                 </Grid>
               </Grid>
               <Divider style={{ margin: "15px 0 0 0" }} />
@@ -322,13 +322,13 @@ const JobDetailsComponent = ({
                 <Grid item sm={12} md={7} />
               </Hidden>
               <Grid item sm={12} md={5}>
-                {jobDetails.status === 1 && (
+                {/* {jobDetails.status === 1 && ( */}
                   <Grid container spacing={2} className={classes.ctaBtn}>
-                    <Grid item>
+                    {/* <Grid item>
                       <Button color='primary' variant='outlined'>
                         {t('shareBtn')}
                       </Button>
-                    </Grid>
+                    </Grid> */}
                     <Grid item>
                       <FavBtn
                         isFav={!!jobsToRender.favourite}
@@ -360,7 +360,7 @@ const JobDetailsComponent = ({
                       ) : (
                         <Link
                           className="btnLink"
-                          to={customURL('link', "application")}
+                          to={customURL(jobsToRender.url, "application")}
                         >
                           <Button color="primary" variant="contained">
                             <DescriptionIcon />
@@ -370,7 +370,7 @@ const JobDetailsComponent = ({
                       )}
                     </Grid>
                   </Grid>
-                )}
+                {/* )} */}
               </Grid>
             </Grid>
           </div>

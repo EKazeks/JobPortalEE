@@ -267,11 +267,16 @@ const AdDetails = ({
                 <h6>
                   <strong>{t("postType")}: </strong>
                   {/* <span>{customTranslateCampaign(item.campaignType)}</span> */}
-                  <span>{jobsToRender.campaignType}</span>
+                  {/* <span>{jobsToRender.campaignType}</span> */}
+                  {jobsToRender.campaignType === "free" && <span>Free</span>}
+                  {jobsToRender.campaignType === "lift" && <span>Lift</span>}
+                  {jobsToRender.campaignType === "home_page_thing" && <span>Front Page News</span>}
+                  {jobsToRender.campaignType === "noteworthy" && <span>Remarkable</span>}
+                  {jobsToRender.campaignType === "some_start" && <span>Social Media Start</span>}
                 </h6>
                 <h6>
                   <strong>{t("postStatus")}: </strong>
-                  {/* {customTranslateStatus(item.campaignType)} */}
+                  {customTranslateStatus(jobsToRender.campaignType)}
                   {`Active`}
                 </h6>
               </div>

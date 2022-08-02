@@ -4,20 +4,23 @@ import store from "../store";
 export const customURL = (url, type) => {
 
   const {id} = store.getState().jobs
-
- 
+  const {jobName} = store.getState().jobs
+  const {jobPostNumber} = store.getState().jobs
+  const splittedJobName = jobName.split(' ').join('-').toLowerCase();
   // url comes from backend in this format - "https://vpt-ui-dev.azurewebsites.net/tyopaikat/Nordic-C-Creditor-Oy/67289/Kirjanpitäjä-Controller/14"
-  let path = [];
+  let path = []
   let connectString;
   let pathName;
   let splittedPath;
+  let jobTitle;
+  let postId;
 
   // const pathname = url && url.split("/toopakkumised/")[1]; 
 
   if(url === undefined || url === null)
   {
-    pathName = id
-    splittedPath = 'testingYolo'
+    pathName = splittedJobName
+    splittedPath = id
     path = [pathName,splittedPath]
   }else{
     pathName = url.split("/toopakkumised/")[1];
@@ -30,20 +33,28 @@ export const customURL = (url, type) => {
 
 
   if (path.length >= 3) {
-    connectString = path[0] + "-" + path[1] + "/" + path[2];
+    connectString = path[0] + "-" + path[1] + "-" + path[2] + "/" + jobPostNumber;
   } else {
     connectString = path[0] + "/" + path[1]; // work
   }
 
   const companyName = path[0]; // work
   const companyId = path[1]; // work
-  const jobTitle = path && path[0]; // work
-  const postId = path && path[1]; // work
+  if (path.length > 2) {
+    jobTitle = path[0] + '-' + path[1] + '-' + path[2];
+  } else {
+    jobTitle = path[0];
+  }
+  if (path.length > 2) {
+    postId = path[3]
+  } else {
+    postId = path[1]; // work
+  }
 
   switch (type) {
     case "internal": // For admins and companies, url path is jobpost/jobTitle/postId
       return `/jobpost/${connectString}`;
-
+      
     case "external": // For public, url path is tyopaikat/companyName/companyId/jobTitle/postId
       return `/tyopaikat/${connectString}`;
 

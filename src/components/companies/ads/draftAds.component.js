@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Paper, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
@@ -7,6 +7,7 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import { useTranslation } from 'react-i18next';
 import CustomizedDialogs from '../../../utils/customizedDialog';
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 const styles = theme => ({
   activatedHelp: {
@@ -31,10 +32,21 @@ const DraftAds = ({
   deleteAdvertisement,
 }) => {
   const { t } = useTranslation('jobs', 'advertForm');
+  const [jobs, setJobs] = useState([]);
+  const [draftJobs, setDraftJobs] = useState([]);
+
+  useEffect(() => {
+    axios.get(`https://localhost:7262/jobsEn`).then((res) => {
+      setJobs(res.data)
+      setDraftJobs(res.data.map(draft => draft.isDraft === 1))
+    })
+    console.log(draftJobs);
+  },[])
+
   return (
     <div className="container">
       <h3 style={{ margin: '30px 0px' }}>
-        {t('draftAdsTitle')} ({`${draftAds && draftAds.length}`}):
+        {t('draftAdsTitle')} ({`${draftJobs && draftJobs.length === 1 ? draftJobs.length : 0}`}):
       </h3>
       {draftAds &&
         draftAds.slice(selectedPage * 10, selectedPage * 10 + 10).map(item => {

@@ -33,7 +33,6 @@ import CustomizedDialog from "../../../utils/customizedDialog";
 import i18n from "../../../utils/i18n";
 import TextEditor from "../../../utils/textEditor";
 import { Link } from "react-router-dom";
-import { saveAndPublishAdvertisementToEe } from "../../../actions";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
@@ -297,9 +296,6 @@ const AdvertFormComponent = ({
                   
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <Field component={TextEditor} fullWidth name="campaignLevel" placeholder={t('campaignLevel')} id="campaignLevel" />
-              </Grid> */}
             </Grid>
             <Grid container></Grid>
             <CampaignsContainer />

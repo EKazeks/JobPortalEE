@@ -39,7 +39,7 @@ const initialState = {
   postRequesFailure:false,
   showSpinner: false,
   isSaveAndPublishAdvertisement: false,
-  isSaveAdvertisementAsDraft: false,
+  isDraft: 0,
   apiSuccess: false,
   apiFailed: false,
   uploadedImage: {},
@@ -104,7 +104,7 @@ export default function advertisementsReducer(state = initialState, action) {
       return {
         ...state,
         showSpinner: true,
-        isSaveAdvertisementAsDraft: true,
+        isDraft: 1,
       };
 
     case ADD_EXTRA_SERVICE:
@@ -139,7 +139,7 @@ export default function advertisementsReducer(state = initialState, action) {
         uploadedImage: {},
         showSpinner: false,
         apiSuccess: true,
-        isSaveAdvertisementAsDraft: false,
+        isDraft: 0,
         isToEdit: false,
         extraService: {
           help: false,
