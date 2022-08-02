@@ -1,1 +1,22 @@
+
+# dependencies
 /node_modules
+
+# production
+/build
+
+# misc
+.DS_Store
+.env
+
+# If Packages have their independent repo
+# /packages
+
+# ignore log files
+.idea/
+.vscode/
+node_modules/
+build
+.DS_Store
+.npm/
+dist
