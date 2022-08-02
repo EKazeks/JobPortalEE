@@ -276,7 +276,7 @@ const AdDetails = ({
                 </h6>
                 <h6>
                   <strong>{t("postStatus")}: </strong>
-                  {/* {customTranslateStatus(item.campaignType)} */}
+                  {customTranslateStatus(jobsToRender.campaignType)}
                   {`Active`}
                 </h6>
               </div>

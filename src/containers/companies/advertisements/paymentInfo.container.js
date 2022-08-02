@@ -51,7 +51,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   saveAndPublishAdvertisement,
-  saveAndPublishAdvertisementToEe,
   closeDialog,
 };
 

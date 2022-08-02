@@ -106,15 +106,6 @@ function* getAllJobCategorySaga() {
   }
 }
 
-// function saveAndPublishAdvertisementEstonia(){
-//   try{
-//     let url;
-//     let body;
-//     let parsedCompany ={};
-
-//   }
-// }
-
 function* saveAndPublishAdvertisementSaga() {
   try {
     let url;
@@ -151,13 +142,12 @@ function* saveAndPublishAdvertisementSaga() {
 
     const {
       selectedCampaign,
-      isSaveAdvertisementAsDraft,
+      isDraft,
       isToEdit,
       uploadedImage,
       marketingDetails,
       extraService,
     } = advertisement;
-    const isDraft = isSaveAdvertisementAsDraft;
     const refinedUploadedImage =
       uploadedImage &&
       uploadedImage.name &&
@@ -189,6 +179,7 @@ function* saveAndPublishAdvertisementSaga() {
         campaign_type: selectedCampaign.type,
         status: statusToUpdate,
         extra_service: selectedService,
+        isDraft
       };
     } else if (!uploadedImage.name) {
       // no uploaded image means, no need to send any base64. Also, if there is an image stored in db..and we want to delete it, I am changing the formvalues of image_document in component
@@ -198,6 +189,7 @@ function* saveAndPublishAdvertisementSaga() {
         campaignLevel: selectedCampaign.type,
         status: statusToUpdate,
         extra_service: selectedService,
+        isDraft
       };
     } else if (
       uploadedImage.name &&
@@ -218,6 +210,7 @@ function* saveAndPublishAdvertisementSaga() {
           data: base64,
         },
         extra_service: selectedService,
+        isDraft
       };
     }
     if (selectedCampaign.includes_mktbudget) {
@@ -460,7 +453,6 @@ function* editVacancyFormSaga({ id, isToEdit }) {
     });
     const result = yield call(apiManualRequest, url);
     const resultParsed = result.data;
-    console.log("saga works");
     // If we are populating from Draft Component, we are editing--> call UpdateJobPost API, it needs company_id && post_id which is being sent along with the vacancy form!
 
     const {

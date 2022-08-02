@@ -357,9 +357,6 @@ export const saveAndPublishAdvertisementSuccess = (payload) => ({
   type: SAVE_AND_PUBLISH_ADVERTISEMENT_SUCCESS,
   payload: payload
 });
-export const saveAndPublishAdvertisementToEeSuccess = (action,payload) => ({
-  type: SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS,
-});
 
 export const saveAdvertisementAsDraft = () => ({
   type: SAVE_ADVERTISEMENT_AS_DRAFT,

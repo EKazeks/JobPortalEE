@@ -9,7 +9,6 @@ import {
   choosePaymentMethod,
   addExtraService,
   changeRoute,
-  saveAndPublishAdvertisementToEeSuccess
 } from '../../../actions';
 import store from '../../../store';
 import { jobPostFormValidate as validate } from '../../validate';
@@ -62,6 +61,5 @@ const mapDispatchToProps = {
   choosePaymentMethod,
   addExtraService,
   changeRoute,
-  saveAndPublishAdvertisementToEeSuccess
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AdvertFormContainer);
