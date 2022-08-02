@@ -38,7 +38,7 @@ const DraftAds = ({
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn`).then((res) => {
       setJobs(res.data)
-      setDraftJobs(res.data.map(draft => draft.isDraft === 1))
+      setDraftJobs(res.data.filter(isDraft => isDraft.isDraft === 1))
     })
     console.log(draftJobs);
   },[])
