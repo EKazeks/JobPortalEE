@@ -235,11 +235,15 @@ const JobsComponent = ({
                             <Link
                               className={classes.jobContainerHover}
                               to={customURL(item.url, "open_position")}
-                              onClick={() => fetchJobById(item.id)}
+                              onClick={() => 
+                                fetchJobById(item.id, item.companyName, item.companyBusinessId)
+                              }
                             />
                           ) : (
                             <Link
-                              onClick={() => fetchJobById(item.id)}
+                              onClick={() => 
+                                fetchJobById(item.id, item.companyName, item.companyBusinessId)
+                              }
                               className={classes.jobContainerHover}
                               to={customURL(item.url, "open_position")}
                             />
@@ -311,7 +315,7 @@ const JobsComponent = ({
                                 <Grid item>
                                   <span>
                                     {t("applicationDueDate")}:
-                                    {dateFormat(item.dateOfApplication)}
+                                    {item.dateOfApplication.charAt(2) === '.' ? item.dateOfApplication  : dateFormat(item.dateOfApplication)}
                                   </span>
                                 </Grid>
                               </Grid>
@@ -329,7 +333,7 @@ const JobsComponent = ({
                               <Grid item>
                                 <span>
                                   {t("applicationDueDate")}:
-                                  {dateFormat(item.dateOfApplication)}
+                                  {item.dateOfApplication.charAt(2) === '.' ? item.dateOfApplication  : dateFormat(item.dateOfApplication)}
                                 </span>
                               </Grid>
                             </Hidden>

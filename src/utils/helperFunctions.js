@@ -6,7 +6,11 @@ export const customURL = (url, type) => {
   const {id} = store.getState().jobs
   const {jobName} = store.getState().jobs
   const {jobPostNumber} = store.getState().jobs
-  const splittedJobName = jobName.split(' ').join('-').toLowerCase();
+  //const {companyName} = store.getState().jobs
+  //const {companyBusinessId} = store.getState().jobs
+  const companyIdForTesting = '6035'
+  const splittedJobName = jobName.split().join('-').toLowerCase();
+  //const splittedCompanyName = companyName.split('').join('-').toLowerCase();
   // url comes from backend in this format - "https://vpt-ui-dev.azurewebsites.net/tyopaikat/Nordic-C-Creditor-Oy/67289/Kirjanpitäjä-Controller/14"
   let path = []
   let connectString;
@@ -59,13 +63,13 @@ export const customURL = (url, type) => {
       return `/tyopaikat/${connectString}`;
 
     case "application": // For application form component
-      return `/tyopaikat/${jobTitle}/${companyId}/${postId}/hae`;
+      return `/tyopaikat/${jobTitle}/${companyIdForTesting}/${postId}/hae`;
 
     case "campaign": // For campaign component
       return `/${jobTitle}/${postId}/campaign`;
 
     case "open_position":
-      return `/tyopaikat/${companyName}/${companyId}/${jobTitle}/${postId}`;
+      return `/tyopaikat/${companyName}/${companyIdForTesting}/${jobTitle}/${postId}`;
     default:
       break;
   }

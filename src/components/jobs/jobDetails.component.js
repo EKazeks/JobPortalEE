@@ -113,22 +113,12 @@ const JobDetailsComponent = ({
   const { id } = useSelector((state) => state.jobs);
   const [dateOfApplication, setDateOfApplication] = useState();
   const [address, setAddress] = useState();
- // const [urlToApplyJob, setUrlToApplyJob] = useState()
-  const [jobDuration, setJobDuration] = useState([
-    'Valid until further notice', 'Temporary'
-  ]);
-  const [jobType, setJobType] = useState([
-    'shift work','Evening and weekend work',''
-  ])
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data)
       setDateOfApplication(dateFormat(res.data.dateOfApplication))
       setAddress(res.data.jobPostAddress.address)
-      setJobDuration(res.data.isPermanentPlace[0])
-      setJobType(res.data.isNightShift[1])
-     // setUrlToApplyJob(res.data.url)
     });
   }, []);
 
@@ -172,7 +162,7 @@ const JobDetailsComponent = ({
                     <strong className={classes.metaDataTitle}>
                       <span>{t("jobtype:jobTypeLabel")}: </span>
                       <span className={classes.metaData}>
-                        {jobDuration}
+                        {jobsToRender.durationOfEmployment}
                       </span>
                     </strong>
                   </h6>
@@ -180,7 +170,7 @@ const JobDetailsComponent = ({
                     <strong className={classes.metaDataTitle}>
                       <span>{t("jobhours:jobHoursLabel")}: </span>
                       <span className={classes.metaData}>
-                        {convertJobHoursToStr(t, jobType)}
+                        {convertJobHoursToStr(t, jobsToRender.workStart)}
                       </span>
                     </strong>
                   </h6>

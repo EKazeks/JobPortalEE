@@ -163,9 +163,11 @@ export const getJobsOffers = () => ({
   type: GET_JOBS_OFFERS_SUCCESS,
 });
 
-export const fetchJobById = (id) => ({
+export const fetchJobById = (id,companyName, companyBusinessId) => ({
   type: FETCH_JOB_BY_ID,
   id,
+  companyName,
+  companyBusinessId
 });
 export const fetchJobNameById = (jobName,jobPostNumber) => ({
   type: FETCH_JOB_NAME_BY_ID,

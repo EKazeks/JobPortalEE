@@ -180,7 +180,7 @@ const AdDetails = ({
               <Grid container spacing={2} className={classes.ctaBtn}>
                 <Grid item>
                   {/* If post is active post, show Inactive btn. If it is inactive post, show copy btn in Addetails */}
-                  {jobsToRender.campaignType === "free" ? (
+                  {jobsToRender.campaignType === "Free" ? (
                     <Link to="/tyopaikkailmoitus/" className="btnLink">
                       <Button
                         variant="outlined"
@@ -192,7 +192,7 @@ const AdDetails = ({
                         {t("common:copyBtn")}
                       </Button>
                     </Link>
-                  ) : jobsToRender.campaignLevel === "free" ? (
+                  ) : jobsToRender.campaignLevel === "Free" ? (
                     <Button
                       variant="outlined"
                       color="primary"
@@ -213,7 +213,7 @@ const AdDetails = ({
                     ""
                   )}
                 </Grid>
-                {jobsToRender.campaignType === "free" && (
+                {jobsToRender.campaignType === "Free" && (
                   <Grid item>
                     <Link
                       to={`/tyopaikkailmoitus/${jobsToRender.id}`}
@@ -313,7 +313,7 @@ const AdDetails = ({
             <Grid container spacing={2} className={classes.ctaBtn}>
               <Grid item>
                 {/* If post is active post, show Inactive btn. If it is inactive post, show copy btn in Addetails */}
-                {jobsToRender.campaignType === "free" ? (
+                {jobsToRender.campaignType === "Free" ? (
                   <Link to="/tyopaikkailmoitus/" className="btnLink">
                     <Button
                       variant="outlined"
@@ -325,7 +325,7 @@ const AdDetails = ({
                       {t("common:copyBtn")}
                     </Button>
                   </Link>
-                ) : jobsToRender.campaignType === "free" ? (
+                ) : jobsToRender.campaignType === "Free" ? (
                   <Button
                     variant="outlined"
                     color="primary"
@@ -345,7 +345,7 @@ const AdDetails = ({
                   ""
                 )}
               </Grid>
-              {jobsToRender.campaignType === "free" && (
+              {jobsToRender.campaignType === "Free" && (
                 <Grid item>
                   <Link
                     to={`/tyopaikkailmoitus/${jobsToRender.id}`}
