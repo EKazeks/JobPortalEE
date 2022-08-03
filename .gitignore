@@ -7,7 +7,6 @@
 
 # misc
 .DS_Store
-.env
 
 # If Packages have their independent repo
 # /packages

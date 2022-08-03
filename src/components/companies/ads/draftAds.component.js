@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import CustomizedDialogs from '../../../utils/customizedDialog';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+import { fetchJobById, fetchJobNameById } from '../../../actions';
 
 const styles = theme => ({
   activatedHelp: {
@@ -46,12 +47,12 @@ const DraftAds = ({
   return (
     <div className="container">
       <h3 style={{ margin: '30px 0px' }}>
-        {t('draftAdsTitle')} ({`${draftJobs && draftJobs.length === 1 ? draftJobs.length : 0}`}):
+        {t('draftAdsTitle')} ({`${draftJobs && draftJobs.length}`}):
       </h3>
-      {draftAds &&
-        draftAds.slice(selectedPage * 10, selectedPage * 10 + 10).map(item => {
+      {draftJobs &&
+        draftJobs.slice(selectedPage * 10, selectedPage * 10 + 10).map(item => {
           return (
-            <div key={item.post_id}>
+            <div key={item.id}>
               <Paper style={{ marginTop: 20 }}>
                 <Grid container spacing={1} style={{ padding: 20 }} alignItems="center">
                   <Grid item md={5} sm={8} xs={8}>
@@ -60,16 +61,16 @@ const DraftAds = ({
                         <Link to="/tyopaikkailmoitus" className="btnLink">
                           <h4
                             onClick={() => {
-                              populateVacancyForm(item.post_id, true);
+                              populateVacancyForm(item.jobPostNumber, true);
                             }}
                           >
-                            {item.job_title}, {item.job_location}
+                            {item.jobName}, {item.jobPostAddress.address}
                           </h4>
                         </Link>
                       ) : (
                         <span className={classes.jobTitle}>
                           <h4>
-                            {item.job_title}, {item.job_location}
+                            {item.jobName}, {item.jobPostAddress.address}
                           </h4>
                         </span>
                       )}
@@ -77,7 +78,8 @@ const DraftAds = ({
                   </Grid>
                   <Grid item md={3} sm={4} xs={4} style={{ color: '#34495E ' }}>
                     <div>
-                      <h5>{new Intl.DateTimeFormat('fi-FI').format(new Date(item.created))}</h5>
+                      {/* <h5>{new Intl.DateTimeFormat('fi-FI').format(new Date(item.created))}</h5> */}
+                      <h5>{new Intl.DateTimeFormat('fi-FI').format(new Date())}</h5>
                     </div>
                   </Grid>
                   <Grid item md={4} sm={12} xs={12}>
@@ -93,7 +95,7 @@ const DraftAds = ({
                       ) : (
                         <>
                           <Grid item>
-                            <Button variant="outlined" color="secondary" onClick={() => warnToDelete(item.post_id)}>
+                            <Button variant="outlined" color="secondary" onClick={() => warnToDelete(item.id)}>
                               {t('common:deleteBtn')}
                             </Button>
                           </Grid>
@@ -103,7 +105,9 @@ const DraftAds = ({
                                 variant="contained"
                                 color="primary"
                                 onClick={() => {
-                                  populateVacancyForm(item.post_id, true);
+                                  // fetchJobById(item.id);
+                                  // fetchJobNameById(item.jobName, item.jobPostNumber)
+                                  populateVacancyForm(item.id)
                                 }}
                               >
                                 {t('common:openBtn')}
