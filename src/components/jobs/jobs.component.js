@@ -180,7 +180,6 @@ const JobsComponent = ({
 }) => {
   const { t } = useTranslation("jobsList", "jobs");
   const [jobsToRender, setJobsToRender] = useState([]);
-  const [address,setAddress] = useState();
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn`).then((res) => {

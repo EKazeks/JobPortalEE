@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import DraftAdsComponent from '../../../components/companies/ads/draftAds.component';
-import { getAllAdsByStatus, changeAdvertPage, populateVacancyForm, warnToDelete, deleteAdvertisement } from '../../../actions';
+import { getAllAdsByStatus, changeAdvertPage, populateVacancyForm, warnToDelete, deleteAdvertisement, fetchJobById } from '../../../actions';
 
 const mapStateToProps = state => ({
   draftAds: state.advertisement.advertisements.draftAds,
@@ -16,5 +16,7 @@ const mapDispatchToProps = {
   populateVacancyForm,
   warnToDelete,
   deleteAdvertisement,
+  fetchJobById,
+
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DraftAdsComponent);

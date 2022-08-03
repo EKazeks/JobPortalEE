@@ -174,6 +174,7 @@ export const JobCategoriesComponent = ({
   jobCategories
 }) => {
   const { t } = useTranslation('category');
+  
   return (
     <div>
       <Field
