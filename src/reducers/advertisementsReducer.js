@@ -44,6 +44,7 @@ const initialState = {
   apiFailed: false,
   uploadedImage: {},
   campaigns: [],
+  id: 0,
   jobCategories: [],
   advertisements: { draftAds: [], activeAds: [], inActiveAds: [] },
   extraService: { help: false, sos: false },
@@ -286,6 +287,7 @@ export default function advertisementsReducer(state = initialState, action) {
         // selectedMainMenu: '',
         selectedAd: action.id,
         showSpinner: true,
+        id: action.id
       };
 
     case OPEN_AD_TO_SEE_AD_INFO_SUCCESS:

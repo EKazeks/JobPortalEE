@@ -40,8 +40,8 @@ const ActiveAdsComponent = ({
   // },[])
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn`).then((res) => {
-      setJobsToRender(res.data);
+    axios.get(`https://localhost:7262/activeAds`).then((res) => {
+      setJobsToRender(res.data.filter(isFetched => isFetched.isFetched === 0 && isFetched.isDraft === 0));
     });
   }, []);
 
@@ -186,7 +186,7 @@ const ActiveAdsComponent = ({
                   </Grid>
                   <Grid item md={3} style={{ color: "#34495E " }}>
                     <div>
-                      <h5>{dateFormat(item.dateOfApplication)}</h5>
+                      <h5>{item.dateOfApplication.charAt(2) === '.' ? item.dateOfApplication  : dateFormat(item.dateOfApplication)}</h5>
                     </div>
                   </Grid>
                   <Grid item md={4}>
@@ -270,7 +270,7 @@ const ActiveAdsComponent = ({
           nextLabel={<NavigateNextIcon />}
           breakLabel="..."
           breakClassName="break-me"
-          pageCount={6}
+          pageCount={25}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={changeAdvertPage}

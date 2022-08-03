@@ -32,6 +32,8 @@ const initialState = {
   isOfferCopied:false,
   isOfferEdited: false,
   jobPostNumber: 0,
+  companyName: '',
+  companyBusinessId: 0,
   jobDetails: [],
   jobApplicantsId: 0,
   selectedPage: {
@@ -82,7 +84,9 @@ const jobsReducer = (state = initialState, action) => {
     case FETCH_JOB_BY_ID:
       return {
         ...state,
-        id: action.id
+        id: action.id,
+        companyName: action.companyName,
+        companyBusinessId: action.companyBusinessId
       };
     case FETCH_JOB_NAME_BY_ID:
       return {

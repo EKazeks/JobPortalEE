@@ -315,14 +315,14 @@ function* saveAndPublishAdvertisementSaga() {
 
 function* getJobPostByPostIdSaga({}) {
   try {
-    const id = store.getState().jobs.id;
+    const id = store.getState().advertisement.id;
     const url = `${API_SERVER_EST}/${id}`;
     const companyBusinessId = store.getState().jobs.jobsList.companyBusinessId;
     const userRole = store.getState().client.user.data[6].user_type;
 
     const result = yield call(apiOpenRequest, url);
-    const resultParsed = result.data;
-    yield put(openAdToSeeAdInfoSuccess(resultParsed));
+    //const resultParsed = result.data;
+    yield put(openAdToSeeAdInfoSuccess(result.data));
   } catch (error) {
     console.log(error);
     yield put(hideSpinner());
