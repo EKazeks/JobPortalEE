@@ -97,13 +97,13 @@ function* getAllCampaignsSaga() {
 }
 function* getAllJobCategorySaga() {
   try {
-    const url = `${API_SERVER_EST}/getAllCategories`;
+    const url = 'https://localhost:7262/jobsEn/getAllCategories';
    
     const result = yield call(apiOpenRequest, url);
    
     const resultParsed = JSON.parse(result.data);
     yield put(getAllJobCategorySuccess(resultParsed));
-   
+   console.log('hello')
   } catch (error) {
     console.log(error);
   }
