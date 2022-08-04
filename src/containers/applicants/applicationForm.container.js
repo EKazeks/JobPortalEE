@@ -2,8 +2,9 @@ import React from 'react';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import ApplicationForm from '../../components/applicants/applicationForm.component';
-import { getJobDetailsById, sendApplication, closeSnackbar, resetApplicationSent } from '../../actions';
+import { getJobDetailsById, sendApplication, closeSnackbar, resetApplicationSent, fetchJobById } from '../../actions';
 import { applicationFormValidate as validate } from '../validate';
+import store from '../../store';
 
 class ApplicationContainer extends React.Component {
   componentDidMount() {
@@ -45,7 +46,6 @@ const mapStateToProps = state => {
     initialValues: populateApplicationForm,
     applicant_cv: state.jobseekerProfile.profile.cv_document && state.jobseekerProfile.profile.cv_document[0].path,
     cv_filename: state.jobseekerProfile.profile.cv_document && state.jobseekerProfile.profile.cv_document[0].filename,
-    jobDetails: state.jobs.jobDetails,
     showErrorMsg: state?.form?.applicationForm?.syncErrors?.application_description?.length > 0 ? true : false,
   };
 };
@@ -55,5 +55,6 @@ const mapDispatchToProps = {
   sendApplication,
   closeSnackbar,
   resetApplicationSent,
+  fetchJobById,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ApplicationFormContainer);

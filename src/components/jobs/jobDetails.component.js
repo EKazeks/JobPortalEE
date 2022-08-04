@@ -22,6 +22,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { isRteEmpty } from "../../containers/validate";
 import NotFoundPage from "../../utils/notFoundPage";
+import { fetchJobById } from "../../actions";
 
 const styles = (theme) => ({
   addMargin: {
@@ -111,13 +112,13 @@ const JobDetailsComponent = ({
 }) => {
   const [jobsToRender, setJobsToRender] = useState([]);
   const { id } = useSelector((state) => state.jobs);
-  const [dateOfApplication, setDateOfApplication] = useState();
+  //const [dateOfApplication, setDateOfApplication] = useState();
   const [address, setAddress] = useState();
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data)
-      setDateOfApplication(dateFormat(res.data.dateOfApplication))
+      //setDateOfApplication(dateFormat(res.data.dateOfApplication))
       setAddress(res.data.jobPostAddress.address)
     });
   }, []);
@@ -154,7 +155,7 @@ const JobDetailsComponent = ({
                     <strong className={classes.metaDataTitle}>
                       <span>{t("applyPeriod")}: </span>
                       <span className={classes.metaData}>
-                        {dateOfApplication}
+                        {jobsToRender.dateOfApplication}
                       </span>
                     </strong>
                   </h6>
@@ -212,10 +213,10 @@ const JobDetailsComponent = ({
                         />
                       </Grid>
                       <Grid item>
-                        {jobsToRender.url ? (
+                        {jobsToRender.urlToApplyJob ? (
                               <a
                                 className="btnLink"
-                                href={jobsToRender.url}
+                                href={jobsToRender.urlToApplyJob}
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >
@@ -229,7 +230,13 @@ const JobDetailsComponent = ({
                                 className="btnLink"
                                 to={customURL(jobsToRender.url, "application")}
                               >
-                                <Button color="primary" variant="contained">
+                                <Button
+                                  color="primary" 
+                                  variant="contained"
+                                  onClick={() => {
+                                    fetchJobById(jobsToRender.id, jobsToRender.companyName, jobsToRender.companyBusinessId, jobsToRender.jobName, jobsToRender.jobPostNumber)
+                                  }}
+                                 >
                                   <DescriptionIcon />
                                   <span style={{ marginLeft: 8 }}>{t("applyBtn")}</span>
                                 </Button>
@@ -335,10 +342,10 @@ const JobDetailsComponent = ({
                       />
                     </Grid>
                     <Grid item>
-                      {jobsToRender.url ? (
+                      {jobsToRender.urlToApplyJob ? (
                         <a
                           className="btnLink"
-                          href={jobsToRender.url}
+                          href={jobsToRender.urlToApplyJob}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -352,7 +359,13 @@ const JobDetailsComponent = ({
                           className="btnLink"
                           to={customURL(jobsToRender.url, "application")}
                         >
-                          <Button color="primary" variant="contained">
+                          <Button 
+                            color="primary" 
+                            variant="contained"
+                            onClick={() => {
+                              fetchJobById(jobsToRender.id, jobsToRender.companyName, jobsToRender.companyBusinessId, jobsToRender.jobName, jobsToRender.jobPostNumber)
+                            }}
+                          >
                             <DescriptionIcon />
                             <span style={{ marginLeft: 8 }}>{t("applyBtn")}</span>
                           </Button>
