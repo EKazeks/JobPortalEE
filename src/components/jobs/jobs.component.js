@@ -234,15 +234,19 @@ const JobsComponent = ({
                           {userRole === "admin" ? ( // To give the admins same view as Companies so they can edit ads!
                             <Link
                               className={classes.jobContainerHover}
-                              to={customURL(item.url, "open_position")}
+                              to={customURL(item.url, "internal")}
                               onClick={() => 
-                                fetchJobById(item.id, item.companyName, item.companyBusinessId)
+                                {
+                                  fetchJobById(item.id, item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
+                              }
                               }
                             />
                           ) : (
                             <Link
                               onClick={() => 
-                                fetchJobById(item.id, item.companyName, item.companyBusinessId)
+                                {
+                                  fetchJobById(item.id, item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
+                                }
                               }
                               className={classes.jobContainerHover}
                               to={customURL(item.url, "open_position")}
@@ -405,7 +409,9 @@ const JobsComponent = ({
                                         variant="contained"
                                         color="primary"
                                         onClick={() =>
-                                          fetchJobById(item.id)
+                                          {
+                                            fetchJobById(item.id, item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
+                                          }
                                         }
                                       >
                                         {t("common:openBtn")}
@@ -414,14 +420,16 @@ const JobsComponent = ({
                                   ) : (
                                     <Link
                                       className="btnLink"
-                                      to={customURL(item.url, "open_position")}
+                                      to={customURL(item.url, "external")}
                                     >
                                       <Button
                                         variant="contained"
                                         color="primary"
                                         className="fullWidthBtn"
                                         onClick={() =>
-                                          fetchJobById(item.id)
+                                          {
+                                            fetchJobById(item.id, item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
+                                          }
                                         }
                                       >
                                         {t("watchBtn")}

@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { getFormValues } from 'redux-form';
-import { API_SERVER, CLOSE_DIALOG, SEND_APPLICATION } from '../constants';
+import { API_SERVER, API_SERVER_EST, CLOSE_DIALOG, SEND_APPLICATION } from '../constants';
 import { apiOpenPost } from '../utils/request';
 import store from '../store';
 import {
@@ -11,8 +11,9 @@ import {
 } from '../actions';
 import browserHistory from '../history';
 
-function* sendApplicationSaga({ id }) {
+function* sendApplicationSaga() {
   try {
+    const {id} = store.getState().jobs;
     const company_id = id.split('JP')[0];
     const post_id = id.split('JP')[1];
     const uploadedCV = store.getState().jobs.uploadedDocument && store.getState().jobs.uploadedDocument[0];
@@ -34,14 +35,14 @@ function* sendApplicationSaga({ id }) {
     }
 
     // Back end needs in the following format
-    const url = `${API_SERVER}/ApplyJobPost`;
-    const body = JSON.stringify({
-      ...formValues,
-      company_id,
-      post_id,
-      cv_id,
-    });
-    const result = yield call(apiOpenPost, url, body);
+    const url = `${API_SERVER_EST}/addApplicationToOffer/${id}`;
+    // const body = JSON.stringify({
+    //   ...formValues,
+    //   company_id,
+    //   post_id,
+    //   cv_id,
+    // });
+    const result = yield call(apiOpenPost, url);
 
     const data = {
       firstName: formValues.firstname,
@@ -49,7 +50,7 @@ function* sendApplicationSaga({ id }) {
       email: formValues.email,
     };
 
-    if (result.data === 'Application to Job Post saved successfully!') {
+    if (result.data) {
       yield put(sendApplicationSuccess());
       yield put(populateSignupForm(data));
     } else {

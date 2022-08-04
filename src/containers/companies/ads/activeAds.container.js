@@ -10,7 +10,6 @@ import {
   deleteAdvertisement,
   deleteJobOffer,
   fetchJobById,
-  fetchJobNameById,
   editOffer
 } from '../../../actions';
 
@@ -35,7 +34,6 @@ const mapDispatchToProps = {
   deleteAdvertisement,
   deleteJobOffer,
   fetchJobById,
-  fetchJobNameById,
   editOffer
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ActiveAdsComponent);

@@ -422,7 +422,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     yield put(
       change("vacancy", "is_email_notification", is_email_notification)
     );
-    yield put(change("vacancy", "email", email));
+    //yield put(change("vacancy", "email", email));
     yield put(change("vacancy", "notice_frequency", notice_frequency));
 
     const postCampaign = campaigns.find(

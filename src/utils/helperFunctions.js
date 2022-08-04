@@ -6,20 +6,21 @@ export const customURL = (url, type) => {
   const {id} = store.getState().jobs
   const {jobName} = store.getState().jobs
   const {jobPostNumber} = store.getState().jobs
-  //const {companyName} = store.getState().jobs
-  //const {companyBusinessId} = store.getState().jobs
-  const companyIdForTesting = '6035'
-  const splittedJobName = jobName.split().join('-').toLowerCase();
-  //const splittedCompanyName = companyName.split('').join('-').toLowerCase();
-  // url comes from backend in this format - "https://vpt-ui-dev.azurewebsites.net/tyopaikat/Nordic-C-Creditor-Oy/67289/Kirjanpitäjä-Controller/14"
+  const {companyName} = store.getState().jobs
+  const {companyBusinessId} = store.getState().jobs
+  //const companyIdForTesting = '6035'
+  let splittedJobName = jobName.split(" ").join("-").toLowerCase();
+  if (jobName.indexOf('/')) {
+    splittedJobName = jobName.split(' ').toString().replace('/','-').replace(/[,]/gi, '').toLowerCase();
+  }
+  const splittedCompanyName = companyName.split(' ').join('-').toLowerCase();
+  
   let path = []
   let connectString;
   let pathName;
   let splittedPath;
   let jobTitle;
   let postId;
-
-  // const pathname = url && url.split("/toopakkumised/")[1]; 
 
   if(url === undefined || url === null)
   {
@@ -32,18 +33,13 @@ export const customURL = (url, type) => {
     path = splittedPath[0].split("-"); 
   }
 
-  // const splittedPath = pathname && pathname.split("/"); 
-
-
-
   if (path.length >= 3) {
     connectString = path[0] + "-" + path[1] + "-" + path[2] + "/" + jobPostNumber;
   } else {
     connectString = path[0] + "/" + path[1]; // work
   }
-
-  const companyName = path[0]; // work
-  const companyId = path[1]; // work
+  //const companyName = path[0]; // work
+  //const companyId = path[1]; // work
   if (path.length > 2) {
     jobTitle = path[0] + '-' + path[1] + '-' + path[2];
   } else {
@@ -57,19 +53,19 @@ export const customURL = (url, type) => {
 
   switch (type) {
     case "internal": // For admins and companies, url path is jobpost/jobTitle/postId
-      return `/jobpost/${connectString}`;
+      return `/jobpost/${splittedJobName}/${jobPostNumber}`;
       
     case "external": // For public, url path is tyopaikat/companyName/companyId/jobTitle/postId
-      return `/tyopaikat/${connectString}`;
+      return `/tyopaikat/${splittedCompanyName}/${companyBusinessId}/${splittedJobName}/${jobPostNumber}`;
 
     case "application": // For application form component
-      return `/tyopaikat/${jobTitle}/${companyIdForTesting}/${postId}/hae`;
+      return `/tyopaikat/${splittedJobName}/${companyBusinessId}JP${jobPostNumber}/hae`;
 
     case "campaign": // For campaign component
-      return `/${jobTitle}/${postId}/campaign`;
+      return `/${splittedJobName}/${jobPostNumber}/campaign`;
 
     case "open_position":
-      return `/tyopaikat/${companyName}/${companyIdForTesting}/${jobTitle}/${postId}`;
+      return `/tyopaikat/${splittedCompanyName}/${companyBusinessId}/${splittedJobName}/${jobPostNumber}`;
     default:
       break;
   }

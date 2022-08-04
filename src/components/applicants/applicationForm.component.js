@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, CardContent, Grid, Divider, Snackbar } from '@material-ui/core';
 import { Field } from 'redux-form';
 import { withStyles } from '@material-ui/core/styles';
@@ -14,6 +14,8 @@ import Loader from '../../utils/loader';
 import store from '../../store';
 import { PrivacyTermPage, ServiceTermPage } from '../../constants/wordpressRoutes';
 import TextEditor from '../../utils/textEditor';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const styles = theme => ({
   header: {
@@ -95,6 +97,19 @@ const ApplicationForm = ({
   );
   const { t } = useTranslation('applicant', 'common', 'jobDetails');
   const { lang } = store.getState().language;
+  const [jobsToRender, setJobsToRender] = useState([]);
+  const { id } = useSelector((state) => state.jobs);
+  const { companyName } = useSelector((state) => state.jobs);
+  const { jobName } = useSelector((state) => state.jobs);
+  const [address, setAddress] = useState();
+
+  useEffect(() => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
+      setJobsToRender(res.data)
+      //setDateOfApplication(dateFormat(res.data.dateOfApplication))
+      setAddress(res.data.jobPostAddress.address)
+    });
+  }, []);
 
   return (
     <div className="container">
@@ -115,10 +130,10 @@ const ApplicationForm = ({
               <Grid container spacing={5}>
                 <Grid item sm={5} xs={12}>
                   <div>
-                    <h3>{jobDetails.job_title}</h3>
-                    <p>{jobDetails.company_name}</p>
-                    <p>{jobDetails.job_location}</p>
-                    <Link className="btnLink" to={customURL(jobDetails.job_post_link, 'external')} target="_noblank">
+                    <h3>{jobsToRender.jobName}</h3>
+                    <p>{jobsToRender.companyName}</p>
+                    <p>{address}</p>
+                    <Link className="btnLink" to={customURL(jobsToRender.url, 'external')} target="_noblank">
                       <Button variant="contained" color="secondary">
                         {t('openAd')}
                       </Button>

@@ -32,13 +32,6 @@ const ActiveAdsComponent = ({
   const [toEdit, setToEdit] = useState();
   const [jobCategorys, setJobCategorys] = useState([]);
 
-  // useEffect(() => {
-  //     axios.get('https://www.tootukassa.ee/api/toopakkumised').then((res) => {
-  //         setJobCategorys(res.data)
-  //     })
-  //     console.log(jobCategorys);
-  // },[])
-
   useEffect(() => {
     axios.get(`https://localhost:7262/activeAds`).then((res) => {
       setJobsToRender(res.data.filter(isFetched => isFetched.isFetched === 0 && isFetched.isDraft === 0));
@@ -138,8 +131,7 @@ const ActiveAdsComponent = ({
                       >
                         <h4
                           onClick={() => {
-                            fetchJobById(item.id);
-                            fetchJobNameById(item.jobName, item.jobPostNumber)
+                            fetchJobById(item.id, item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
                           }}
                         >
                           {item.jobName === null ? item.jobName : item.jobName},
@@ -239,8 +231,7 @@ const ActiveAdsComponent = ({
                               }
                               color="primary"
                               onClick={() => {
-                                fetchJobById(item.id);
-                                fetchJobNameById(item.jobName, item.jobPostNumber)
+                                fetchJobById(item.id, item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
                               }}
                             >
                               {t("common:openBtn")}
