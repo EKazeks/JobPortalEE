@@ -97,10 +97,13 @@ function* getAllCampaignsSaga() {
 }
 function* getAllJobCategorySaga() {
   try {
-    const url = `${API_SERVER}/GetJobCategories`;
+    const url = `${API_SERVER_EST}/getAllCategories`;
+   
     const result = yield call(apiOpenRequest, url);
+   
     const resultParsed = JSON.parse(result.data);
     yield put(getAllJobCategorySuccess(resultParsed));
+   
   } catch (error) {
     console.log(error);
   }
@@ -571,7 +574,7 @@ function* updateJobPostSaga({ isToEdit, id }) {
     yield put(
       change("editVacancy", "is_email_notification", is_email_notification)
     );
-    yield put(change("editVacancy", "email", email));
+    yield put(change("editVacancy", email, email));
     yield put(change("editVacancy", "notice_frequency", notice_frequency));
   } catch (error) {
     console.log(error);
