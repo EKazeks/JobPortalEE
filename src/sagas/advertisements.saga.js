@@ -899,8 +899,9 @@ function* updateJobApplicationDetailsSaga({
 }) {
   try {
     let body;
-    const url = `${API_SERVER}/UpdateJobApplicationDetails`;
+    let url;
     const formValues = getFormValues("applicantDetails")(store.getState());
+    let response;
     const loggedInUser = store.getState().client.user.data[1];
     const {
       application_notes,
@@ -911,41 +912,34 @@ function* updateJobApplicationDetailsSaga({
       interview_place,
     } = formValues;
     if (update === "note") {
-      body = JSON.stringify({
-        application_id,
-        company_id,
-        post_id,
-        email,
-        update,
-        application_notes,
-      });
+      url = `https://localhost:7262/addApplicantNote`
+      body ={
+       id:"646d0f1f-4fa7-44b4-869a-f56935677af8",
+       note:application_notes
+      };
     } else {
-      body = JSON.stringify({
-        application_id,
-        company_id,
-        post_id,
-        email,
-        update,
-        interview_title,
-        interview_msg,
-        interview_date,
-        interview_time,
-        interview_place,
-        loggedInUser,
-      });
+      url = `https://localhost:7262/sendApplicantReminderOfInterview`
+      body = {
+        email: "moscemoscemosce@gmail.com",
+        subject: interview_title,
+        message: interview_msg,
+        date: interview_date,
+        time: interview_time,
+        address: interview_place,
+      }
     }
-    const result = yield call(apiManualPost, url, body);
+    axios.post(url, body).then((res)=>{response = res});
     if (
-      result.data === "Job Application's details updated successfully!" ||
-      result.data === "Interview reminder emails sent successfully!"
+      response === "400"
     ) {
+      yield put(showFailedSnackbar());
+    } else {
       yield put(showSuccessSnackbar());
       yield put(
         getApplicationDetailsById(application_id, company_id, post_id, email)
       );
       yield put(openAdToSeeAdInfo(post_id));
-    } else {
-      yield put(showFailedSnackbar());
+      
     }
     // console.log('result', result);
   } catch (e) {
