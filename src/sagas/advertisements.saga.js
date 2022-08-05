@@ -95,7 +95,7 @@ function* getAllCampaignsSaga() {
     console.log(error);
   }
 }
-function* getAllJobCategorySaga() {
+/* function* getAllJobCategorySaga() {
   try {
     const url = 'https://localhost:7262/jobsEn/getAllCategories';
    
@@ -107,7 +107,35 @@ function* getAllJobCategorySaga() {
   } catch (error) {
     console.log(error);
   }
+} */
+function* getAllJobCategorySaga() {
+  try {
+ 
+    const url = 'https://localhost:7262/jobsEn/getAllCategories';
+   
+    const result = yield call(apiOpenRequest, url);
+   
+    const categoryArray=result.data
+    const jobCateg= [...categoryArray.reduce((map, obj) =>map.set(obj.jobCode, obj), new Map()).values()];
+     const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode );
+     const lastCategory={jobCode:`${jobCateg.length+1}`,jobTags:"Other"}
+     jobCateg.push(lastCategory)
+     const mapped=jobCateg.map(item => {
+      return {
+        id: item.jobCode,
+        type: item.jobTags
+      };
+    });
+  
+    yield put(getAllJobCategorySuccess(mapped));
+    
+   
+  } catch (error) {
+    console.log(error);
+  }
 }
+
+
 
 function* saveAndPublishAdvertisementSaga() {
   try {

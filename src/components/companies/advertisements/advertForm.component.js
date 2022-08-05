@@ -33,9 +33,9 @@ import CustomizedDialog from "../../../utils/customizedDialog";
 import i18n from "../../../utils/i18n";
 import TextEditor from "../../../utils/textEditor";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import axios from "axios";
-import { useState } from "react";
+
 
 const styles = (theme) => ({
   header: {
@@ -154,6 +154,7 @@ const AdvertFormComponent = ({
 }) => {
   const { t } = useTranslation("advertForm", "campaigns");
   const [copiedJob, setCopiedJob] = useState({});
+  const[jobCategorys,setJobCategorys]=useState([])
   const storedPath =
     Array.isArray(
       formValueSelector("vacancy")(store.getState(), "image_document")
@@ -168,6 +169,26 @@ const AdvertFormComponent = ({
       });
     }
   }, []);
+
+  //fetching jobsCategories and storing them in jobCategorys state
+  useEffect(() => {
+    axios.get('https://localhost:7262/getAllCategories').then((res) => {
+       const categoryArray=res.data
+        const jobCateg= [...categoryArray.reduce((map, obj) =>map.set(obj.jobCode, obj), new Map()).values()];
+       const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode );
+     const lastCategory={jobCode:`${jobCateg.length+1}`,jobTags:"Other"}
+     jobCateg.push(lastCategory)
+     const mapped=jobCateg.map(item => {
+      return {
+        id: item.jobCode,
+        type: item.jobTags
+      };
+    });
+       setJobCategorys(mapped)
+    }) 
+ 
+ },[])
+  console.log(jobCategorys); 
 
   const { lang } = store.getState().language;
 
@@ -208,7 +229,7 @@ const AdvertFormComponent = ({
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <JobCategoriesComponent jobCategories={jobCategories} />
+                <JobCategoriesComponent jobCategories={jobCategorys} />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <JobTypeComponent />
