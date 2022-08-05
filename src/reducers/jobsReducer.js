@@ -35,7 +35,8 @@ const initialState = {
   jobPostNumber: 0,
   companyName: '',
   companyBusinessId: 0,
-  address: '',
+  address: 0,
+  url: '',
   jobDetails: [],
   jobApplicantsId: 0,
   selectedPage: {
@@ -94,7 +95,9 @@ const jobsReducer = (state = initialState, action) => {
         companyName: action.companyName,
         companyBusinessId: action.companyBusinessId,
         jobName: action.jobName,
-        jobPostNumber: action.jobPostNumber
+        jobPostNumber: action.jobPostNumber,
+        address: action.address,
+        url: action.url
       }
     case GET_JOB_APPLICANTS:
       return {
