@@ -97,20 +97,11 @@ const ApplicationForm = ({
   );
   const { t } = useTranslation('applicant', 'common', 'jobDetails');
   const { lang } = store.getState().language;
-  const [jobsToRender, setJobsToRender] = useState([]);
   const { id } = useSelector((state) => state.jobs);
+  const { url } = useSelector((state) => state.jobs);
   const { address } = useSelector((state) => state.jobs);
   const { companyName } = useSelector((state) => state.jobs);
   const { jobName } = useSelector((state) => state.jobs);
- // const [address, setAddress] = useState();
-
-  useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
-      setJobsToRender(res.data)
-      //setDateOfApplication(dateFormat(res.data.dateOfApplication))
-      //setAddress(res.data.jobPostAddress.address)
-    });
-  }, []);
 
   return (
     <div className="container">
@@ -134,7 +125,7 @@ const ApplicationForm = ({
                     <h3>{jobName}</h3>
                     <p>{companyName}</p>
                     <p>{address}</p>
-                    <Link className="btnLink" to={customURL(jobsToRender.url, 'external')} target="_noblank">
+                    <Link className="btnLink" to={customURL({url}, 'external')} target="_noblank">
                       <Button variant="contained" color="secondary">
                         {t('openAd')}
                       </Button>

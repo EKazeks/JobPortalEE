@@ -114,7 +114,7 @@ const JobDetailsComponent = ({
   const [jobsToRender, setJobsToRender] = useState([]);
   const { id } = useSelector((state) => state.jobs);
   //const [dateOfApplication, setDateOfApplication] = useState();
-  const [address, setAddress] = useState();
+  const [address, setAddress] = useState('');
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
@@ -241,7 +241,8 @@ const JobDetailsComponent = ({
                                       jobsToRender.companyBusinessId, 
                                       jobsToRender.jobName, 
                                       jobsToRender.jobPostNumber,
-                                      {address})
+                                      jobsToRender.url,
+                                      address.address)
                                   }}
                                  >
                                   <DescriptionIcon />
@@ -376,7 +377,8 @@ const JobDetailsComponent = ({
                                 jobsToRender.companyBusinessId, 
                                 jobsToRender.jobName, 
                                 jobsToRender.jobPostNumber,
-                                {address})
+                                address.address,
+                                jobsToRender.url)
                             }}
                           >
                             <DescriptionIcon />
