@@ -176,7 +176,8 @@ const JobsComponent = ({
   isWarnToDelete,
   deleteAdvertisement,
   classes,
-  fetchJobById
+  fetchJobById,
+  fetchJobInfo
 }) => {
   const { t } = useTranslation("jobsList", "jobs");
   const [jobsToRender, setJobsToRender] = useState([]);
@@ -237,7 +238,8 @@ const JobsComponent = ({
                               to={customURL(item.url, "internal")}
                               onClick={() => 
                                 {
-                                  fetchJobById(item.id, item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
+                                  fetchJobById(item.id)
+                                  fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
                               }
                               }
                             />
@@ -245,7 +247,8 @@ const JobsComponent = ({
                             <Link
                               onClick={() => 
                                 {
-                                  fetchJobById(item.id, item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
+                                  fetchJobById(item.id)
+                                  fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
                                 }
                               }
                               className={classes.jobContainerHover}
@@ -410,7 +413,8 @@ const JobsComponent = ({
                                         color="primary"
                                         onClick={() =>
                                           {
-                                            fetchJobById(item.id, item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
+                                            fetchJobById(item.id)
+                                            fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
                                           }
                                         }
                                       >
@@ -428,7 +432,8 @@ const JobsComponent = ({
                                         className="fullWidthBtn"
                                         onClick={() =>
                                           {
-                                            fetchJobById(item.id, item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
+                                            fetchJobById(item.id)
+                                            fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
                                           }
                                         }
                                       >

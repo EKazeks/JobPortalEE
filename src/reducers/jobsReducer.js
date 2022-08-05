@@ -18,7 +18,8 @@ import {
   WARN_TO_DELETE,
   DELETE_JOB_OFFER,
   GET_JOB_APPLICANTS,
-  FETCH_JOB_NAME_BY_ID
+  FETCH_JOB_NAME_BY_ID,
+  FETCH_JOB_INFO
 } from "../constants";
 
 const initialState = {
@@ -34,6 +35,7 @@ const initialState = {
   jobPostNumber: 0,
   companyName: '',
   companyBusinessId: 0,
+  address: '',
   jobDetails: [],
   jobApplicantsId: 0,
   selectedPage: {
@@ -85,11 +87,15 @@ const jobsReducer = (state = initialState, action) => {
       return {
         ...state,
         id: action.id,
+      };
+    case FETCH_JOB_INFO:
+      return {
+        ...state,
         companyName: action.companyName,
         companyBusinessId: action.companyBusinessId,
         jobName: action.jobName,
         jobPostNumber: action.jobPostNumber
-      };
+      }
     case GET_JOB_APPLICANTS:
       return {
         ...state,

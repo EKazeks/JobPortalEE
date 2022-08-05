@@ -11,7 +11,8 @@ import {
   deleteAdvertisement,
   resetSearchCriteriaForm,
   changePagination,
-  fetchJobById
+  fetchJobById,
+  fetchJobInfo
 } from '../../actions';
 import JobsComponent from '../../components/jobs/jobs.component';
 import { JOBPOST_COUNT_PER_PAGE } from '../../constants';
@@ -69,6 +70,7 @@ const mapDispatchToProps = {
   resetSearchCriteriaForm,
   changePagination,
   fetchJobById,
+  fetchJobInfo
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(JobsContainer);

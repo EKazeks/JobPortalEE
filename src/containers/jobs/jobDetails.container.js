@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import JobDetailsComponent from '../../components/jobs/jobDetails.component';
-import { getJobDetailsById, toggleFavoriteJobs, closeSnackbar, changePagination,fetchJobById } from '../../actions';
+import { getJobDetailsById, toggleFavoriteJobs, closeSnackbar, changePagination,fetchJobById,fetchJobInfo } from '../../actions';
 
 class JobDetailsContainer extends React.Component {
   componentDidMount() {
@@ -31,7 +31,8 @@ const mapDispatchToProps = {
   toggleFavoriteJobs,
   closeSnackbar,
   changePagination,
-  fetchJobById
+  fetchJobById,
+  fetchJobInfo
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(JobDetailsContainer);

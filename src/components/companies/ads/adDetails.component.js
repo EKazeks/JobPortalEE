@@ -98,7 +98,7 @@ const AdDetails = ({
   props,
 }) => {
   const { t } = useTranslation("adDetails");
-  const { id, jobDetails } = useSelector((state) => state.jobs);
+  const { id } = useSelector((state) => state.jobs);
   const [dateOfApplication,setDateOfApplication] = useState();
   const [address,setAddress] = useState();
   const [toEdit,setToEdit] = useState()

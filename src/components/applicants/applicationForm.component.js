@@ -99,15 +99,16 @@ const ApplicationForm = ({
   const { lang } = store.getState().language;
   const [jobsToRender, setJobsToRender] = useState([]);
   const { id } = useSelector((state) => state.jobs);
+  const { address } = useSelector((state) => state.jobs);
   const { companyName } = useSelector((state) => state.jobs);
   const { jobName } = useSelector((state) => state.jobs);
-  const [address, setAddress] = useState();
+ // const [address, setAddress] = useState();
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data)
       //setDateOfApplication(dateFormat(res.data.dateOfApplication))
-      setAddress(res.data.jobPostAddress.address)
+      //setAddress(res.data.jobPostAddress.address)
     });
   }, []);
 
@@ -130,8 +131,8 @@ const ApplicationForm = ({
               <Grid container spacing={5}>
                 <Grid item sm={5} xs={12}>
                   <div>
-                    <h3>{jobsToRender.jobName}</h3>
-                    <p>{jobsToRender.companyName}</p>
+                    <h3>{jobName}</h3>
+                    <p>{companyName}</p>
                     <p>{address}</p>
                     <Link className="btnLink" to={customURL(jobsToRender.url, 'external')} target="_noblank">
                       <Button variant="contained" color="secondary">

@@ -22,7 +22,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { isRteEmpty } from "../../containers/validate";
 import NotFoundPage from "../../utils/notFoundPage";
-import { fetchJobById } from "../../actions";
+import { fetchJobById, fetchJobInfo } from "../../actions";
 
 const styles = (theme) => ({
   addMargin: {
@@ -109,6 +109,7 @@ const JobDetailsComponent = ({
   showSpinner,
   classes,
   changePagination,
+  fetchJobInfo
 }) => {
   const [jobsToRender, setJobsToRender] = useState([]);
   const { id } = useSelector((state) => state.jobs);
@@ -234,7 +235,13 @@ const JobDetailsComponent = ({
                                   color="primary" 
                                   variant="contained"
                                   onClick={() => {
-                                    fetchJobById(jobsToRender.id, jobsToRender.companyName, jobsToRender.companyBusinessId, jobsToRender.jobName, jobsToRender.jobPostNumber)
+                                    fetchJobById(jobsToRender.id)
+                                    fetchJobInfo(
+                                      jobsToRender.companyName, 
+                                      jobsToRender.companyBusinessId, 
+                                      jobsToRender.jobName, 
+                                      jobsToRender.jobPostNumber,
+                                      {address})
                                   }}
                                  >
                                   <DescriptionIcon />
@@ -363,7 +370,13 @@ const JobDetailsComponent = ({
                             color="primary" 
                             variant="contained"
                             onClick={() => {
-                              fetchJobById(jobsToRender.id, jobsToRender.companyName, jobsToRender.companyBusinessId, jobsToRender.jobName, jobsToRender.jobPostNumber)
+                              fetchJobById(jobsToRender.id)
+                              fetchJobInfo(
+                                jobsToRender.companyName, 
+                                jobsToRender.companyBusinessId, 
+                                jobsToRender.jobName, 
+                                jobsToRender.jobPostNumber,
+                                {address})
                             }}
                           >
                             <DescriptionIcon />
