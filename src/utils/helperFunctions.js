@@ -8,49 +8,17 @@ export const customURL = (url, type) => {
   const {jobPostNumber} = store.getState().jobs
   const {companyName} = store.getState().jobs
   const {companyBusinessId} = store.getState().jobs
-  //const companyIdForTesting = '6035'
-  let splittedJobName = jobName.split(" ").join("-").toLowerCase();
-  if (jobName.indexOf('/')) {
+  let splittedJobName;
+
+  splittedJobName = jobName.split(' ').join("-").toLowerCase();
+  if (jobName.length >= 40) {
+    splittedJobName = jobName.split(' ').toString().replace(/[ ,-,,/]/g, '-').toLowerCase()
+  } else if (jobName.includes('/')) {
     splittedJobName = jobName.split(' ').toString().replace('/','-').replace(/[,]/gi, '').toLowerCase();
-  }
+  } 
+    
   const splittedCompanyName = companyName.split(' ').join('-').toLowerCase();
   
-  let path = []
-  let connectString;
-  let pathName;
-  let splittedPath;
-  let jobTitle;
-  let postId;
-
-  if(url === undefined || url === null)
-  {
-    pathName = splittedJobName
-    splittedPath = id
-    path = [pathName,splittedPath]
-  }else{
-    pathName = url.split("/toopakkumised/")[1];
-    splittedPath = pathName.split("/"); 
-    path = splittedPath[0].split("-"); 
-  }
-
-  if (path.length >= 3) {
-    connectString = path[0] + "-" + path[1] + "-" + path[2] + "/" + jobPostNumber;
-  } else {
-    connectString = path[0] + "/" + path[1]; // work
-  }
-  //const companyName = path[0]; // work
-  //const companyId = path[1]; // work
-  if (path.length > 2) {
-    jobTitle = path[0] + '-' + path[1] + '-' + path[2];
-  } else {
-    jobTitle = path[0];
-  }
-  if (path.length > 2) {
-    postId = path[3]
-  } else {
-    postId = path[1]; // work
-  }
-
   switch (type) {
     case "internal": // For admins and companies, url path is jobpost/jobTitle/postId
       return `/jobpost/${splittedJobName}/${jobPostNumber}`;

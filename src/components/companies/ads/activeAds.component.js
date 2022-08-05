@@ -23,7 +23,7 @@ const ActiveAdsComponent = ({
   showDialog,
   isToDeleteAdvertisementId,
   fetchJobById,
-  fetchJobNameById,
+  fetchJobInfo,
   editOffer,
 }) => {
   const { t } = useTranslation("jobs");
@@ -131,7 +131,8 @@ const ActiveAdsComponent = ({
                       >
                         <h4
                           onClick={() => {
-                            fetchJobById(item.id, item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
+                            fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
+                            fetchJobById(item.id)
                           }}
                         >
                           {item.jobName === null ? item.jobName : item.jobName},
@@ -231,7 +232,8 @@ const ActiveAdsComponent = ({
                               }
                               color="primary"
                               onClick={() => {
-                                fetchJobById(item.id, item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
+                                fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
+                                fetchJobById(item.id)
                               }}
                             >
                               {t("common:openBtn")}
