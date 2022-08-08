@@ -549,10 +549,10 @@ export const getAllJobCategorySuccess = (result) => ({
   type: GET_ALL_JOB_CATEGORY_SUCCESS,
   result,
 });
-export const getAllJobCategoryFromEstoniaSuccess = (jobTags) => ({
+/* export const getAllJobCategoryFromEstoniaSuccess = (jobTags) => ({
   type: GET_ALL_JOB_CATEGORY_FROM_ESTONIA_SUCCESS,
   jobTags,
-});
+}); */
 
 // COMPANY PROFILE
 export const addCompanyProfile = () => ({

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useEffect,useState } from 'react';
 import { Field } from 'redux-form';
 import { Paper, Grid, Button, Card, CardContent, Snackbar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -8,6 +8,7 @@ import { renderSwitchLabels as RenderSwitchLabels, renderSelectField } from '../
 import { MySnackbarContentWrapper } from '../../utils/snackbar.utils';
 import autoCompleteLocation from '../../utils/autoCompleteLocation';
 import { MultiSelectJobCategoriesComponent, MultiSelectJobHoursComponent, MultiSelectJobTypeComponent } from '../../utils/multiSelectCustomField';
+import axios from 'axios';
 
 const styles = theme => ({
   title: {
@@ -120,6 +121,7 @@ const HomePageComponent = ({
   valid,
   pristine,
 }) => {
+
   const { t } = useTranslation('homepage');
   return (
     <div className="container">
