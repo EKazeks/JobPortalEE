@@ -183,7 +183,7 @@ const AdvertFormComponent = ({
      jobCateg.push(lastCategory)
      const mapped=jobCateg.map(item => {
       return {
-        id: item.jobCode,
+        id: parseInt(item.jobCode),
         type: item.jobTags
       };
     });
