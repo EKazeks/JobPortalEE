@@ -174,10 +174,10 @@ const AdvertFormComponent = ({
   useEffect(() => {
     axios.get('https://localhost:7262/getAllCategories').then((res) => {
        const categoryArray=res.data
-        const jobCateg= [...categoryArray.reduce((map, obj) =>map.set(obj.jobCode, obj), new Map()).values()];
+        const jobCateg= [...categoryArray.reduce((map, obj) =>map.set(obj.jobCode-1, obj), new Map()).values()];
         
-       /* const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode ); */
-       const firstCategory={jobCode:"category",jobTags:""}
+       const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode );
+       const firstCategory={jobCode:"0",jobTags:""}
        jobCateg.unshift(firstCategory)
      const lastCategory={jobCode:`${jobCateg.length+1}`,jobTags:"Other"}
      jobCateg.push(lastCategory)

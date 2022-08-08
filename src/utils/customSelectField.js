@@ -188,7 +188,7 @@ export const JobCategoriesComponent = ({
         {jobCategories.map(category => {
           return (
             <option
-              value={category.id === 1 ? '' : category.id} // id:1 is empty -- required for validation
+              value={category.id === "0"? '' : category.id} // id:1 is empty -- required for validation
               key={category.id}
             >
               {t(`${category.id}`)}
