@@ -162,7 +162,7 @@ function* saveAndPublishAdvertisementSaga() {
       isDraft || extraService.help || extraService.sos
         ? 0
         : selectedCampaign.type === "free"
-        ? 1
+        ? 'active'
         : 4;
 
     const selectedService = extraService.help
@@ -331,7 +331,7 @@ function* getJobPostByPostIdSaga({id}) {
 
 function* getAllAdsByStatusSaga({ status }) {
   try {
-    const url = `${API_SERVER}/SearchJobPosts`;
+    const url = `${API_SERVER_EST}`;
     const { client, usersCompanyList, companyProfile } = store.getState();
     const uuid = client.user.data[2];
     const roleId = client.user.data[5];
@@ -352,7 +352,7 @@ function* getAllAdsByStatusSaga({ status }) {
     });
 
     const result = yield call(apiManualPost, url, body);
-    const resultParsed = JSON.parse(result.data);
+    const resultParsed = result.data;
     yield put(getAllAdsByStatusSuccess(status, resultParsed));
   } catch (error) {
     console.log(error);
@@ -751,18 +751,15 @@ function* updateCampaignSaga({ id }) {
 
 function* changeJobPostStatusSaga({ id }) {
   try {
-    const url = `${API_SERVER}/UpdateJobPostStatus`;
-    const { company_id } = store.getState().companyProfile.profile;
-    const post_id = id;
-    const userRole = store.getState().client.user.data[6].user_type;
-
+    const url = `https://localhost:7262/changeOfferStatus`;
     const body = JSON.stringify({
-      post_id: userRole === "admin" ? id.split("admin")[0] : post_id, // For admins, we need to get company id from post itself
-      company_id: userRole === "admin" ? id.split("admin")[1] : company_id,
-      status: 2,
+
+      id,
+      status: 'inactive',
     });
+
     const result = yield call(apiManualPost, url, body);
-    if (result.data === "Job Post Status updated successfully!") {
+    if (result.data) {
       yield put(showSuccessSnackbar());
       yield put(openAdToSeeAdInfo(id));
     } else {
@@ -827,7 +824,7 @@ function* deleteJobPostSaga({ id }) {
       company_id: userRole === "admin" ? id.split("admin")[1] : companyId,
     });
     //yield call( apiOpenRequest, url);
-    const result = axios.delete(url).finally((res) => {});
+    const result = axios.delete(url).finally((res) => ({res}));
     if (userRole === "admin") {
       yield put(filterJobs(result, true));
     } else {
@@ -1075,7 +1072,7 @@ export function* watchgetJobPostByPostIdSaga() {
   yield takeEvery(OPEN_AD_TO_SEE_AD_INFO, getJobPostByPostIdSaga);
 }
 export function* watchdeleteJobPostSaga() {
-  yield takeEvery(DELETE_JOB_OFFER, deleteJobPostSaga);
+  yield takeEvery(DELETE_ADVERTISEMENT, deleteJobPostSaga);
 }
 export function* watchupdateJobPostSaga() {
   yield takeEvery(UPDATE_ADVERTISEMENT, updateJobPostSaga);

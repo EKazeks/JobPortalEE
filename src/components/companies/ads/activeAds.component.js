@@ -35,7 +35,7 @@ const ActiveAdsComponent = ({
 
   useEffect(() => {
     axios.get(`https://localhost:7262/activeAds`).then((res) => {
-      setJobsToRender(res.data.filter(isFetched => isFetched.isFetched === 0 && isFetched.isDraft === 0));
+      setJobsToRender(res.data.filter(status => status.offerStatus === 'active'));
     });
   }, []);
 

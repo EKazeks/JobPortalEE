@@ -48,8 +48,8 @@ const initialState = {
   dashboard: [],
   notificationToggleBtn: false,
   workStart: null,
-  warnToDelete: false,
-  isToDeleteAdvertisementId: 0,
+  // warnToDelete: false,
+  // isToDeleteAdvertisementId: 0,
 };
 
 const jobsReducer = (state = initialState, action) => {
@@ -64,12 +64,12 @@ const jobsReducer = (state = initialState, action) => {
         ...state,
         warnToDelete: false,
       }
-      case WARN_TO_DELETE:
-        return {
-          ...state,
-          warnToDelete: true,
-          isToDeleteAdvertisementId: action.id,
-        };
+      // case WARN_TO_DELETE:
+      //   return {
+      //     ...state,
+      //     warnToDelete: true,
+      //     isToDeleteAdvertisementId: action.id,
+      //   };
     case EDIT_OFFER:
       return{
         ...state,

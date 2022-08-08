@@ -6,8 +6,9 @@ import {
   openAdToSeeAdInfo,
   changeCampaign,
   warnToDelete,
-  deleteAdvertisement,
   populateVacancyForm,
+  deleteJobOffer,
+  deleteAdvertisement
 } from '../../../actions';
 
 const mapStateToProps = state => ({
@@ -25,7 +26,8 @@ const mapDispatchToProps = {
   openAdToSeeAdInfo,
   changeCampaign,
   warnToDelete,
-  deleteAdvertisement,
   populateVacancyForm,
+  deleteJobOffer,
+  deleteAdvertisement
 };
 export default connect(mapStateToProps, mapDispatchToProps)(InActiveAdsComponent);

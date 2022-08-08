@@ -191,7 +191,8 @@ const AdDetails = ({
                         // alert('updateJOBPOSTSTATUS');
                         store.dispatch(
                           changeActivePostToInactive(
-                            userRole === 'admin' ? `${viewSelectedAd.jobPostNumber}admin${viewSelectedAd.companyBusinessId}` : viewSelectedAd.jobPostNumber,
+                            // userRole === 'admin' ? `${viewSelectedAd.jobPostNumber}admin${viewSelectedAd.companyBusinessId}` : viewSelectedAd.jobPostNumber,
+                            viewSelectedAd.id
                           ),
                         );
                       }}
@@ -244,8 +245,10 @@ const AdDetails = ({
                  </h6>
                  <h6>
                    <strong>{t("postStatus")}: </strong>
-                   {customTranslateStatus(viewSelectedAd.campaignType)}
-                  {`Active`}
+                   {/* {customTranslateStatus(viewSelectedAd.offerStatus)} */}
+                   {viewSelectedAd.offerStatus === 'inactive' && <span>Expired</span>}
+                   {viewSelectedAd.offerStatus === 'active' && <span>Active</span>}
+                  {/* {`Active`} */}
                  </h6>
                </div>
             </Grid>
@@ -299,7 +302,8 @@ const AdDetails = ({
                     onClick={() => {
                       store.dispatch(
                         changeActivePostToInactive(
-                          userRole === 'admin' ? `${viewSelectedAd.jobPostNumber}admin${viewSelectedAd.companyBusinessId}` : viewSelectedAd.jobPostNumber,
+                          // userRole === 'admin' ? `${viewSelectedAd.jobPostNumber}admin${viewSelectedAd.companyBusinessId}` : viewSelectedAd.jobPostNumber,
+                          viewSelectedAd.id
                         ),
                       );
                     }}
