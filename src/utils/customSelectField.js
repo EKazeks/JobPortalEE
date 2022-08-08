@@ -61,8 +61,7 @@ export const JobTypeComponent = ({ margin, hideLabel }) => {
         <option value="" />
         <option value="12">{t("jobType12")}</option>
         <option value="13">{t("jobType13")}</option>
-        <option value="14">{t("jobType14")}</option>
-        <option value="15">{t("jobType15")}</option>
+       
       </Field>
     </div>
   );

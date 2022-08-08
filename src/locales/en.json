@@ -412,11 +412,9 @@
     "appliedJobsTitle": "Applied jobs"
   },
   "jobtype": {
-    "jobType12": "Valid until further notice",
-    "jobType13": "Temporary",
-    "jobType14": "Less than 3 months",
-    "jobType15": "Summer Job",
-    "jobTypeLabel": "Job duration"
+    "jobType12": "Termless",
+    "jobType13": "Fixed Term"
+  
   },
   "jobhours": {
     "jobHours31": "Full-time",
