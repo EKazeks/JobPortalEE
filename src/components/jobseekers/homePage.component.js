@@ -121,26 +121,7 @@ const HomePageComponent = ({
   valid,
   pristine,
 }) => {
-  const[jobCategorys,setJobCategorys]=useState([])
-  //fetching jobsCategory
-  useEffect(() => {
-    axios.get('https://localhost:7262/getAllCategories').then((res) => {
-       const categoryArray=res.data
-        const jobCateg= [...categoryArray.reduce((map, obj) =>map.set(obj.jobCode, obj), new Map()).values()];
-       const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode );
-     const lastCategory={jobCode:`${jobCateg.length+1}`,jobTags:"Other"}
-     jobCateg.push(lastCategory)
-     const mapped=jobCateg.map(item => {
-      return {
-        id: item.jobCode,
-        type: item.jobTags
-      };
-    });
-       setJobCategorys(mapped)
-    }) 
- 
- },[])
-  
+
   const { t } = useTranslation('homepage');
   return (
     <div className="container">
@@ -177,7 +158,7 @@ const HomePageComponent = ({
                           : classes.homePageMultiSelectInitial
                       }
                     >
-                      <MultiSelectJobCategoriesComponent jobCategories={jobCategorys} />
+                      <MultiSelectJobCategoriesComponent jobCategories={jobCategories} />
                     </Grid>
                   </Grid>
                   <Grid container spacing={1} alignItems="center">

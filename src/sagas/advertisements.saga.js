@@ -111,21 +111,24 @@ function* getAllCampaignsSaga() {
 function* getAllJobCategorySaga() {
   try {
  
-    const url = 'https://localhost:7262/jobsEn/getAllCategories';
+    const url = 'https://localhost:7262/getAllCategories';
    
     const result = yield call(apiOpenRequest, url);
    
     const categoryArray=result.data
+    
     const jobCateg= [...categoryArray.reduce((map, obj) =>map.set(obj.jobCode, obj), new Map()).values()];
-     const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode );
-     const lastCategory={jobCode:`${jobCateg.length+1}`,jobTags:"Other"}
-     jobCateg.push(lastCategory)
-     const mapped=jobCateg.map(item => {
-      return {
-        id: item.jobCode,
-        type: item.jobTags
-      };
-    });
+    const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode );
+    const firstCategory={jobCode:"0",jobTags:""}
+    jobCateg.unshift(firstCategory)
+  const lastCategory={jobCode:`${jobCateg.length}`,jobTags:"Other"}
+  jobCateg.push(lastCategory)
+  const mapped=jobCateg.map(item => {
+   return {
+     id: parseInt(item.jobCode),
+     type: item.jobTags
+   };
+ });
   
     yield put(getAllJobCategorySuccess(mapped));
     
