@@ -286,7 +286,7 @@
     "failedMsg": "An error occurred. Please try again later!"
   },
   "category": {
-    "category": "",
+    "category": "Job category",
     "1": "Assisting, administration",
     "2": "Construction and building materials",
     "3": "Energy and natural resources",

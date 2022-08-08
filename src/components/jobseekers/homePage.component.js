@@ -122,6 +122,7 @@ const HomePageComponent = ({
   pristine,
 }) => {
   const[jobCategorys,setJobCategorys]=useState([])
+  //fetching jobsCategory
   useEffect(() => {
     axios.get('https://localhost:7262/getAllCategories').then((res) => {
        const categoryArray=res.data
@@ -139,7 +140,7 @@ const HomePageComponent = ({
     }) 
  
  },[])
-  console.log(jobCategorys); 
+  
   const { t } = useTranslation('homepage');
   return (
     <div className="container">

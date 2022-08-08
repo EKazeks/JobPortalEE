@@ -175,7 +175,10 @@ const AdvertFormComponent = ({
     axios.get('https://localhost:7262/getAllCategories').then((res) => {
        const categoryArray=res.data
         const jobCateg= [...categoryArray.reduce((map, obj) =>map.set(obj.jobCode, obj), new Map()).values()];
-       const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode );
+        
+       /* const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode ); */
+       const firstCategory={jobCode:"category",jobTags:""}
+       jobCateg.unshift(firstCategory)
      const lastCategory={jobCode:`${jobCateg.length+1}`,jobTags:"Other"}
      jobCateg.push(lastCategory)
      const mapped=jobCateg.map(item => {
@@ -189,6 +192,7 @@ const AdvertFormComponent = ({
  
  },[])
   console.log(jobCategorys); 
+  console.log("jobCategories",jobCategories);
 
   const { lang } = store.getState().language;
 
