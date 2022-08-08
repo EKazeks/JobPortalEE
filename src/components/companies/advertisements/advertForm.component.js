@@ -179,7 +179,7 @@ const AdvertFormComponent = ({
        const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode );
        const firstCategory={jobCode:"0",jobTags:""}
        jobCateg.unshift(firstCategory)
-     const lastCategory={jobCode:`${jobCateg.length+1}`,jobTags:"Other"}
+     const lastCategory={jobCode:`${jobCateg.length}`,jobTags:"Other"}
      jobCateg.push(lastCategory)
      const mapped=jobCateg.map(item => {
       return {
