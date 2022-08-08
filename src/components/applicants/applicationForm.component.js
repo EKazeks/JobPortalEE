@@ -88,6 +88,8 @@ const ApplicationForm = ({
   applicant_cv,
   cv_filename,
   valid,
+  address,
+  id,
   ...props
 }) => {
   const cv_document = (
@@ -97,11 +99,17 @@ const ApplicationForm = ({
   );
   const { t } = useTranslation('applicant', 'common', 'jobDetails');
   const { lang } = store.getState().language;
-  const { id } = useSelector((state) => state.jobs);
-  const { url } = useSelector((state) => state.jobs);
-  const { address } = useSelector((state) => state.jobs);
+  //const { id } = useSelector((state) => state.jobs);
+  //const { address } = useSelector((state) => state.jobs);
   const { companyName } = useSelector((state) => state.jobs);
   const { jobName } = useSelector((state) => state.jobs);
+  const [ url, setUrl ] = useState([])
+
+  useEffect(() => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
+    setUrl(res.data.url)
+    })
+  },[])
 
   return (
     <div className="container">

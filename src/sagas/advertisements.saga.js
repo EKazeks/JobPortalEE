@@ -313,9 +313,9 @@ function* saveAndPublishAdvertisementSaga() {
   }
 }
 
-function* getJobPostByPostIdSaga({}) {
+function* getJobPostByPostIdSaga({id}) {
   try {
-    const {id} = store.getState().jobs;
+    //const {id} = store.getState().jobs;
     const url = `${API_SERVER_EST}/${id}`;
     const companyBusinessId = store.getState().jobs.jobsList.companyBusinessId;
     const userRole = store.getState().client.user.data[6].user_type;

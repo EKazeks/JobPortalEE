@@ -167,14 +167,13 @@ export const fetchJobById = (id,companyName, companyBusinessId, jobName, jobPost
   type: FETCH_JOB_BY_ID,
   id,
 });
-export const fetchJobInfo = (companyName,companyBusinessId, jobName, jobPostNumber,address,url) => ({
+export const fetchJobInfo = (companyName,companyBusinessId, jobName, jobPostNumber,address) => ({
   type: FETCH_JOB_INFO,
   companyName,
   companyBusinessId,
   jobName,
   jobPostNumber,
   address,
-  url
 })
 
 export const editOffer = (id) => ({

@@ -241,7 +241,6 @@ const JobDetailsComponent = ({
                                       jobsToRender.companyBusinessId, 
                                       jobsToRender.jobName, 
                                       jobsToRender.jobPostNumber,
-                                      jobsToRender.url,
                                       address.address)
                                   }}
                                  >
@@ -377,8 +376,7 @@ const JobDetailsComponent = ({
                                 jobsToRender.companyBusinessId, 
                                 jobsToRender.jobName, 
                                 jobsToRender.jobPostNumber,
-                                address.address,
-                                jobsToRender.url)
+                                address.address)
                             }}
                           >
                             <DescriptionIcon />
