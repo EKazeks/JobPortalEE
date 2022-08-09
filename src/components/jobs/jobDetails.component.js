@@ -22,7 +22,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { isRteEmpty } from "../../containers/validate";
 import NotFoundPage from "../../utils/notFoundPage";
-import { fetchJobById, fetchJobInfo } from "../../actions";
+import { fetchJobById, fetchJobInfo, setIdToApply } from "../../actions";
 
 const styles = (theme) => ({
   addMargin: {
@@ -109,7 +109,8 @@ const JobDetailsComponent = ({
   showSpinner,
   classes,
   changePagination,
-  fetchJobInfo
+  fetchJobInfo,
+  setIdToApply
 }) => {
   const [jobsToRender, setJobsToRender] = useState([]);
   const { id } = useSelector((state) => state.jobs);
@@ -235,7 +236,7 @@ const JobDetailsComponent = ({
                                   color="primary" 
                                   variant="contained"
                                   onClick={() => {
-                                    fetchJobById(jobsToRender.id)
+                                    setIdToApply(jobsToRender.id)
                                     fetchJobInfo(
                                       jobsToRender.companyName, 
                                       jobsToRender.companyBusinessId, 
@@ -371,13 +372,13 @@ const JobDetailsComponent = ({
                             color="primary" 
                             variant="contained"
                             onClick={() => {
-                              fetchJobById(jobsToRender.id)
+                              setIdToApply(jobsToRender.id)
                               fetchJobInfo(
                                 jobsToRender.companyName, 
                                 jobsToRender.companyBusinessId, 
                                 jobsToRender.jobName, 
                                 jobsToRender.jobPostNumber,
-                                address.address,
+                                jobsToRender.jobPostAddress.address,
                                 jobsToRender.url)
                             }}
                           >

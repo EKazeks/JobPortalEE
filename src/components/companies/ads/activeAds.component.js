@@ -10,6 +10,7 @@ import CustomizedDialogs from "../../../utils/customizedDialog";
 import i18n from "../../../utils/i18n";
 import axios from "axios";
 import { changeRoute } from "../../../actions";
+import { useMemo } from "react";
 
 const ActiveAdsComponent = ({
   warnToDelete,
@@ -32,7 +33,7 @@ const ActiveAdsComponent = ({
   const [toEdit, setToEdit] = useState();
   const [jobCategorys, setJobCategorys] = useState([]);
 
-  useEffect(() => {
+  useMemo(() => {
     axios.get(`https://localhost:7262/activeAds`).then((res) => {
       setJobsToRender(res.data.filter(isFetched => isFetched.isFetched === 0 && isFetched.isDraft === 0));
     });

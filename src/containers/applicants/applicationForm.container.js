@@ -7,9 +7,9 @@ import { applicationFormValidate as validate } from '../validate';
 import store from '../../store';
 
 class ApplicationContainer extends React.Component {
-  componentDidMount() {
-    this.props.getJobDetailsById(`${this.props.match.params.id.split('JP')[1]}$$${this.props.match.params.id.split('JP')[0]}`);
-  }
+  // componentDidMount() {
+  //   this.props.getJobDetailsById(`${this.props.match.params.id.split('JP')[1]}$$${this.props.match.params.id.split('JP')[0]}`);
+  // }
 
   componentWillUnmount() {
     if (this.props.isApplicationSent) {
