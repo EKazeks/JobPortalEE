@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { getFormValues } from 'redux-form';
 import { API_SERVER, API_SERVER_EST, CLOSE_DIALOG, SEND_APPLICATION } from '../constants';
-import { apiOpenPost } from '../utils/request';
+import { apiManualPost, apiOpenPost } from '../utils/request';
 import store from '../store';
 import {
   sendApplicationSuccess,
@@ -13,9 +13,9 @@ import browserHistory from '../history';
 
 function* sendApplicationSaga() {
   try {
-    const {id} = store.getState().jobs;
-    const company_id = id.split('JP')[0];
-    const post_id = id.split('JP')[1];
+    const {idToApply} = store.getState().jobs;
+    const company_id = idToApply.split('JP')[0];
+    const post_id = idToApply.split('JP')[1];
     const uploadedCV = store.getState().jobs.uploadedDocument && store.getState().jobs.uploadedDocument[0];
     const cv_id_value = store.getState().jobseekerProfile.profile.cv_id;
     const cv_id = cv_id_value?.toString(); // optional chaining ?.
@@ -35,14 +35,20 @@ function* sendApplicationSaga() {
     }
 
     // Back end needs in the following format
-    const url = `${API_SERVER_EST}/addApplicationToOffer/${id}`;
-    // const body = JSON.stringify({
-    //   ...formValues,
-    //   company_id,
-    //   post_id,
-    //   cv_id,
-    // });
-    const result = yield call(apiOpenPost, url);
+    const url = `https://localhost:7262/addApplicationToOffer/${idToApply}`;
+    const body = {
+      id:idToApply,
+      firstName:formValues.firstname,
+      lastName:formValues.lastname,
+      email:formValues.email,
+      phone:formValues.contact_number,
+      linkedIn:formValues.linkedin,
+      description:formValues.application_description,
+      favouriteCandidate:0,
+      note:'',
+      jobPostId:idToApply,
+    };
+    const result = yield call(apiManualPost,url,body);
 
     const data = {
       firstName: formValues.firstname,

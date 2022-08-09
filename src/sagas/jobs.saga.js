@@ -82,66 +82,66 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
   }
 }
 
-// function* getJobDetailsByIdSaga(props) {
-//   const {jobs} = store.getState()
-//   const {id} = jobs
-//   try {
-//     const url = `${API_SERVER_EST}/${id}`;
+function* getJobDetailsByIdSaga(props) {
+  const {jobs} = store.getState()
+  const {id} = jobs
+  try {
+    const url = `${API_SERVER_EST}/${id}`;
 
-//     let body;
-//     let result;
-//     let resultParsed;
-//     let jobDetailResult;
-//     let jobUrl;
-//     let ilmoId;
+    let body;
+    let result;
+    let resultParsed;
+    let jobDetailResult;
+    let jobUrl;
+    let ilmoId;
 
-//     const job_detail = props.id.split('$$');
+    const job_detail = props.id.split('$$');
 
-//     const { user } = store.getState().client;
+    const { user } = store.getState().client;
 
-//     const email = user && user.data && user.data[1];
+    const email = user && user.data && user.data[1];
 
-//     const userUrl = window.location.href;
+    const userUrl = window.location.href;
 
-//     const isApplyPage = userUrl.includes('hae') ? true : false;
+    const isApplyPage = userUrl.includes('hae') ? true : false;
 
-//     if (email) {
-//       body = JSON.stringify({
-//         id: parseInt(job_detail[0]),
-//         companyBusinessId: parseInt(job_detail[1]),
-//         email,
-//         isApplyPage,
-//       });
-//     } else {
-//       body = JSON.stringify({
-//         id: parseInt(job_detail[0]),
-//         companyBusinessId: parseInt(job_detail[1]),
-//         isApplyPage,
-//       });
-//     }
+    if (email) {
+      body = JSON.stringify({
+        id: parseInt(job_detail[0]),
+        companyBusinessId: parseInt(job_detail[1]),
+        email,
+        isApplyPage,
+      });
+    } else {
+      body = JSON.stringify({
+        id: parseInt(job_detail[0]),
+        companyBusinessId: parseInt(job_detail[1]),
+        isApplyPage,
+      });
+    }
 
-//     result = axios.get(`https://localhost:7262/jobsEn/${id}`, url, body).then((res) => res.data)
+    result = axios.get(`https://localhost:7262/jobsEn/${id}`, url, body).then((res) => res.data)
 
-//     if (result.data !== 'job details does not exist') {
-//       resultParsed = JSON.parse(result.data)[0];
-//       ilmoId = resultParsed.ilmoitusnumero;
-//       jobUrl = `${mol_page_url}-api/v1/tyopaikat/${ilmoId}?kieli=fi`;
-//       yield put(getJobDetailsByIdSuccess(resultParsed));
-//     } else {
-//       ilmoId = result.data.ilmoitusnumero;
+    if (result.data !== 'job details does not exist') {
+      resultParsed = JSON.parse(result.data)[0];
+      ilmoId = resultParsed.ilmoitusnumero;
+      jobUrl = `${mol_page_url}-api/v1/tyopaikat/${ilmoId}?kieli=fi`;
+      yield put(getJobDetailsByIdSuccess(resultParsed));
+    } else {
+      ilmoId = result.data.ilmoitusnumero;
 
-//       yield put(getJobDetailsByIdSuccess(result.data));
-//     }
-//     jobDetailResult = yield call(apiOpenRequest, jobUrl);
-//     if (jobDetailResult.data) {
-//       jobDetailResult = jobDetailResult.data.response?.docs[0];
+      yield put(getJobDetailsByIdSuccess(result.data));
+    }
+    jobDetailResult = yield call(apiOpenRequest, jobUrl);
+    if (jobDetailResult.data) {
+      jobDetailResult = jobDetailResult.data.response?.docs[0];
 
-//       yield put(getWorkStartSuccess(jobDetailResult));
-//     }
-//   } catch (e) {
-//     console.warn(e);
-//   }
-// }
+      yield put(getWorkStartSuccess(jobDetailResult));
+    }
+  } catch (e) {
+    console.warn(e);
+  }
+}
 
 function* toggleFavoriteJobsSaga({ companyBusinessId, jobPostNumber, status }) {
   try {
@@ -315,9 +315,9 @@ export function* watchFilterJobs() {
   yield takeEvery(FILTER_JOBS, filterJobsSaga);
 }
 
-// export function* watchGetJobDetailsById() {
-//   yield takeEvery(GET_JOB_DETAILS_BY_ID, getJobDetailsByIdSaga);
-// }
+export function* watchGetJobDetailsById() {
+  yield takeEvery(GET_JOB_DETAILS_BY_ID, getJobDetailsByIdSaga);
+}
 
 export function* watchtoggleFavoriteJobs() {
   yield takeEvery(TOGGLE_FAVORITE_JOBS, toggleFavoriteJobsSaga);

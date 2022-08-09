@@ -5,6 +5,7 @@ export const EDIT_OFFER = 'EDIT_OFFER'
 
 export const FILTER_JOBS = 'FILTER_JOBS';
 export const FETCH_JOB_BY_ID = 'FETCH_JOB_BY_ID';
+export const SET_ID_TO_APPLY = 'SET_ID_TO_APPLY';
 export const FETCH_JOB_INFO = 'FETCH_JOB_INFO';
 export const FILTER_JOBS_SUCCESS = 'FILTER_JOBS_SUCCESS';
 export const GET_JOB_DETAILS_BY_ID = 'GET_JOB_DETAILS_BY_ID';
