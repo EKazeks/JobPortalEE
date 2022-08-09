@@ -35,8 +35,8 @@ function* sendApplicationSaga() {
     }
 
     // Back end needs in the following format
-    const url = `https://localhost:7262/addApplicationToOffer/${idToApply}`;
-    const body = {
+    const url = `https://localhost:7262/addApplicationToOffer`;
+    const body = ({
       id:idToApply,
       firstName:formValues.firstname,
       lastName:formValues.lastname,
@@ -45,9 +45,9 @@ function* sendApplicationSaga() {
       linkedIn:formValues.linkedin,
       description:formValues.application_description,
       favouriteCandidate:0,
-      note:'',
-      jobPostId:idToApply,
-    };
+      note:formValues.application_description,
+      jobpostId:idToApply,
+    });
     const result = yield call(apiManualPost,url,body);
 
     const data = {
@@ -56,7 +56,7 @@ function* sendApplicationSaga() {
       email: formValues.email,
     };
 
-    if (result.data) {
+    if (result.data.status != 400) {
       yield put(sendApplicationSuccess());
       yield put(populateSignupForm(data));
     } else {

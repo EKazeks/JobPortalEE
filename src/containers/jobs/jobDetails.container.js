@@ -4,9 +4,9 @@ import JobDetailsComponent from '../../components/jobs/jobDetails.component';
 import { getJobDetailsById, toggleFavoriteJobs, closeSnackbar, changePagination,fetchJobById,fetchJobInfo,setIdToApply } from '../../actions';
 
 class JobDetailsContainer extends React.Component {
-  // componentDidMount() {
-  //   this.props.getJobDetailsById(`${this.props.match.params.id}$$${this.props.match.params.companyId}`);
-  // }
+  componentDidMount() {
+    this.props.getJobDetailsById(`${this.props.match.params.id}$$${this.props.match.params.companyId}`);
+  }
 
   render() {
     return <JobDetailsComponent {...this.props} />;
