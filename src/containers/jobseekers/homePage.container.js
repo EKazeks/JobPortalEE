@@ -38,6 +38,7 @@ const mapStateToProps = state => {
       data.label = i18next.t(`category:${el.job_category}`);
       return data;
     });
+    console.log(jobcategoryList)
     return jobcategoryList;
   };
 
@@ -68,7 +69,7 @@ const mapStateToProps = state => {
     job_type: dashboard && dashboard.job_type && extractJobTypeData(dashboard.job_type.jobtypeList),
     job_hours: dashboard && dashboard.job_hours && extractJobHoursData(dashboard.job_hours.jobhoursList),
   };
-
+console.log(populateFormValues)
   return {
     initialValues: populateFormValues,
     dashboard,

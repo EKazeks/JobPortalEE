@@ -167,6 +167,7 @@ const AdvertFormComponent = ({
     if (isOfferCopied) {
       axios.get(`https://localhost:7262/jobsEn/${idToCopy}`).then((res) => {
         setCopiedJob(res.data);
+        console.log('copiied',res.data)
       });
     }
   }, []);

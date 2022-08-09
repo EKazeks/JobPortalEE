@@ -37,7 +37,7 @@ export const publishedTimes = [
   { value: 2 },
   { value: 4 },
   { value: 8 },
-  { value: 15 },
+ 
 ];
 
 export const emailLanguages = [

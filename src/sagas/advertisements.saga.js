@@ -7,6 +7,7 @@ import {
   initialize,
   getFormInitialValues,
   touch,
+  formValues,
 } from "redux-form";
 import {
   SAVE_AND_PUBLISH_ADVERTISEMENT,
@@ -149,6 +150,8 @@ function* saveAndPublishAdvertisementSaga() {
 
     const { advertisement, client, companyProfile } = store.getState();
     const formValues = getFormValues("vacancy")(store.getState());
+
+    console.log('FORMVALUESPUBLISH',formValues)
     const paymentInfoForm = getFormValues("paymentInfo")(store.getState());
     const uuid = client.user.data[2];
     const userRole = client.user.data[6].user_type;
@@ -355,7 +358,9 @@ function* getJobPostByPostIdSaga({id}) {
     const userRole = store.getState().client.user.data[6].user_type;
 
     const result = yield call(apiOpenRequest, url);
+    console.log("GETJOBBYPOSTID")
     const resultParsed = result.data;
+    console.log("GETJOBBYPOSTID",resultParsed)
     yield put(openAdToSeeAdInfoSuccess(resultParsed));
   } catch (error) {
     console.log(error);
@@ -399,7 +404,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     //const companyBusinessId = store.getState().jobs.companyBusinessId;
     const campaigns = store.getState().advertisement.campaigns;
     const userRole = store.getState().client.user.data[6].user_type;
-
+    /* const formValues = getFormValues("vacancy")(store.getState()); */
     const body = JSON.stringify({
       jobPostNumber: userRole === "admin" ? id.split("admin")[0] : id,
       //companyBusinessId: userRole === 'admin' ? id.split('admin')[1] : companyBusinessId,
@@ -416,8 +421,8 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       company_image,
       image_id,
       jobName,
-      titleSpecification,
-      workingTime,
+      jobCode,
+      jobDuration,
       jobTags,
       job_location,
       jobDescription,
@@ -431,19 +436,21 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       more_budget,
       marketing_budget,
       urlToApplyJob,
+      durationOfEmployment
     } = resultParsed;
-
+console.log()
     if (isToEdit) {
       yield put(change("vacancy", "jobPostNumber", jobPostNumber));
       // yield put(change('vacancy', 'company_id', company_id));
+      // yield put(change('vacancy', "value from inputfield", "value from api call"));
       if (company_image) {
         yield put(change("vacancy", "image_document", company_image));
         yield put(change("vacancy", "image_id", image_id));
       }
     }
     yield put(change("vacancy", "jobTitle", jobName));
-    yield put(change("vacancy", "jobType", titleSpecification));
-    yield put(change('vacancy', 'jobDuration', workingTime));
+    yield put(change("vacancy", "jobType", jobCode));
+    yield put(change('vacancy', 'jobDuration', durationOfEmployment));
     
     yield put(change("vacancy", "jobCategory", jobTags));
     yield put(
@@ -496,8 +503,8 @@ function* editVacancyFormSaga({ id, isToEdit }) {
       company_image,
       image_id,
       jobName,
-      titleSpecification,
-      workingTime,
+      jobCode,
+      jobDuration,
       jobTags,
       job_location,
       jobDescription,
@@ -511,6 +518,7 @@ function* editVacancyFormSaga({ id, isToEdit }) {
       more_budget,
       marketing_budget,
       urlToApplyJob,
+      durationOfEmployment
     } = resultParsed;
 
     if (isToEdit) {
@@ -522,8 +530,8 @@ function* editVacancyFormSaga({ id, isToEdit }) {
       }
     }
     yield put(change("editVacancy", "jobTitle", jobName));
-    yield put(change("editVacancy", "jobType", titleSpecification));
-    yield put(change("editVacancy", "jobDuration", workingTime));
+    yield put(change("editVacancy", "jobType",jobCode));
+    yield put(change("editVacancy", "jobDuration", durationOfEmployment));
     yield put(change("editVacancy", "jobCategory", jobTags));
     // yield put(change('editVacancy', 'jobLocation', resultParsed.jobPostAddress.address));
     yield put(change("editVacancy", "jobDescription", jobDescription));
@@ -567,8 +575,9 @@ function* updateJobPostSaga({ isToEdit, id }) {
       image_id,
       jobName,
       companyBusinessId,
-      titleSpecification,
-      workingTime,
+      jobCode,
+      jobDuration,
+      durationOfEmployment,
       jobTags,
       job_location,
       jobDescription,
@@ -593,8 +602,8 @@ function* updateJobPostSaga({ isToEdit, id }) {
       }
     }
     yield put(change("editVacancy", "jobName", jobName));
-    yield put(change("editVacancy", "jobType", titleSpecification));
-    yield put(change("editVacancy", "jobDuration", workingTime));
+    yield put(change("editVacancy", "jobType", jobCode));
+    yield put(change("editVacancy", "jobDuration", durationOfEmployment));
     yield put(change("editVacancy", "jobCategory", jobTags));
     yield put(
       change("editVacancy", "jobLocation", resultParsed.jobPostAddress.address)
