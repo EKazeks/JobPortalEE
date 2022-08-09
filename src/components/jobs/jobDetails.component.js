@@ -242,7 +242,6 @@ const JobDetailsComponent = ({
                                       jobsToRender.companyBusinessId, 
                                       jobsToRender.jobName, 
                                       jobsToRender.jobPostNumber,
-                                      jobsToRender.url,
                                       address.address)
                                   }}
                                  >

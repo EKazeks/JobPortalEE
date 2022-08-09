@@ -52,7 +52,7 @@ const AdminApplicantComponent = ({
 }) => {
   const { t } = useTranslation('common');
   const [jobsToRender, setJobsToRender] = useState([]);
-  const [applicants, setApplicants] = useState({})
+  const [applicants, setApplicants] = useState([])
   const {id} = useSelector((state) => state.jobs)
 
   useEffect(() => {
@@ -113,7 +113,7 @@ const AdminApplicantComponent = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {applicants.map(applicant => {
+            {applicants && applicants.map(applicant => {
               const details = {
                 firstname: applicant.firstName,
                 lastname: applicant.lastName,

@@ -38,7 +38,6 @@ const initialState = {
   companyName: '',
   companyBusinessId: 0,
   address: 0,
-  url: '',
   jobDetails: [],
   jobApplicantsId: 0,
   selectedPage: {
@@ -51,8 +50,8 @@ const initialState = {
   dashboard: [],
   notificationToggleBtn: false,
   workStart: null,
-  warnToDelete: false,
-  isToDeleteAdvertisementId: 0,
+  // warnToDelete: false,
+  // isToDeleteAdvertisementId: 0,
 };
 
 const jobsReducer = (state = initialState, action) => {
@@ -67,12 +66,12 @@ const jobsReducer = (state = initialState, action) => {
         ...state,
         warnToDelete: false,
       }
-      case WARN_TO_DELETE:
-        return {
-          ...state,
-          warnToDelete: true,
-          isToDeleteAdvertisementId: action.id,
-        };
+      // case WARN_TO_DELETE:
+      //   return {
+      //     ...state,
+      //     warnToDelete: true,
+      //     isToDeleteAdvertisementId: action.id,
+      //   };
     case EDIT_OFFER:
       return{
         ...state,
@@ -105,7 +104,6 @@ const jobsReducer = (state = initialState, action) => {
         jobName: action.jobName,
         jobPostNumber: action.jobPostNumber,
         address: action.address,
-        url: action.url
       }
     case GET_JOB_APPLICANTS:
       return {

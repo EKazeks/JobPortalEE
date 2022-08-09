@@ -180,7 +180,6 @@ export const fetchJobInfo = (companyName,companyBusinessId, jobName, jobPostNumb
   jobName,
   jobPostNumber,
   address,
-  url
 })
 
 export const editOffer = (id) => ({

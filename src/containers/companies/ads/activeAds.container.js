@@ -34,6 +34,7 @@ const mapDispatchToProps = {
   populateVacancyForm,
   deleteAdvertisement,
   deleteJobOffer,
+  openAdToSeeAdInfo,
   fetchJobById,
   fetchJobInfo,
   editOffer

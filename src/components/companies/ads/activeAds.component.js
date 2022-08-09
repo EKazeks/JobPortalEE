@@ -26,6 +26,7 @@ const ActiveAdsComponent = ({
   fetchJobById,
   fetchJobInfo,
   editOffer,
+  openAdToSeeAdInfo
 }) => {
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
@@ -35,7 +36,7 @@ const ActiveAdsComponent = ({
 
   useMemo(() => {
     axios.get(`https://localhost:7262/activeAds`).then((res) => {
-      setJobsToRender(res.data.filter(isFetched => isFetched.isFetched === 0 && isFetched.isDraft === 0));
+      setJobsToRender(res.data.filter(status => status.offerStatus === 'active'));
     });
   }, []);
 
@@ -134,6 +135,7 @@ const ActiveAdsComponent = ({
                           onClick={() => {
                             fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
                             fetchJobById(item.id)
+                            //openAdToSeeAdInfo(item.id)
                           }}
                         >
                           {item.jobName === null ? item.jobName : item.jobName},
@@ -235,6 +237,7 @@ const ActiveAdsComponent = ({
                               onClick={() => {
                                 fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
                                 fetchJobById(item.id)
+                                //openAdToSeeAdInfo(item.id)
                               }}
                             >
                               {t("common:openBtn")}

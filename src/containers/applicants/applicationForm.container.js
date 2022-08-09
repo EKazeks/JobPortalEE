@@ -47,6 +47,8 @@ const mapStateToProps = state => {
     applicant_cv: state.jobseekerProfile.profile.cv_document && state.jobseekerProfile.profile.cv_document[0].path,
     cv_filename: state.jobseekerProfile.profile.cv_document && state.jobseekerProfile.profile.cv_document[0].filename,
     showErrorMsg: state?.form?.applicationForm?.syncErrors?.application_description?.length > 0 ? true : false,
+    id: state.jobs.id,
+    address: state.jobs.address,
   };
 };
 
