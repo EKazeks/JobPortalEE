@@ -48,7 +48,7 @@ function* sendApplicationSaga() {
       note:formValues.application_description,
       jobpostId:idToApply,
     });
-    const result = yield call(apiManualPost,url,body);
+    const result = yield call(apiManualPost,url,JSON.stringify(body));
 
     const data = {
       firstName: formValues.firstname,
