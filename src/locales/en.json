@@ -413,7 +413,8 @@
   },
   "jobtype": {
     "jobType12": "Termless",
-    "jobType13": "Fixed Term"
+    "jobType13": "Fixed Term",
+    "jobTypeLabel": "Job duration"
   
   },
   "jobhours": {

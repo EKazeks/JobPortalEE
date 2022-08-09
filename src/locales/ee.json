@@ -412,7 +412,8 @@
     },
    "jobtype":{
       "jobType12": "tähtajatu",
-      "jobType13": "tähtajaline"
+      "jobType13": "tähtajaline",
+      "jobTypeLabel": "Töö kestus"
    
    },
    "jobhours":{

@@ -443,7 +443,8 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     }
     yield put(change("vacancy", "jobTitle", jobName));
     yield put(change("vacancy", "jobType", titleSpecification));
-    yield put(change("vacancy", "jobLocation", workingTime));
+    yield put(change('vacancy', 'jobDuration', workingTime));
+    
     yield put(change("vacancy", "jobCategory", jobTags));
     yield put(
       change("vacancy", "jobLocation", resultParsed.jobPostAddress.address)
@@ -591,7 +592,7 @@ function* updateJobPostSaga({ isToEdit, id }) {
       }
     }
     yield put(change("editVacancy", "jobName", jobName));
-    yield put(change("editVacancy", "titleSpecification", titleSpecification));
+    yield put(change("editVacancy", "jobType", titleSpecification));
     yield put(change("editVacancy", "jobDuration", workingTime));
     yield put(change("editVacancy", "jobCategory", jobTags));
     yield put(
