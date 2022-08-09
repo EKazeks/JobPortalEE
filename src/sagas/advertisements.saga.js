@@ -95,16 +95,50 @@ function* getAllCampaignsSaga() {
     console.log(error);
   }
 }
-function* getAllJobCategorySaga() {
+/* function* getAllJobCategorySaga() {
   try {
-    const url = `${API_SERVER}/GetJobCategories`;
+    const url = 'https://localhost:7262/jobsEn/getAllCategories';
+   
     const result = yield call(apiOpenRequest, url);
+   
     const resultParsed = JSON.parse(result.data);
     yield put(getAllJobCategorySuccess(resultParsed));
+   console.log('hello')
+  } catch (error) {
+    console.log(error);
+  }
+} */
+function* getAllJobCategorySaga() {
+  try {
+ 
+    const url = 'https://localhost:7262/getAllCategories';
+   
+    const result = yield call(apiOpenRequest, url);
+   
+    const categoryArray=result.data
+    
+    const jobCateg= [...categoryArray.reduce((map, obj) =>map.set(obj.jobCode, obj), new Map()).values()];
+    const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode );
+    const firstCategory={jobCode:"0",jobTags:""}
+    jobCateg.unshift(firstCategory)
+  const lastCategory={jobCode:`${jobCateg.length}`,jobTags:"Other"}
+  jobCateg.push(lastCategory)
+  const mapped=jobCateg.map(item => {
+   return {
+     id: parseInt(item.jobCode),
+     type: item.jobTags
+   };
+ });
+  
+    yield put(getAllJobCategorySuccess(mapped));
+    
+   
   } catch (error) {
     console.log(error);
   }
 }
+
+
 
 function* saveAndPublishAdvertisementSaga() {
   try {
@@ -571,7 +605,7 @@ function* updateJobPostSaga({ isToEdit, id }) {
     yield put(
       change("editVacancy", "is_email_notification", is_email_notification)
     );
-    yield put(change("editVacancy", "email", email));
+    yield put(change("editVacancy", email, email));
     yield put(change("editVacancy", "notice_frequency", notice_frequency));
   } catch (error) {
     console.log(error);
