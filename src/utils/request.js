@@ -51,10 +51,7 @@ export const apiManualPost = (url = 'https://localhost:7262/jobsEn', body, metho
     body,
   };
 
-  console.log("identify body : ",body) 
-  console.log("typeOf body : ",typeof body) 
-
-  return fetch(url,{headers,method:'POST',body:JSON.stringify(body)})
+  return fetch(url,options)
     .then(res => res.json())
     .then(data => ({ data }))
     .catch(error => ({ error }));
