@@ -156,6 +156,7 @@ import {
   DELETE_JOB_OFFER,
   GET_JOB_APPLICANTS,
   FETCH_JOB_INFO,
+  SET_ID_TO_APPLY
 } from "../constants";
 
 // get jobs offers
@@ -163,11 +164,16 @@ export const getJobsOffers = () => ({
   type: GET_JOBS_OFFERS_SUCCESS,
 });
 
-export const fetchJobById = (id,companyName, companyBusinessId, jobName, jobPostNumber) => ({
+export const fetchJobById = (id) => ({
   type: FETCH_JOB_BY_ID,
   id,
 });
-export const fetchJobInfo = (companyName,companyBusinessId, jobName, jobPostNumber,address) => ({
+
+export const setIdToApply = (id) => ({
+  type: SET_ID_TO_APPLY,
+  id,
+})
+export const fetchJobInfo = (companyName,companyBusinessId, jobName, jobPostNumber,address,url) => ({
   type: FETCH_JOB_INFO,
   companyName,
   companyBusinessId,

@@ -19,7 +19,8 @@ import {
   DELETE_JOB_OFFER,
   GET_JOB_APPLICANTS,
   FETCH_JOB_NAME_BY_ID,
-  FETCH_JOB_INFO
+  FETCH_JOB_INFO,
+  SET_ID_TO_APPLY
 } from "../constants";
 
 const initialState = {
@@ -28,6 +29,7 @@ const initialState = {
   apiFailed: false,
   isToEdit: false,
   id: 0,
+  idToApply:0,
   jobName: '',
   idToCopy:0,
   isOfferCopied:false,
@@ -88,6 +90,12 @@ const jobsReducer = (state = initialState, action) => {
         ...state,
         id: action.id,
       };
+      
+    case SET_ID_TO_APPLY:
+      return {
+        ...state,
+        idToApply:action.id
+      }
     case FETCH_JOB_INFO:
       return {
         ...state,
