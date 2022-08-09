@@ -133,8 +133,8 @@ const ActiveAdsComponent = ({
                         <h4
                           onClick={() => {
                             fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
-                            //fetchJobById(item.id)
-                            openAdToSeeAdInfo(item.id)
+                            fetchJobById(item.id)
+                            //openAdToSeeAdInfo(item.id)
                           }}
                         >
                           {item.jobName === null ? item.jobName : item.jobName},
@@ -235,8 +235,8 @@ const ActiveAdsComponent = ({
                               color="primary"
                               onClick={() => {
                                 fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
-                                //fetchJobById(item.id)
-                                openAdToSeeAdInfo(item.id)
+                                fetchJobById(item.id)
+                                //openAdToSeeAdInfo(item.id)
                               }}
                             >
                               {t("common:openBtn")}
