@@ -194,8 +194,8 @@ const AdvertFormComponent = ({
     }) 
  
  },[])
-  console.log(jobCategorys); 
-  console.log("jobCategories",jobCategories);
+/*   console.log(jobCategorys);  */
+  /* console.log("jobCategories",jobCategories); */
 
 
   useEffect(() => {
@@ -205,7 +205,7 @@ const AdvertFormComponent = ({
     });
 
 }, []);
-console.log("jobDuration",jobDuration)
+
 
   const { lang } = store.getState().language;
 

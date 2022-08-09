@@ -406,7 +406,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     });
     const result = yield call(apiManualRequest, url);
     const resultParsed = result.data;
-    console.log(resultParsed);
+    console.log("Populate Vacancy form",resultParsed)
     // console.log('resultParsed', resultParsed);
     // If we are populating from Draft Component, we are editing--> call UpdateJobPost API, it needs company_id && post_id which is being sent along with the vacancy form!
 
@@ -488,6 +488,7 @@ function* editVacancyFormSaga({ id, isToEdit }) {
     });
     const result = yield call(apiManualRequest, url);
     const resultParsed = result.data;
+    console.log("Edit Vacancy form",resultParsed)
     // If we are populating from Draft Component, we are editing--> call UpdateJobPost API, it needs company_id && post_id which is being sent along with the vacancy form!
 
     const {
