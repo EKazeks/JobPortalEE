@@ -177,7 +177,7 @@ export const JobCategoriesComponent = ({
     <div>
       <Field
         component={renderSelectField}
-        name="job_category"
+        name="jobCategory"
         label={hideLabel ? '' : `${t('category')} *`}
         id="job_category"
         fullWidth

@@ -622,7 +622,7 @@ function* updateAndPublishAdvertisementSaga() {
     const {
       jobName,
       jobCategory,
-      titleSpecification,
+      jobType,
       jobDuration,
       jobLocation,
       applicationUrl,
@@ -633,7 +633,7 @@ function* updateAndPublishAdvertisementSaga() {
       id,
       jobTitle: jobName,
       jobCategory,
-      jobType: titleSpecification,
+      jobType,
       jobDuration,
       jobLocation,
       applicationUrl,
