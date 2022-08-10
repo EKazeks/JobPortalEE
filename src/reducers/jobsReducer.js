@@ -66,12 +66,12 @@ const jobsReducer = (state = initialState, action) => {
         ...state,
         warnToDelete: false,
       }
-      // case WARN_TO_DELETE:
-      //   return {
-      //     ...state,
-      //     warnToDelete: true,
-      //     isToDeleteAdvertisementId: action.id,
-      //   };
+      case WARN_TO_DELETE:
+        return {
+          ...state,
+          warnToDelete: true,
+          isToDeleteAdvertisementId: action.id,
+        };
     case EDIT_OFFER:
       return{
         ...state,

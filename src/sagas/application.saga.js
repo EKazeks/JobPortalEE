@@ -14,8 +14,10 @@ import browserHistory from '../history';
 function* sendApplicationSaga() {
   try {
     const {idToApply} = store.getState().jobs;
+    const id = idToApply;
     const company_id = idToApply.split('JP')[0];
     const post_id = idToApply.split('JP')[1];
+    const {jobPostNumber} = store.getState().jobs;
     const uploadedCV = store.getState().jobs.uploadedDocument && store.getState().jobs.uploadedDocument[0];
     const cv_id_value = store.getState().jobseekerProfile.profile.cv_id;
     const cv_id = cv_id_value?.toString(); // optional chaining ?.
@@ -34,8 +36,8 @@ function* sendApplicationSaga() {
       delete formValues.cv_document;
     }
 
-    // Back end needs in the following format
-    const url = `https://localhost:7262/addApplicationToOffer`;
+    // Backend needs in the following format
+    const url = `https://localhost:7262/addApplicationToOffer/${id}`;
     const body = ({
       id:idToApply,
       firstName:formValues.firstname,

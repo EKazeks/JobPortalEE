@@ -1106,7 +1106,7 @@ export function* watchgetJobPostByPostIdSaga() {
   yield takeEvery(OPEN_AD_TO_SEE_AD_INFO, getJobPostByPostIdSaga);
 }
 export function* watchdeleteJobPostSaga() {
-  yield takeEvery(DELETE_ADVERTISEMENT, deleteJobPostSaga);
+  yield takeEvery(DELETE_JOB_OFFER, deleteJobPostSaga);
 }
 export function* watchupdateJobPostSaga() {
   yield takeEvery(UPDATE_ADVERTISEMENT, updateJobPostSaga);
