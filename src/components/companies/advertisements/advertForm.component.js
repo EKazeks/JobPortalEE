@@ -236,7 +236,7 @@ const AdvertFormComponent = ({
                 <JobCategoriesComponent jobCategories={jobCategorys} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <JobTypeComponent />
+                <JobTypeComponent id="jobType"/>
               </Grid>
               <Grid item xs={12} sm={6} id="jobDuration" name="jobDuration">
                 <JobHoursComponent />
