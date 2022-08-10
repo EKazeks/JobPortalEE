@@ -50,6 +50,8 @@ export const convertJobTypeToStr = (t, type) => {
   );
 };
 
+
+
 export const dateFormat = (date) => {
   const formatedDate = date.split("T", 10)[0].split("-");
   const newDateFormat =
