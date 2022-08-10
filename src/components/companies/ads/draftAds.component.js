@@ -41,9 +41,9 @@ const DraftAds = ({
       setJobs(res.data)
       setDraftJobs(res.data.filter(isDraft => isDraft.isDraft === 1))
     })
-    console.log(draftJobs);
+   
   },[])
-
+  console.log("draftJOBS",draftJobs);
   return (
     <div className="container">
       <h3 style={{ margin: '30px 0px' }}>

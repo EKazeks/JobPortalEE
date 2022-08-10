@@ -29,7 +29,7 @@ export const jobType = [
   { value: 12 },
   { value: 13 },
   { value: 14 },
-  { value: 15 },
+ 
 ];
 
 export const publishedTimes = [
@@ -62,7 +62,7 @@ export const JobTypeComponent = ({ margin, hideLabel }) => {
         <option value="12">{t("jobType12")}</option>
         <option value="13">{t("jobType13")}</option>
         <option value="14">{t("jobType14")}</option>
-        <option value="15">{t("jobType15")}</option>
+       
       </Field>
     </div>
   );
@@ -178,7 +178,7 @@ export const JobCategoriesComponent = ({
     <div>
       <Field
         component={renderSelectField}
-        name="job_category"
+        name="jobCategory"
         label={hideLabel ? '' : `${t('category')} *`}
         id="job_category"
         fullWidth

@@ -155,6 +155,7 @@ const AdvertFormComponent = ({
   const { t } = useTranslation("advertForm", "campaigns");
   const [copiedJob, setCopiedJob] = useState({});
   const[jobCategorys,setJobCategorys]=useState([])
+  const [jobDuration,setJobDuration]=useState([]);
   const storedPath =
     Array.isArray(
       formValueSelector("vacancy")(store.getState(), "image_document")
@@ -166,9 +167,12 @@ const AdvertFormComponent = ({
     if (isOfferCopied) {
       axios.get(`https://localhost:7262/jobsEn/${idToCopy}`).then((res) => {
         setCopiedJob(res.data);
+        console.log('copiied',res.data)
       });
     }
   }, []);
+  
+ 
 
   //fetching jobsCategories and storing them in jobCategorys state
   useEffect(() => {
@@ -191,8 +195,18 @@ const AdvertFormComponent = ({
     }) 
  
  },[])
-  console.log(jobCategorys); 
-  console.log("jobCategories",jobCategories);
+/*   console.log(jobCategorys);  */
+  /* console.log("jobCategories",jobCategories); */
+
+
+  useEffect(() => {
+   
+    axios.get('https://localhost:7262/jobsEn').then((res) => {
+      setJobDuration(res.data);
+    });
+
+}, []);
+
 
   const { lang } = store.getState().language;
 
@@ -233,7 +247,7 @@ const AdvertFormComponent = ({
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <JobCategoriesComponent jobCategories={jobCategorys} />
+                <JobCategoriesComponent jobCategories={jobCategories} />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <JobTypeComponent id="jobType"/>
@@ -254,7 +268,7 @@ const AdvertFormComponent = ({
                 <Field
                   component={renderDatePicker}
                   id="lastApplicationDate"
-                  label={t("Last application date")}
+                  label={t("field5")}
                   name="lastApplicationDate"
                   required
                 />

@@ -7,6 +7,7 @@ import {
   initialize,
   getFormInitialValues,
   touch,
+  formValues,
 } from "redux-form";
 import {
   SAVE_AND_PUBLISH_ADVERTISEMENT,
@@ -149,6 +150,8 @@ function* saveAndPublishAdvertisementSaga() {
 
     const { advertisement, client, companyProfile } = store.getState();
     const formValues = getFormValues("vacancy")(store.getState());
+
+    console.log('FORMVALUESPUBLISH',formValues)
     const paymentInfoForm = getFormValues("paymentInfo")(store.getState());
     const uuid = client.user.data[2];
     const userRole = client.user.data[6].user_type;
@@ -263,6 +266,9 @@ function* saveAndPublishAdvertisementSaga() {
     }
     // SAVING AND PUBLISHING JOBPOST
     axios.post(url,body).then((res)=>{response=res})
+
+  /*   const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
+    const parsedResult = JSON.parse(result.data); */
     if(response === 400)
     {
       yield put(saveAndPublishAdvertisement())
@@ -386,7 +392,7 @@ function* getAllAdsByStatusSaga({ status }) {
     });
 
     const result = yield call(apiManualPost, url, body);
-    const resultParsed = result.data;
+    const resultParsed = JSON.parse(result.data);
     yield put(getAllAdsByStatusSuccess(status, resultParsed));
   } catch (error) {
     console.log(error);
@@ -399,14 +405,14 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     //const companyBusinessId = store.getState().jobs.companyBusinessId;
     const campaigns = store.getState().advertisement.campaigns;
     const userRole = store.getState().client.user.data[6].user_type;
-
+    /* const formValues = getFormValues("vacancy")(store.getState()); */
     const body = JSON.stringify({
       jobPostNumber: userRole === "admin" ? id.split("admin")[0] : id,
       //companyBusinessId: userRole === 'admin' ? id.split('admin')[1] : companyBusinessId,
     });
     const result = yield call(apiManualRequest, url);
     const resultParsed = result.data;
-    console.log(resultParsed);
+    console.log("Populate Vacancy form",resultParsed)
     // console.log('resultParsed', resultParsed);
     // If we are populating from Draft Component, we are editing--> call UpdateJobPost API, it needs company_id && post_id which is being sent along with the vacancy form!
 
@@ -416,8 +422,8 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       company_image,
       image_id,
       jobName,
-      titleSpecification,
-      workingTime,
+      jobCode,
+      jobDuration,
       jobTags,
       job_location,
       jobDescription,
@@ -431,19 +437,22 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       more_budget,
       marketing_budget,
       urlToApplyJob,
+      durationOfEmployment
     } = resultParsed;
 
     if (isToEdit) {
       yield put(change("vacancy", "jobPostNumber", jobPostNumber));
       // yield put(change('vacancy', 'company_id', company_id));
+      // yield put(change('vacancy', "value from inputfield", "value from api call"));
       if (company_image) {
         yield put(change("vacancy", "image_document", company_image));
         yield put(change("vacancy", "image_id", image_id));
       }
     }
     yield put(change("vacancy", "jobTitle", jobName));
-    yield put(change("vacancy", "jobType", titleSpecification));
-    yield put(change("vacancy", "jobLocation", workingTime));
+    yield put(change("vacancy", "jobType", jobCode));
+    yield put(change('vacancy', 'jobDuration', durationOfEmployment));
+    
     yield put(change("vacancy", "jobCategory", jobTags));
     yield put(
       change("vacancy", "jobLocation", resultParsed.jobPostAddress.address)
@@ -478,7 +487,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
 
 function* editVacancyFormSaga({ id, isToEdit }) {
   try {
-    const url = `${API_SERVER_EST}/${id}`;
+    const url = `https://localhost:7262/activeAds`;
     const campaigns = store.getState().advertisement.campaigns;
     const userRole = store.getState().client.user.data[6].user_type;
 
@@ -487,6 +496,7 @@ function* editVacancyFormSaga({ id, isToEdit }) {
     });
     const result = yield call(apiManualRequest, url);
     const resultParsed = result.data;
+    console.log("Edit Vacancy form",resultParsed)
     // If we are populating from Draft Component, we are editing--> call UpdateJobPost API, it needs company_id && post_id which is being sent along with the vacancy form!
 
     const {
@@ -494,8 +504,8 @@ function* editVacancyFormSaga({ id, isToEdit }) {
       company_image,
       image_id,
       jobName,
-      titleSpecification,
-      workingTime,
+      jobCode,
+      jobDuration,
       jobTags,
       job_location,
       jobDescription,
@@ -509,6 +519,7 @@ function* editVacancyFormSaga({ id, isToEdit }) {
       more_budget,
       marketing_budget,
       urlToApplyJob,
+      durationOfEmployment
     } = resultParsed;
 
     if (isToEdit) {
@@ -520,8 +531,8 @@ function* editVacancyFormSaga({ id, isToEdit }) {
       }
     }
     yield put(change("editVacancy", "jobTitle", jobName));
-    yield put(change("editVacancy", "jobType", titleSpecification));
-    yield put(change("editVacancy", "jobDuration", workingTime));
+    yield put(change("editVacancy", "jobType",jobCode));
+    yield put(change("editVacancy", "jobDuration", durationOfEmployment));
     yield put(change("editVacancy", "jobCategory", jobTags));
     // yield put(change('editVacancy', 'jobLocation', resultParsed.jobPostAddress.address));
     yield put(change("editVacancy", "jobDescription", jobDescription));
@@ -565,8 +576,9 @@ function* updateJobPostSaga({ isToEdit, id }) {
       image_id,
       jobName,
       companyBusinessId,
-      titleSpecification,
-      workingTime,
+      jobCode,
+      jobDuration,
+      durationOfEmployment,
       jobTags,
       job_location,
       jobDescription,
@@ -591,8 +603,8 @@ function* updateJobPostSaga({ isToEdit, id }) {
       }
     }
     yield put(change("editVacancy", "jobName", jobName));
-    yield put(change("editVacancy", "titleSpecification", titleSpecification));
-    yield put(change("editVacancy", "jobDuration", workingTime));
+    yield put(change("editVacancy", "jobType", jobCode));
+    yield put(change("editVacancy", "jobDuration", durationOfEmployment));
     yield put(change("editVacancy", "jobCategory", jobTags));
     yield put(
       change("editVacancy", "jobLocation", resultParsed.jobPostAddress.address)
@@ -621,7 +633,7 @@ function* updateAndPublishAdvertisementSaga() {
     const {
       jobName,
       jobCategory,
-      titleSpecification,
+      jobType,
       jobDuration,
       jobLocation,
       applicationUrl,
@@ -632,7 +644,7 @@ function* updateAndPublishAdvertisementSaga() {
       id,
       jobTitle: jobName,
       jobCategory,
-      jobType: titleSpecification,
+      jobType,
       jobDuration,
       jobLocation,
       applicationUrl,
@@ -642,6 +654,7 @@ function* updateAndPublishAdvertisementSaga() {
     };
 
     axios.patch(url,body).then((res)=>{response=res})
+    console.log(response)
     if(response === 400)
     {
       yield put(saveAndPublishAdvertisementFailed())

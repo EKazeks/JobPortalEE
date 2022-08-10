@@ -411,11 +411,11 @@
       "appliedJobsTitle": "Tööle kandideerimised"
     },
    "jobtype":{
-      "jobType12": "Kehtiv kuni täiendava teadaandeni",
-      "jobType13": "Ajutine",
-      "jobType14": "Vähem kui 3 kuud",
-      "jobType15": "Hooajaline töö",
-      "jobTypeLabel": "Töö kestus" 
+      "jobType12": "tähtajatu",
+      "jobType13": "tähtajaline",
+      "jobType14": "muu",
+      "jobTypeLabel": "Töö kestus"
+   
    },
    "jobhours":{
       "jobHours31": "Täiskohaga",
