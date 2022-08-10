@@ -80,12 +80,12 @@ export const jobPostFormValidate = values => {
     errors.email = i18next.t('validation:fieldRequired');
   }
   if (
-    values.application_link &&
+    values.applicationUrl &&
     !/^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm.test(
-      values.application_link,
+      values.applicationUrl,
     )
   ) {
-    errors.application_link = i18next.t('validation:urlInvalid');
+    errors.applicationUrl = i18next.t('validation:urlInvalid');
   }
   return errors;
 };

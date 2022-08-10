@@ -490,7 +490,7 @@ function* editVacancyFormSaga({ id, isToEdit }) {
     const url = `https://localhost:7262/activeAds`;
     const campaigns = store.getState().advertisement.campaigns;
     const userRole = store.getState().client.user.data[6].user_type;
-
+    console.log('CAMPIGNS',campaigns)
     const body = JSON.stringify({
       jobPostNumber: userRole === "admin" ? id.split("admin")[0] : id,
     });

@@ -155,7 +155,7 @@ const AdvertFormComponent = ({
   const { t } = useTranslation("advertForm", "campaigns");
   const [copiedJob, setCopiedJob] = useState({});
   const[jobCategorys,setJobCategorys]=useState([])
-  const [jobDuration,setJobDuration]=useState([]);
+  
   const storedPath =
     Array.isArray(
       formValueSelector("vacancy")(store.getState(), "image_document")
@@ -199,13 +199,13 @@ const AdvertFormComponent = ({
   /* console.log("jobCategories",jobCategories); */
 
 
-  useEffect(() => {
+/*   useEffect(() => {
    
     axios.get('https://localhost:7262/jobsEn').then((res) => {
       setJobDuration(res.data);
     });
 
-}, []);
+}, []); */
 
 
   const { lang } = store.getState().language;
