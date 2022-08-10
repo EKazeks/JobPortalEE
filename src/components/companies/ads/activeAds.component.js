@@ -26,19 +26,38 @@ const ActiveAdsComponent = ({
   fetchJobById,
   fetchJobInfo,
   editOffer,
-  openAdToSeeAdInfo
+  openAdToSeeAdInfo,
 }) => {
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
   const [toEdit, setToEdit] = useState();
   const [jobCategorys, setJobCategorys] = useState([]);
+  const [offerDeleted, setOfferDeleted] = useState(false);
 
-  useMemo(() => {
+  useEffect(() => {
     axios.get(`https://localhost:7262/activeAds`).then((res) => {
-      setJobsToRender(res.data.filter(status => status.offerStatus === 'active'));
+      setJobsToRender(
+        res.data.filter((status) => status.offerStatus === "active")
+      );
     });
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setJobsToRender([]);
+
+      await axios.get(`https://localhost:7262/activeAds`).then((res) => {
+        setJobsToRender(
+          res.data.filter((status) => status.offerStatus === "active")
+        );
+      });
+
+      setOfferDeleted(false);
+    };
+
+    fetchData();
+  }, [offerDeleted === true]);
 
   const updateSize = () => {
     setIsDesktop(window.innerWidth >= 1440);
@@ -49,30 +68,6 @@ const ActiveAdsComponent = ({
   });
 
   return (
-    //  <div>
-    //   {jobsToRender.map(job => {
-
-    //     return (
-    //       <div key={job.id}>
-    //       <Grid>
-    //         <div>
-    //           <h1>
-    //             {applicants && applicants.map((applicant) => {
-    //               return (
-    //                 <h1>
-    //                   {applicant.firstName}
-
-    //                 </h1>
-    //               )
-    //             })}
-    //             {/* {console.log(applicants.length)} */}
-    //           </h1>
-    //         </div>
-    //       </Grid>
-    //       </div>
-    //     )
-    //   })}
-    //   </div>
     <div className="container">
       <Grid container style={{ margin: "30px 0px" }}>
         <Grid item sm={10}>
@@ -133,8 +128,13 @@ const ActiveAdsComponent = ({
                       >
                         <h4
                           onClick={() => {
-                            fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
-                            fetchJobById(item.id)
+                            fetchJobInfo(
+                              item.companyName,
+                              item.companyBusinessId,
+                              item.jobName,
+                              item.jobPostNumber
+                            );
+                            fetchJobById(item.id);
                             //openAdToSeeAdInfo(item.id)
                           }}
                         >
@@ -182,7 +182,11 @@ const ActiveAdsComponent = ({
                   </Grid>
                   <Grid item md={3} style={{ color: "#34495E " }}>
                     <div>
-                      <h5>{item.dateOfApplication.charAt(2) === '.' ? item.dateOfApplication  : dateFormat(item.dateOfApplication)}</h5>
+                      <h5>
+                        {item.dateOfApplication.charAt(2) === "."
+                          ? item.dateOfApplication
+                          : dateFormat(item.dateOfApplication)}
+                      </h5>
                     </div>
                   </Grid>
                   <Grid item md={4}>
@@ -235,8 +239,13 @@ const ActiveAdsComponent = ({
                               }
                               color="primary"
                               onClick={() => {
-                                fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
-                                fetchJobById(item.id)
+                                fetchJobInfo(
+                                  item.companyName,
+                                  item.companyBusinessId,
+                                  item.jobName,
+                                  item.jobPostNumber
+                                );
+                                fetchJobById(item.id);
                                 //openAdToSeeAdInfo(item.id)
                               }}
                             >
@@ -258,7 +267,7 @@ const ActiveAdsComponent = ({
         warnToDeleteModal
         handleClick={() => {
           deleteJobOffer(isToDeleteAdvertisementId);
-          changeRoute();
+          setOfferDeleted(true);
         }}
       />
       <div className="pagination-body">
