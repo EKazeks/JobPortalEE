@@ -414,6 +414,7 @@
   "jobtype": {
     "jobType12": "Termless",
     "jobType13": "Fixed Term",
+    "jobType14": "Other",
     "jobTypeLabel": "Job duration"
   
   },

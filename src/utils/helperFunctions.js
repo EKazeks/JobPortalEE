@@ -45,7 +45,7 @@ export const convertJobTypeToStr = (t, type) => {
       {type === "12" && t("jobtype:jobType12")}
       {type === "13" && t("jobtype:jobType13")}
       {type === "14" && t("jobtype:jobType14")}
-      {type === "15" && t("jobtype:jobType15")}
+      
     </>
   );
 };

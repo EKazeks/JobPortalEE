@@ -29,7 +29,7 @@ export const jobType = [
   { value: 12 },
   { value: 13 },
   { value: 14 },
-  { value: 15 },
+ 
 ];
 
 export const publishedTimes = [
@@ -37,7 +37,7 @@ export const publishedTimes = [
   { value: 2 },
   { value: 4 },
   { value: 8 },
- 
+  { value: 15 },
 ];
 
 export const emailLanguages = [
@@ -61,6 +61,7 @@ export const JobTypeComponent = ({ margin, hideLabel }) => {
         <option value="" />
         <option value="12">{t("jobType12")}</option>
         <option value="13">{t("jobType13")}</option>
+        <option value="14">{t("jobType14")}</option>
        
       </Field>
     </div>

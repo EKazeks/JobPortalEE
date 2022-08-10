@@ -266,6 +266,9 @@ function* saveAndPublishAdvertisementSaga() {
     }
     // SAVING AND PUBLISHING JOBPOST
     axios.post(url,body).then((res)=>{response=res})
+
+  /*   const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
+    const parsedResult = JSON.parse(result.data); */
     if(response === 400)
     {
       yield put(saveAndPublishAdvertisement())
@@ -358,9 +361,7 @@ function* getJobPostByPostIdSaga({id}) {
     const userRole = store.getState().client.user.data[6].user_type;
 
     const result = yield call(apiOpenRequest, url);
-    console.log("GETJOBBYPOSTID")
     const resultParsed = result.data;
-    console.log("GETJOBBYPOSTID",resultParsed)
     yield put(openAdToSeeAdInfoSuccess(resultParsed));
   } catch (error) {
     console.log(error);
@@ -391,7 +392,7 @@ function* getAllAdsByStatusSaga({ status }) {
     });
 
     const result = yield call(apiManualPost, url, body);
-    const resultParsed = result.data;
+    const resultParsed = JSON.parse(result.data);
     yield put(getAllAdsByStatusSuccess(status, resultParsed));
   } catch (error) {
     console.log(error);
@@ -438,7 +439,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       urlToApplyJob,
       durationOfEmployment
     } = resultParsed;
-console.log()
+
     if (isToEdit) {
       yield put(change("vacancy", "jobPostNumber", jobPostNumber));
       // yield put(change('vacancy', 'company_id', company_id));
@@ -486,7 +487,7 @@ console.log()
 
 function* editVacancyFormSaga({ id, isToEdit }) {
   try {
-    const url = `${API_SERVER_EST}/${id}`;
+    const url = `https://localhost:7262/activeAds`;
     const campaigns = store.getState().advertisement.campaigns;
     const userRole = store.getState().client.user.data[6].user_type;
 
@@ -653,6 +654,7 @@ function* updateAndPublishAdvertisementSaga() {
     };
 
     axios.patch(url,body).then((res)=>{response=res})
+    console.log(response)
     if(response === 400)
     {
       yield put(saveAndPublishAdvertisementFailed())

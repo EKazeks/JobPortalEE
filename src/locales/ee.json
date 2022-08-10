@@ -413,6 +413,7 @@
    "jobtype":{
       "jobType12": "tähtajatu",
       "jobType13": "tähtajaline",
+      "jobType14": "muu",
       "jobTypeLabel": "Töö kestus"
    
    },
