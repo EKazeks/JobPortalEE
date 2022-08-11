@@ -125,19 +125,11 @@ const JobDetailsComponent = ({
     });
   }, []);
 
-/*   useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
-      setJobsToRender(res.data)
-      //setDateOfApplication(dateFormat(res.data.dateOfApplication))
-      setAddress(res.data.jobPostAddress.address)
-    });
-  }, []); */
-
   const { t } = useTranslation("jobDetails", "jobhours", "jobtype");
   const heroImage = jobsToRender.logo && jobsToRender.logo[0].path;
   const title = `${jobsToRender?.jobName} - ${jobsToRender?.companyName} | Avoimet työpaikat`;
   const selectedPage = 1;
-  console.log('jobstoRender',jobsToRender)
+
       return (
         <div>
           <div className="container">
@@ -165,7 +157,7 @@ const JobDetailsComponent = ({
                     <strong className={classes.metaDataTitle}>
                       <span>{t("applyPeriod")}: </span>
                       <span className={classes.metaData}>
-                      {jobsToRender.dateOfApplication?.lastIndexOf(":00.000Z") ? dateFormat(jobsToRender.dateOfApplication) : jobsToRender.dateOfApplication}
+                      {jobsToRender.dateOfApplication === jobsToRender.dateOfApplication ? jobsToRender.dateOfApplication : dateFormat(jobsToRender.dateOfApplication)}
                       </span>
                     </strong>
                   </h6>
@@ -174,6 +166,7 @@ const JobDetailsComponent = ({
                       <span>{t("jobtype:jobTypeLabel")}: </span>
                       <span className={classes.metaData}>
                       {convertJobTypeToStr(t, jobsToRender.titleSpecification)}
+                      {jobsToRender.isPermanentPlace === 1  && jobsToRender.isPartPlace === 1 ? <span>Termless</span> : jobsToRender.isPermanentPlace === 0  && jobsToRender.isPartPlace === 1 ? <span>Fixed Term</span> : <span>Termless</span>}
                       </span>
                     </strong>
                   </h6>
@@ -182,7 +175,8 @@ const JobDetailsComponent = ({
                       <span>{t("jobhours:jobHoursLabel")}: </span>
                       <span className={classes.metaData}>
                       {convertJobHoursToStr(t, jobsToRender.durationOfEmployment)}
-                   
+                      {jobsToRender.durationOfEmployment === 'tähtajatu' && <span>Full-time</span>}
+                      {jobsToRender.durationOfEmployment === 'tähtajaline' && <span>Part-time</span>}
                       </span>
                     </strong>
                   </h6>

@@ -185,7 +185,7 @@ const JobsComponent = ({
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn`).then((res) => {
-      setJobsToRender(res.data);
+      setJobsToRender(res.data.filter((activeJobs) => activeJobs.offerStatus === 'active'));
     });
   }, [])
 

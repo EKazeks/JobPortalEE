@@ -332,7 +332,7 @@ const AdvertFormComponent = ({
                   name="jobDescription"
                   placeholder={t("field4")}
                   id="jobDescription"
-                  
+                  required
                 />
               </Grid>
             </Grid>

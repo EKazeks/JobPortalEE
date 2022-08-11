@@ -45,7 +45,7 @@ export const signInValidate = values => {
 export const jobPostFormValidate = values => {
   const errors = {};
   const extra_service = store.getState().advertisement.extraService;
-  const requiredFields = ['jobTitle', 'jobCategory', 'jobType', 'jobDuration', 'lastApplicationDate', 'jobLocation', 'is_agreement'];
+  const requiredFields = ['jobTitle', 'jobCategory', 'jobType', 'jobDuration', 'lastApplicationDate', 'jobLocation', 'is_agreement', 'jobDescription'];
 
   if (!extra_service.sos) {
     requiredFields.push('job_description');
@@ -80,12 +80,12 @@ export const jobPostFormValidate = values => {
     errors.email = i18next.t('validation:fieldRequired');
   }
   if (
-    values.application_link &&
+    values.applicationUrl &&
     !/^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm.test(
-      values.application_link,
+      values.applicationUrl,
     )
   ) {
-    errors.application_link = i18next.t('validation:urlInvalid');
+    errors.applicationUrl = i18next.t('validation:urlInvalid');
   }
   return errors;
 };

@@ -48,7 +48,7 @@ const AppliedJobsComponent = ({ appliedJobs, advertPages, changeAdvertPage, sele
                     <div>
                       <span>
                         {t('common:deadline')}:
-                        <span style={{ color: 'red', margin: '0 5px' }}>{post.dateOfApplication}</span>
+                        <span style={{ color: 'red', margin: '0 5px' }}>{post.dateOfApplication.lastIndexOf(':00.000Z') ? dateFormat(post.dateOfApplication) : post.dateOfApplication}</span>
                       </span>
                     </div>
                   </Grid>
