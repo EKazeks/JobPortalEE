@@ -156,7 +156,8 @@ import {
   DELETE_JOB_OFFER,
   GET_JOB_APPLICANTS,
   FETCH_JOB_INFO,
-  SET_ID_TO_APPLY
+  SET_ID_TO_APPLY,
+  DELETE_SUCCESS,
 } from "../constants";
 
 // get jobs offers
@@ -172,26 +173,33 @@ export const fetchJobById = (id) => ({
 export const setIdToApply = (id) => ({
   type: SET_ID_TO_APPLY,
   id,
-})
-export const fetchJobInfo = (companyName,companyBusinessId, jobName, jobPostNumber,address,url) => ({
+});
+export const fetchJobInfo = (
+  companyName,
+  companyBusinessId,
+  jobName,
+  jobPostNumber,
+  address,
+  url
+) => ({
   type: FETCH_JOB_INFO,
   companyName,
   companyBusinessId,
   jobName,
   jobPostNumber,
   address,
-})
+});
 
 export const editOffer = (id) => ({
-  type:EDIT_OFFER,
+  type: EDIT_OFFER,
   id,
-})
+});
 
-export const fetchJobApplicants = (id,payload) => ({
+export const fetchJobApplicants = (id, payload) => ({
   type: GET_JOB_APPLICANTS,
   id,
   //payload
-})
+});
 
 // export const getJobsOffersSuccess = () => ({
 //   type: GET_JOBS_OFFERS_SUCCESS,
@@ -257,7 +265,7 @@ export const getAllAdsByStatus = (status) => ({
   type: GET_ALL_ADS_BY_STATUS,
   status,
 });
-export const getAllAdsByStatusSuccess = ( result) => ({
+export const getAllAdsByStatusSuccess = (result) => ({
   type: GET_ALL_ADS_BY_STATUS_SUCCESS,
   result,
 });
@@ -364,7 +372,7 @@ export const updateAndPublishAdvertisementSuccess = () => ({
 
 export const saveAndPublishAdvertisementSuccess = (payload) => ({
   type: SAVE_AND_PUBLISH_ADVERTISEMENT_SUCCESS,
-  payload: payload
+  payload: payload,
 });
 
 export const saveAdvertisementAsDraft = () => ({
@@ -476,10 +484,8 @@ export const populateVacancyFormSuccess = (campaignDetails, isToEdit) => ({
 export const editVacancyForm = (id, isToEdit) => ({
   type: EDIT_VACANCY_FORM,
   id,
-  isToEdit
-})
-
-
+  isToEdit,
+});
 
 // POPULATE SIGNUP FORM
 export const populateSignupForm = (applicantData) => ({
@@ -489,10 +495,10 @@ export const populateSignupForm = (applicantData) => ({
 
 // UPDATE ADVERTISEMENT
 
-export const updateAdvertisement = (id,isToEdit) => ({
+export const updateAdvertisement = (id, isToEdit) => ({
   type: UPDATE_ADVERTISEMENT,
   id,
-  isToEdit
+  isToEdit,
 });
 export const changeCampaign = (campaign) => ({
   type: CHANGE_CAMPAIGN,
@@ -514,7 +520,7 @@ export const changeActivePostToInactive = (id) => ({
 export const deleteJobOffer = (id) => ({
   type: DELETE_JOB_OFFER,
   id,
-})
+});
 
 export const deleteAdvertisement = (id) => ({
   type: DELETE_ADVERTISEMENT,
@@ -523,6 +529,10 @@ export const deleteAdvertisement = (id) => ({
 export const warnToDelete = (id) => ({
   type: WARN_TO_DELETE,
   id,
+});
+
+export const deleteSuccess = () => ({
+  type: DELETE_SUCCESS,
 });
 
 // GET ALL CAMAPIGNS
@@ -647,11 +657,7 @@ export const updateEmailNotification = () => ({
 });
 
 // FAVORITE JOBS
-export const toggleFavoriteJobs = (
-  companyBusinessId,
-  id,
-  status
-) => ({
+export const toggleFavoriteJobs = (companyBusinessId, id, status) => ({
   type: TOGGLE_FAVORITE_JOBS,
   companyBusinessId,
   id,
@@ -845,10 +851,10 @@ export const updateJobApplicationDetails = (
   update,
 });
 
-export const editInterviewDetails = (isToEdit,id) => ({
+export const editInterviewDetails = (isToEdit, id) => ({
   type: EDIT_INTERVIEW_DETAILS,
   isToEdit,
-  id
+  id,
 });
 
 export const warnToDeleteApplication = (id) => ({

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Paper, Button } from "@material-ui/core";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
@@ -9,8 +9,6 @@ import { customURL, dateFormat } from "../../../utils/helperFunctions";
 import CustomizedDialogs from "../../../utils/customizedDialog";
 import i18n from "../../../utils/i18n";
 import axios from "axios";
-import { changeRoute } from "../../../actions";
-import { useMemo } from "react";
 
 const ActiveAdsComponent = ({
   warnToDelete,
@@ -18,50 +16,42 @@ const ActiveAdsComponent = ({
   deleteJobOffer,
   changeAdvertPage,
   selectedPage,
-  advertPages,
-  openAdToSeeJobPost,
   postAdvertisement,
   showDialog,
   isToDeleteAdvertisementId,
   fetchJobById,
   fetchJobInfo,
   editOffer,
+  deleteAdvertisement,
   openAdToSeeAdInfo,
 }) => {
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
   const [toEdit, setToEdit] = useState();
-  const [jobCategorys, setJobCategorys] = useState([]);
+  const [componentDeployed, setComponentDeployed] = useState(false);
   const [offerDeleted, setOfferDeleted] = useState(false);
 
-  useEffect(() => {
-    axios.get(`https://localhost:7262/activeAds`).then((res) => {
-      setJobsToRender(
-        res.data.filter((status) => status.offerStatus === "active")
-      );
-    });
-  }, []);
+  const refreshPage = () => {
+    window.location.reload();
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setJobsToRender([]);
-
+    const getData = async () => {
       await axios.get(`https://localhost:7262/activeAds`).then((res) => {
         setJobsToRender(
           res.data.filter((status) => status.offerStatus === "active")
         );
       });
-
-      setOfferDeleted(false);
     };
-
-    fetchData();
-  }, [offerDeleted === true]);
+    getData();
+    setComponentDeployed(true);
+  }, [componentDeployed === false]);
 
   const updateSize = () => {
     setIsDesktop(window.innerWidth >= 1440);
   };
+
   useEffect(() => {
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
@@ -267,7 +257,7 @@ const ActiveAdsComponent = ({
         warnToDeleteModal
         handleClick={() => {
           deleteJobOffer(isToDeleteAdvertisementId);
-          setOfferDeleted(true);
+          refreshPage();
         }}
       />
       <div className="pagination-body">

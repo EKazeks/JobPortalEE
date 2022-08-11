@@ -32,11 +32,11 @@ import {
   ADD_EXTRA_SERVICE,
   SAVE_NEW_CAMPAIGN,
   AUTO_EMAIL_TO_APPLICANT,
-} from '../constants';
+} from "../constants";
 
 const initialState = {
-  postRequesSucces:false,
-  postRequesFailure:false,
+  postRequesSucces: false,
+  postRequesFailure: false,
   showSpinner: false,
   isSaveAndPublishAdvertisement: false,
   isDraft: 0,
@@ -54,10 +54,10 @@ const initialState = {
   chartData: [],
   isToChangeCampaign: false,
   selectedSideMenu: 0,
-  selectedMainMenu: '',
+  selectedMainMenu: "",
   selectedCampaign: {
     id: 2,
-    type: 'lift',
+    type: "lift",
     value: 10,
   },
   marketingDetails: {},
@@ -77,7 +77,7 @@ export default function advertisementsReducer(state = initialState, action) {
         ...state,
         selectedCampaign: {
           id: 2,
-          type: 'lift',
+          type: "lift",
           value: 10,
         },
         isToChangeCampaign: false,
@@ -109,7 +109,7 @@ export default function advertisementsReducer(state = initialState, action) {
       };
 
     case ADD_EXTRA_SERVICE:
-      if (action.serviceType === 'help') {
+      if (action.serviceType === "help") {
         return {
           ...state,
           extraService: {
@@ -118,7 +118,7 @@ export default function advertisementsReducer(state = initialState, action) {
           },
         };
       }
-      if (action.serviceType === 'sos') {
+      if (action.serviceType === "sos") {
         return {
           ...state,
           extraService: {
@@ -134,7 +134,7 @@ export default function advertisementsReducer(state = initialState, action) {
         ...state,
         selectedCampaign: {
           id: 2,
-          name: 'lift',
+          name: "lift",
           price: 10,
         },
         uploadedImage: {},
@@ -173,7 +173,12 @@ export default function advertisementsReducer(state = initialState, action) {
         isToChangeCampaign: true,
       };
     case POPULATE_VACANCY_FORM_SUCCESS:
-      const { postCampaign, marketing_platform, more_budget, marketing_budget } = action.campaignDetails;
+      const {
+        postCampaign,
+        marketing_platform,
+        more_budget,
+        marketing_budget,
+      } = action.campaignDetails;
       return {
         ...state,
         selectedCampaign: {
@@ -287,7 +292,7 @@ export default function advertisementsReducer(state = initialState, action) {
         // selectedMainMenu: '',
         selectedAd: action.id,
         showSpinner: true,
-        id: action.id
+        id: action.id,
       };
 
     case OPEN_AD_TO_SEE_AD_INFO_SUCCESS:
