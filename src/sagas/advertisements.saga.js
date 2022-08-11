@@ -185,13 +185,14 @@ function* saveAndPublishAdvertisementSaga() {
       marketingDetails,
       extraService,
     } = advertisement;
+    console.log('ADDDDDD',advertisement)
     const refinedUploadedImage =
       uploadedImage &&
       uploadedImage.name &&
       uploadedImage.name.replace(/\s+\(\d+\)/g, "JP"); // If stored filename has (int), dropzone doesn't understand the path..so changing such names before sending to db.
     const refinedFormValues = filterObj("image_document", formValues);
 
-   
+   console.log('ISDRAFT',isDraft)
     url = `${API_SERVER_EST}/postJob`;
 
 
@@ -199,7 +200,7 @@ function* saveAndPublishAdvertisementSaga() {
       isDraft || extraService.help || extraService.sos
         ? 0
         : selectedCampaign.type === "free"
-        ? 'active'
+        ? 1
         : 4;
 
     const selectedService = extraService.help
@@ -214,19 +215,24 @@ function* saveAndPublishAdvertisementSaga() {
         ...refinedFormValues,
         uuid,
         campaign_type: selectedCampaign.type,
+        selectedCampaign:selectedCampaign,
         status: statusToUpdate,
         extra_service: selectedService,
-        isDraft
+        isDraft,
+        campaign_id:selectedCampaign.id
+      
       };
     } else if (!uploadedImage.name) {
       // no uploaded image means, no need to send any base64. Also, if there is an image stored in db..and we want to delete it, I am changing the formvalues of image_document in component
       body = {
         ...formValues,
         uuid,
-        campaignLevel: selectedCampaign.type,
+        campaign_type: selectedCampaign.type,
         status: statusToUpdate,
         extra_service: selectedService,
-        isDraft
+        isDraft,
+        campaign_id:selectedCampaign.id,
+        selectedCampaign:selectedCampaign,
       };
     } else if (
       uploadedImage.name &&
@@ -236,7 +242,7 @@ function* saveAndPublishAdvertisementSaga() {
       body = {
         ...formValues,
         uuid,
-        campaignLevel: selectedCampaign.type,
+        campaign_type: selectedCampaign.type,
         status: statusToUpdate,
         image_document: {
           uuid,
@@ -247,7 +253,9 @@ function* saveAndPublishAdvertisementSaga() {
           data: base64,
         },
         extra_service: selectedService,
-        isDraft
+        isDraft,
+        campaign_id:selectedCampaign.id,
+        selectedCampaign:selectedCampaign,
       };
     }
     if (selectedCampaign.includes_mktbudget) {
@@ -264,6 +272,7 @@ function* saveAndPublishAdvertisementSaga() {
         ? parseInt(marketing_budget)
         : 0;
     }
+    console.log("BODY",body)
     // SAVING AND PUBLISHING JOBPOST
     axios.post(url,body).then((res)=>{response=res})
 
@@ -404,6 +413,8 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     const url = `${API_SERVER_EST}/${id}`;
     //const companyBusinessId = store.getState().jobs.companyBusinessId;
     const campaigns = store.getState().advertisement.campaigns;
+    const selectedCampaign = store.getState().advertisement.selectedCampaign;
+    console.log('COPY', selectedCampaign)
     const userRole = store.getState().client.user.data[6].user_type;
     /* const formValues = getFormValues("vacancy")(store.getState()); */
     const body = JSON.stringify({
@@ -469,11 +480,12 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     yield put(change("vacancy", "notice_frequency", notice_frequency));
 
     const postCampaign = campaigns.find(
-      (campaign) => campaign.id === campaign_id
+      (campaign) => campaign.id === selectedCampaign.id
     );
 
     const campaignDetails = {
       postCampaign,
+      selectedCampaign,
       marketing_platform,
       more_budget,
       marketing_budget,
@@ -629,7 +641,7 @@ function* updateAndPublishAdvertisementSaga() {
     const url = `https://localhost:7262/updateJobOffer`;
     const id = store.getState().jobs.id;
     let response;
-    const campaignLevel = store.getState().advertisement.campaigns[0].type;
+    const campaign_type = store.getState().advertisement.campaigns[0].type;
     const {
       jobName,
       jobCategory,
@@ -650,7 +662,7 @@ function* updateAndPublishAdvertisementSaga() {
       applicationUrl,
       lastApplicationDate,
       jobDescription,
-      campaignLevel,
+      campaign_type,
     };
 
     axios.patch(url,body).then((res)=>{response=res})
