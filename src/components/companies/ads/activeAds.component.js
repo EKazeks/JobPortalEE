@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Paper, Button } from "@material-ui/core";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
@@ -9,8 +9,6 @@ import { customURL, dateFormat } from "../../../utils/helperFunctions";
 import CustomizedDialogs from "../../../utils/customizedDialog";
 import i18n from "../../../utils/i18n";
 import axios from "axios";
-import { changeRoute } from "../../../actions";
-import { useMemo } from "react";
 
 const ActiveAdsComponent = ({
   warnToDelete,
@@ -18,61 +16,48 @@ const ActiveAdsComponent = ({
   deleteJobOffer,
   changeAdvertPage,
   selectedPage,
-  advertPages,
-  openAdToSeeJobPost,
   postAdvertisement,
   showDialog,
   isToDeleteAdvertisementId,
   fetchJobById,
   fetchJobInfo,
   editOffer,
-  openAdToSeeAdInfo
+  deleteAdvertisement,
+  openAdToSeeAdInfo,
 }) => {
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
   const [jobsToRender, setJobsToRender] = useState([]);
   const [toEdit, setToEdit] = useState();
-  const [jobCategorys, setJobCategorys] = useState([]);
+  const [componentDeployed, setComponentDeployed] = useState(false);
+  const [offerDeleted, setOfferDeleted] = useState(false);
 
-  useMemo(() => {
-    axios.get(`https://localhost:7262/activeAds`).then((res) => {
-      setJobsToRender(res.data.filter(status => status.offerStatus === 'active'));
-    });
-  }, []);
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      await axios.get(`https://localhost:7262/activeAds`).then((res) => {
+        setJobsToRender(
+          res.data.filter((status) => status.offerStatus === "active")
+        );
+      });
+    };
+    getData();
+    setComponentDeployed(true);
+  }, [componentDeployed === false]);
 
   const updateSize = () => {
     setIsDesktop(window.innerWidth >= 1440);
   };
+
   useEffect(() => {
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
   });
 
   return (
-    //  <div>
-    //   {jobsToRender.map(job => {
-
-    //     return (
-    //       <div key={job.id}>
-    //       <Grid>
-    //         <div>
-    //           <h1>
-    //             {applicants && applicants.map((applicant) => {
-    //               return (
-    //                 <h1>
-    //                   {applicant.firstName}
-
-    //                 </h1>
-    //               )
-    //             })}
-    //             {/* {console.log(applicants.length)} */}
-    //           </h1>
-    //         </div>
-    //       </Grid>
-    //       </div>
-    //     )
-    //   })}
-    //   </div>
     <div className="container">
       <Grid container style={{ margin: "30px 0px" }}>
         <Grid item sm={10}>
@@ -133,8 +118,13 @@ const ActiveAdsComponent = ({
                       >
                         <h4
                           onClick={() => {
-                            fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
-                            fetchJobById(item.id)
+                            fetchJobInfo(
+                              item.companyName,
+                              item.companyBusinessId,
+                              item.jobName,
+                              item.jobPostNumber
+                            );
+                            fetchJobById(item.id);
                             //openAdToSeeAdInfo(item.id)
                           }}
                         >
@@ -182,7 +172,11 @@ const ActiveAdsComponent = ({
                   </Grid>
                   <Grid item md={3} style={{ color: "#34495E " }}>
                     <div>
-                      <h5>{item.dateOfApplication.charAt(2) === '.' ? item.dateOfApplication  : dateFormat(item.dateOfApplication)}</h5>
+                      <h5>
+                        {item.dateOfApplication.charAt(2) === "."
+                          ? item.dateOfApplication
+                          : dateFormat(item.dateOfApplication)}
+                      </h5>
                     </div>
                   </Grid>
                   <Grid item md={4}>
@@ -235,8 +229,13 @@ const ActiveAdsComponent = ({
                               }
                               color="primary"
                               onClick={() => {
-                                fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
-                                fetchJobById(item.id)
+                                fetchJobInfo(
+                                  item.companyName,
+                                  item.companyBusinessId,
+                                  item.jobName,
+                                  item.jobPostNumber
+                                );
+                                fetchJobById(item.id);
                                 //openAdToSeeAdInfo(item.id)
                               }}
                             >
@@ -258,7 +257,7 @@ const ActiveAdsComponent = ({
         warnToDeleteModal
         handleClick={() => {
           deleteJobOffer(isToDeleteAdvertisementId);
-          changeRoute();
+          refreshPage();
         }}
       />
       <div className="pagination-body">

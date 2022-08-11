@@ -20,7 +20,8 @@ import {
   GET_JOB_APPLICANTS,
   FETCH_JOB_NAME_BY_ID,
   FETCH_JOB_INFO,
-  SET_ID_TO_APPLY
+  SET_ID_TO_APPLY,
+  DELETE_SUCCESS,
 } from "../constants";
 
 const initialState = {
@@ -29,13 +30,13 @@ const initialState = {
   apiFailed: false,
   isToEdit: false,
   id: 0,
-  idToApply:0,
-  jobName: '',
-  idToCopy:0,
-  isOfferCopied:false,
+  idToApply: 0,
+  jobName: "",
+  idToCopy: 0,
+  isOfferCopied: false,
   isOfferEdited: false,
   jobPostNumber: 0,
-  companyName: '',
+  companyName: "",
   companyBusinessId: 0,
   address: 0,
   jobDetails: [],
@@ -56,46 +57,47 @@ const initialState = {
 
 const jobsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE: 
+    case SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE:
       return {
         ...state,
-        showSpinner: true
-      }
-    case DELETE_JOB_OFFER:
-      return {
-        ...state,
-        warnToDelete: false,
-      }
-      case WARN_TO_DELETE:
-        return {
-          ...state,
-          warnToDelete: true,
-          isToDeleteAdvertisementId: action.id,
-        };
+        showSpinner: true,
+      };
+    // case DELETE_JOB_OFFER:
+    //   return {
+    //     ...state,
+    //     warnToDelete: false,
+    //   };
+    // case WARN_TO_DELETE:
+    //   return {
+    //     ...state,
+    //     warnToDelete: true,
+    //     isToDeleteAdvertisementId: action.id,
+    //   };
+
     case EDIT_OFFER:
-      return{
+      return {
         ...state,
-        idToCopy:action.id,
-        isOfferCopied:true,
-        isOfferEdited: true
-      }
+        idToCopy: action.id,
+        isOfferCopied: true,
+        isOfferEdited: true,
+      };
     case SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS:
       return {
         ...state,
         showSpinner: false,
         apiSuccess: true,
-      }
+      };
     case FETCH_JOB_BY_ID:
       return {
         ...state,
         id: action.id,
       };
-      
+
     case SET_ID_TO_APPLY:
       return {
         ...state,
-        idToApply:action.id
-      }
+        idToApply: action.id,
+      };
     case FETCH_JOB_INFO:
       return {
         ...state,
@@ -104,7 +106,7 @@ const jobsReducer = (state = initialState, action) => {
         jobName: action.jobName,
         jobPostNumber: action.jobPostNumber,
         address: action.address,
-      }
+      };
     case GET_JOB_APPLICANTS:
       return {
         ...state,

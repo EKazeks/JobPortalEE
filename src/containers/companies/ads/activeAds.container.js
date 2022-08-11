@@ -1,5 +1,5 @@
-import { connect } from 'react-redux';
-import ActiveAdsComponent from '../../../components/companies/ads/activeAds.component';
+import { connect } from "react-redux";
+import ActiveAdsComponent from "../../../components/companies/ads/activeAds.component";
 import {
   getAllAdsByStatus,
   changeAdvertPage,
@@ -11,17 +11,20 @@ import {
   deleteJobOffer,
   fetchJobById,
   fetchJobInfo,
-  editOffer
-} from '../../../actions';
+  editOffer,
+  deleteSuccess,
+} from "../../../actions";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     //activeAds: state.advertisement.advertisements.activeAds,
     selectedPage: state.pagination.selectedPage.selected,
-    advertPages: Math.ceil(state.advertisement.advertisements.activeAds.length / 10),
+    advertPages: Math.ceil(
+      state.advertisement.advertisements.activeAds.length / 10
+    ),
     companyId: state.companyProfile.profile.company_id,
-    showDialog: state.jobs.warnToDelete,
-    isToDeleteAdvertisementId: state.jobs.isToDeleteAdvertisementId,
+    showDialog: state.advertisement.warnToDelete,
+    isToDeleteAdvertisementId: state.advertisement.isToDeleteAdvertisementId,
   };
 };
 
@@ -37,6 +40,7 @@ const mapDispatchToProps = {
   openAdToSeeAdInfo,
   fetchJobById,
   fetchJobInfo,
-  editOffer
+  editOffer,
+  deleteSuccess,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ActiveAdsComponent);
