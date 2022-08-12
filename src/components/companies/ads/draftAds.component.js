@@ -5,10 +5,11 @@ import ReactPaginate from 'react-paginate';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from "react-redux";
 import CustomizedDialogs from '../../../utils/customizedDialog';
 import { withStyles } from '@material-ui/core/styles';
+import store from '../../../store';
 import axios from 'axios';
-
 const styles = theme => ({
   activatedHelp: {
     color: 'green',
@@ -35,15 +36,34 @@ const DraftAds = ({
   const { t } = useTranslation('jobs', 'advertForm');
   const [jobs, setJobs] = useState([]);
   const [draftJobs, setDraftJobs] = useState([]);
-
+/*   const [campaignType,setCampaignType]=useState([])
+console.log('draftADSSSSSSS',draftAds) */
   useEffect(() => {
     axios.get(`https://localhost:7262/activeAds`).then((res) => {
       setJobs(res.data)
       setDraftJobs(res.data.filter(isDraft => isDraft.isDraft === 1))
     })
+    console.log("Draft",store.getState().advertisement);
    
   },[])
-  console.log("draftJOBS",draftJobs);
+/*   const { id } = useSelector((state) => state.jobs);
+  useEffect(() => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
+      setCampaignType(res.data)
+      //setDateOfApplication(dateFormat(res.data.dateOfApplication))
+   
+    });
+  }, []); */
+
+ /*  useEffect(() => {
+    axios.get(`${API_SERVER_EST}/${id}`).then((res) => {
+      setValue(res.data.selectedCampaign)
+      
+    })
+  },[]) */
+   
+    /* console.log("draftJOBS2222222",campaignType); */
+  
   return (
     <div className="container">
       <h3 style={{ margin: '30px 0px' }}>
@@ -76,14 +96,14 @@ const DraftAds = ({
                       {/* )} */}
                     </div>
                   </Grid>
-                  <Grid item md={3} sm={4} xs={4} style={{ color: '#34495E ' }}>
+                  <Grid item md={3} sm={4} xs={4} container justifyContent="center">
                     <div>
                       {/* <h5>{new Intl.DateTimeFormat('fi-FI').format(new Date(item.created))}</h5> */}
                       <h5>{new Intl.DateTimeFormat('fi-FI').format(new Date())}</h5>
                     </div>
                   </Grid>
-                  <Grid item md={4} sm={12} xs={12}>
-                    <Grid container spacing={4}>
+                  <Grid item md={4} sm={12} xs={12} >
+                    <Grid container justifyContent="flex-end" spacing={4}   >
                       {item.extra_service === 'help' ? (
                         <Grid item>
                           <span className={classes.activatedHelp}>{t('advertForm:activateHelp')}</span>
@@ -94,7 +114,7 @@ const DraftAds = ({
                         </Grid>
                       ) : (
                         <>
-                          <Grid item>
+                          <Grid item >
                             <Button variant="outlined" color="secondary" onClick={() => warnToDelete(item.id)}>
                               {t('common:deleteBtn')}
                             </Button>
@@ -135,7 +155,7 @@ const DraftAds = ({
           nextLabel={<NavigateNextIcon />}
           breakLabel="..."
           breakClassName="break-me"
-          pageCount={advertPages}
+          pageCount={draftJobs.length/7}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={changeAdvertPage}
