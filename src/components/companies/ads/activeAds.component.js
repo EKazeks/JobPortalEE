@@ -173,9 +173,10 @@ const ActiveAdsComponent = ({
                   <Grid item md={3} style={{ color: "#34495E " }}>
                     <div>
                       <h5>
-                        {item.dateOfApplication.charAt(2) === "."
+                        {/* {item.dateOfApplication.charAt(2) === "."
                           ? item.dateOfApplication
-                          : dateFormat(item.dateOfApplication)}
+                          : dateFormat(item.dateOfApplication)} */}
+                          {item.dateOfApplication.indexOf(':00.000Z') === item.dateOfApplication.indexOf(':00.000Z') ? item.dateOfApplication?.replace("T12:27:00.000Z", "") : item.dateOfApplication}
                       </h5>
                     </div>
                   </Grid>

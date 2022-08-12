@@ -42,10 +42,11 @@ export const customURL = (url, type) => {
 export const convertJobTypeToStr = (t, type) => {
   return (
     <>
+      {type === "isPermanentPlace" && t("jobtype:isPermanentPlace")}
+      {type === "isPartPlace" && t("jobtype:isPartPlace")}
       {type === "12" && t("jobtype:jobType12")}
       {type === "13" && t("jobtype:jobType13")}
       {type === "14" && t("jobtype:jobType14")}
-      
     </>
   );
 };
@@ -68,11 +69,38 @@ export const dateFormat = (date) => {
   } else {
     return <>{newDateFormat}</>;
   }
+  //console.log(date);
+
+// if (date === date.slice(-1)) {
+//   return formatedDate
+// } 
+
+  // if (date === date) {
+  //   return date
+  // } else if ( date === date.indexOf(':00.000Z')) {
+  //    formatedDate = date.split("T", 10)[0].split("-");
+  // } else if (formatedDate) {
+  //    newDateFormat =
+  //     formatedDate[2] + "." + formatedDate[1] + "." + formatedDate[0];
+  // } else {
+  //   return <>{newDateFormat}</>;
+  // }
+  // if (!date.indexOf(':00.000Z')) {
+  //   return (
+  //     <>
+  //       {formadatedDate}
+  //     </>
+  //   );
+  // } else {
+  //   return <>{newDateFormat}</>;
+  // }
 };
 
 export const convertJobHoursToStr = (t, type) => {
   return (
     <>
+      {type === "tähtajatu" && t("jobhours:tähtajatu")}
+      {type === "tähtajaline" && t("jobhours:tähtajaline")}
       {type === "31" && t("jobhours:jobHours31")}
       {type === "32" && t("jobhours:jobHours32")}
       {type === "33" && t("jobhours:jobHours33")}

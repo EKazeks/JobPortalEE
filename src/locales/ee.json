@@ -411,13 +411,17 @@
       "appliedJobsTitle": "Tööle kandideerimised"
     },
    "jobtype":{
-      "jobType12": "tähtajatu",
-      "jobType13": "tähtajaline",
+      "isPermanentPlace": "Ajutine",
+      "isPartPlace": "Kehtib kuni edasise teatamiseni",
+      "jobType12": "Ajutine",
+      "jobType13": "Kehtib kuni edasise teatamiseni",
       "jobType14": "muu",
       "jobTypeLabel": "Töö kestus"
    
    },
    "jobhours":{
+      "tähtajatu": "Täiskohaga",
+      "tähtajaline": "Osalise tööajaga",
       "jobHours31": "Täiskohaga",
       "jobHours32": "Osalise tööajaga",
       "jobHours33": "Vahetustega töö",

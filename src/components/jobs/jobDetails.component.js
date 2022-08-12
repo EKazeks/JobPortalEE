@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import { isRteEmpty } from "../../containers/validate";
 import NotFoundPage from "../../utils/notFoundPage";
 import { fetchJobById, fetchJobInfo, setIdToApply } from "../../actions";
+import i18n from "../../utils/i18n";
 
 const styles = (theme) => ({
   addMargin: {
@@ -116,6 +117,8 @@ const JobDetailsComponent = ({
   const { id } = useSelector((state) => state.jobs);
   //const [dateOfApplication, setDateOfApplication] = useState();
   const [address, setAddress] = useState('');
+  const isPermanentPlace = 'isPermanentPlace';
+  const isPartPlace = 'isPartPlace';
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
@@ -157,7 +160,8 @@ const JobDetailsComponent = ({
                     <strong className={classes.metaDataTitle}>
                       <span>{t("applyPeriod")}: </span>
                       <span className={classes.metaData}>
-                      {jobsToRender.dateOfApplication === jobsToRender.dateOfApplication ? jobsToRender.dateOfApplication : dateFormat(jobsToRender.dateOfApplication)}
+                        {console.log(jobsToRender.dateOfApplication)}
+                      {jobsToRender.dateOfApplication?.indexOf(':00.000Z') === jobsToRender.dateOfApplication?.indexOf(':00.000Z') ? jobsToRender.dateOfApplication?.replace("T12:27:00.000Z", "") : jobsToRender.dateOfApplication}
                       </span>
                     </strong>
                   </h6>
@@ -165,8 +169,9 @@ const JobDetailsComponent = ({
                     <strong className={classes.metaDataTitle}>
                       <span>{t("jobtype:jobTypeLabel")}: </span>
                       <span className={classes.metaData}>
-                      {convertJobTypeToStr(t, jobsToRender.titleSpecification)}
-                      {jobsToRender.isPermanentPlace === 1  && jobsToRender.isPartPlace === 1 ? <span>Termless</span> : jobsToRender.isPermanentPlace === 0  && jobsToRender.isPartPlace === 1 ? <span>Fixed Term</span> : <span>Termless</span>}
+                      {/* {convertJobTypeToStr(t, jobsToRender.titleSpecification)} */}
+                      {convertJobTypeToStr(t, jobsToRender?.isPermanentPlace === 1 ? isPermanentPlace : null)}
+                      {convertJobTypeToStr(t, jobsToRender?.isPartPlace === 1 ? isPartPlace : null)}
                       </span>
                     </strong>
                   </h6>
@@ -175,8 +180,6 @@ const JobDetailsComponent = ({
                       <span>{t("jobhours:jobHoursLabel")}: </span>
                       <span className={classes.metaData}>
                       {convertJobHoursToStr(t, jobsToRender.durationOfEmployment)}
-                      {jobsToRender.durationOfEmployment === 'tähtajatu' && <span>Full-time</span>}
-                      {jobsToRender.durationOfEmployment === 'tähtajaline' && <span>Part-time</span>}
                       </span>
                     </strong>
                   </h6>

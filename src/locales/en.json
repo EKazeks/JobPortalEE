@@ -412,13 +412,17 @@
     "appliedJobsTitle": "Applied jobs"
   },
   "jobtype": {
-    "jobType12": "Termless",
-    "jobType13": "Fixed Term",
+    "isPermanentPlace": "Temporary",
+    "isPartPlace": "Valid until further notice",
+    "jobType12": "Temporary",
+    "jobType13": "Valid until further notice",
     "jobType14": "Other",
     "jobTypeLabel": "Job duration"
   
   },
   "jobhours": {
+    "tähtajatu": "Full-time",
+    "tähtajaline": "Part-time",
     "jobHours31": "Full-time",
     "jobHours32": "Part-time",
     "jobHours33": "Shift work",
