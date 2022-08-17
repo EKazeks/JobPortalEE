@@ -657,21 +657,13 @@ export const updateEmailNotification = () => ({
 });
 
 // FAVORITE JOBS
-export const toggleFavoriteJobs = (companyBusinessId, id, status) => ({
+export const toggleFavoriteJobs = (id) => ({
   type: TOGGLE_FAVORITE_JOBS,
-  companyBusinessId,
   id,
-  status,
 });
-export const deleteFavoriteJobs = (
-  companyBusinessId,
-  jobPostNumber,
-  status
-) => ({
+export const deleteFavoriteJobs = (id) => ({
   type: DELETE_FAVORITE_JOBS,
-  companyBusinessId,
-  jobPostNumber,
-  status,
+  id,
 });
 
 // ADMINS

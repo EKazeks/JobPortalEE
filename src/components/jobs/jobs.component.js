@@ -177,15 +177,18 @@ const JobsComponent = ({
   deleteAdvertisement,
   classes,
   fetchJobById,
-  fetchJobInfo
+  fetchJobInfo,
+  deleteFavoriteJobs
 }) => {
   const { t } = useTranslation("jobsList", "jobs");
   const [jobsToRender, setJobsToRender] = useState([]);
+  const [favouritesJobs, setFavouritesJobs] = useState([]);
   const [address,setAddress] = useState();
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn`).then((res) => {
+    axios.get(`https://localhost:7262/activeAds`).then((res) => {
       setJobsToRender(res.data.filter((activeJobs) => activeJobs.offerStatus === 'active'));
+      setFavouritesJobs(res.data.filter((favourite) => favourite.isFavourite === 1));
     });
   }, [])
 
@@ -252,7 +255,7 @@ const JobsComponent = ({
                                 }
                               }
                               className={classes.jobContainerHover}
-                              to={customURL(item.url, "open_position")}
+                              to={customURL(item.url, "external")}
                             />
                           )}
                           <Grid
@@ -369,34 +372,18 @@ const JobsComponent = ({
                                     className={classes.favBtn}
                                     handleFav={() => {
                                       toggleFavoriteJobs(
-                                        item.companyBusinessId,
                                         item.id,
-                                        !favoriteJobs.some(
-                                          (favList) =>
-                                            favList.companyBusinessId ===
-                                              item.companyBusinessId &&
-                                            favList.id ===
-                                              item.id
-                                        )
+                                        //item.companyBusinessId,
+                                        //item.jobPostNumber,
+                                        //!favoriteJobs.some(favList => favList.isFavourite),
                                       );
                                     }}
-                                    isFav={favoriteJobs.some(
-                                      (favList) =>
-                                        favList.companyBusinessId ===
-                                          item.companyBusinessId &&
-                                        favList.id ===
-                                          item.id
-                                    )} // checking from the favoriteJobs list
+                                    isFav={favoriteJobs.some(favList => favList.companyBusinessId === item.companyBusinessId && favList.id === item.id)} // checking from the favoriteJobs list
                                     btnText={
-                                      !favoriteJobs.some(
-                                        (favList) =>
-                                          favList.companyBusinessId ===
-                                            item.companyBusinessId &&
-                                          favList.id ===
-                                            item.id
-                                      )
-                                        ? t("addFav")
-                                        : t("delFav")
+                                      !favoriteJobs.some(favList => favList.companyBusinessId === item.companyBusinessId && favList.id === item.id)
+                                      //!favoriteJobs.filter((favourite) => favourite.isFavourite)
+                                        ? t('addFav')
+                                        : t('delFav')
                                     }
                                   />
                                 )}

@@ -32,7 +32,7 @@ import {
   changePagination,
   getWorkStartSuccess,
 } from '../actions';
-import { apiOpenPost, apiManualPost, apiOpenRequest } from '../utils/request';
+import { apiOpenPost, apiManualPost, apiOpenRequest, apiManualRequest } from '../utils/request';
 import store from '../store';
 import axios from 'axios';
 
@@ -105,60 +105,54 @@ function* getJobDetailsByIdSaga(props) {
 
     const isApplyPage = userUrl.includes('hae') ? true : false;
 
-    if (email) {
-      body = JSON.stringify({
-        id: parseInt(job_detail[0]),
-        companyBusinessId: parseInt(job_detail[1]),
-        email,
-        isApplyPage,
-      });
-    } else {
-      body = JSON.stringify({
-        id: parseInt(job_detail[0]),
-        companyBusinessId: parseInt(job_detail[1]),
-        isApplyPage,
-      });
+    // if (email) {
+    //   body = JSON.stringify({
+    //     id: parseInt(job_detail[0]),
+    //     companyBusinessId: parseInt(job_detail[1]),
+    //     email,
+    //     isApplyPage,
+    //   });
+    // } else {
+    //   body = JSON.stringify({
+    //     id: parseInt(job_detail[0]),
+    //     companyBusinessId: parseInt(job_detail[1]),
+    //     isApplyPage,
+    //   });
+    // }
+
+    result = axios.get( url ).then((res) => res.data)
+    const data = result.data
+    if (data === data) {
+      //resultParsed = result.data[0];
+      //ilmoId = resultParsed.ilmoitusnumero;
+      //jobUrl = `${mol_page_url}-api/v1/tyopaikat/${ilmoId}?kieli=fi`;
+      yield put(getJobDetailsByIdSuccess(data));
     }
+    // } else {
+    //   //ilmoId = result.data.ilmoitusnumero;
 
-    result = axios.get(`https://localhost:7262/jobsEn/${id}`, url, body).then((res) => res.data)
+    //   yield put(getJobDetailsByIdSuccess(data));
+    // }
+   //jobDetailResult = yield call(apiOpenRequest, url);
+    // if (jobDetailResult.data) {
+    //   jobDetailResult = jobDetailResult.data.response?.docs[0];
 
-    if (result.data !== 'job details does not exist') {
-      resultParsed = JSON.parse(result.data)[0];
-      ilmoId = resultParsed.ilmoitusnumero;
-      jobUrl = `${mol_page_url}-api/v1/tyopaikat/${ilmoId}?kieli=fi`;
-      yield put(getJobDetailsByIdSuccess(resultParsed));
-    } else {
-      ilmoId = result.data.ilmoitusnumero;
-
-      yield put(getJobDetailsByIdSuccess(result.data));
-    }
-    jobDetailResult = yield call(apiOpenRequest, jobUrl);
-    if (jobDetailResult.data) {
-      jobDetailResult = jobDetailResult.data.response?.docs[0];
-
-      yield put(getWorkStartSuccess(jobDetailResult));
-    }
+    //   yield put(getWorkStartSuccess(jobDetailResult));
+    // }
   } catch (e) {
     console.warn(e);
   }
 }
 
-function* toggleFavoriteJobsSaga({ companyBusinessId, jobPostNumber, status }) {
+function* toggleFavoriteJobsSaga({ id }) {
   try {
-    const url = `${API_SERVER_EST}`;
-    const { user } = store.getState().client;
-    const email = user && user.data && user.data[1];
-    const body = JSON.stringify({
-      email,
-      companyBusinessId,
-      jobPostNumber,
-      status: status ? 1 : 0,
-    });
-
-    const result = yield call(apiManualPost, url, body);
-    if (result.data === "Applicant's favourite job post status updated successfully!") {
+    const url = `https://localhost:7262/setFavouriteOffer/${id}`;
+    const result = yield call(apiManualPost, url);
+    const data = result.data
+    
+    if (data === data) {
       yield put(showSuccessSnackbar());
-      yield put(getJobDetailsById(`${jobPostNumber}$$${companyBusinessId}`));
+      yield put(getJobDetailsById(id));
       yield put(getFavoriteJobs());
     } else {
       yield put(showFailedSnackbar());
@@ -170,19 +164,15 @@ function* toggleFavoriteJobsSaga({ companyBusinessId, jobPostNumber, status }) {
     yield put(showDialog());
   }
 }
-function* deleteFavoriteJobsSaga({ companyBusinessId, jobPostNumber, status }) {
+function* deleteFavoriteJobsSaga({ id }) {
   try {
-    const url = `${API_SERVER_EST}`;
-    const email = store.getState().client.user.data[1];
-    const body = JSON.stringify({
-      email,
-      companyBusinessId,
-      jobPostNumber,
-      status,
-    });
-
-    const result = yield call(apiManualPost, url, body);
-    if (result.data === "Applicant's favourite job post status updated successfully!") {
+    const url = `https://localhost:7262/unsetFavouriteOffer/${id}`;
+    const body = ({
+      isFavourite: 0
+    })
+    const result = yield call(apiManualPost, url);
+    const data = result.data
+    if (data === data) {
       yield put(getFavoriteJobs());
     }
   } catch (e) {
@@ -208,20 +198,16 @@ function* getAppliedJobsSaga() {
 }
 function* getFavoriteJobsSaga() {
   try {
-    const url = `${API_SERVER}/GetFavouriteJobPostByEmail`;
-    const email = store.getState().client.user && store.getState().client.user.data[1];
-    const body = JSON.stringify({
-      email,
-    });
-    //if (email !== null) {
-      // In case users are not logged in don't call this API
-      const result = yield call(apiManualPost, url, body);
-      const resultParsed = JSON.parse(result.data);
+    const url = `https://localhost:7262/getFavouriteOffers`;
 
-      if (resultParsed) {
-        yield put(getFavoriteJobsSuccess(resultParsed));
+    const result = yield call(apiManualRequest, url);
+
+    const data = result.data
+
+      if (data === data) {
+        yield put(getFavoriteJobsSuccess(data));
       } else {
-        // yield put(getFavoriteJobsSuccess([]));
+        //yield put(getFavoriteJobsSuccess([]));
       }
     
   } catch (e) {

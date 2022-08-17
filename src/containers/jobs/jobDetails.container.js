@@ -19,7 +19,7 @@ const mapStateToProps = state => {
     jobDetails: state.jobs.jobsList && state.jobs.jobsList,
     workStart: state.jobs.workStart && state.jobs.workStart,
     favoriteJobs: state.jobs.favoriteJobs && state.jobs.favoriteJobs,
-    favBtnstatus: !!(state.jobs.jobDetails && state.jobs.jobDetails.favourite),
+    favBtnstatus: !!(state.jobs.favoriteJobs && state.jobs.favoriteJobs.isFavourite),
     showSuccessSnackbar: state.asyncActions.showSuccessSnackbar,
     showFailedSnackbar: state.asyncActions.showFailedSnackbar,
     showDialog: state.asyncActions.showDialog,

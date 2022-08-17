@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { getFavoriteJobs, changeAdvertPage } from '../../actions';
+import { getFavoriteJobs, changeAdvertPage,fetchJobInfo,fetchJobById } from '../../actions';
 import FavoriteJobsComponent from '../../components/jobseekers/favoriteJobs.component';
 import store from '../../store';
 
@@ -38,5 +38,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   getFavoriteJobs,
   changeAdvertPage,
+  fetchJobInfo,
+  fetchJobById
 };
 export default connect(mapStateToProps, mapDispatchToProps)(FavoriteJobsContainer);

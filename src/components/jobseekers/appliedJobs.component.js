@@ -7,17 +7,21 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import { customURL, dateFormat } from '../../utils/helperFunctions';
 import axios from 'axios';
-import { fetchJobById } from '../../actions';
-import { useSelector } from 'react-redux';
+import { fetchJobApplicants, fetchJobById } from '../../actions';
+import { useDispatch, useSelector } from 'react-redux';
 
 const AppliedJobsComponent = ({ appliedJobs, advertPages, changeAdvertPage, selectedPage }) => {
   const { t } = useTranslation('appliedJobs', 'common');
   const [jobsToRender, setJobsToRender] = useState([]);
+  const [applicants, setApplicants] = useState([]);
   const { id } = useSelector((state) => state.jobs);
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn`).then((res) => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data);
+      setApplicants(res.data.jobPostApplications)
+      // dispatch(fetchJobApplicants(applicants.id))
     });
   }, []);
 
@@ -27,7 +31,7 @@ const AppliedJobsComponent = ({ appliedJobs, advertPages, changeAdvertPage, sele
         <Grid container style={{ padding: '50px 0px' }}>
           <Grid item sm={10}>
             <h3>
-              {t('appliedJobsTitle')}({`${jobsToRender && jobsToRender.length}`}):
+              {t('appliedJobsTitle')}({`${applicants.length}`}):
             </h3>
           </Grid>
         </Grid>
@@ -36,7 +40,7 @@ const AppliedJobsComponent = ({ appliedJobs, advertPages, changeAdvertPage, sele
       {jobsToRender &&
         jobsToRender.slice(selectedPage * 10, selectedPage * 10 + 10).map(post => {
           return (
-            <div key={`${post.companyBussinedId}${post.id}`}>
+            <div key={`${post.jobPostApplications.jobpostId}${post.jobPostApplications.id}`}>
               <Paper style={{ marginTop: 20 }}>
                 <Grid container spacing={1} style={{ padding: 20 }} alignItems="center">
                   <Grid item xs={8}>

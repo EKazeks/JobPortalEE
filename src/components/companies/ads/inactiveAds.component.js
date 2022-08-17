@@ -163,7 +163,7 @@ const InactiveAds = ({
         dialogText={t("warnToDeletePostText")}
         warnToDeleteModal
         handleClick={() => {
-          deleteAdvertisement(isToDeleteAdvertisementId);
+          deleteJobOffer(isToDeleteAdvertisementId);
           refreshPage();
         }}
       />

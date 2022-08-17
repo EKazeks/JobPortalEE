@@ -295,7 +295,7 @@ const AdvertFormComponent = ({
                   }
                   btnText={t("addPic")}
                   name="logo"
-                  id="logo"
+                  id="id"
                   fullWidth
                   isImage
                 />
