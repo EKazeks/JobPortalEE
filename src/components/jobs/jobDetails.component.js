@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import { isRteEmpty } from "../../containers/validate";
 import NotFoundPage from "../../utils/notFoundPage";
 import { fetchJobById, fetchJobInfo, setIdToApply } from "../../actions";
+import i18n from "../../utils/i18n";
 
 const styles = (theme) => ({
   addMargin: {
@@ -102,6 +103,7 @@ const JobDetailsComponent = ({
   workStart,
   toggleFavoriteJobs,
   favBtnstatus,
+  favoriteJobs,
   showSuccessSnackbar,
   showFailedSnackbar,
   closeSnackbar,
@@ -114,30 +116,32 @@ const JobDetailsComponent = ({
 }) => {
   const [jobsToRender, setJobsToRender] = useState([]);
   const { id } = useSelector((state) => state.jobs);
-  //const [dateOfApplication, setDateOfApplication] = useState();
+  const [dateOfApplication, setDateOfApplication] = useState();
   const [address, setAddress] = useState('');
+  const isPermanentPlace = 'isPermanentPlace';
+  const isPartPlace = 'isPartPlace';
 
   useEffect(() => {
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data)
-      //setDateOfApplication(dateFormat(res.data.dateOfApplication))
+      setDateOfApplication(dateFormat(res.data.dateOfApplication))
       setAddress(res.data.jobPostAddress.address)
     });
   }, []);
 
-/*   useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
-      setJobsToRender(res.data)
-      //setDateOfApplication(dateFormat(res.data.dateOfApplication))
-      setAddress(res.data.jobPostAddress.address)
-    });
-  }, []); */
+//   const getDate = (date) => {
+//     const newDate = date.substring(0, 10).split(".")
+//     const replacedDate = newDate.toString().split("-");
+//     let finelDate = replacedDate[2] + "." + replacedDate[1] + "." + replacedDate[0];
+//     return <>{finelDate}</>
+// }
+
 
   const { t } = useTranslation("jobDetails", "jobhours", "jobtype");
   const heroImage = jobsToRender.logo && jobsToRender.logo[0].path;
   const title = `${jobsToRender?.jobName} - ${jobsToRender?.companyName} | Avoimet työpaikat`;
   const selectedPage = 1;
-  console.log('jobstoRender',jobsToRender)
+
       return (
         <div>
           <div className="container">
@@ -165,7 +169,8 @@ const JobDetailsComponent = ({
                     <strong className={classes.metaDataTitle}>
                       <span>{t("applyPeriod")}: </span>
                       <span className={classes.metaData}>
-                      {jobsToRender.dateOfApplication?.lastIndexOf(":00.000Z") ? dateFormat(jobsToRender.dateOfApplication) : jobsToRender.dateOfApplication}
+                      {jobsToRender.dateOfApplication?.indexOf(':00.000Z') !== -1 ? jobsToRender.dateOfApplication?.substring(0,10) : jobsToRender.dateOfApplication}
+                      {/* {dateOfApplication?.indexOf(':00.000Z') !== -1 ? getDate(dateOfApplication?.substring(0,10)) : getDate(dateOfApplication)} */}
                       </span>
                     </strong>
                   </h6>
@@ -173,7 +178,9 @@ const JobDetailsComponent = ({
                     <strong className={classes.metaDataTitle}>
                       <span>{t("jobtype:jobTypeLabel")}: </span>
                       <span className={classes.metaData}>
-                      {convertJobTypeToStr(t, jobsToRender.titleSpecification)}
+                      {/* {convertJobTypeToStr(t, jobsToRender.titleSpecification)} */}
+                      {convertJobTypeToStr(t, jobsToRender?.isPermanentPlace === 1 && jobsToRender?.isPartPlace === 1  || jobsToRender?.isPermanentPlace === 1 ? isPermanentPlace : null)}
+                      {convertJobTypeToStr(t, jobsToRender?.isPartPlace === 1 && jobsToRender?.isPermanentPlace === 0 ? isPartPlace : null)}
                       </span>
                     </strong>
                   </h6>
@@ -182,7 +189,6 @@ const JobDetailsComponent = ({
                       <span>{t("jobhours:jobHoursLabel")}: </span>
                       <span className={classes.metaData}>
                       {convertJobHoursToStr(t, jobsToRender.durationOfEmployment)}
-                   
                       </span>
                     </strong>
                   </h6>
@@ -196,12 +202,12 @@ const JobDetailsComponent = ({
                       </strong>
                     </h6>
                   ) : null}
-                  {jobsToRender.status === 2 && (
+                  {jobsToRender.offerStatus === "inactive" && (
                     <p style={{ color: "red" }}>{t("inactiveBtn")}</p>
                   )}
                 </Grid>
                 <Grid item sm={12} md={5}>
-                  {/* {jobsToRender.status === 1 && ( */}
+                  {jobsToRender.offerStatus === "active" && (
                     <Grid container spacing={2} className={classes.ctaBtn}>
                       {/* <Grid item>
                         <Button color="primary" variant="outlined">
@@ -210,16 +216,16 @@ const JobDetailsComponent = ({
                       </Grid> */}
                       <Grid item>
                         <FavBtn
-                          isFav={!!jobsToRender.favourite}
-                          // handleFav={() =>
-                          //   toggleFavoriteJobs(
-                          //     jobsToRender.companyBusinessId,
-                          //     jobsToRender.id,
-                          //     !favBtnstatus
-                          //   )
-                          // }
+                          isFav={!!jobsToRender.isFavourite}
+                          handleFav={() =>
+                            toggleFavoriteJobs(
+                              jobsToRender.companyBusinessId,
+                              jobsToRender.id,
+                              !favBtnstatus
+                            )
+                          }
                           btnText={
-                            !jobsToRender.favourite ? t("addFav") : t("deleteFav")
+                            !jobsToRender.isFavourite ? t("addFav") : t("deleteFav")
                           }
                         />
                       </Grid>
@@ -261,7 +267,7 @@ const JobDetailsComponent = ({
                             )}
                       </Grid>
                     </Grid>
-                  {/* )} */}
+                   )} 
                 </Grid>
               </Grid>
               <Divider style={{ margin: "15px 0 0 0" }} />
@@ -336,7 +342,7 @@ const JobDetailsComponent = ({
                 <Grid item sm={12} md={7} />
               </Hidden>
               <Grid item sm={12} md={5}>
-                {/* {jobDetails.status === 1 && ( */}
+                {jobsToRender.offerStatus === "active" && (
                   <Grid container spacing={2} className={classes.ctaBtn}>
                     {/* <Grid item>
                       <Button color='primary' variant='outlined'>
@@ -345,7 +351,7 @@ const JobDetailsComponent = ({
                     </Grid> */}
                     <Grid item>
                       <FavBtn
-                        isFav={!!jobsToRender.favourite}
+                        isFav={!!jobsToRender.isFavourite}
                         handleFav={() =>
                           toggleFavoriteJobs(
                             jobsToRender.companyBusinessId,
@@ -354,7 +360,7 @@ const JobDetailsComponent = ({
                           )
                         }
                         btnText={
-                          !jobsToRender.favourite ? t("addFav") : t("deleteFav")
+                          !jobsToRender.isFavourite ? t("addFav") : t("deleteFav")
                         }
                       />
                     </Grid>
@@ -397,7 +403,7 @@ const JobDetailsComponent = ({
                       )}
                     </Grid>
                   </Grid>
-                {/* )} */}
+                )}
               </Grid>
             </Grid>
           </div>

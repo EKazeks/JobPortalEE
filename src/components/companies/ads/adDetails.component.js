@@ -388,9 +388,9 @@ const AdDetails = ({
               <h6 className="ad_title_2">
                 <strong style={{ marginRight: 10 }}>
                   {`${
-                    jobsToRender.status === 0
+                    jobsToRender.isDraft === 1
                       ? t("draft")
-                      : jobsToRender.status === 1
+                      : jobsToRender.offerStatus === "active"
                       ? t("active")
                       : t("inactive")
                   }`}
@@ -491,7 +491,7 @@ const AdDetails = ({
                   <strong>{t("postType")}: </strong>
                   {/* <span>{customTranslateCampaign(item.campaignType)}</span> */}
                   {/* <span>{jobsToRender.campaignType}</span> */}
-                  {jobsToRender.campaignType === "free" && <span>Free</span>}
+                  {jobsToRender.campaignType === "free"  && <span>Free</span>}
                   {jobsToRender.campaignType === "lift" && <span>Lift</span>}
                   {jobsToRender.campaignType === "home_page_thing" && <span>Front Page News</span>}
                   {jobsToRender.campaignType === "noteworthy" && <span>Remarkable</span>}
@@ -512,9 +512,9 @@ const AdDetails = ({
               <div
                 className={classes.companyLogo}
                 style={{
-                  backgroundImage: `url(${
+                  backgroundImage: `${
                     jobsToRender.logo ? jobsToRender.logo[0].path : ""
-                  })`,
+                  }`,
                 }}
               />
             </Grid>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -10,6 +10,9 @@ import { useTranslation } from 'react-i18next';
 import Language from './lang.component';
 import store from '../../store';
 import { Homepage } from '../../constants/wordpressRoutes';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchJobApplicants } from '../../actions';
 
 const styles = theme => ({
   root: {
@@ -72,6 +75,16 @@ const brandLogo = 'https://vptapiprodstorage.blob.core.windows.net/jobportaldocs
 const JobseekerNavBarComponent = ({ classes, isUserLoggedIn, logout }) => {
   const { t } = useTranslation('navbar');
   const { lang } = store.getState().language;
+  const [applicants, setApplicants] = useState([]);
+  const dispatch = useDispatch()
+  const {id} = useSelector((state) => state.jobs)
+  useEffect(() => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
+      setApplicants(res.data.jobPostApplications)
+      
+    });
+  }, []);
+
   return (
     <div className={classes.root}>
       {isUserLoggedIn && (

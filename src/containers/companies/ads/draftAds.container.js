@@ -1,13 +1,22 @@
-import { connect } from 'react-redux';
-import DraftAdsComponent from '../../../components/companies/ads/draftAds.component';
-import { getAllAdsByStatus, changeAdvertPage, populateVacancyForm, warnToDelete, deleteAdvertisement, deleteJobOffer } from '../../../actions';
+import { connect } from "react-redux";
+import DraftAdsComponent from "../../../components/companies/ads/draftAds.component";
+import {
+  getAllAdsByStatus,
+  changeAdvertPage,
+  populateVacancyForm,
+  warnToDelete,
+  deleteAdvertisement,
+  deleteJobOffer,
+} from "../../../actions";
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   draftAds: state.advertisement.advertisements.draftAds,
   selectedPage: state.pagination.selectedPage.selected,
-  advertPages: Math.ceil(state.advertisement.advertisements.draftAds.length / 10),
-  showDialog: state.jobs.warnToDelete,
-  isToDeleteAdvertisementId: state.jobs.isToDeleteAdvertisementId,
+  advertPages: Math.ceil(
+    state.advertisement.advertisements.draftAds.length / 10
+  ),
+  showDialog: state.advertisement.warnToDelete,
+  isToDeleteAdvertisementId: state.advertisement.isToDeleteAdvertisementId,
 });
 
 const mapDispatchToProps = {
@@ -16,6 +25,6 @@ const mapDispatchToProps = {
   populateVacancyForm,
   warnToDelete,
   deleteAdvertisement,
-  deleteJobOffer
+  deleteJobOffer,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DraftAdsComponent);

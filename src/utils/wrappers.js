@@ -24,8 +24,6 @@ export const renderTextField = (props) => {
     ...restProps
   } = props;
 
-  const defaultValue="123"
-
   return (
     <TextField
       {...input}
@@ -33,8 +31,7 @@ export const renderTextField = (props) => {
       variant="outlined"
       error={touched && invalid}
       helperText={touched && error}
-      defaultValue={defaultValue}
-      InputProps={{inputProps:{defaultValue:"test"}}}
+      InputProps={{ inputProps: { defaultValue: "test" } }}
       // margin='dense'
     />
   );

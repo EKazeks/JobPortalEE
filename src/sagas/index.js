@@ -68,7 +68,7 @@ export default function* rootSaga() {
     watchgetAppliedJobsSaga(),
     watchgetFavoriteJobsSaga(),
     watchdeleteFavoriteJobsSaga(),
-    //watchGetJobDetailsById(),
+    watchGetJobDetailsById(),
     watchgetApplicantDashboardInfoSaga(),
     watchtoggleEmailNotificationSaga(),
     watchupdateEmailNotificationSaga(),

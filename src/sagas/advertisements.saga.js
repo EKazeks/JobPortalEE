@@ -79,6 +79,8 @@ import {
   getJobsOffers,
   getAllJobCategoryFromEstoniaSuccess,
   editVacancyForm,
+  deleteSuccess,
+  deleteAdvertisement,
 } from "../actions";
 import { customTranslateCampaign } from "../utils/customTranslate";
 import browserHistory from "../history";
@@ -111,35 +113,34 @@ function* getAllCampaignsSaga() {
 } */
 function* getAllJobCategorySaga() {
   try {
- 
-    const url = 'https://localhost:7262/getAllCategories';
-   
+    const url = "https://localhost:7262/getAllCategories";
+
     const result = yield call(apiOpenRequest, url);
-   
-    const categoryArray=result.data
-    
-    const jobCateg= [...categoryArray.reduce((map, obj) =>map.set(obj.jobCode, obj), new Map()).values()];
-    const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode );
-    const firstCategory={jobCode:"0",jobTags:""}
-    jobCateg.unshift(firstCategory)
-  const lastCategory={jobCode:`${jobCateg.length}`,jobTags:"Other"}
-  jobCateg.push(lastCategory)
-  const mapped=jobCateg.map(item => {
-   return {
-     id: parseInt(item.jobCode),
-     type: item.jobTags
-   };
- });
-  
+
+    const categoryArray = result.data;
+
+    const jobCateg = [
+      ...categoryArray
+        .reduce((map, obj) => map.set(obj.jobCode, obj), new Map())
+        .values(),
+    ];
+    const sorted = jobCateg.sort((a, b) => a.jobCode - b.jobCode);
+    const firstCategory = { jobCode: "0", jobTags: "" };
+    jobCateg.unshift(firstCategory);
+    const lastCategory = { jobCode: `${jobCateg.length}`, jobTags: "Other" };
+    jobCateg.push(lastCategory);
+    const mapped = jobCateg.map((item) => {
+      return {
+        id: parseInt(item.jobCode),
+        type: item.jobTags,
+      };
+    });
+
     yield put(getAllJobCategorySuccess(mapped));
-    
-   
   } catch (error) {
     console.log(error);
   }
 }
-
-
 
 function* saveAndPublishAdvertisementSaga() {
   try {
@@ -151,7 +152,7 @@ function* saveAndPublishAdvertisementSaga() {
     const { advertisement, client, companyProfile } = store.getState();
     const formValues = getFormValues("vacancy")(store.getState());
 
-    console.log('FORMVALUESPUBLISH',formValues)
+    console.log("FORMVALUESPUBLISH", formValues);
     const paymentInfoForm = getFormValues("paymentInfo")(store.getState());
     const uuid = client.user.data[2];
     const userRole = client.user.data[6].user_type;
@@ -191,15 +192,13 @@ function* saveAndPublishAdvertisementSaga() {
       uploadedImage.name.replace(/\s+\(\d+\)/g, "JP"); // If stored filename has (int), dropzone doesn't understand the path..so changing such names before sending to db.
     const refinedFormValues = filterObj("image_document", formValues);
 
-   
     url = `${API_SERVER_EST}/postJob`;
-
 
     const statusToUpdate =
       isDraft || extraService.help || extraService.sos
         ? 0
         : selectedCampaign.type === "free"
-        ? 'active'
+        ? "active"
         : 4;
 
     const selectedService = extraService.help
@@ -216,7 +215,7 @@ function* saveAndPublishAdvertisementSaga() {
         campaign_type: selectedCampaign.type,
         status: statusToUpdate,
         extra_service: selectedService,
-        isDraft
+        isDraft,
       };
     } else if (!uploadedImage.name) {
       // no uploaded image means, no need to send any base64. Also, if there is an image stored in db..and we want to delete it, I am changing the formvalues of image_document in component
@@ -226,7 +225,7 @@ function* saveAndPublishAdvertisementSaga() {
         campaignLevel: selectedCampaign.type,
         status: statusToUpdate,
         extra_service: selectedService,
-        isDraft
+        isDraft,
       };
     } else if (
       uploadedImage.name &&
@@ -247,7 +246,7 @@ function* saveAndPublishAdvertisementSaga() {
           data: base64,
         },
         extra_service: selectedService,
-        isDraft
+        isDraft,
       };
     }
     if (selectedCampaign.includes_mktbudget) {
@@ -265,19 +264,18 @@ function* saveAndPublishAdvertisementSaga() {
         : 0;
     }
     // SAVING AND PUBLISHING JOBPOST
-    axios.post(url,body).then((res)=>{response=res})
+    axios.post(url, body).then((res) => {
+      response = res;
+    });
 
-  /*   const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
+    /*   const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
     const parsedResult = JSON.parse(result.data); */
-    if(response === 400)
-    {
-      yield put(saveAndPublishAdvertisement())
-    }
-    else{
-      yield put(saveAndPublishAdvertisementSuccess())
+    if (response === 400) {
+      yield put(saveAndPublishAdvertisement());
+    } else {
+      yield put(saveAndPublishAdvertisementSuccess());
     }
     // response = result.data.status
-    
 
     // const parsedResult = JSON.parse(result.data);
 
@@ -353,7 +351,7 @@ function* saveAndPublishAdvertisementSaga() {
   }
 }
 
-function* getJobPostByPostIdSaga({id}) {
+function* getJobPostByPostIdSaga({ id }) {
   try {
     //const {id} = store.getState().jobs;
     const url = `${API_SERVER_EST}/${id}`;
@@ -412,7 +410,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     });
     const result = yield call(apiManualRequest, url);
     const resultParsed = result.data;
-    console.log("Populate Vacancy form",resultParsed)
+    console.log("Populate Vacancy form", resultParsed);
     // console.log('resultParsed', resultParsed);
     // If we are populating from Draft Component, we are editing--> call UpdateJobPost API, it needs company_id && post_id which is being sent along with the vacancy form!
 
@@ -437,7 +435,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       more_budget,
       marketing_budget,
       urlToApplyJob,
-      durationOfEmployment
+      durationOfEmployment,
     } = resultParsed;
 
     if (isToEdit) {
@@ -451,8 +449,8 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     }
     yield put(change("vacancy", "jobTitle", jobName));
     yield put(change("vacancy", "jobType", jobCode));
-    yield put(change('vacancy', 'jobDuration', durationOfEmployment));
-    
+    yield put(change("vacancy", "jobDuration", durationOfEmployment));
+
     yield put(change("vacancy", "jobCategory", jobTags));
     yield put(
       change("vacancy", "jobLocation", resultParsed.jobPostAddress.address)
@@ -479,7 +477,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       marketing_budget,
     };
 
-     yield put(populateVacancyFormSuccess(campaignDetails, isToEdit));
+    yield put(populateVacancyFormSuccess(campaignDetails, isToEdit));
   } catch (e) {
     console.log(e);
   }
@@ -496,7 +494,7 @@ function* editVacancyFormSaga({ id, isToEdit }) {
     });
     const result = yield call(apiManualRequest, url);
     const resultParsed = result.data;
-    console.log("Edit Vacancy form",resultParsed)
+    console.log("Edit Vacancy form", resultParsed);
     // If we are populating from Draft Component, we are editing--> call UpdateJobPost API, it needs company_id && post_id which is being sent along with the vacancy form!
 
     const {
@@ -519,7 +517,7 @@ function* editVacancyFormSaga({ id, isToEdit }) {
       more_budget,
       marketing_budget,
       urlToApplyJob,
-      durationOfEmployment
+      durationOfEmployment,
     } = resultParsed;
 
     if (isToEdit) {
@@ -531,7 +529,7 @@ function* editVacancyFormSaga({ id, isToEdit }) {
       }
     }
     yield put(change("editVacancy", "jobTitle", jobName));
-    yield put(change("editVacancy", "jobType",jobCode));
+    yield put(change("editVacancy", "jobType", jobCode));
     yield put(change("editVacancy", "jobDuration", durationOfEmployment));
     yield put(change("editVacancy", "jobCategory", jobTags));
     // yield put(change('editVacancy', 'jobLocation', resultParsed.jobPostAddress.address));
@@ -653,14 +651,14 @@ function* updateAndPublishAdvertisementSaga() {
       campaignLevel,
     };
 
-    axios.patch(url,body).then((res)=>{response=res})
-    console.log(response)
-    if(response === 400)
-    {
-      yield put(saveAndPublishAdvertisementFailed())
-    }
-    else{
-      yield put(updateAndPublishAdvertisementSuccess())
+    axios.patch(url, body).then((res) => {
+      response = res;
+    });
+    console.log(response);
+    if (response === 400) {
+      yield put(saveAndPublishAdvertisementFailed());
+    } else {
+      yield put(updateAndPublishAdvertisementSuccess());
     }
   } catch (e) {
     console.log(e);
@@ -720,13 +718,13 @@ function* updateCampaignSaga({ id }) {
     }
 
     // const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
-    axios.patch(url,body).then((res)=>{response=res})
-    if(response === 400)
-    {
-      yield put(showFailedSnackbar())
-    }
-    else{
-      yield put(showSuccessSnackbar())
+    axios.patch(url, body).then((res) => {
+      response = res;
+    });
+    if (response === 400) {
+      yield put(showFailedSnackbar());
+    } else {
+      yield put(showSuccessSnackbar());
     }
 
     // if (resultParsed) {
@@ -800,9 +798,8 @@ function* changeJobPostStatusSaga({ id }) {
   try {
     const url = `https://localhost:7262/changeOfferStatus`;
     const body = JSON.stringify({
-
       id,
-      status: 'inactive',
+      status: "inactive",
     });
 
     const result = yield call(apiManualPost, url, body);
@@ -871,7 +868,7 @@ function* deleteJobPostSaga({ id }) {
       company_id: userRole === "admin" ? id.split("admin")[1] : companyId,
     });
     //yield call( apiOpenRequest, url);
-    const result = axios.delete(url).finally((res) => ({res}));
+    const result = axios.delete(url).finally((res) => ({ res }));
     if (userRole === "admin") {
       yield put(filterJobs(result, true));
     } else {
@@ -879,6 +876,7 @@ function* deleteJobPostSaga({ id }) {
       yield put(getAllAdsByStatus(1));
       yield put(getAllAdsByStatus(2));
     }
+    yield put(deleteAdvertisement());
   } catch (error) {
     console.log(error);
   }
@@ -956,13 +954,13 @@ function* updateJobApplicationDetailsSaga({
       interview_place,
     } = formValues;
     if (update === "note") {
-      url = `https://localhost:7262/addApplicantNote`
-      body ={
-       id:"646d0f1f-4fa7-44b4-869a-f56935677af8",
-       note:application_notes
+      url = `https://localhost:7262/addApplicantNote`;
+      body = {
+        id: "646d0f1f-4fa7-44b4-869a-f56935677af8",
+        note: application_notes,
       };
     } else {
-      url = `https://localhost:7262/sendApplicantReminderOfInterview`
+      url = `https://localhost:7262/sendApplicantReminderOfInterview`;
       body = {
         email: "moscemoscemosce@gmail.com",
         subject: interview_title,
@@ -970,12 +968,12 @@ function* updateJobApplicationDetailsSaga({
         date: interview_date,
         time: interview_time,
         address: interview_place,
-      }
+      };
     }
-    axios.post(url, body).then((res)=>{response = res});
-    if (
-      response === "400"
-    ) {
+    axios.post(url, body).then((res) => {
+      response = res;
+    });
+    if (response === "400") {
       yield put(showFailedSnackbar());
     } else {
       yield put(showSuccessSnackbar());
@@ -983,7 +981,6 @@ function* updateJobApplicationDetailsSaga({
         getApplicationDetailsById(application_id, company_id, post_id, email)
       );
       yield put(openAdToSeeAdInfo(post_id));
-      
     }
     // console.log('result', result);
   } catch (e) {

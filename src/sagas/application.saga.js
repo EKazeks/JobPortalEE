@@ -37,7 +37,7 @@ function* sendApplicationSaga() {
     }
 
     // Backend needs in the following format
-    const url = `https://localhost:7262/addApplicationToOffer/${id}`;
+    const url = `https://localhost:7262/addApplicationToOffer/`;
     const body = ({
       id:idToApply,
       firstName:formValues.firstname,
@@ -45,7 +45,7 @@ function* sendApplicationSaga() {
       email:formValues.email,
       phone:formValues.contact_number,
       linkedIn:formValues.linkedin,
-      description:formValues.application_description,
+      description:formValues.description,
       favouriteCandidate:0,
       note:formValues.application_description,
       jobpostId:idToApply,
