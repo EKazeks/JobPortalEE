@@ -40,7 +40,7 @@ const styles = (theme) => ({
     },
   },
 
-  companyImage: {
+  logo: {
     minHeight: 420,
     maxHeight: 600,
     maxWidth: "100%",
@@ -129,14 +129,6 @@ const JobDetailsComponent = ({
     });
   }, []);
 
-//   const getDate = (date) => {
-//     const newDate = date.substring(0, 10).split(".")
-//     const replacedDate = newDate.toString().split("-");
-//     let finelDate = replacedDate[2] + "." + replacedDate[1] + "." + replacedDate[0];
-//     return <>{finelDate}</>
-// }
-
-
   const { t } = useTranslation("jobDetails", "jobhours", "jobtype");
   const heroImage = jobsToRender.logo && jobsToRender.logo[0].path;
   const title = `${jobsToRender?.jobName} - ${jobsToRender?.companyName} | Avoimet työpaikat`;
@@ -178,7 +170,7 @@ const JobDetailsComponent = ({
                     <strong className={classes.metaDataTitle}>
                       <span>{t("jobtype:jobTypeLabel")}: </span>
                       <span className={classes.metaData}>
-                      {/* {convertJobTypeToStr(t, jobsToRender.titleSpecification)} */}
+                      {convertJobTypeToStr(t, jobsToRender.titleSpecification)}
                       {convertJobTypeToStr(t, jobsToRender?.isPermanentPlace === 1 && jobsToRender?.isPartPlace === 1  || jobsToRender?.isPermanentPlace === 1 ? isPermanentPlace : null)}
                       {convertJobTypeToStr(t, jobsToRender?.isPartPlace === 1 && jobsToRender?.isPermanentPlace === 0 ? isPartPlace : null)}
                       </span>
@@ -273,25 +265,33 @@ const JobDetailsComponent = ({
               <Divider style={{ margin: "15px 0 0 0" }} />
             </div>
             <Grid container justifyContent="flex-end">
-              <div
+              {/* <div
                 className={jobsToRender.logo ? classes.logo : null}
                 style={{
-                  backgroundImage: `url(${
-                    jobsToRender.logo ? jobsToRender.logo[0].path : null
-                  })`,
+                  backgroundImage: `${
+                    jobsToRender.logo ? jobsToRender.logo[0].path : ""
+                  }`,
                 }}
-              />
+              /> */}
             </Grid>
             <div className={classes.jobDetail}>
-              {/* {jobsToRender.logo && (
+              {jobsToRender.logo && (
                 <div className={classes.companyImgFrame}>
-                  <img
-                    src={heroImage}
-                    alt="company-img"
-                    className={jobsToRender.logo ? classes.companyImage : ""}
-                  />
+            <img
+              src={
+                `${jobsToRender.logo}`
+              }
+              alt={
+                jobsToRender.company_image
+                  ? `${jobsToRender.jobName} Company-Image`
+                  : ""
+              }
+              className={
+                jobsToRender.logo ? classes.logo : ""
+              }
+            />
                 </div>
-              )} */}
+              )}
               <div
                 className={classes.jobDesc}
                 dangerouslySetInnerHTML={{ __html: jobsToRender.jobDescription }} // To convert rte string into html

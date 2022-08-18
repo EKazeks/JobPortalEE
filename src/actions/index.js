@@ -275,9 +275,9 @@ export const openAdToSeeAdInfo = (id) => ({
   id,
 });
 
-export const openAdToSeeAdInfoSuccess = (result) => ({
+export const openAdToSeeAdInfoSuccess = (resultParsed) => ({
   type: OPEN_AD_TO_SEE_AD_INFO_SUCCESS,
-  result,
+  resultParsed,
 });
 
 export const hideSpinner = () => ({

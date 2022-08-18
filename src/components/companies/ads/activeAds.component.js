@@ -188,7 +188,7 @@ const ActiveAdsComponent = ({
                           : dateFormat(item.dateOfApplication)} */}
                           {/* {item.dateOfApplication} */}
                           {/* {item.dateOfApplication.indexOf(':00.000Z') === item.dateOfApplication.indexOf(':00.000Z') ? item.dateOfApplication?.replace("T12:27:00.000Z", "") : item.dateOfApplication} */}
-                          {item.dateOfApplication.indexOf(':00.000Z') !== -1 ? getDate(item.dateOfApplication?.substring(0,10)) : getDate(item.dateOfApplication)}
+                          {item.dateOfApplication.indexOf(':00.000Z') !== -1 ? getDate(item.dateOfApplication?.substring(0,10)) : item.dateOfApplication}
                           {/* {getDate(dateOfApplication)} */}
                       </h5>
                     </div>
