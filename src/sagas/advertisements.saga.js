@@ -147,6 +147,8 @@ function* saveAndPublishAdvertisementSaga() {
     let url;
     let body;
     let response;
+    let isPermanentPlace;
+    let isPartPlace;
     let parsedCompany = {};
 
     const { advertisement, client, companyProfile } = store.getState();
@@ -158,6 +160,7 @@ function* saveAndPublishAdvertisementSaga() {
     const userRole = client.user.data[6].user_type;
     const payment_method = paymentInfoForm && paymentInfoForm.payment_method;
     const companyId = companyProfile.profile.company_id;
+    const {company_name,company_url,profile_description,email,contact_number} = companyProfile.profile;
 
     if (!formValues.company_id) {
       formValues.company_id = companyId; // Also sending company_id to add company specific post.
@@ -165,18 +168,18 @@ function* saveAndPublishAdvertisementSaga() {
 
     yield put(closeDialog());
 
-    if (userRole === "admin") {
-      const companyDetails = {
-        company_id: parseInt(formValues.company_id),
-        uuid,
-      };
-      const jobPostOwner = yield call(
-        apiManualPost,
-        `${API_SERVER}/GetCompanyProfile`,
-        JSON.stringify({ ...companyDetails })
-      );
-      parsedCompany = JSON.parse(jobPostOwner.data);
-    }
+    // if (userRole === "admin") {
+    //   const companyDetails = {
+    //     company_id: parseInt(formValues.company_id),
+    //     uuid,
+    //   };
+    //   const jobPostOwner = yield call(
+    //     apiManualPost,
+    //     `${API_SERVER}/GetCompanyProfile`,
+    //     JSON.stringify({ ...companyDetails })
+    //   );
+    //   parsedCompany = JSON.parse(jobPostOwner.data);
+    // }
 
     const {
       selectedCampaign,
@@ -190,7 +193,7 @@ function* saveAndPublishAdvertisementSaga() {
       uploadedImage &&
       uploadedImage.name &&
       uploadedImage.name.replace(/\s+\(\d+\)/g, "JP"); // If stored filename has (int), dropzone doesn't understand the path..so changing such names before sending to db.
-    const refinedFormValues = filterObj("image_document", formValues);
+    const refinedFormValues = filterObj("logo", formValues);
 
     url = `${API_SERVER_EST}/postJob`;
 
@@ -210,6 +213,11 @@ function* saveAndPublishAdvertisementSaga() {
     // image_document array means, it already exists in db, no need to send while updating
     if (Array.isArray(formValues.image_document) === true) {
       body = {
+        companyName: company_name,
+        companyPageUrl: company_url,
+        companyDescription: profile_description,
+        email,
+        phone: contact_number,
         ...refinedFormValues,
         uuid,
         campaign_type: selectedCampaign.type,
@@ -220,7 +228,20 @@ function* saveAndPublishAdvertisementSaga() {
     } else if (!uploadedImage.name) {
       // no uploaded image means, no need to send any base64. Also, if there is an image stored in db..and we want to delete it, I am changing the formvalues of image_document in component
       body = {
-        ...formValues,
+        companyName: company_name,
+        companyPageUrl: company_url,
+        companyDescription: profile_description,
+        email,
+        phone: contact_number,
+        companyBusinessId: companyId.toString(),
+        is_agreement: formValues.is_agreement,
+        jobCategory: formValues.jobCategory,
+        jobDescription: formValues.jobDescription,
+        jobDuration: formValues.jobDuration,
+        jobLocation: formValues.jobLocation,
+        jobTitle: formValues.jobTitle,
+        jobType: formValues.jobType,
+        lastApplicationDate: formValues.lastApplicationDate,
         uuid,
         campaignLevel: selectedCampaign.type,
         status: statusToUpdate,
@@ -233,7 +254,20 @@ function* saveAndPublishAdvertisementSaga() {
     ) {
       const base64 = formValues.image_document;
       body = {
-        ...formValues,
+        companyName: company_name,
+        companyPageUrl: company_url,
+        companyDescription: profile_description,
+        email,
+        phone: contact_number,
+        companyBusinessId: companyId.toString(),
+        is_agreement: formValues.is_agreement,
+        jobCategory: formValues.jobCategory,
+        jobDescription: formValues.jobDescription,
+        jobDuration: formValues.jobDuration,
+        jobLocation: formValues.jobLocation,
+        jobTitle: formValues.jobTitle,
+        jobType: formValues.jobType,
+        lastApplicationDate: formValues.lastApplicationDate,
         uuid,
         campaignLevel: selectedCampaign.type,
         status: statusToUpdate,
@@ -243,11 +277,11 @@ function* saveAndPublishAdvertisementSaga() {
           path: "",
           filename: refinedUploadedImage,
           filetype: uploadedImage.type,
-          data: base64,
+          logo: base64,
         },
         extra_service: selectedService,
         isDraft,
-      };
+      }
     }
     if (selectedCampaign.includes_mktbudget) {
       const {
@@ -418,6 +452,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       jobPostNumber,
       //companyBusinessId,
       company_image,
+      logo,
       image_id,
       jobName,
       jobCode,
@@ -442,8 +477,8 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       yield put(change("vacancy", "jobPostNumber", jobPostNumber));
       // yield put(change('vacancy', 'company_id', company_id));
       // yield put(change('vacancy', "value from inputfield", "value from api call"));
-      if (company_image) {
-        yield put(change("vacancy", "image_document", company_image));
+      if (logo) {
+        yield put(change("vacancy", "logo", logo));
         yield put(change("vacancy", "image_id", image_id));
       }
     }
@@ -499,7 +534,7 @@ function* editVacancyFormSaga({ id, isToEdit }) {
 
     const {
       jobPostNumber,
-      company_image,
+      logo,
       image_id,
       jobName,
       jobCode,
@@ -523,8 +558,8 @@ function* editVacancyFormSaga({ id, isToEdit }) {
     if (isToEdit) {
       yield put(change("editVacancy", "jobPostNumber", jobPostNumber));
       // yield put(change('vacancy', 'company_id', company_id));
-      if (company_image) {
-        yield put(change("editVacancy", "image_document", company_image));
+      if (logo) {
+        yield put(change("editVacancy", "logo", logo));
         yield put(change("editVacancy", "image_id", image_id));
       }
     }
@@ -596,7 +631,7 @@ function* updateJobPostSaga({ isToEdit, id }) {
       yield put(change("editVacancy", "jobPostNumber", jobPostNumber));
       yield put(change("vacancy", "companyBusinessId", companyBusinessId));
       if (logo) {
-        yield put(change("editVacancy", "image_document", logo));
+        yield put(change("editVacancy", "logo", logo));
         yield put(change("editVacancy", "image_id", image_id));
       }
     }

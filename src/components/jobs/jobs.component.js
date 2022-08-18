@@ -317,9 +317,9 @@ const JobsComponent = ({
                               <Grid container className={classes.dateInfo}>
                                 <Grid item>
                                   <span>
-                                    {t("publishedDate")}:
+                                    {/* {t("publishedDate")}:
                                     {/* {item.dateOfApplication} */}
-                                    'At the moment'
+                                    {/* {'At the moment'} */}
                                   </span>
                                 </Grid>
                                 <Grid item>
@@ -335,9 +335,8 @@ const JobsComponent = ({
                             <Hidden only={["xs", "sm", "md", "lg"]}>
                               <Grid item>
                                 <span>
-                                  {t("publishedDate")}:
+                                  {/* {t("publishedDate")}: */}
                                   {/* {item.dateOfApplication} */}
-                                  'At the moment'
                                 </span>
                               </Grid>
                               <Grid item>

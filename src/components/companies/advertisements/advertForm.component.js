@@ -134,6 +134,7 @@ const AdvertFormComponent = ({
   showPaymentDialog,
   isToEdit,
   image,
+  logo,
   dispatch,
   apiSuccess,
   apiFailed,
@@ -287,15 +288,15 @@ const AdvertFormComponent = ({
                   component={renderDropzoneField}
                   type="file"
                   imagefile={
-                    image && !image.path && !Array.isArray(image)
-                      ? image
-                      : Array.isArray(image)
-                      ? image[0].path
+                    logo && !logo.path && !Array.isArray(logo)
+                      ? logo
+                      : Array.isArray(logo)
+                      ? logo[0].path
                       : ""
                   }
                   btnText={t("addPic")}
                   name="logo"
-                  id="id"
+                  id="logo"
                   fullWidth
                   isImage
                 />
@@ -310,11 +311,11 @@ const AdvertFormComponent = ({
                     // deleting stored image in db vs. newly uploaded image
                     storedPath
                       ? dispatch(
-                          change("vacancy", "image_document", {
+                          change("vacancy", "logo", {
                             path: storedPath,
                           })
                         )
-                      : dispatch(change("vacancy", "image_document", ""));
+                      : dispatch(change("vacancy", "logo", ""));
                     clearImagesFromState();
                   }}
                 >

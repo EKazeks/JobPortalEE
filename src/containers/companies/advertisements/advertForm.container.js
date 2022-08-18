@@ -25,7 +25,7 @@ const mapStateToProps = state => {
   //let language = formValueSelector('vacancy')(store.getState(), 'email_language');
 
   return {
-    image: formValueSelector('vacancy')(state, 'image_document'),
+    logo: formValueSelector('vacancy')(state, 'logo'),
     jobCategories: state.jobCategories.jobCategories.filter(jobs => jobs.type !== 'all'),
     selectedCampaign: store.getState().advertisement.selectedCampaign && store.getState().advertisement.selectedCampaign,
     apiSuccess: store.getState().advertisement.apiSuccess,

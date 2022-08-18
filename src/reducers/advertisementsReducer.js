@@ -298,13 +298,13 @@ export default function advertisementsReducer(state = initialState, action) {
     case OPEN_AD_TO_SEE_AD_INFO_SUCCESS:
       return {
         ...state,
-        viewSelectedAd: action.result,
+        viewSelectedAd: action.resultParsed,
         showSpinner: false,
         marketingDetails: {
-          marketing_platform: action.result.marketing_platform,
-          more_budget: action.result.more_budget,
+          marketing_platform: action.resultParsed.marketing_platform,
+          more_budget: action.resultParsed.more_budget,
           //marketing_budget: action.result.marketing_budget,
-          isPlatformSaved: action.result.isPlatformSaved,
+          isPlatformSaved: action.resultParsed.isPlatformSaved,
         },
       };
 
