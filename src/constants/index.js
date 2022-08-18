@@ -247,6 +247,7 @@ export const SOS_SERVICE_FEE = 90;
 // Development Server
 export const API_SERVER = "https://vpt-api-dev.azurewebsites.net/api";
 export const API_SERVER_EST = "https://localhost:7262/jobsEn";
+export const ESTONIAN_USER_VALIDATE = "https://localhost:7262/CheckUser";
 export const API_SERVER_EST_GET_ID = "https://localhost:7262/JobOffer";
 export const VPT_IDENTITY_SERVER =
   "https://vpt-identityserver-dev.azurewebsites.net/api";

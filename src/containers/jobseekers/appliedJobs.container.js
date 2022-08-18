@@ -30,7 +30,7 @@ const mapStateToProps = state => {
     appliedJobs: state.jobs.appliedJobs,
     selectedPage: state.pagination.selectedPage.selected,
     advertPages: Math.ceil(state.jobs.appliedJobs.length / 10),
-    isUserType: state.client.user && state.client.user.data[6].user_type,
+    isUserType: state.client.user && state.client.user.data.user_type,
   };
 };
 

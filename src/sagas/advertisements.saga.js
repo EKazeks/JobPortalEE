@@ -160,7 +160,13 @@ function* saveAndPublishAdvertisementSaga() {
     const userRole = client.user.data[6].user_type;
     const payment_method = paymentInfoForm && paymentInfoForm.payment_method;
     const companyId = companyProfile.profile.company_id;
-    const {company_name,company_url,profile_description,email,contact_number} = companyProfile.profile;
+    const {
+      company_name,
+      company_url,
+      profile_description,
+      email,
+      contact_number,
+    } = companyProfile.profile;
 
     if (!formValues.company_id) {
       formValues.company_id = companyId; // Also sending company_id to add company specific post.
@@ -281,7 +287,7 @@ function* saveAndPublishAdvertisementSaga() {
         },
         extra_service: selectedService,
         isDraft,
-      }
+      };
     }
     if (selectedCampaign.includes_mktbudget) {
       const {
@@ -390,7 +396,7 @@ function* getJobPostByPostIdSaga({ id }) {
     //const {id} = store.getState().jobs;
     const url = `${API_SERVER_EST}/${id}`;
     const companyBusinessId = store.getState().jobs.jobsList.companyBusinessId;
-    const userRole = store.getState().client.user.data[6].user_type;
+    const userRole = store.getState().client.user.data.user_type;
 
     const result = yield call(apiOpenRequest, url);
     const resultParsed = result.data;
@@ -436,7 +442,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     const url = `${API_SERVER_EST}/${id}`;
     //const companyBusinessId = store.getState().jobs.companyBusinessId;
     const campaigns = store.getState().advertisement.campaigns;
-    const userRole = store.getState().client.user.data[6].user_type;
+    const userRole = store.getState().client.user.data.user_type;
     /* const formValues = getFormValues("vacancy")(store.getState()); */
     const body = JSON.stringify({
       jobPostNumber: userRole === "admin" ? id.split("admin")[0] : id,
@@ -522,7 +528,7 @@ function* editVacancyFormSaga({ id, isToEdit }) {
   try {
     const url = `https://localhost:7262/activeAds`;
     const campaigns = store.getState().advertisement.campaigns;
-    const userRole = store.getState().client.user.data[6].user_type;
+    const userRole = store.getState().client.user.data.user_type;
 
     const body = JSON.stringify({
       jobPostNumber: userRole === "admin" ? id.split("admin")[0] : id,
@@ -712,7 +718,7 @@ function* updateCampaignSaga({ id }) {
 
     // Upgrade campaign
     const url = `https://localhost:7262/updateJobOfferCampaignType`;
-    const uuid = store.getState().client.user.data[2];
+    const uuid = store.getState().client.user.data;
     const { type, includes_mktbudget } = advertisement.selectedCampaign;
     const campaign_id = advertisement.selectedCampaign.id;
     const userRole = client.user.data[6].user_type;
@@ -896,7 +902,7 @@ function* deleteJobPostSaga({ id }) {
   try {
     const url = `${API_SERVER_EST}/${id}`;
     const companyId = store.getState().companyProfile.profile.company_id;
-    const userRole = store.getState().client.user.data[6].user_type;
+    const userRole = store.getState().client.user.data.user_type;
 
     const body = JSON.stringify({
       post_id: userRole === "admin" ? id.split("admin")[0] : id,
@@ -979,7 +985,7 @@ function* updateJobApplicationDetailsSaga({
     let url;
     const formValues = getFormValues("applicantDetails")(store.getState());
     let response;
-    const loggedInUser = store.getState().client.user.data[1];
+    const loggedInUser = store.getState().client.user.data;
     const {
       application_notes,
       interview_title,
@@ -1062,7 +1068,7 @@ function* deleteApplicationSaga() {
 
 function* changeRouteSaga() {
   try {
-    const userRole = store.getState().client.user.data[6].user_type;
+    const userRole = store.getState().client.user.data.user_type;
 
     if (userRole === "company") {
       browserHistory.push("/omat-ilmoitukseni");
@@ -1085,7 +1091,7 @@ function* adminGetUserCompanyProfileSaga({ id }) {
   const url = `${API_SERVER}/GetCompanyProfile`;
 
   try {
-    const uuid = store.getState().client.user.data[2];
+    const uuid = store.getState().client.user.data.id;
     const body = JSON.stringify({ company_id: id, uuid });
     const result = yield call(apiManualPost, url, body);
     const resultParsed = JSON.parse(result.data)[0];

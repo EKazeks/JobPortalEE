@@ -1,5 +1,5 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
-import { getFormValues, reset } from 'redux-form';
+import { call, put, takeEvery } from "redux-saga/effects";
+import { getFormValues, reset } from "redux-form";
 import {
   API_SERVER,
   API_SERVER_EST,
@@ -15,7 +15,7 @@ import {
   RESET_SEARCH_CRITERIA_FORM,
   JOBPOST_COUNT_PER_PAGE,
   mol_page_url,
-} from '../constants';
+} from "../constants";
 import {
   filterJobsSuccess,
   getJobDetailsByIdSuccess,
@@ -31,10 +31,15 @@ import {
   changeAdvertPage,
   changePagination,
   getWorkStartSuccess,
-} from '../actions';
-import { apiOpenPost, apiManualPost, apiOpenRequest, apiManualRequest } from '../utils/request';
-import store from '../store';
-import axios from 'axios';
+} from "../actions";
+import {
+  apiOpenPost,
+  apiManualPost,
+  apiOpenRequest,
+  apiManualRequest,
+} from "../utils/request";
+import store from "../store";
+import axios from "axios";
 
 function* filterJobsSaga({ isToRetainSelectedPage }) {
   try {
@@ -43,16 +48,35 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
     const changePage = pagination.isToChangePage;
     const currentPage = pagination.selectedPage?.selected;
 
-    const searchFormValues = getFormValues('searchCriteria')(store.getState());
+    const searchFormValues = getFormValues("searchCriteria")(store.getState());
     // The foloowing conditions for not sending the keys to backend incase no inputs!
     const body = JSON.stringify({
-      search_phrase: searchFormValues.search_phrase ? searchFormValues.search_phrase : undefined,
-      job_location: searchFormValues.job_location ? searchFormValues.job_location : undefined,
+      search_phrase: searchFormValues.search_phrase
+        ? searchFormValues.search_phrase
+        : undefined,
+      job_location: searchFormValues.job_location
+        ? searchFormValues.job_location
+        : undefined,
       portal_category_id:
-        searchFormValues.portal_category_id.length > 0 ? searchFormValues.portal_category_id.map(category => category.id.toString()) : undefined,
-      job_type: searchFormValues.job_type.length > 0 ? searchFormValues.job_type.map(jobType => jobType.value.toString()) : undefined,
-      job_hours: searchFormValues.job_hours.length > 0 ? searchFormValues.job_hours.map(jobHours => jobHours.value.toString()) : undefined,
-      published: searchFormValues.published !== '' ? parseInt(searchFormValues.published) : undefined,
+        searchFormValues.portal_category_id.length > 0
+          ? searchFormValues.portal_category_id.map((category) =>
+              category.id.toString()
+            )
+          : undefined,
+      job_type:
+        searchFormValues.job_type.length > 0
+          ? searchFormValues.job_type.map((jobType) => jobType.value.toString())
+          : undefined,
+      job_hours:
+        searchFormValues.job_hours.length > 0
+          ? searchFormValues.job_hours.map((jobHours) =>
+              jobHours.value.toString()
+            )
+          : undefined,
+      published:
+        searchFormValues.published !== ""
+          ? parseInt(searchFormValues.published)
+          : undefined,
     });
 
     if (isToRetainSelectedPage) {
@@ -61,7 +85,7 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
 
     const portal_url = `${API_SERVER}/SearchPortalAds/?offset=${start}&rows=${JOBPOST_COUNT_PER_PAGE}`;
 
-    const portal_result = yield call(apiOpenPost,portal_url, body);
+    const portal_result = yield call(apiOpenPost, portal_url, body);
     const portal_data = JSON.parse(portal_result.data);
     yield put(filterJobsSuccess(portal_data));
 
@@ -72,7 +96,7 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
       yield put(
         changeAdvertPage({
           selected: 0,
-        }),
+        })
       );
     }
 
@@ -83,8 +107,8 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
 }
 
 function* getJobDetailsByIdSaga(props) {
-  const {jobs} = store.getState()
-  const {id} = jobs
+  const { jobs } = store.getState();
+  const { id } = jobs;
   try {
     const url = `${API_SERVER_EST}/${id}`;
 
@@ -95,7 +119,7 @@ function* getJobDetailsByIdSaga(props) {
     let jobUrl;
     let ilmoId;
 
-    const job_detail = props.id.split('$$');
+    const job_detail = props.id.split("$$");
 
     const { user } = store.getState().client;
 
@@ -103,7 +127,7 @@ function* getJobDetailsByIdSaga(props) {
 
     const userUrl = window.location.href;
 
-    const isApplyPage = userUrl.includes('hae') ? true : false;
+    const isApplyPage = userUrl.includes("hae") ? true : false;
 
     // if (email) {
     //   body = JSON.stringify({
@@ -120,8 +144,8 @@ function* getJobDetailsByIdSaga(props) {
     //   });
     // }
 
-    result = axios.get( url ).then((res) => res.data)
-    const data = result.data
+    result = axios.get(url).then((res) => res.data);
+    const data = result.data;
     if (data === data) {
       //resultParsed = result.data[0];
       //ilmoId = resultParsed.ilmoitusnumero;
@@ -133,7 +157,7 @@ function* getJobDetailsByIdSaga(props) {
 
     //   yield put(getJobDetailsByIdSuccess(data));
     // }
-   //jobDetailResult = yield call(apiOpenRequest, url);
+    //jobDetailResult = yield call(apiOpenRequest, url);
     // if (jobDetailResult.data) {
     //   jobDetailResult = jobDetailResult.data.response?.docs[0];
 
@@ -148,8 +172,8 @@ function* toggleFavoriteJobsSaga({ id }) {
   try {
     const url = `https://localhost:7262/setFavouriteOffer/${id}`;
     const result = yield call(apiManualPost, url);
-    const data = result.data
-    
+    const data = result.data;
+
     if (data === data) {
       yield put(showSuccessSnackbar());
       yield put(getJobDetailsById(id));
@@ -167,11 +191,11 @@ function* toggleFavoriteJobsSaga({ id }) {
 function* deleteFavoriteJobsSaga({ id }) {
   try {
     const url = `https://localhost:7262/unsetFavouriteOffer/${id}`;
-    const body = ({
-      isFavourite: 0
-    })
+    const body = {
+      isFavourite: 0,
+    };
     const result = yield call(apiManualPost, url);
-    const data = result.data
+    const data = result.data;
     if (data === data) {
       yield put(getFavoriteJobs());
     }
@@ -183,7 +207,7 @@ function* deleteFavoriteJobsSaga({ id }) {
 function* getAppliedJobsSaga() {
   try {
     const url = `${API_SERVER}/GetAppliedJobPostByEmail`;
-    const email = store.getState().client.user.data[1];
+    const email = store.getState().client.user.data.email;
     const body = JSON.stringify({
       email,
     });
@@ -202,14 +226,13 @@ function* getFavoriteJobsSaga() {
 
     const result = yield call(apiManualRequest, url);
 
-    const data = result.data
+    const data = result.data;
 
-      if (data === data) {
-        yield put(getFavoriteJobsSuccess(data));
-      } else {
-        //yield put(getFavoriteJobsSuccess([]));
-      }
-    
+    if (data === data) {
+      yield put(getFavoriteJobsSuccess(data));
+    } else {
+      //yield put(getFavoriteJobsSuccess([]));
+    }
   } catch (e) {
     console.log(e);
   }
@@ -218,9 +241,9 @@ function* getFavoriteJobsSaga() {
 function* getApplicantDashboardInfoSaga() {
   try {
     const url = `${API_SERVER}/GetApplicantDashboardInfo`;
-    const email = store.getState().client.user.data[1];
-    const firstname = store.getState().client.user.data[3];
-    const lastname = store.getState().client.user.data[4];
+    const email = store.getState().client.user.data.email;
+    const firstname = store.getState().client.user.data.email;
+    const lastname = store.getState().client.user.data.email;
     const body = JSON.stringify({
       email,
       firstname,
@@ -237,21 +260,32 @@ function* getApplicantDashboardInfoSaga() {
 function* toggleEmailNotificationSaga() {
   try {
     const url = `${API_SERVER}/UpdateApplicantEmailNotification`;
-    const email = store.getState().client.user.data[1];
+    const email = store.getState().client.user.data.email;
     const isToggleOn = store.getState().jobs.notificationToggleBtn;
-    const formValues = getFormValues('jobPreference')(store.getState());
+    const formValues = getFormValues("jobPreference")(store.getState());
 
     const body = JSON.stringify({
       ...formValues,
       email_notice_active: isToggleOn,
       email,
-      job_category: formValues.job_category.length > 0 ? formValues.job_category.map(category => category.id.toString()) : undefined,
-      job_type: formValues.job_type.length > 0 ? formValues.job_type.map(el => el.type.toString()) : undefined,
-      job_hours: formValues.job_hours.length > 0 ? formValues.job_hours.map(el => el.type.toString()) : undefined,
+      job_category:
+        formValues.job_category.length > 0
+          ? formValues.job_category.map((category) => category.id.toString())
+          : undefined,
+      job_type:
+        formValues.job_type.length > 0
+          ? formValues.job_type.map((el) => el.type.toString())
+          : undefined,
+      job_hours:
+        formValues.job_hours.length > 0
+          ? formValues.job_hours.map((el) => el.type.toString())
+          : undefined,
     });
 
     const result = yield call(apiManualPost, url, body);
-    if (result.data === "Applicant's email notification updated successfully!") {
+    if (
+      result.data === "Applicant's email notification updated successfully!"
+    ) {
       yield put(showSuccessSnackbar());
       yield put(getApplicantDashboardInfo());
     } else {
@@ -264,19 +298,30 @@ function* toggleEmailNotificationSaga() {
 function* updateEmailNotificationSaga() {
   try {
     const url = `${API_SERVER}/UpdateApplicantEmailNotification`;
-    const email = store.getState().client.user.data[1];
+    const email = store.getState().client.user.data.email;
     const isToggleOn = 1;
-    const formValues = getFormValues('jobPreference')(store.getState());
+    const formValues = getFormValues("jobPreference")(store.getState());
     const body = JSON.stringify({
       ...formValues,
       email_notice_active: isToggleOn,
       email,
-      job_category: formValues.job_category.length > 0 ? formValues.job_category.map(category => category.id.toString()) : undefined,
-      job_type: formValues.job_type.length > 0 ? formValues.job_type.map(el => el.type.toString()) : undefined,
-      job_hours: formValues.job_hours.length > 0 ? formValues.job_hours.map(el => el.type.toString()) : undefined,
+      job_category:
+        formValues.job_category.length > 0
+          ? formValues.job_category.map((category) => category.id.toString())
+          : undefined,
+      job_type:
+        formValues.job_type.length > 0
+          ? formValues.job_type.map((el) => el.type.toString())
+          : undefined,
+      job_hours:
+        formValues.job_hours.length > 0
+          ? formValues.job_hours.map((el) => el.type.toString())
+          : undefined,
     });
     const result = yield call(apiManualPost, url, body);
-    if (result.data === "Applicant's email notification updated successfully!") {
+    if (
+      result.data === "Applicant's email notification updated successfully!"
+    ) {
       yield put(showSuccessSnackbar());
       yield put(getApplicantDashboardInfo());
     } else {
@@ -291,7 +336,7 @@ function* updateEmailNotificationSaga() {
 
 function* resetSearchCriteriaFormSaga() {
   try {
-    yield put(reset('searchCriteria'));
+    yield put(reset("searchCriteria"));
   } catch (error) {
     console.log(error);
   }

@@ -27,7 +27,7 @@ const mapStateToProps = state => {
   const extraServiceSum = extraService === 'help' ? HELP_SERVICE_FEE : extraService === 'sos' ? SOS_SERVICE_FEE : 0;
   const totalSum = isExtraServiceAdded ? extraServiceSum : isToChangeCampaign ? newCampValue + mktBudget : value + mktBudget;
 
-  const userRole = state.client.user && state.client.user.data[5];
+  const userRole = state.client.user && state.client.user.data.user_role;
   return {
     /* initialValues: {
       payment_method: userRole === 1 ? 'invoice' : null

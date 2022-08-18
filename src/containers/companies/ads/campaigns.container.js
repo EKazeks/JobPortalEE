@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
   isToChangeCampaign: state.advertisement.isToChangeCampaign,
   showSuccessSnackbar: state.asyncActions.showSuccessSnackbar,
   showFailedSnackbar: state.asyncActions.showFailedSnackbar,
-  userRole: state.client.user.data[6].user_type,
+  userRole: state.client.user.data.user_type,
   id: state.advertisement.selectedAd,
   showDialog: state.asyncActions.showMktDialog,
   showPaymentDialog: state.asyncActions.showPaymentDialog,

@@ -7,7 +7,7 @@ import { apiManualPost } from '../utils/request';
 
 function* getCompaniesList({ isProfileUpdated }) {
   try {
-    const email = store.getState().client.user.data[1];
+    const email = store.getState().client.user.data.email;
 
     if (email) {
       const url = `${API_SERVER}/GetUserCompaniesList`;

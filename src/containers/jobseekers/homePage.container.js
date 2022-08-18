@@ -77,7 +77,7 @@ console.log(populateFormValues)
     notificationToggleBtn: state.jobs.notificationToggleBtn,
     showSuccessSnackbar: state.asyncActions.showSuccessSnackbar,
     showFailedSnackbar: state.asyncActions.showFailedSnackbar,
-    isUserType: state.client.user && state.client.user.data[6].user_type,
+    isUserType: state.client.user && state.client.user.data.user_type,
     formValues,
   };
 };
