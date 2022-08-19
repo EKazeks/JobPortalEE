@@ -38,7 +38,7 @@ const ProfileContainerForm = reduxForm({
 const mapStateToProps = (state) => {
   const { isToAddNewProfile } = state.companyProfile;
   return {
-    logo: formValueSelector("companyProfile")(state, "logo_document"),
+    logo: state.companyProfile.profile.companyLogo.logo,
     showSuccessSnackbar: state.asyncActions.showSuccessSnackbar,
     showFailedSnackbar: state.asyncActions.showFailedSnackbar,
     showCustomError: state.asyncActions.showCustomError,
@@ -53,7 +53,7 @@ const mapStateToProps = (state) => {
     isToAddNewProfile,
     isCompanyCreated: state.companyProfile.profile.company_id !== 0, // Resembles newly registered users but profile not updated
     isSuperUser: state.client.user && state.client.user.data.user_role === 0, // Resembles only the registered user, not added employees
-    uploadedLogo: state.companyProfile.uploadedLogo,
+    uploadedLogo: state.companyProfile.profile.companyLogo.logo,
     companyLists: state.companyLists.companyLists,
     apiSuccess: state.companyLists.apiSuccess,
     clientUserEmail: state.client.user.data.email,
