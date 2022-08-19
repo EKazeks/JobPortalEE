@@ -107,7 +107,6 @@ const InactiveAds = ({
                     <Grid item md={3} style={{ color: "#34495E " }}>
                       <div>
                         {/* <h5>{new Intl.DateTimeFormat('fi-FI').format(new Date(item.created))}</h5> */}
-                        {"Creation Date"}
                       </div>
                     </Grid>
                     <Grid item md={4}>

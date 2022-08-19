@@ -15,7 +15,6 @@ import { customURL, dateFormat } from '../../utils/helperFunctions';
 import TextEditor from '../../utils/textEditor';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { fetchJobApplicants } from '../../actions';
 
 const styles = theme => ({
   formBtn: {
@@ -133,38 +132,20 @@ const ApplicantDetails = ({
   const applicant_cv = viewApplication.applicant_cv && viewApplication.applicant_cv[0].path;
   const cv_filename = viewApplication.applicant_cv && viewApplication.applicant_cv[0].filename;
   const { t } = useTranslation('applicant', 'common');
-  const [jobsToRender, setJobsToRender] = useState([]);
-  const [applicants, setApplicants] = useState([])
-  const [address, setAddress] = useState()
-  const {id} = useSelector((state) => state.jobs)
-  const dispatch = useDispatch()
-  //const {jobpostId} = useSelector((state) => state.jobs.jobApplicants)
 
-  useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${id}`).then(res => {
-      setJobsToRender(res.data);
-      setApplicants(res.data.jobPostApplications)
-      setAddress(res.data.jobPostAddress.address)
-    });
-  }, []);
-
-  // useEffect(() => {
-  //   dispatch(fetchJobApplicants(applicants.id))
-  //   console.log(applicantId);
-  // },[])
   return (
     <div className="job-application">
       <SideBar />
       <div className={classes.adContent}>
         <div className="container">
           <div className={classes.backBtnContainer}>
-            <Link to={`${customURL(jobsToRender.url, 'internal')}`} className={classes.backBtnText}>
+            <Link to={`${customURL(viewSelectedAd.url, 'internal')}`} className={classes.backBtnText}>
               <ArrowBackIosIcon /> {t('jobs:backButton')}
             </Link>
           </div>
           <div className={classes.title}>
             <h3>
-              {jobsToRender.jobName}, {address}
+              {viewSelectedAd.jobName}, {viewSelectedAd.jobPostAddress.address}
             </h3>
             <Divider />
           </div>
@@ -242,9 +223,9 @@ const ApplicantDetails = ({
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          {/* <a href={applicant_cv} target="_blank" rel="noopener noreferrer">
+                          <a href={applicant_cv} target="_blank" rel="noopener noreferrer">
                             {cv_filename}
-                          </a> */}
+                          </a>
                         </Grid>
                       </Grid>
                     </div>
@@ -292,12 +273,12 @@ const ApplicantDetails = ({
                     <Grid item className="fullWidthBtn">
                       <Button
                         variant="contained"
-                        //className={classNames(viewApplication.status === 1 ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
-                        //startIcon={viewApplication.status === 1 && <DoneIcon />}
-                        //disabled={viewApplication.status === 1}
+                        className={classNames(viewApplication.favouriteCandidate === 1 ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
+                        startIcon={viewApplication.favouriteCandidate === 1 && <DoneIcon />}
+                        disabled={viewApplication.favouriteCandidate === 1}
                         color="primary"
                         onClick={() =>
-                          updateApplicantStatus(applicants.id, applicants.jobpostId, applicants.email, 1)
+                          updateApplicantStatus(viewApplication.id, viewApplication.jobpostId, viewApplication.email, 1)
                         }
                       >
                         {t('call')} / {t('interview')}
@@ -306,12 +287,12 @@ const ApplicantDetails = ({
                     <Grid item className="fullWidthBtn">
                       <Button
                         variant="contained"
-                        className={classNames(applicants.status === 4 ? classes.rejectStatus : classes.inactiveStatus, 'fullWidthBtn')}
-                        startIcon={applicants.status === 4 && <DoneIcon />}
-                        disabled={applicants.status === 4}
+                        className={classNames(viewApplication.favouriteCandidate === 4 ? classes.rejectStatus : classes.inactiveStatus, 'fullWidthBtn')}
+                        startIcon={viewApplication.favouriteCandidate === 4 && <DoneIcon />}
+                        disabled={viewApplication.favouriteCandidate === 4}
                         color="secondary"
                         onClick={() =>
-                          updateApplicantStatus(applicants.id, applicants.jobpostId, applicants.email, 4)
+                          updateApplicantStatus(viewApplication.id, viewApplication.jobpostId, viewApplication.email, 4)
                         }
                       >
                         {t('dontCall')}
@@ -320,12 +301,12 @@ const ApplicantDetails = ({
                     <Grid item className="fullWidthBtn">
                       <Button
                         variant="contained"
-                        className={classNames(applicants.status === 2 ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
-                        startIcon={applicants.status === 2 && <DoneIcon />}
-                        disabled={applicants.status === 2}
+                        className={classNames(viewApplication.favouriteCandidate === 2 ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
+                        startIcon={viewApplication.favouriteCandidate === 2 && <DoneIcon />}
+                        disabled={viewApplication.favouriteCandidate === 2}
                         color="primary"
                         onClick={() =>
-                          updateApplicantStatus(applicants.id, applicants.jobpostId, applicants.email, 2)
+                          updateApplicantStatus(viewApplication.id, viewApplication.jobpostId, viewApplication.email, 2)
                         }
                       >
                         {t('interviewBooked')}
@@ -334,11 +315,11 @@ const ApplicantDetails = ({
                     <Grid item className="fullWidthBtn">
                       <Button
                         variant="contained"
-                        className={classNames(applicants.is_fav ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
-                        startIcon={applicants.is_fav && <DoneIcon />}
+                        className={classNames(viewApplication.favouriteCandidate ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
+                        startIcon={viewApplication.favouriteCandidate && <DoneIcon />}
                         color="secondary"
                         onClick={() =>
-                          updateApplicantStatus(applicants.id,applicants.jobpostId, applicants.email, 3)
+                          updateApplicantStatus(viewApplication.id,viewApplication.jobpostId, viewApplication.email, 3)
                         }
                       >
                         {t('addToFavorites')}
@@ -361,9 +342,9 @@ const ApplicantDetails = ({
                     loading={loading}
                     handleClick={() =>
                       updateJobApplicationDetails(
-                        viewApplication.application_id,
-                        viewApplication.company_id,
-                        viewApplication.post_id,
+                        viewApplication.id,
+                        //viewApplication.company_id,
+                        viewApplication.jobpostId,
                         viewApplication.email,
                         'note',
                       )
@@ -382,9 +363,9 @@ const ApplicantDetails = ({
                     editInterviewDetails={editInterviewDetails}
                     handleClick={() =>
                       updateJobApplicationDetails(
-                        viewApplication.application_id,
-                        viewApplication.company_id,
-                        viewApplication.post_id,
+                        viewApplication.id,
+                        //viewApplication.company_id,
+                        viewApplication.jobpostId,
                         viewApplication.email,
                         'interview',
                       )

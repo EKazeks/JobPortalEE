@@ -18,14 +18,14 @@ const mapStateToProps = state => {
   return {
     selectedMenu: state.advertisement.selectedSideMenu,
     viewSelectedAd: state.advertisement.viewSelectedAd,
-    applications: state.advertisement.viewSelectedAd.applications && state.advertisement.viewSelectedAd.applications,
+    applications: state.advertisement.viewSelectedAd.jobPostApplications && state.advertisement.viewSelectedAd.jobPostApplications,
     showSpinner: state.advertisement.showSpinner,
     campaigns: state.advertisement.campaigns,
     showSuccessSnackbar: state.asyncActions.showSuccessSnackbar,
     showFailedSnackbar: state.asyncActions.showFailedSnackbar,
     userRole: state.client.user.data[6].user_type,
     showDialog: state.advertisement.warnToDeleteApplication,
-    advertPages: state.advertisement.viewSelectedAd.applications && Math.ceil(state.advertisement.viewSelectedAd.applications.length / rows),
+    advertPages: state.advertisement.viewSelectedAd.jobPostApplications && Math.ceil(state.advertisement.viewSelectedAd.jobPostApplications.length / rows),
     selectedPage: state.pagination.selectedPage.selected,
     rowsPerPage: rows,
   };

@@ -73,7 +73,7 @@ const _onFormSubmit = () => {
 const EditAdvertFormComponent = ({
   classes,
   handleSubmit,
-  image,
+  logo,
   dispatch,
   apiSuccess,
   apiFailed,
@@ -89,9 +89,9 @@ const EditAdvertFormComponent = ({
   const { t } = useTranslation('advertForm');
 
   const storedPath =
-    Array.isArray(formValueSelector('editVacancy')(store.getState(), 'image_document')) &&
-    formValueSelector('editVacancy')(store.getState(), 'image_document')[0] &&
-    formValueSelector('editVacancy')(store.getState(), 'image_document')[0].path;
+    Array.isArray(formValueSelector('editVacancy')(store.getState(), 'logo')) &&
+    formValueSelector('editVacancy')(store.getState(), 'logo')[0] &&
+    formValueSelector('editVacancy')(store.getState(), 'logo')[0].path;
 
   return (
     <div className="container">
@@ -128,10 +128,10 @@ const EditAdvertFormComponent = ({
                 <Field
                   component={renderDropzoneField}
                   type="file"
-                  imagefile={image && !image.path && !Array.isArray(image) ? image : Array.isArray(image) ? image[0].path : ''}
+                  imagefile={logo && !logo.path && !Array.isArray(logo) ? logo : Array.isArray(logo) ? logo[0].path : ''}
                   btnText={t('addPic')}
-                  name="image_document"
-                  id="image_id"
+                  name="logo"
+                  id="logo"
                   fullWidth
                   isImage
                 />
