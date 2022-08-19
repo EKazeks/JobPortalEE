@@ -155,8 +155,7 @@ const AdvertFormComponent = ({
 }) => {
   const { t } = useTranslation("advertForm", "campaigns");
   const [copiedJob, setCopiedJob] = useState({});
-  const[jobCategorys,setJobCategorys]=useState([])
-  const [jobDuration,setJobDuration]=useState([]);
+  
   const storedPath =
     Array.isArray(
       formValueSelector("vacancy")(store.getState(), "image_document")
@@ -173,42 +172,6 @@ const AdvertFormComponent = ({
     }
   }, []);
   
- 
-
-  //fetching jobsCategories and storing them in jobCategorys state
-  useEffect(() => {
-    axios.get('https://localhost:7262/getAllCategories').then((res) => {
-       const categoryArray=res.data
-        const jobCateg= [...categoryArray.reduce((map, obj) =>map.set(obj.jobCode-1, obj), new Map()).values()];
-        
-       const sorted= jobCateg.sort((a, b) => a.jobCode - b.jobCode );
-       const firstCategory={jobCode:"0",jobTags:""}
-       jobCateg.unshift(firstCategory)
-     const lastCategory={jobCode:`${jobCateg.length}`,jobTags:"Other"}
-     jobCateg.push(lastCategory)
-     const mapped=jobCateg.map(item => {
-      return {
-        id: parseInt(item.jobCode),
-        type: item.jobTags
-      };
-    });
-       setJobCategorys(mapped)
-    }) 
- 
- },[])
-/*   console.log(jobCategorys);  */
-  /* console.log("jobCategories",jobCategories); */
-
-
-  useEffect(() => {
-   
-    axios.get('https://localhost:7262/jobsEn').then((res) => {
-      setJobDuration(res.data);
-    });
-
-}, []);
-
-
   const { lang } = store.getState().language;
 
   return (

@@ -391,9 +391,8 @@ function* saveAndPublishAdvertisementSaga() {
   }
 }
 
-function* getJobPostByPostIdSaga({ id }) {
+function* getJobPostByPostIdSaga({id}) {
   try {
-    //const {id} = store.getState().jobs;
     const url = `${API_SERVER_EST}/${id}`;
     const companyBusinessId = store.getState().jobs.jobsList.companyBusinessId;
     const userRole = store.getState().client.user.data.user_type;
@@ -666,7 +665,7 @@ function* updateJobPostSaga({ isToEdit, id }) {
 function* updateAndPublishAdvertisementSaga() {
   try {
     const url = `https://localhost:7262/updateJobOffer`;
-    const id = store.getState().jobs.id;
+    const {id} = store.getState().jobs
     let response;
     const campaignLevel = store.getState().advertisement.campaigns[0].type;
     const {
@@ -936,7 +935,7 @@ function* getApplicationDetailsByIdSaga({ jobpostId, id }) {
 
     if (resultParsed) {
       yield put(getApplicationDetailsByIdSuccess(resultParsed));
-      yield put(openAdToSeeAdInfo(jobpostId));
+      yield put(openAdToSeeAdInfo(id));
     }
   } catch (e) {
     console.log(e.message);

@@ -12,10 +12,10 @@ const EditAdvertFormContainer = reduxForm({
 
 const mapStateToProps = state => ({
   // When backend sends back the data, image document is sent as company_image
-  image: formValueSelector('editVacancy')(state, 'company_image')
+  logo: formValueSelector('editVacancy')(state, 'company_image')
     ? formValueSelector('editVacancy')(state, 'company_image')[0].path
-    : formValueSelector('editVacancy')(state, 'image_document')
-    ? formValueSelector('editVacancy')(state, 'image_document')
+    : formValueSelector('editVacancy')(state, 'logo')
+    ? formValueSelector('editVacancy')(state, 'logo')
     : undefined,
   jobCategories: state.jobCategories.jobCategories.filter(jobs => jobs.type !== 'all'),
   apiSuccess: store.getState().advertisement.apiSuccess,
