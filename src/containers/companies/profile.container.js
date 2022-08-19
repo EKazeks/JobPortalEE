@@ -38,7 +38,7 @@ const ProfileContainerForm = reduxForm({
 const mapStateToProps = (state) => {
   const { isToAddNewProfile } = state.companyProfile;
   return {
-    logo: state.companyProfile.profile.companyLogo.logo,
+    logo: formValueSelector('companyProfile')(state, 'logo_document'),
     showSuccessSnackbar: state.asyncActions.showSuccessSnackbar,
     showFailedSnackbar: state.asyncActions.showFailedSnackbar,
     showCustomError: state.asyncActions.showCustomError,

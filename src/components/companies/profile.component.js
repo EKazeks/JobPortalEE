@@ -76,6 +76,7 @@ const ProfileComponent = ({
   classes,
   invalid,
   logo,
+  uploadedLogo,
   dispatch,
   handleSubmit,
   addCompanyProfile,
@@ -319,19 +320,19 @@ const ProfileComponent = ({
                 </Grid>
                 <Grid item md={4} sm={12} style={{ marginTop: 30 }}>
                   <Field
-                    name="logo"
+                    name="logo_document"
                     component={renderDropzoneField}
                     type="file"
-                    /*  imagefile={
-                      logo && !logo.path && logo[0] && logo[0].path !== ''
-                        ? logo
-                        : initialValues &&
-                          initialValues.logo_document &&
-                          initialValues.logo_document[0]
-                          ? initialValues.logo_document[0].path
-                          : ''
-                    } */
-                    imagefile={logo}
+                    //  imagefile={
+                    //   logo && !logo.path && logo[0] && logo[0].path !== ''
+                    //     ? logo
+                    //     : initialValues &&
+                    //       initialValues.logo &&
+                    //       initialValues.logo[0]
+                    //       ? initialValues.logo_document[0].path
+                    //       : ''
+                    // } 
+                    imagefile={typeof logo === 'string' ? logo : uploadedLogo}
                     btnText={t("addLogo")}
                     fullWidth
                     isLogo

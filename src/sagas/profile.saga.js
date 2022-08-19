@@ -7,6 +7,7 @@ import {
   ADD_APPLICANT_PROFILE,
   GET_APPLICANT_PROFILE,
   ADD_NEW_COMPANY_START,
+  API_SERVER_UPDATE_COMPANY_INFO,
 } from "../constants";
 import store from "../store";
 import { apiManualPost, apiManualRequest } from "../utils/request";
@@ -37,11 +38,15 @@ function* addCompanyProfile() {
     const uuid = client.user.data[2];
     const refinedFormValues = filterObj("logo_document", formValues);
 
+    console.log('refinedFormValues =>',refinedFormValues)
+    console.log('formValues =>',formValues)
+
+
     if (isToAddNewProfile || formValues.company_id === 0) {
       // For newly registered company users - getCompanyProfile gives company id 0.
       url = `${API_SERVER}/AddCompanyProfile`;
     } else {
-      url = `${API_SERVER}/UpdateCompanyProfile`;
+      url = `${API_SERVER_UPDATE_COMPANY_INFO}`;
     }
     // Send companyUser as empty array if no additional users/ Back-end needs it
     if (!formValues.companyUser) {
@@ -52,32 +57,77 @@ function* addCompanyProfile() {
     }
 
     if (Array.isArray(formValues.logo_document) === true) {
-      body = JSON.stringify({
-        ...refinedFormValues,
-        uuid,
-      });
+      const base64 = formValues.logo_document;
+      body = {
+        id: refinedFormValues.id,
+        companyName: refinedFormValues.companyName,
+        firstName: refinedFormValues.firstName,
+        lastName: refinedFormValues.lastName,
+        email: refinedFormValues.email,
+        telephone: refinedFormValues.telephone,
+        businessId: refinedFormValues.companyBusinessId,
+        address: refinedFormValues.address,
+        city: refinedFormValues.city,
+        postalCode: refinedFormValues.zipCode,
+        companyUrl: refinedFormValues.companyUrl,
+        companyInformation: refinedFormValues.profileDescription,
+        companyLogo: base64
+      }
+      // body = {
+      //   ...refinedFormValues,
+      //   companyLogo: refinedFormValues.companyLogo.toString(),
+      //   //uuid,
+      // };
     } else if (!uploadedLogo.name) {
-      body = JSON.stringify({
-        ...formValues,
-        uuid,
-      });
+      const base64 = formValues.logo_document;
+      // body = {
+      //   ...formValues,
+      //   companyLogo: refinedFormValues.companyLogo.toString(),
+      //   //uuid,
+      // };
+            body = {
+        id: refinedFormValues.id,
+        companyName: refinedFormValues.companyName,
+        firstName: refinedFormValues.firstName,
+        lastName: refinedFormValues.lastName,
+        email: refinedFormValues.email,
+        telephone: refinedFormValues.telephone,
+        businessId: refinedFormValues.companyBusinessId,
+        address: refinedFormValues.address,
+        city: refinedFormValues.city,
+        postalCode: refinedFormValues.zipCode,
+        companyUrl: refinedFormValues.companyUrl,
+        companyInformation: refinedFormValues.profileDescription,
+        companyLogo: base64
+      }
     } else {
       const base64 = formValues.logo_document;
-      body = JSON.stringify({
-        ...formValues,
-        uuid,
-        logo_document: {
-          data: base64,
-          filename: uploadedLogo.name.replace(/\s+\(\d+\)/g, "JP"), // If stored filename has (int), dropzone doesn't understand the path..so changing such names before sending to db.
-          filetype: uploadedLogo.type,
-          path: "logo",
-        },
-      });
+      body = {
+        id: refinedFormValues.id,
+        companyName: refinedFormValues.companyName,
+        firstName: refinedFormValues.firstName,
+        lastName: refinedFormValues.lastName,
+        email: refinedFormValues.email,
+        telephone: refinedFormValues.telephone,
+        businessId: refinedFormValues.companyBusinessId,
+        address: refinedFormValues.address,
+        city: refinedFormValues.city,
+        postalCode: refinedFormValues.zipCode,
+        companyUrl: refinedFormValues.companyUrl,
+        companyInformation: refinedFormValues.profileDescription,
+        companyLogo: base64
+        // logo_document: {
+        //   data: base64,
+        //   filename: uploadedLogo.name.replace(/\s+\(\d+\)/g, "JP"), // If stored filename has (int), dropzone doesn't understand the path..so changing such names before sending to db.
+        //   filetype: uploadedLogo.type,
+        //   path: "logo",
+        // },
+      };
     }
-    const result = yield call(apiManualPost, url, body);
+    // const result = yield call(apiManualPost, url, body);
+    const result = yield call (axios.patch(url, body).then(res => res.data));
     if (
-      result.data === "Company Profile updated successfully!" ||
-      result.data === "Company Profile saved successfully!"
+      result.data
     ) {
       yield put(showSuccessSnackbar());
       if (isToAddNewProfile) {
