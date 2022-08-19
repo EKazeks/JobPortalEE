@@ -10,6 +10,7 @@ import CustomizedDialogs from "../../../utils/customizedDialog";
 import i18n from "../../../utils/i18n";
 import axios from "axios";
 import { getDate } from "date-fns";
+import { getAdInfoFromSideMenu } from "../../../actions";
 
 const ActiveAdsComponent = ({
   warnToDelete,
@@ -128,14 +129,15 @@ const ActiveAdsComponent = ({
                       >
                         <h4
                           onClick={() => {
-                            fetchJobInfo(
-                              item.companyName,
-                              item.companyBusinessId,
-                              item.jobName,
-                              item.jobPostNumber
-                            );
-                            fetchJobById(item.id);
-                            //openAdToSeeAdInfo(item.id)
+                            // fetchJobInfo(
+                            //   item.companyName,
+                            //   item.companyBusinessId,
+                            //   item.jobName,
+                            //   item.jobPostNumber
+                            // );
+                            // fetchJobById(item.id);
+                            openAdToSeeAdInfo(item.id)
+                            getAdInfoFromSideMenu(1);
                           }}
                         >
                           {item.jobName === null ? item.jobName : item.jobName},
@@ -243,14 +245,14 @@ const ActiveAdsComponent = ({
                               }
                               color="primary"
                               onClick={() => {
-                                fetchJobInfo(
-                                  item.companyName,
-                                  item.companyBusinessId,
-                                  item.jobName,
-                                  item.jobPostNumber
-                                );
-                                fetchJobById(item.id);
-                                //openAdToSeeAdInfo(item.id)
+                                // fetchJobInfo(
+                                //   item.companyName,
+                                //   item.companyBusinessId,
+                                //   item.jobName,
+                                //   item.jobPostNumber
+                                // );
+                                // fetchJobById(item.id);
+                                openAdToSeeAdInfo(item.id)
                               }}
                             >
                               {t("common:openBtn")}

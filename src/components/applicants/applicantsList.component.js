@@ -97,19 +97,7 @@ const styles = theme => ({
 
 const ApplicantsList = ({ viewSelectedAd, applications, classes, showDialog, deleteApplication, advertPages, changeAdvertPage, selectedPage, rowsPerPage }) => {
   const { t } = useTranslation('applicant');
-  const [jobsToRender, setJobsToRender] = useState([]);
-  const [applicants, setApplicants] = useState([])
-  const {id} = useSelector((state) => state.jobs)
-  const dispatch = useDispatch()
   selectedPage = 1;
-
-  useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${id}`).then(res => {
-      setJobsToRender(res.data);
-      setApplicants(res.data.jobPostApplications)
-      dispatch(fetchJobApplicants(applicants.id))
-    });
-  }, []);
 
   return (
     <div className="container">
@@ -123,7 +111,7 @@ const ApplicantsList = ({ viewSelectedAd, applications, classes, showDialog, del
         <Grid container>
           <Grid item xs={9} sm={11}>
             <h3 className="ad_title_3">
-              {t('allApplicants')} ({applicants.length}):
+              {t('allApplicants')} ({applications?.length}):
             </h3>
           </Grid>
           <Grid item xs={3} sm={1}>
@@ -160,14 +148,13 @@ const ApplicantsList = ({ viewSelectedAd, applications, classes, showDialog, del
           </Grid>
         </Grid>
         <ApplicationsList
-          applicants={applicants}
-          jobsToRender={jobsToRender}
+          applications={applications}
           classes={classes}
           advertPages={1}
           // advertPages={advertPages}
           changeAdvertPage={changeAdvertPage}
           selectedPage={selectedPage}
-          showPagination={applicants && applicants.length > 0 ? true : false}
+          showPagination={applications && applications.length > 0 ? true : false}
           rowsPerPage={rowsPerPage}
         />
       </div>
@@ -182,33 +169,33 @@ const ApplicantsList = ({ viewSelectedAd, applications, classes, showDialog, del
   );
 };
 
-const ApplicationsList = ({ applicants,jobsToRender, classes, selectedPage, advertPages, changeAdvertPage, showPagination, rowsPerPage }) => {
+const ApplicationsList = ({ applications,jobsToRender,viewSelectedAd, classes, selectedPage, advertPages, changeAdvertPage, showPagination, rowsPerPage }) => {
   const { t } = useTranslation('applicant');
   return (
 
-    <div style={applicants && applicants.length > 0 ? { marginBottom: 0 } : { marginBottom: 160 }}>
-      {applicants &&
-        applicants
+    <div style={applications && applications.length > 0 ? { marginBottom: 0 } : { marginBottom: 160 }}>
+      {applications &&
+        applications
           //.slice(selectedPage * 4, selectedPage * 4 + 4)
           //.slice(selectedPage * rowsPerPage, selectedPage * rowsPerPage + rowsPerPage)
-          .map((applicants, id) => {
+          .map((application, id) => {
             const applicationDetails = {
-              id: applicants.id,
+              id: application.id,
               //company_id: application.company_id,
-              jobpostId: applicants.jobpostId,
-              email: applicants.email,
+              //jobpostId: applicants.jobpostId,
+              email: application.email,
             };
             return (
                 <div key={id}>
                   <Paper className={classes.lists}>
                     <Grid container spacing={1} alignItems="center" style={{ padding: 8 }}>
                       <Grid item xs={12} sm={2}>
-                        {applicants.applicant_photo && applicants.applicant_photo ? (
+                        {application.applicant_photo && application.applicant_photo ? (
                           <div>
                             <div
                               className={classes.profileImage}
                               style={{
-                                backgroundImage: `url(${applicants.applicant_photo[0].path})`,
+                                backgroundImage: `url(${application.applicant_photo[0].path})`,
                               }}
                             />
                           </div>
@@ -226,33 +213,33 @@ const ApplicationsList = ({ applicants,jobsToRender, classes, selectedPage, adve
                       </Grid>
                       <Grid item xs={12} sm={2}>
                         <div>
-                          <strong className={applicants.status !== 4 ? classes.status : classes.rejectStatus}>
-                            {applicants.open_status === 0 ? t('newApplicant') : ''}
-                            {applicants.is_fav && <StarBorderIcon />}
+                          <strong className={application.status !== 4 ? classes.status : classes.rejectStatus}>
+                            {application.favouriteCandidate === 0 ? t('newApplicant') : ''}
+                            {application.is_fav && <StarBorderIcon />}
 
-                            {applicants.status === 1
+                            {application.status === 1
                               ? t('call')
-                              : applicants.status === 2
+                              : application.status === 2
                               ? t('interviewBooked')
-                              : applicants.status === 4
+                              : application.status === 4
                               ? t('dontCall')
                               : ''}
                           </strong>
                           <p>
-                            {applicants.firstName} {applicants.lastName}
+                            {application.firstName} {application.lastName}
                           </p>
                         </div>
                       </Grid>
                       <Grid item xs={12} sm={3}>
                         <div className={classes.applicationEmail}>
-                          <a href={`mailto:${applicants.email}`} target="_blank" rel="noopener noreferrer">
-                            <p>{applicants.email}</p>
+                          <a href={`mailto:${application.email}`} target="_blank" rel="noopener noreferrer">
+                            <p>{application.email}</p>
                           </a>
                         </div>
                       </Grid>
                       <Grid item xs={12} sm={2}>
                         <div>
-                          <p>{applicants.phone}</p>
+                          <p>{application.phone}</p>
                         </div>
                       </Grid>
                       <Grid item xs={12} sm={1}>
@@ -274,20 +261,20 @@ const ApplicationsList = ({ applicants,jobsToRender, classes, selectedPage, adve
                             className={classes.removeBtn}
                             onClick={() => {
                               store.dispatch(warnToDeleteApplication())
-                              store.dispatch(fetchJobApplicants(applicants.id))
+                              store.dispatch(fetchJobApplicants(application.id))
                             }
                             }
                           >
                             {t('common:deleteBtn')}
                           </Button>
                           <div>
-                            <Link to={`/applicants/${applicants.id}`} className="btnLink_white">
+                            <Link to={`/applicants/${application.jobpostId}JP${application.id}`} className="btnLink_white">
                               <Button
                                 variant="contained"
                                 color="primary"
                                 onClick={() =>
                                   store.dispatch(
-                                    getApplicationDetailsById(applicants.id),
+                                    getApplicationDetailsById(application.id, application.email, application.jobpostId),
                                   )
                                 }
                               >

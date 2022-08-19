@@ -54,6 +54,7 @@ const SideBar = ({
   selectedMenu,
   viewSelectedAd,
   getAdInfoFromSideMenu,
+  applications,
   match,
   fetchedPosts,
 }) => {
@@ -79,11 +80,11 @@ const SideBar = ({
     <div className={classes.toolbar}>
       <div className={classes.toolbar} />
       <CssBaseline />
-      {jobsToRender.length !== 0 && (
+      {viewSelectedAd.length !== 0 && (
         <List>
           <Link
             className="btnLink"
-            to={customURL(jobsToRender.url, "internal")}
+            to={customURL(viewSelectedAd.url, "internal")}
           >
             <ListItem
               value={0}
@@ -101,7 +102,7 @@ const SideBar = ({
           </Link>
           <Link
             className="btnLink"
-            to={customURL(jobsToRender.url, "internal")}
+            to={customURL(viewSelectedAd.url, "internal")}
           >
             <ListItem
               value={1}
@@ -113,7 +114,7 @@ const SideBar = ({
             >
               <ListItemText
                 primary={`${t("applications")} (${
-                  applicant.length
+                  applications?.length
                 })`}
                 className={classes.sideBarText}
               />
@@ -121,7 +122,7 @@ const SideBar = ({
           </Link>
           <Link
             className="btnLink"
-            to={customURL(jobsToRender.url, "internal")}
+            to={customURL(viewSelectedAd.url, "internal")}
           >
             <ListItem
               value={2}
