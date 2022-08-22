@@ -90,27 +90,15 @@ import { useSelector } from "react-redux";
 
 function* getAllCampaignsSaga() {
   try {
-    const url = `${API_SERVER}/GetCampaigns`;
+    const url = `https://localhost:7262/campaigns/Campaign`;
     const result = yield call(apiManualRequest, url);
-    const resultParsed = JSON.parse(result.data);
+    const resultParsed = result.data;
     yield put(getAllCampaignsSuccess(resultParsed));
   } catch (error) {
     console.log(error);
   }
 }
-/* function* getAllJobCategorySaga() {
-  try {
-    const url = 'https://localhost:7262/jobsEn/getAllCategories';
-   
-    const result = yield call(apiOpenRequest, url);
-   
-    const resultParsed = JSON.parse(result.data);
-    yield put(getAllJobCategorySuccess(resultParsed));
-   console.log('hello')
-  } catch (error) {
-    console.log(error);
-  }
-} */
+
 function* getAllJobCategorySaga() {
   try {
     const url = "https://localhost:7262/getAllCategories";
@@ -228,7 +216,7 @@ function* saveAndPublishAdvertisementSaga() {
         phone: telephone,
         ...refinedFormValues,
         uuid,
-        campaign_type: selectedCampaign.type,
+        campaignLevel: selectedCampaign.type,
         status: statusToUpdate,
         extra_service: selectedService,
         isDraft,
@@ -301,7 +289,7 @@ function* saveAndPublishAdvertisementSaga() {
         : 0;
     }
     // SAVING AND PUBLISHING JOBPOST
-    axios.post(url, body).then((res) => {
+    const result = axios.post(url, body).then((res) => {
       response = res;
     });
 
@@ -313,74 +301,74 @@ function* saveAndPublishAdvertisementSaga() {
       yield put(saveAndPublishAdvertisementSuccess());
     }
 
-    const parsedResult = JSON.parse(response.data);
+    // const parsedResult = result.data;
 
     //If publishing post, Generate invoice under the hood via Talousvirta API or online payment via NETS
 
-    if (parsedResult) {
-      const { company_name, business_id, firstname, lastname, email, address, zip_code, city } =
-        userRole === 'admin' ? parsedCompany[0] : companyProfile.profile;
-      const jobTitle = formValues.job_title;
-      const postId = parsedResult[0].post_id;
-      const orderId = parsedResult[0].order_id;
-      const publishedPostStatus = parsedResult[0].job_post_status;
-      const description = `${jobTitle} | Kampanjapaketti - ${customTranslateCampaign(selectedCampaign.id)}`;
-      const mkt_description = `${jobTitle} | Lisätty markkinointiraha`;
+    // if (parsedResult) {
+    //   const { company_name, business_id, firstname, lastname, email, address, zip_code, city } =
+    //     userRole === 'admin' ? parsedCompany[0] : companyProfile.profile;
+    //   const jobTitle = formValues.job_title;
+    //   const postId = parsedResult[0].post_id;
+    //   const orderId = parsedResult[0].order_id;
+    //   const publishedPostStatus = parsedResult[0].job_post_status;
+    //   const description = `${jobTitle} | Kampanjapaketti - ${customTranslateCampaign(selectedCampaign.id)}`;
+    //   const mkt_description = `${jobTitle} | Lisätty markkinointiraha`;
 
-      const extra_service_description = `Aktivoitu lisäpalvelu | ${extraService.help ? 'HELP' : 'SOS'}`;
+    //   const extra_service_description = `Aktivoitu lisäpalvelu | ${extraService.help ? 'HELP' : 'SOS'}`;
 
-      // If mkt budget is added with campaigns with mkt budget, i.e. 5th campaign for now.
-      let marketing_budget = 0;
-      if (selectedCampaign.includes_mktbudget && !!parsedResult[0].marketing_budget) {
-        marketing_budget = parsedResult[0].marketing_budget;
-      }
+    //   // If mkt budget is added with campaigns with mkt budget, i.e. 5th campaign for now.
+    //   let marketing_budget = 0;
+    //   if (selectedCampaign.includes_mktbudget && !!parsedResult[0].marketing_budget) {
+    //     marketing_budget = parsedResult[0].marketing_budget;
+    //   }
 
-      const extra_service_fee = extraService.help ? HELP_SERVICE_FEE : extraService.sos ? SOS_SERVICE_FEE : 0;
+    //   const extra_service_fee = extraService.help ? HELP_SERVICE_FEE : extraService.sos ? SOS_SERVICE_FEE : 0;
 
-      if (
-        (publishedPostStatus === 0 && extra_service_fee > 0) || // If help and sos are added as extra service
-        publishedPostStatus === 4 // If paid campaigns are selected, temporary placeholder status
-      ) {
-        const isExtraServiceAdded = publishedPostStatus === 0 && extra_service_fee > 0 ? true : false;
-        const extra_service_fee_with_vat = extra_service_fee * 1.24; // Total price for the extra service including vat
+    //   if (
+    //     (publishedPostStatus === 0 && extra_service_fee > 0) || // If help and sos are added as extra service
+    //     publishedPostStatus === 4 // If paid campaigns are selected, temporary placeholder status
+    //   ) {
+    //     const isExtraServiceAdded = publishedPostStatus === 0 && extra_service_fee > 0 ? true : false;
+    //     const extra_service_fee_with_vat = extra_service_fee * 1.24; // Total price for the extra service including vat
 
-        const amount = parsedResult[0].job_post_campaign_money;
-        const totalSum = (marketing_budget + amount) * 1.24;
+    //     const amount = parsedResult[0].job_post_campaign_money;
+    //     const totalSum = (marketing_budget + amount) * 1.24;
 
-        const details = {
-          company_id: formValues.company_id,
-          company_name,
-          business_id,
-          firstname,
-          lastname,
-          email,
-          address,
-          zip_code,
-          city,
-          description: isExtraServiceAdded ? extra_service_description : description,
-          totalSum: isExtraServiceAdded ? extra_service_fee_with_vat : totalSum,
-          amount: isExtraServiceAdded ? extra_service_fee : amount,
-          post_id: postId,
-          order_id: orderId,
-          marketing_budget,
-          mkt_description,
-          selectedCampaign,
-        };
+    //     const details = {
+    //       company_id: formValues.company_id,
+    //       company_name,
+    //       business_id,
+    //       firstname,
+    //       lastname,
+    //       email,
+    //       address,
+    //       zip_code,
+    //       city,
+    //       description: isExtraServiceAdded ? extra_service_description : description,
+    //       totalSum: isExtraServiceAdded ? extra_service_fee_with_vat : totalSum,
+    //       amount: isExtraServiceAdded ? extra_service_fee : amount,
+    //       post_id: postId,
+    //       order_id: orderId,
+    //       marketing_budget,
+    //       mkt_description,
+    //       selectedCampaign,
+    //     };
 
-        if (payment_method === 'invoice') {
-          yield put(sendInvoiceToTalous(details));
-        } else if (payment_method === 'online') {
-           put(registerPayment(details));
-        }
-      }
-      // Post saved as a draft or free campaign or help/sos feature
-      //if (parsedResult[0].job_post_status !== 4)
-      else {
-        yield put(saveAndPublishAdvertisementSuccess());
-      }
-    } else {
-      yield put(saveAndPublishAdvertisementFailed());
-    }
+    //     if (payment_method === 'invoice') {
+    //       yield put(sendInvoiceToTalous(details));
+    //     } else if (payment_method === 'online') {
+    //        put(registerPayment(details));
+    //     }
+    //   }
+    //   // Post saved as a draft or free campaign or help/sos feature
+    //   //if (parsedResult[0].job_post_status !== 4)
+    //   else {
+    //     yield put(saveAndPublishAdvertisementSuccess());
+    //   }
+    // } else {
+    //   yield put(saveAndPublishAdvertisementFailed());
+    // }
   } catch (error) {
     console.log(error);
     yield put(saveAndPublishAdvertisementFailed());
@@ -393,9 +381,14 @@ function* getJobPostByPostIdSaga({id}) {
     const companyBusinessId = store.getState().jobs.jobsList.companyBusinessId;
     const userRole = store.getState().client.user.data.user_type;
 
-    const result = yield call(apiOpenRequest, url);
-    const resultParsed = result.data;
-    yield put(openAdToSeeAdInfoSuccess(resultParsed));
+
+    if (id === 0 || id === undefined || id === null) {
+      yield put(hideSpinner());
+    } else {
+      const result = yield call(apiManualRequest, url);
+      const resultParsed = result.data
+      yield put(openAdToSeeAdInfoSuccess(resultParsed))
+    }
   } catch (error) {
     console.log(error);
     yield put(hideSpinner());

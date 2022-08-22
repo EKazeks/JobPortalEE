@@ -1,42 +1,69 @@
 import React from "react";
 import store from "../store";
 
-export const customURL = (url, type) => {
+export const customURL = (url,type) => {
 
-  const {id} = store.getState().jobs
-  const {jobName} = store.getState().jobs
-  const {jobPostNumber} = store.getState().jobs
-  const {companyName} = store.getState().jobs
-  const {companyBusinessId} = store.getState().jobs
-  let splittedJobName;
-
-  splittedJobName = jobName.split(' ').join("-").toLowerCase();
-  if (jobName.length >= 40) {
-    splittedJobName = jobName.split(' ').toString().replace(/[ ,-,,/]/g, '-').toLowerCase()
-  } else if (jobName.includes('/')) {
-    splittedJobName = jobName.split(' ').toString().replace('/','-').replace(/[,]/gi, '').toLowerCase();
-  } 
-    
-  const splittedCompanyName = companyName.split(' ').join('-').toLowerCase();
-  
+  const pathname = url && url.split('/tyopaikat/')[1];
+  const splittedPath = pathname && pathname.split('/');
+  let {jobName} = store.getState().advertisement.viewSelectedAd
+  // const companyName = splittedPath && splittedPath[0]
+  let jobPostNumber = '65009'
+  const companyId = splittedPath && splittedPath[1];
+  //const jobName = splittedPath && splittedPath[2];
+  //const jobPostNumber = splittedPath && splittedPath[3];
+  //let splittedJobName = jobName.split(' ').join("-").toLowerCase();
   switch (type) {
-    case "internal": // For admins and companies, url path is jobpost/jobTitle/postId
-      return `/jobpost/${splittedJobName}/${jobPostNumber}`;
-      
-    case "external": // For public, url path is tyopaikat/companyName/companyId/jobTitle/postId
-      return `/tyopaikat/${splittedCompanyName}/${companyBusinessId}/${splittedJobName}/${jobPostNumber}`;
+    case 'internal': // For admins and companies, url path is jobpost/jobTitle/postId
+      return `/jobpost/${jobName}/${jobPostNumber}`;
 
-    case "application": // For application form component
-      return `/tyopaikat/${splittedJobName}/${companyBusinessId}JP${jobPostNumber}/hae`;
+    case 'external': // For public, url path is tyopaikat/companyName/companyId/jobTitle/postId
+      return `/tyopaikat/${pathname}`;
 
-    case "campaign": // For campaign component
-      return `/${splittedJobName}/${jobPostNumber}/campaign`;
+    case 'application': // For application form component
+      return `/tyopaikat/${jobName}/${companyId}JP${jobPostNumber}/hae`;
 
-    case "open_position":
-      return `/tyopaikat/${splittedCompanyName}/${companyBusinessId}/${splittedJobName}/${jobPostNumber}`;
+    case 'campaign': // For campaign component
+      return `/${jobName}/${jobPostNumber}/campaign`;
     default:
       break;
   }
+  // const {id} = store.getState().jobs
+  // let {jobName} = store.getState().advertisement.viewSelectedAd
+  // const {jobPostNumber} = store.getState().jobs
+  // const {companyName} = store.getState().jobs
+  // const {companyBusinessId} = store.getState().jobs
+  // let splittedJobName;
+  // // if (jobName === undefined) {
+  // //   return jobName = 'customUrl';
+  // // } else {
+  // // }
+  // splittedJobName = jobName.split(' ').join("-").toLowerCase();
+  // if (jobName.length >= 40) {
+  //   splittedJobName = jobName.split(' ').toString().replace(/[ ,-,,/]/g, '-').toLowerCase()
+  // } else if (jobName.includes('/')) {
+  //   splittedJobName = jobName.split(' ').toString().replace('/','-').replace(/[,]/gi, '').toLowerCase();
+  // } 
+    
+  // const splittedCompanyName = companyName.split(' ').join('-').toLowerCase();
+  
+  // switch (type) {
+  //   case "internal": // For admins and companies, url path is jobpost/jobTitle/postId
+  //     return `/jobpost/${splittedJobName}/${jobPostNumber}`;
+      
+  //   case "external": // For public, url path is tyopaikat/companyName/companyId/jobTitle/postId
+  //     return `/tyopaikat/${splittedCompanyName}/${companyBusinessId}/${splittedJobName}/${jobPostNumber}`;
+
+  //   case "application": // For application form component
+  //     return `/tyopaikat/${splittedJobName}/${companyBusinessId}JP${jobPostNumber}/hae`;
+
+  //   case "campaign": // For campaign component
+  //     return `/${splittedJobName}/${jobPostNumber}/campaign`;
+
+  //   case "open_position":
+  //     return `/tyopaikat/${splittedCompanyName}/${companyBusinessId}/${splittedJobName}/${jobPostNumber}`;
+  //   default:
+  //     break;
+  // }
 };
 
 export const convertJobTypeToStr = (t, type) => {
