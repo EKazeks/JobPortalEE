@@ -125,7 +125,7 @@ export const loginPost = (url, body, method = "POST") => {
 }; */
 
 export const apiOpenRequest = (
-  url = `https://localhost:7262/jobsEn`,
+  url,
   method = "GET"
 ) => {
   const headers = new Headers();

@@ -248,7 +248,7 @@ const CampaignComponent = ({
             campaigns.map(campaign => (
               <Grid
                 item
-                md={campaign.id === 4 || campaign.id === 5 ? 6 : 4}
+                md={campaign.id === 'fd90b98a-c44f-4c38-9f96-2cbe9d3f3739' || campaign.id === 'e4f3fb19-db74-4aac-8190-6fa936aa0ac5' ? 6 : 'fd90b98a-c44f-4c38-9f96-2cbe9d3f3739'}
                 xs={12}
                 sm={6}
                 key={campaign.value}
@@ -274,23 +274,23 @@ const CampaignComponent = ({
                     </span>
                     <h4 className={classes.campaignType}>{customTranslateCampaign(campaign.id)}</h4>
                   </div>
-                  <div className={campaign.id === 1 || campaign.id === 2 || campaign.id === 3 ? classes.upperGridFeature : classes.lowerGridFeature}>
+                  <div className={campaign.id === 'fd188ed8-80e3-4f02-9ca5-b1bb14f73f6b' || campaign.id === '5bb74a6f-ec6e-4dab-bf04-1d344d03a9be' || campaign.id === '142c7490-6cb4-4799-9b38-6807bc1954f3' ? classes.upperGridFeature : classes.lowerGridFeature}>
                     <div className={classes.featureList}>
                       <span>
                         <CheckIcon className={classes.icon} />
                       </span>
                       <span>
-                        {campaign.id === 5
+                        {campaign.id === 'e4f3fb19-db74-4aac-8190-6fa936aa0ac5'
                           ? t('type5Feature1')
-                          : campaign.id === 4
+                          : campaign.id === 'fd90b98a-c44f-4c38-9f96-2cbe9d3f3739'
                           ? t('type4Feature1')
-                          : campaign.id === 3
+                          : campaign.id === '142c7490-6cb4-4799-9b38-6807bc1954f3'
                           ? t('type3Feature1')
                           : t('type1Feature1')}
                       </span>
                     </div>
 
-                    {campaign.id === 2 && (
+                    {campaign.id === '5bb74a6f-ec6e-4dab-bf04-1d344d03a9be' && (
                       <div className={classes.featureList}>
                         <span>
                           <CheckIcon className={classes.icon} />
@@ -299,7 +299,7 @@ const CampaignComponent = ({
                       </div>
                     )}
 
-                    {campaign.id === 3 && (
+                    {campaign.id === '142c7490-6cb4-4799-9b38-6807bc1954f3' && (
                       <div className={classes.featureList}>
                         <span>
                           <CheckIcon className={classes.icon} />
@@ -307,7 +307,7 @@ const CampaignComponent = ({
                         <span>{t('feature7')}</span>
                       </div>
                     )}
-                    {campaign.id === 4 && (
+                    {campaign.id === 'fd90b98a-c44f-4c38-9f96-2cbe9d3f3739' && (
                       <div className={classes.featureList}>
                         <span>
                           <CheckIcon className={classes.icon} />
@@ -315,7 +315,7 @@ const CampaignComponent = ({
                         <span>{t('feature8')}</span>
                       </div>
                     )}
-                    {campaign.google_visibile && (
+                    {campaign.google_visible && (
                       <div className={classes.featureList}>
                         <span>
                           <CheckIcon className={classes.icon} />
