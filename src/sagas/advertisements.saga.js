@@ -245,10 +245,7 @@ function* saveAndPublishAdvertisementSaga() {
         extra_service: selectedService,
         isDraft,
       };
-    } else if (
-      uploadedImage.name &&
-      !Array.isArray(formValues.logo)
-    ) {
+    } else if (uploadedImage.name && !Array.isArray(formValues.logo)) {
       const base64 = formValues.logo;
       body = {
         companyName: companyName,
@@ -375,19 +372,21 @@ function* saveAndPublishAdvertisementSaga() {
   }
 }
 
-function* getJobPostByPostIdSaga({id}) {
+function* getJobPostByPostIdSaga({ id }) {
   try {
     const url = `${API_SERVER_EST}/${id}`;
     const companyBusinessId = store.getState().jobs.jobsList.companyBusinessId;
     const userRole = store.getState().client.user.data.user_type;
 
-
     if (id === 0 || id === undefined || id === null) {
-      yield put(hideSpinner());
     } else {
       const result = yield call(apiManualRequest, url);
-      const resultParsed = result.data
-      yield put(openAdToSeeAdInfoSuccess(resultParsed))
+      const resultParsed = result.data;
+      if (result.data.status === 404) {
+        yield put(hideSpinner());
+      } else {
+        yield put(openAdToSeeAdInfoSuccess(resultParsed));
+      }
     }
   } catch (error) {
     console.log(error);
@@ -654,7 +653,7 @@ function* updateJobPostSaga({ isToEdit, id }) {
 function* updateAndPublishAdvertisementSaga() {
   try {
     const url = `https://localhost:7262/updateJobOffer`;
-    const {id} = store.getState().jobs
+    const { id } = store.getState().jobs;
     let response;
     const campaignLevel = store.getState().advertisement.campaigns[0].type;
     const {
@@ -924,7 +923,7 @@ function* getApplicationDetailsByIdSaga({ jobpostId, id }) {
 
     if (resultParsed) {
       yield put(getApplicationDetailsByIdSuccess(resultParsed));
-      yield put(openAdToSeeAdInfo(id));
+      // yield put(openAdToSeeAdInfo(id));
     }
   } catch (e) {
     console.log(e.message);
