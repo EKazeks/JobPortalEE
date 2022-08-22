@@ -8,6 +8,7 @@ import {
   GET_APPLICANT_PROFILE,
   ADD_NEW_COMPANY_START,
   API_SERVER_UPDATE_COMPANY_INFO,
+  ESTONIAN_GET_APPLICANT_PROFILE,
 } from "../constants";
 import store from "../store";
 import { apiManualPost, apiManualRequest } from "../utils/request";
@@ -38,9 +39,8 @@ function* addCompanyProfile() {
     const uuid = client.user.data[2];
     const refinedFormValues = filterObj("logo_document", formValues);
 
-    console.log('refinedFormValues =>',refinedFormValues)
-    console.log('formValues =>',formValues)
-
+    console.log("refinedFormValues =>", refinedFormValues);
+    console.log("formValues =>", formValues);
 
     if (isToAddNewProfile || formValues.company_id === 0) {
       // For newly registered company users - getCompanyProfile gives company id 0.
@@ -71,8 +71,8 @@ function* addCompanyProfile() {
         postalCode: refinedFormValues.zipCode,
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
-        companyLogo: base64
-      }
+        companyLogo: base64,
+      };
       // body = {
       //   ...refinedFormValues,
       //   companyLogo: refinedFormValues.companyLogo.toString(),
@@ -85,7 +85,7 @@ function* addCompanyProfile() {
       //   companyLogo: refinedFormValues.companyLogo.toString(),
       //   //uuid,
       // };
-            body = {
+      body = {
         id: refinedFormValues.id,
         companyName: refinedFormValues.companyName,
         firstName: refinedFormValues.firstName,
@@ -98,8 +98,8 @@ function* addCompanyProfile() {
         postalCode: refinedFormValues.zipCode,
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
-        companyLogo: base64
-      }
+        companyLogo: base64,
+      };
     } else {
       const base64 = formValues.logo_document;
       body = {
@@ -115,7 +115,7 @@ function* addCompanyProfile() {
         postalCode: refinedFormValues.zipCode,
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
-        companyLogo: base64
+        companyLogo: base64,
         // logo_document: {
         //   data: base64,
         //   filename: uploadedLogo.name.replace(/\s+\(\d+\)/g, "JP"), // If stored filename has (int), dropzone doesn't understand the path..so changing such names before sending to db.
@@ -125,10 +125,8 @@ function* addCompanyProfile() {
       };
     }
     // const result = yield call(apiManualPost, url, body);
-    const result = yield call (axios.patch(url, body).then(res => res.data));
-    if (
-      result.data
-    ) {
+    const result = yield call(axios.patch(url, body).then((res) => res.data));
+    if (result.data) {
       yield put(showSuccessSnackbar());
       if (isToAddNewProfile) {
         yield put(getUserCompanyList());
@@ -178,15 +176,10 @@ function* getCompanyProfileSaga() {
 function* getApplicantProfileSaga() {
   try {
     const { client } = store.getState();
-    const url = `${API_SERVER}/GetApplicantProfile`;
-    const uuid = client.user.data[2];
-    const email = client.user.data[1];
-    const body = JSON.stringify({
-      email,
-      uuid,
-    });
-    const result = yield call(apiManualPost, url, body);
-    const resultParsed = JSON.parse(result.data)[0];
+    const url = `${ESTONIAN_GET_APPLICANT_PROFILE}/${client.user.data.company_id}`;
+
+    const result = yield call(apiManualRequest, url);
+    const resultParsed = JSON.parse(result.data);
     yield put(getApplicantProfileSuccess(resultParsed));
   } catch (error) {
     console.warn(error);
