@@ -240,9 +240,9 @@ export const filterJobsSuccess = (result) => ({
   result,
 });
 export const getJobDetailsById = (id) => ({ type: GET_JOB_DETAILS_BY_ID, id });
-export const getJobDetailsByIdSuccess = (result) => ({
+export const getJobDetailsByIdSuccess = (data) => ({
   type: GET_JOB_DETAILS_BY_ID_SUCCESS,
-  result,
+  data,
 });
 
 export const getWorkStartSuccess = (result) => ({

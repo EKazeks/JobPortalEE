@@ -157,19 +157,20 @@ function* saveAndPublishAdvertisementSaga() {
     console.log("FORMVALUESPUBLISH", formValues);
     const paymentInfoForm = getFormValues("paymentInfo")(store.getState());
     const uuid = client.user.data[2];
-    const userRole = client.user.data[6].user_type;
+    const userRole = client.user.data.user_type;
     const payment_method = paymentInfoForm && paymentInfoForm.payment_method;
-    const companyId = companyProfile.profile.company_id;
+    const companyId = companyProfile.profile.companyBusinessId;
     const {
-      company_name,
-      company_url,
-      profile_description,
+      companyName,
+      companyUrl,
+      profileDescription,
       email,
-      contact_number,
+      contactNumber,
+      telephone,
     } = companyProfile.profile;
 
-    if (!formValues.company_id) {
-      formValues.company_id = companyId; // Also sending company_id to add company specific post.
+    if (!formValues.companyId) {
+      formValues.companyId = companyId; // Also sending company_id to add company specific post.
     }
 
     yield put(closeDialog());
@@ -217,13 +218,14 @@ function* saveAndPublishAdvertisementSaga() {
       : null;
 
     // image_document array means, it already exists in db, no need to send while updating
-    if (Array.isArray(formValues.image_document) === true) {
+    if (Array.isArray(formValues.logo) === true) {
       body = {
-        companyName: company_name,
-        companyPageUrl: company_url,
-        companyDescription: profile_description,
+        companyName: companyName,
+        companyPageUrl: companyUrl,
+        companyDescription: profileDescription,
         email,
-        phone: contact_number,
+        applicationUrl: formValues.applicationUrl,
+        phone: telephone,
         ...refinedFormValues,
         uuid,
         campaign_type: selectedCampaign.type,
@@ -234,12 +236,13 @@ function* saveAndPublishAdvertisementSaga() {
     } else if (!uploadedImage.name) {
       // no uploaded image means, no need to send any base64. Also, if there is an image stored in db..and we want to delete it, I am changing the formvalues of image_document in component
       body = {
-        companyName: company_name,
-        companyPageUrl: company_url,
-        companyDescription: profile_description,
+        companyName: companyName,
+        companyPageUrl: companyUrl,
+        companyDescription: profileDescription,
         email,
-        phone: contact_number,
-        companyBusinessId: companyId.toString(),
+        applicationUrl: formValues.applicationUrl,
+        phone: telephone,
+        companyBusinessId: companyId,
         is_agreement: formValues.is_agreement,
         jobCategory: formValues.jobCategory,
         jobDescription: formValues.jobDescription,
@@ -256,16 +259,17 @@ function* saveAndPublishAdvertisementSaga() {
       };
     } else if (
       uploadedImage.name &&
-      !Array.isArray(formValues.image_document)
+      !Array.isArray(formValues.logo)
     ) {
-      const base64 = formValues.image_document;
+      const base64 = formValues.logo;
       body = {
-        companyName: company_name,
-        companyPageUrl: company_url,
-        companyDescription: profile_description,
+        companyName: companyName,
+        companyPageUrl: companyUrl,
+        companyDescription: profileDescription,
         email,
-        phone: contact_number,
-        companyBusinessId: companyId.toString(),
+        applicationUrl: formValues.applicationUrl,
+        phone: telephone,
+        companyBusinessId: companyId,
         is_agreement: formValues.is_agreement,
         jobCategory: formValues.jobCategory,
         jobDescription: formValues.jobDescription,
@@ -277,14 +281,7 @@ function* saveAndPublishAdvertisementSaga() {
         uuid,
         campaignLevel: selectedCampaign.type,
         status: statusToUpdate,
-        image_document: {
-          uuid,
-          document_id: uploadedImage.id,
-          path: "",
-          filename: refinedUploadedImage,
-          filetype: uploadedImage.type,
-          logo: base64,
-        },
+        logo: base64,
         extra_service: selectedService,
         isDraft,
       };
@@ -315,76 +312,75 @@ function* saveAndPublishAdvertisementSaga() {
     } else {
       yield put(saveAndPublishAdvertisementSuccess());
     }
-    // response = result.data.status
 
-    // const parsedResult = JSON.parse(result.data);
+    const parsedResult = JSON.parse(response.data);
 
-    // If publishing post, Generate invoice under the hood via Talousvirta API or online payment via NETS
+    //If publishing post, Generate invoice under the hood via Talousvirta API or online payment via NETS
 
-    // if (parsedResult) {
-    //   const { company_name, business_id, firstname, lastname, email, address, zip_code, city } =
-    //     userRole === 'admin' ? parsedCompany[0] : companyProfile.profile;
-    //   const jobTitle = formValues.job_title;
-    //   const postId = parsedResult[0].post_id;
-    //   const orderId = parsedResult[0].order_id;
-    //   const publishedPostStatus = parsedResult[0].job_post_status;
-    //   const description = `${jobTitle} | Kampanjapaketti - ${customTranslateCampaign(selectedCampaign.id)}`;
-    //   const mkt_description = `${jobTitle} | Lisätty markkinointiraha`;
+    if (parsedResult) {
+      const { company_name, business_id, firstname, lastname, email, address, zip_code, city } =
+        userRole === 'admin' ? parsedCompany[0] : companyProfile.profile;
+      const jobTitle = formValues.job_title;
+      const postId = parsedResult[0].post_id;
+      const orderId = parsedResult[0].order_id;
+      const publishedPostStatus = parsedResult[0].job_post_status;
+      const description = `${jobTitle} | Kampanjapaketti - ${customTranslateCampaign(selectedCampaign.id)}`;
+      const mkt_description = `${jobTitle} | Lisätty markkinointiraha`;
 
-    //   const extra_service_description = `Aktivoitu lisäpalvelu | ${extraService.help ? 'HELP' : 'SOS'}`;
+      const extra_service_description = `Aktivoitu lisäpalvelu | ${extraService.help ? 'HELP' : 'SOS'}`;
 
-    //   // If mkt budget is added with campaigns with mkt budget, i.e. 5th campaign for now.
-    //   let marketing_budget = 0;
-    //   if (selectedCampaign.includes_mktbudget && !!parsedResult[0].marketing_budget) {
-    //     marketing_budget = parsedResult[0].marketing_budget;
-    //   }
+      // If mkt budget is added with campaigns with mkt budget, i.e. 5th campaign for now.
+      let marketing_budget = 0;
+      if (selectedCampaign.includes_mktbudget && !!parsedResult[0].marketing_budget) {
+        marketing_budget = parsedResult[0].marketing_budget;
+      }
 
-    //   const extra_service_fee = extraService.help ? HELP_SERVICE_FEE : extraService.sos ? SOS_SERVICE_FEE : 0;
+      const extra_service_fee = extraService.help ? HELP_SERVICE_FEE : extraService.sos ? SOS_SERVICE_FEE : 0;
 
-    //   if (
-    //     (publishedPostStatus === 0 && extra_service_fee > 0) || // If help and sos are added as extra service
-    //     publishedPostStatus === 4 // If paid campaigns are selected, temporary placeholder status
-    //   ) {
-    //     const isExtraServiceAdded = publishedPostStatus === 0 && extra_service_fee > 0 ? true : false;
-    //     const extra_service_fee_with_vat = extra_service_fee * 1.24; // Total price for the extra service including vat
+      if (
+        (publishedPostStatus === 0 && extra_service_fee > 0) || // If help and sos are added as extra service
+        publishedPostStatus === 4 // If paid campaigns are selected, temporary placeholder status
+      ) {
+        const isExtraServiceAdded = publishedPostStatus === 0 && extra_service_fee > 0 ? true : false;
+        const extra_service_fee_with_vat = extra_service_fee * 1.24; // Total price for the extra service including vat
 
-    //     const amount = parsedResult[0].job_post_campaign_money;
-    //     const totalSum = (marketing_budget + amount) * 1.24;
+        const amount = parsedResult[0].job_post_campaign_money;
+        const totalSum = (marketing_budget + amount) * 1.24;
 
-    //     const details = {
-    //       company_id: formValues.company_id,
-    //       company_name,
-    //       business_id,
-    //       firstname,
-    //       lastname,
-    //       email,
-    //       address,
-    //       zip_code,
-    //       city,
-    //       description: isExtraServiceAdded ? extra_service_description : description,
-    //       totalSum: isExtraServiceAdded ? extra_service_fee_with_vat : totalSum,
-    //       amount: isExtraServiceAdded ? extra_service_fee : amount,
-    //       post_id: postId,
-    //       order_id: orderId,
-    //       marketing_budget,
-    //       mkt_description,
-    //       selectedCampaign,
-    //     };
+        const details = {
+          company_id: formValues.company_id,
+          company_name,
+          business_id,
+          firstname,
+          lastname,
+          email,
+          address,
+          zip_code,
+          city,
+          description: isExtraServiceAdded ? extra_service_description : description,
+          totalSum: isExtraServiceAdded ? extra_service_fee_with_vat : totalSum,
+          amount: isExtraServiceAdded ? extra_service_fee : amount,
+          post_id: postId,
+          order_id: orderId,
+          marketing_budget,
+          mkt_description,
+          selectedCampaign,
+        };
 
-    //     if (payment_method === 'invoice') {
-    //       yield put(sendInvoiceToTalous(details));
-    //     } else if (payment_method === 'online') {
-    //       \ put(registerPayment(details));
-    //     }
-    //   }
-    //   // Post saved as a draft or free campaign or help/sos feature
-    //   //if (parsedResult[0].job_post_status !== 4)
-    //   else {
-    //     yield put(saveAndPublishAdvertisementSuccess());
-    //   }
-    // } else {
-    //   yield put(saveAndPublishAdvertisementFailed());
-    // }
+        if (payment_method === 'invoice') {
+          yield put(sendInvoiceToTalous(details));
+        } else if (payment_method === 'online') {
+           put(registerPayment(details));
+        }
+      }
+      // Post saved as a draft or free campaign or help/sos feature
+      //if (parsedResult[0].job_post_status !== 4)
+      else {
+        yield put(saveAndPublishAdvertisementSuccess());
+      }
+    } else {
+      yield put(saveAndPublishAdvertisementFailed());
+    }
   } catch (error) {
     console.log(error);
     yield put(saveAndPublishAdvertisementFailed());

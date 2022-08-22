@@ -14,6 +14,7 @@ import { getAdInfoFromSideMenu } from "../../../actions";
 
 const ActiveAdsComponent = ({
   warnToDelete,
+  getJobDetailsById,
   populateVacancyForm,
   deleteJobOffer,
   changeAdvertPage,
@@ -129,14 +130,15 @@ const ActiveAdsComponent = ({
                       >
                         <h4
                           onClick={() => {
-                            // fetchJobInfo(
-                            //   item.companyName,
-                            //   item.companyBusinessId,
-                            //   item.jobName,
-                            //   item.jobPostNumber
-                            // );
+                            fetchJobInfo(
+                              item.companyName,
+                              item.companyBusinessId,
+                              item.jobName,
+                              item.jobPostNumber
+                            );
                             // fetchJobById(item.id);
                             openAdToSeeAdInfo(item.id)
+                            //getJobDetailsById(item.id)
                             getAdInfoFromSideMenu(1);
                           }}
                         >

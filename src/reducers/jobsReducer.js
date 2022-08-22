@@ -137,7 +137,7 @@ const jobsReducer = (state = initialState, action) => {
     case GET_JOB_DETAILS_BY_ID_SUCCESS:
       return {
         ...state,
-        jobDetails: action.result,
+        jobDetails: action.data,
         uploadedDocument: [],
         showSpinner: false,
       };
