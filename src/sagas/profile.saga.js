@@ -179,8 +179,8 @@ function* getApplicantProfileSaga() {
     const url = `${ESTONIAN_GET_APPLICANT_PROFILE}/${client.user.data.company_id}`;
 
     const result = yield call(apiManualRequest, url);
-    const resultParsed = JSON.parse(result.data);
-    yield put(getApplicantProfileSuccess(resultParsed));
+
+    yield put(getApplicantProfileSuccess(result.data));
   } catch (error) {
     console.warn(error);
   }

@@ -24,23 +24,19 @@ class JobseekerProfile extends React.Component {
   }
 }
 const mapStateToProps = (state) => ({
-  profilePic: formValueSelector("jobseekerProfile")(state, "photo_document"),
+  profilePic: state.jobseekerProfile.profile.applicantPhoto.content,
   initialValues:
     state.jobseekerProfile.profile && state.jobseekerProfile.profile,
-  applicant_cv:
-    state.jobseekerProfile.profile.cv_document &&
-    state.jobseekerProfile.profile.cv_document[0].path,
-  cv_filename:
-    state.jobseekerProfile.profile.cv_document &&
-    state.jobseekerProfile.profile.cv_document[0].filename,
+  applicant_cv: state.jobseekerProfile.profile.applicantDocument.content,
+  cv_filename: "CV",
   showSuccessSnackbar: state.asyncActions.showSuccessSnackbar,
   showFailedSnackbar: state.asyncActions.showFailedSnackbar,
   isUserType: state.client.user && state.client.user.data.user_type,
-  uploadedDocument:
-    state.jobseekerProfile.uploadedDocument &&
-    state.jobseekerProfile.uploadedDocument[0]
-      ? state.jobseekerProfile.uploadedDocument[0]
-      : "",
+  uploadedDocument: state.jobseekerProfile.profile.applicantDocument.content,
+  // state.jobseekerProfile.uploadedDocument &&
+  // state.jobseekerProfile.uploadedDocument[0]
+  //   ? state.jobseekerProfile.uploadedDocument[0]
+  //   : "",
 });
 
 const mapDispatchToProps = {
