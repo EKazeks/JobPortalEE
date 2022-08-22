@@ -213,37 +213,38 @@ function* addApplicantProfile() {
     const refinedFormValues = filterObj("photo_document", formValues);
 
     if (!formValues.applicant_id) {
-      url = `${API_SERVER}/AddApplicantProfile`;
+      url = `https://localhost:7262/fullFillApplicant`;
     } else {
-      url = `${API_SERVER}/UpdateApplicantProfile`;
+      url = `https://localhost:7262/fullFillApplicant`;
     }
-
+    console.log('FORMVALUES ===>>', formValues);
     if (Array.isArray(formValues.photo_document) === true) {
-      body = JSON.stringify({
+      body = {
         ...refinedFormValues,
         uuid,
-      });
+      };
     } else if (!uploadedProfilePic.name) {
-      body = JSON.stringify({
+      body = {
         ...formValues,
         uuid,
-      });
+      };
     } else {
       const base64 = formValues.photo_document;
-      body = JSON.stringify({
+      body = {
         ...formValues,
         uuid,
+        applicantPhoto: base64,
         photo_document: {
           data: base64,
           filename: uploadedProfilePic.name.replace(/\s+\(\d+\)/g, "JP"), // If stored filename has (int), dropzone doesn't understand the path..so changing such names before sending to db.
           filetype: uploadedProfilePic.type,
           path: "jobportal",
         },
-      });
+      };
     }
 
-    const result = yield call(apiManualPost, url, body);
-    if (result.data === "Applicant Profile updated successfully!") {
+    const result = yield call(axios.patch(url, body).then((res) => res.data));
+    if (result.data) {
       yield put(getApplicantProfile());
       yield put(showSuccessSnackbar());
     } else {

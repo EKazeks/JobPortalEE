@@ -196,7 +196,7 @@ const JobseekerProfileComponent = ({
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
                           <label
-                            htmlFor="applicantCV"
+                            htmlFor="CV"
                             className={classes.fieldLabel}
                           >
                             {t("applicant:cvTitle")}:
@@ -205,12 +205,14 @@ const JobseekerProfileComponent = ({
                         <Grid item md={6} sm={8} xs={12}>
                           <Field
                             component={renderDropzoneField}
-                            name="cv_document"
+                            name="CV"
                             isCV
                             uploadedDocument={uploadedDocument}
                             cvBtnLabel={t("applicant:cvLabel")}
                           />
-                          {!uploadedDocument && cv_document}
+                          {/* {!uploadedDocument && cv_document} */}
+                          {cv_document}
+                          {/* {uploadedDocument} */}
                         </Grid>
                       </Grid>
                     </Grid>
