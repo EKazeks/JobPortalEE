@@ -9,6 +9,7 @@ import { MySnackbarContentWrapper } from '../../utils/snackbar.utils';
 import autoCompleteLocation from '../../utils/autoCompleteLocation';
 import { MultiSelectJobCategoriesComponent, MultiSelectJobHoursComponent, MultiSelectJobTypeComponent } from '../../utils/multiSelectCustomField';
 import axios from 'axios';
+import FavoriteJobsComponent from './favoriteJobs.component';
 
 const styles = theme => ({
   title: {
@@ -120,6 +121,7 @@ const HomePageComponent = ({
   classes,
   valid,
   pristine,
+  favoriteJobs
 }) => {
 
   const { t } = useTranslation('homepage');
@@ -265,8 +267,7 @@ const HomePageComponent = ({
                 </Link>
               </div>
               <p className={classes.cardContentInfo}>
-                {/* <span className={classes.cardContentDynamicInfo}>{dashboard && dashboard.favourite}</span> */}
-                <span className={classes.cardContentDynamicInfo}>{'0'}</span>
+                <span className={classes.cardContentDynamicInfo}>{favoriteJobs?.length}</span>
                 {t('totalFavs')}
               </p>
             </CardContent>

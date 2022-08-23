@@ -210,9 +210,7 @@ const JobseekerProfileComponent = ({
                             uploadedDocument={uploadedDocument}
                             cvBtnLabel={t("applicant:cvLabel")}
                           />
-                          {/* {!uploadedDocument && cv_document} */}
-                          {/* {cv_document} */}
-                          {/* {uploadedDocument} */}
+                          {!uploadedDocument && cv_document}
                         </Grid>
                       </Grid>
                     </Grid>
@@ -223,7 +221,7 @@ const JobseekerProfileComponent = ({
                     name="photo_document"
                     component={renderDropzoneField}
                     type="file"
-                    imagefile={typeof profilePic === 'string' ? profilePic : Array.isArray(profilePic) ? profilePic[0].path : ''}
+                    imagefile={typeof profilePic === 'string' ? profilePic : profilePic}
                     btnText={t("picBtnText")}
                     fullWidth
                     isProfilePic
@@ -240,7 +238,7 @@ const JobseekerProfileComponent = ({
                     color="secondary"
                     onClick={() => {
                       dispatch(
-                        change("jobseekerProfile", "photo_document", undefined)
+                        change("jobseekerProfile", profilePic, undefined)
                       );
                       clearJobseekerProfilePic();
                     }}

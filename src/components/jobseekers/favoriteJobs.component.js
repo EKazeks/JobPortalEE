@@ -20,6 +20,13 @@ const FavoriteJobsComponent = ({
 }) => {
   const { t } = useTranslation("favoriteJobs", "common");
 
+  const getDate = (date) => {
+    const newDate = date.substring(0, 10).split(".")
+    const replacedDate = newDate.toString().split("-");
+    let finelDate = replacedDate[2] + "." + replacedDate[1] + "." + replacedDate[0];
+    return <>{finelDate}</>
+}
+
   return (
     <div className="container">
       <div>
@@ -72,7 +79,7 @@ const FavoriteJobsComponent = ({
                         <span>
                           {t("common:deadline")}:
                           <span style={{ color: "red", margin: "0 5px" }}>
-                            {post.dateOfApplication}
+                            {post.dateOfApplication.indexOf(':00.000Z') !== -1 ? getDate(post.dateOfApplication?.substring(0,10)) : post.dateOfApplication}
                           </span>
                           {/* <span style={{ color: 'red', margin: '0 5px' }}>{new Intl.DateTimeFormat('fi-FI').format(new Date('2022-08-31'))}</span> */}
                         </span>
