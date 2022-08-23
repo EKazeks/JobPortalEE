@@ -1,9 +1,9 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { getAppliedJobs, changeAdvertPage } from '../../actions';
-import AppliedJobsComponent from '../../components/jobseekers/appliedJobs.component';
-import store from '../../store';
+import React from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { getAppliedJobs, changeAdvertPage } from "../../actions";
+import AppliedJobsComponent from "../../components/jobseekers/appliedJobs.component";
+import store from "../../store";
 
 class AppliedJobsContainer extends React.Component {
   componentDidMount() {
@@ -19,15 +19,15 @@ class AppliedJobsContainer extends React.Component {
   }
 
   render() {
-    if (this.props.isUserType === 'applicant') {
+    if (this.props.isUserType === "applicant") {
       return <AppliedJobsComponent {...this.props} />;
     }
     return <Redirect to="/" />;
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    appliedJobs: state.jobs.appliedJobs,
+    appliedJobs: store.getState().jobseekerProfile.profile.appliedJobs,
     selectedPage: state.pagination.selectedPage.selected,
     advertPages: Math.ceil(state.jobs.appliedJobs.length / 10),
     isUserType: state.client.user && state.client.user.data.user_type,
@@ -38,4 +38,7 @@ const mapDispatchToProps = {
   getAppliedJobs,
   changeAdvertPage,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(AppliedJobsContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppliedJobsContainer);
