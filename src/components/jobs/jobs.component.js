@@ -381,30 +381,24 @@ const JobsComponent = ({
                                 ) : (
                                   <FavBtn
                                     className={classes.favBtn}
+                                    
                                     handleFav={() => {
+                                      
+                                      // if (favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)) {
+                                      //   deleteFavoriteJobs(item.id)
+                                      // }
                                       toggleFavoriteJobs(
-                                        item.id
-                                        //item.companyBusinessId,
-                                        //item.jobPostNumber,
-                                        //!favoriteJobs.some(favList => favList.isFavourite),
+                                        item.id,
+                                        item.jobName,
+                                        item.dateOfApplication,
+                                        !favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)
                                       );
                                     }}
-                                    isFav={favoriteJobs.some(
-                                      (favList) =>
-                                        favList.companyBusinessId ===
-                                          item.companyBusinessId &&
-                                        favList.id === item.id
-                                    )} // checking from the favoriteJobs list
+                                    isFav={favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)} // checking from the favoriteJobs list
                                     btnText={
-                                      !favoriteJobs.some(
-                                        (favList) =>
-                                          favList.companyBusinessId ===
-                                            item.companyBusinessId &&
-                                          favList.id === item.id
-                                      )
-                                        ? //!favoriteJobs.filter((favourite) => favourite.isFavourite)
-                                          t("addFav")
-                                        : t("delFav")
+                                      !favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)
+                                      ? t('addFav')
+                                      : t('delFav')
                                     }
                                   />
                                 )}

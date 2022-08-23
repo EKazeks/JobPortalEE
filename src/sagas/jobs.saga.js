@@ -168,10 +168,21 @@ function* getJobDetailsByIdSaga(props) {
   }
 }
 
-function* toggleFavoriteJobsSaga({ id }) {
+function* toggleFavoriteJobsSaga({id}) {
   try {
-    const url = `https://localhost:7262/setFavouriteOffer/${id}`;
-    const result = yield call(apiManualPost, url);
+    const url = `https://localhost:7262/setOfferFavourite`;
+    const {jobName, dateOfApplication} = store.getState().jobs
+    const  instanceId  = store.getState().client.user.data.company_id
+
+    const body = JSON.stringify({
+      id,
+      jobTitle: jobName,
+      closingDate: dateOfApplication,
+      instanceId,
+      jobPostId:id
+    })
+
+    const result = yield call(apiManualPost, url, body);
     const data = result.data;
 
     if (data === data) {
@@ -190,11 +201,9 @@ function* toggleFavoriteJobsSaga({ id }) {
 }
 function* deleteFavoriteJobsSaga({ id }) {
   try {
-    const url = `https://localhost:7262/unsetFavouriteOffer/${id}`;
-    const body = {
-      isFavourite: 0,
-    };
-    const result = yield call(apiManualPost, url);
+    const url = `https://localhost:7262/deleteOfferFromFavourite/${id}`;
+
+    const result = axios.delete(url).then((res) => res.data)
     const data = result.data;
     if (data === data) {
       yield put(getFavoriteJobs());
@@ -222,14 +231,14 @@ function* getAppliedJobsSaga() {
 }
 function* getFavoriteJobsSaga() {
   try {
-    const url = `https://localhost:7262/getFavouriteOffers`;
+    const url = `https://localhost:7262/getAllApplicants`;
 
     const result = yield call(apiManualRequest, url);
+    const data = result.data
+    const {favoriteJobs} = data[0]
 
-    const data = result.data;
-
-    if (data === data) {
-      yield put(getFavoriteJobsSuccess(data));
+    if (favoriteJobs === favoriteJobs) {
+      yield put(getFavoriteJobsSuccess(favoriteJobs));
     } else {
       //yield put(getFavoriteJobsSuccess([]));
     }
@@ -240,21 +249,38 @@ function* getFavoriteJobsSaga() {
 
 function* getApplicantDashboardInfoSaga() {
   try {
-    const url = `${API_SERVER}/GetApplicantDashboardInfo`;
-    const email = store.getState().client.user.data.email;
-    const firstname = store.getState().client.user.data.email;
-    const lastname = store.getState().client.user.data.email;
-    const body = JSON.stringify({
-      email,
-      firstname,
-      lastname,
-    });
-    const result = yield call(apiManualPost, url, body);
-    const resultParsed = JSON.parse(result.data);
+    const  id  = store.getState().client.user.data.company_id
+    const url = `https://localhost:7262/getAllApplicants/${id}`;
+    //const email = store.getState().client.user.data.email;
+    //const firstname = store.getState().client.user.data.email;
+    //const lastname = store.getState().client.user.data.email;
+    // const body = JSON.stringify({
+    //   email,
+    //   firstname,
+    //   lastname,
+    // });
+    const result = yield call(apiManualRequest, url);
+    const resultParsed = result.data;
     yield put(getApplicantDashboardInfoSuccess(resultParsed));
   } catch (e) {
     console.log(e);
   }
+  // try {
+  //   const url = `${API_SERVER}/GetApplicantDashboardInfo`;
+  //   const email = store.getState().client.user.data.email;
+  //   const firstname = store.getState().client.user.data.email;
+  //   const lastname = store.getState().client.user.data.email;
+  //   const body = JSON.stringify({
+  //     email,
+  //     firstname,
+  //     lastname,
+  //   });
+  //   const result = yield call(apiManualPost, url, body);
+  //   const resultParsed = JSON.parse(result.data);
+  //   yield put(getApplicantDashboardInfoSuccess(resultParsed));
+  // } catch (e) {
+  //   console.log(e);
+  // }
 }
 
 function* toggleEmailNotificationSaga() {

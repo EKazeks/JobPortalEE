@@ -6,6 +6,7 @@ import {
   changeAdvertPage,
   fetchJobInfo,
   fetchJobById,
+  deleteFavoriteJobs
 } from "../../actions";
 import FavoriteJobsComponent from "../../components/jobseekers/favoriteJobs.component";
 import store from "../../store";
@@ -45,6 +46,7 @@ const mapDispatchToProps = {
   changeAdvertPage,
   fetchJobInfo,
   fetchJobById,
+  deleteFavoriteJobs
 };
 export default connect(
   mapStateToProps,

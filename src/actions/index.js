@@ -657,9 +657,12 @@ export const updateEmailNotification = () => ({
 });
 
 // FAVORITE JOBS
-export const toggleFavoriteJobs = (id) => ({
+export const toggleFavoriteJobs = (id,jobName,dateOfApplication) => ({
   type: TOGGLE_FAVORITE_JOBS,
   id,
+  jobName,
+  dateOfApplication,
+
 });
 export const deleteFavoriteJobs = (id) => ({
   type: DELETE_FAVORITE_JOBS,

@@ -49,6 +49,7 @@ const initialState = {
   favoriteJobs: [],
   appliedJobs: [],
   dashboard: [],
+  dateOfApplication: '',
   notificationToggleBtn: false,
   workStart: null,
   // warnToDelete: false,
@@ -158,6 +159,9 @@ const jobsReducer = (state = initialState, action) => {
     case TOGGLE_FAVORITE_JOBS:
       return {
         ...state,
+        id: action.id,  
+        dateOfApplication: action.dateOfApplication,
+        jobName: action.jobName
       };
     case GET_APPLIED_JOBS_SUCCESS:
       return {
@@ -180,7 +184,7 @@ const jobsReducer = (state = initialState, action) => {
       return {
         ...state,
         dashboard: action.response,
-        notificationToggleBtn: action.response[0].email_notice_active,
+        //notificationToggleBtn: action.response.emailNotificationActive,
       };
     case TOGGLE_EMAIL_NOTIFICATION:
       return {
