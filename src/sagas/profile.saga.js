@@ -49,11 +49,11 @@ function* addCompanyProfile() {
       url = `${API_SERVER_UPDATE_COMPANY_INFO}`;
     }
     // Send companyUser as empty array if no additional users/ Back-end needs it
-    if (!formValues.companyUser) {
-      formValues.companyUser = [];
+    if (!formValues.companyAdditionalUsers) {
+      formValues.companyAdditionalUsers = [];
     }
-    if (!refinedFormValues.companyUser) {
-      refinedFormValues.companyUser = [];
+    if (!refinedFormValues.companyAdditionalUsers) {
+      refinedFormValues.companyAdditionalUsers = [];
     }
 
     if (Array.isArray(formValues.logo_document) === true) {
@@ -73,18 +73,8 @@ function* addCompanyProfile() {
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
       };
-      // body = {
-      //   ...refinedFormValues,
-      //   companyLogo: refinedFormValues.companyLogo.toString(),
-      //   //uuid,
-      // };
     } else if (!uploadedLogo.name) {
       const base64 = formValues.logo_document;
-      // body = {
-      //   ...formValues,
-      //   companyLogo: refinedFormValues.companyLogo.toString(),
-      //   //uuid,
-      // };
       body = {
         id: refinedFormValues.id,
         companyName: refinedFormValues.companyName,
@@ -116,15 +106,8 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
-        // logo_document: {
-        //   data: base64,
-        //   filename: uploadedLogo.name.replace(/\s+\(\d+\)/g, "JP"), // If stored filename has (int), dropzone doesn't understand the path..so changing such names before sending to db.
-        //   filetype: uploadedLogo.type,
-        //   path: "logo",
-        // },
       };
     }
-    // const result = yield call(apiManualPost, url, body);
     const result = yield call(axios.patch(url, body).then((res) => res.data));
     if (result.data) {
       yield put(showSuccessSnackbar());
@@ -196,10 +179,10 @@ function* addApplicantProfile() {
     const { uploadedProfilePic } = jobseekerProfile;
     const uploadedCV =
       jobseekerProfile.uploadedDocument && jobseekerProfile.uploadedDocument[0];
-    const cv_base64 = formValues && formValues.cv_document;
+    const cv_base64 = formValues && formValues.cv_document
 
     if (!!uploadedCV && formValues.cv_document) {
-      formValues.cv_document = {
+      formValues.CV = {
         document_id: uploadedCV.id,
         path: "Jobportal",
         filename: uploadedCV.name,
@@ -219,27 +202,49 @@ function* addApplicantProfile() {
     }
     console.log('FORMVALUES ===>>', formValues);
     if (Array.isArray(formValues.photo_document) === true) {
+      const base64 = formValues.photo_document;
       body = {
-        ...refinedFormValues,
-        uuid,
+        id: formValues.id,
+        firstName: formValues.firstName,
+        lastName: formValues.lastName,
+        email: formValues.email,
+        contactNumber: formValues.contactNumber,
+        linkedIn: formValues.linkedIn,
+        portfolio: formValues.portfolio,
+        description: formValues.profileDescription,
+        applicantPhoto: base64.toString(),
+        applicantCv: cv_base64,
+        applicantCvFileName: uploadedCV.name
       };
     } else if (!uploadedProfilePic.name) {
+      const base64 = formValues.photo_document;
       body = {
-        ...formValues,
-        uuid,
+        id: formValues.id,
+        firstName: formValues.firstName,
+        lastName: formValues.lastName,
+        email: formValues.email,
+        contactNumber: formValues.contactNumber,
+        linkedIn: formValues.linkedIn,
+        portfolio: formValues.portfolio,
+        description: formValues.profileDescription,
+        applicantPhoto: base64.toString(),
+        applicantCv: cv_base64,
+        applicantCvFileName: uploadedCV.name
       };
     } else {
       const base64 = formValues.photo_document;
       body = {
-        ...formValues,
-        uuid,
-        applicantPhoto: base64,
-        photo_document: {
-          data: base64,
-          filename: uploadedProfilePic.name.replace(/\s+\(\d+\)/g, "JP"), // If stored filename has (int), dropzone doesn't understand the path..so changing such names before sending to db.
-          filetype: uploadedProfilePic.type,
-          path: "jobportal",
-        },
+        id: formValues.id,
+        firstName: formValues.firstName,
+        lastName: formValues.lastName,
+        email: formValues.email,
+        contactNumber: formValues.contactNumber,
+        linkedIn: formValues.linkedIn,
+        portfolio: formValues.portfolio,
+        description: formValues.profileDescription,
+        applicantPhoto: base64.toString(),
+        applicantCv: cv_base64,
+        applicantCvFileName: uploadedCV.name
       };
     }
 

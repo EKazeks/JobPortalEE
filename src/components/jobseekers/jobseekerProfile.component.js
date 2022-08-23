@@ -205,13 +205,13 @@ const JobseekerProfileComponent = ({
                         <Grid item md={6} sm={8} xs={12}>
                           <Field
                             component={renderDropzoneField}
-                            name="CV"
+                            name="cv_document"
                             isCV
                             uploadedDocument={uploadedDocument}
                             cvBtnLabel={t("applicant:cvLabel")}
                           />
                           {/* {!uploadedDocument && cv_document} */}
-                          {cv_document}
+                          {/* {cv_document} */}
                           {/* {uploadedDocument} */}
                         </Grid>
                       </Grid>
@@ -223,7 +223,7 @@ const JobseekerProfileComponent = ({
                     name="photo_document"
                     component={renderDropzoneField}
                     type="file"
-                    imagefile={profilePic}
+                    imagefile={typeof profilePic === 'string' ? profilePic : Array.isArray(profilePic) ? profilePic[0].path : ''}
                     btnText={t("picBtnText")}
                     fullWidth
                     isProfilePic
