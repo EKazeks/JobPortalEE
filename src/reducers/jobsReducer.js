@@ -107,6 +107,7 @@ const jobsReducer = (state = initialState, action) => {
         jobName: action.jobName,
         jobPostNumber: action.jobPostNumber,
         address: action.address,
+        dateOfApplication: action.dateOfApplication
       };
     case GET_JOB_APPLICANTS:
       return {

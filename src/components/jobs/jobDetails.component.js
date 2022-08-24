@@ -404,7 +404,8 @@ const JobDetailsComponent = ({
                             jobsToRender.jobName,
                             jobsToRender.jobPostNumber,
                             jobsToRender.jobPostAddress.address,
-                            jobsToRender.url
+                            jobsToRender.url,
+                            jobsToRender.dateOfApplication,
                           );
                         }}
                       >

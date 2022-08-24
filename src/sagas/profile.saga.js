@@ -159,7 +159,8 @@ function* getCompanyProfileSaga() {
 function* getApplicantProfileSaga() {
   try {
     const { client } = store.getState();
-    const url = `${ESTONIAN_GET_APPLICANT_PROFILE}/${client.user.data.company_id}`;
+     const url = `${ESTONIAN_GET_APPLICANT_PROFILE}/${client.user.data.company_id}`;
+    //const url = `${ESTONIAN_GET_APPLICANT_PROFILE}/${id}`;
 
     const result = yield call(apiManualRequest, url);
 

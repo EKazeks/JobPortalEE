@@ -143,8 +143,8 @@ function* getJobDetailsByIdSaga(props) {
     //     isApplyPage,
     //   });
     // }
-
-    result = axios.get(url).then((res) => res.data);
+    result = yield call(apiManualRequest, url)
+    //result = axios.get(url).then((res) => res.data);
     const data = result.data;
     if (data === data) {
       //resultParsed = result.data[0];
@@ -215,15 +215,14 @@ function* deleteFavoriteJobsSaga({ id }) {
 
 function* getAppliedJobsSaga() {
   try {
-    const url = `${API_SERVER}/GetAppliedJobPostByEmail`;
-    const email = store.getState().client.user.data.email;
-    const body = JSON.stringify({
-      email,
-    });
-    const result = yield call(apiManualPost, url, body);
-    const resultParsed = JSON.parse(result.data);
-    if (resultParsed) {
-      yield put(getAppliedJobsSuccess(resultParsed));
+    const url = `https://localhost:7262/getAllApplicants`;
+
+    const result = yield call(apiManualRequest, url);
+    const data = result.data
+    const {appliedJobs} = data[0]
+
+    if (appliedJobs) {
+      yield put(getAppliedJobsSuccess(appliedJobs));
     }
   } catch (e) {
     console.log(e);

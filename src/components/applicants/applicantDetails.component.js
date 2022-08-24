@@ -141,11 +141,12 @@ const ApplicantDetails = ({
   valid,
   pristine,
   handleSubmit,
+  //cv_filename
 }) => {
   const applicant_cv =
-    viewApplication.applicant_cv && viewApplication.applicant_cv[0].path;
+    viewApplication.applicantDocument && viewApplication.applicantDocument.content;
   const cv_filename =
-    viewApplication.applicant_cv && viewApplication.applicant_cv[0].filename;
+    viewApplication.applicantDocument?.fileName;
   const { t } = useTranslation("applicant", "common");
 
   return (
@@ -227,15 +228,15 @@ const ApplicantDetails = ({
                       </Grid>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label htmlFor="phone" className={classes.fieldLabel}>
+                          <label htmlFor="contactNumber" className={classes.fieldLabel}>
                             {t("common:phone")}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
                           <Field
                             component={renderDenseTextField}
-                            name="phone"
-                            id="phone"
+                            name="contactNumber"
+                            id="contactNumber"
                             disabled
                           />
                         </Grid>
@@ -261,7 +262,7 @@ const ApplicantDetails = ({
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
                           <label
-                            htmlFor="description"
+                            htmlFor="portfolio"
                             className={classes.fieldLabel}
                           >
                             {t("common:portfolio")}:
@@ -270,8 +271,8 @@ const ApplicantDetails = ({
                         <Grid item md={6} sm={8} xs={12}>
                           <Field
                             component={renderDenseTextField}
-                            name="description"
-                            id="description"
+                            name="portfolio"
+                            id="portfolio"
                             disabled
                           />
                         </Grid>
@@ -295,14 +296,14 @@ const ApplicantDetails = ({
                     </div>
                   </Grid>
                   <Grid item md={4} sm={12} style={{ marginTop: 30 }}>
-                    {viewApplication && viewApplication.applicant_photo ? (
+                    {viewApplication && viewApplication.applicantPhoto ? (
                       <div className={classes.applicantPhoto}>
                         <p className={classes.fieldLabel}>
                           {t("common:photo")}:
                         </p>
                         <div
                           style={{
-                            background: `url(${viewApplication.applicant_photo[0].path})`,
+                            background: `url(${viewApplication.applicantPhoto.content})`,
                             backgroundSize: "contain",
                             backgroundRepeat: "no-repeat",
                             height: 200,
@@ -317,7 +318,7 @@ const ApplicantDetails = ({
                 </Grid>
                 <Grid container alignItems="center" style={{ marginTop: 15 }}>
                   <Grid item sm={4}>
-                    <label className={classes.fieldLabel} htmlFor="description">
+                    <label className={classes.fieldLabel} htmlFor="profileDescription">
                       {t("applicationMsg")}:
                     </label>
                   </Grid>
@@ -325,8 +326,8 @@ const ApplicantDetails = ({
                     <Field
                       className={classes.rte}
                       component={TextEditor}
-                      name="description"
-                      id="description"
+                      name="profileDescription"
+                      id="profileDescription"
                       disabled
                       // placeholder={t('descPlaceholder')}
                     />
@@ -463,9 +464,6 @@ const ApplicantDetails = ({
                     handleClick={() =>
                       updateJobApplicationDetails(
                         viewApplication.id,
-                        //viewApplication.company_id,
-                        viewApplication.jobpostId,
-                        viewApplication.email,
                         "note"
                       )
                     }

@@ -23,6 +23,7 @@ function* sendApplicationSaga() {
     const company_id = idToApply.split("JP")[0];
     const post_id = idToApply.split("JP")[1];
     const { jobPostNumber } = store.getState().jobs;
+    const { dateOfApplication } = store.getState().jobs;
     const uploadedCV =
       store.getState().jobs.uploadedDocument &&
       store.getState().jobs.uploadedDocument[0];
@@ -30,7 +31,7 @@ function* sendApplicationSaga() {
     const cv_id = cv_id_value?.toString(); // optional chaining ?.
     const formValues = getFormValues("applicationForm")(store.getState());
     const cv_base64 = formValues && formValues.cv_document;
-
+    console.log('FormValues ===>,',formValues);
     if (!!uploadedCV && formValues.cv_document) {
       formValues.cv_document = {
         document_id: uploadedCV.id,
@@ -44,7 +45,7 @@ function* sendApplicationSaga() {
     }
 
     // Backend needs in the following format
-    const url = `https://localhost:7262/addApplicationToOffer/`;
+    const url = `https://localhost:7262/addApplicationToOffer`;
     const body = {
       id: idToApply,
       firstName: formValues.firstname,
@@ -56,6 +57,7 @@ function* sendApplicationSaga() {
       favouriteCandidate: 0,
       jobTitle: store.getState().jobs.jobName,
       note: formValues.application_description,
+      closingDate: dateOfApplication,
       jobpostId: idToApply,
       instanceId: store.getState().client.user.data.company_id,
     };

@@ -31,6 +31,8 @@ const mapStateToProps = state => {
   const formValues = getFormValues('jobPreference')(state);
   const dashboard = state.jobs.dashboard && state.jobs.dashboard[0];
   const favoriteJobs = state.jobs.favoriteJobs && state.jobs.favoriteJobs;
+  const appliedJobs = state.jobs.dashboard.appliedJobs && state.jobs.dashboard.appliedJobs;
+  
   const extractJobCategoriesData = list => {
     const jobcategoryList = list.map(el => {
       const data = {};
@@ -79,6 +81,8 @@ console.log(populateFormValues)
     showFailedSnackbar: state.asyncActions.showFailedSnackbar,
     isUserType: state.client.user && state.client.user.data.user_type,
     formValues,
+    favoriteJobs,
+    appliedJobs
   };
 };
 

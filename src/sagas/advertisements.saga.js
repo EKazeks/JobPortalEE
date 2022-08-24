@@ -375,8 +375,6 @@ function* saveAndPublishAdvertisementSaga() {
 function* getJobPostByPostIdSaga({ id }) {
   try {
     const url = `${API_SERVER_EST}/${id}`;
-    const companyBusinessId = store.getState().jobs.jobsList.companyBusinessId;
-    const userRole = store.getState().client.user.data.user_type;
 
     if (id === 0 || id === undefined || id === null) {
     } else {
@@ -914,9 +912,10 @@ function* saveAdvertisementAsDraft() {
   yield put(saveAndPublishAdvertisement());
 }
 
-function* getApplicationDetailsByIdSaga({ jobpostId, id }) {
+function* getApplicationDetailsByIdSaga({ jobpostId, instanceId }) {
   try {
-    const url = `https://localhost:7262/jobsApplication/${id}`;
+    
+    const url = `https://localhost:7262/getAllApplicants/${instanceId}`;
 
     const result = yield call(apiManualRequest, url);
     const resultParsed = result.data;
@@ -961,18 +960,20 @@ function* updateApplicantStatusSaga({
   }
 }
 function* updateJobApplicationDetailsSaga({
-  application_id,
   company_id,
   post_id,
   email,
   update,
 }) {
   try {
+  
     let body;
     let url;
+    const id = store.getState().advertisement.viewApplication.id;
     const formValues = getFormValues("applicantDetails")(store.getState());
     let response;
     const loggedInUser = store.getState().client.user.data;
+    console.log('formValues =>>>>', formValues)
     const {
       application_notes,
       interview_title,
@@ -984,13 +985,14 @@ function* updateJobApplicationDetailsSaga({
     if (update === "note") {
       url = `https://localhost:7262/addApplicantNote`;
       body = {
-        id: "646d0f1f-4fa7-44b4-869a-f56935677af8",
+        id: id,
         note: application_notes,
       };
     } else {
       url = `https://localhost:7262/sendApplicantReminderOfInterview`;
       body = {
-        email: "moscemoscemosce@gmail.com",
+        applicantEmail: formValues.email,
+        companyEmail: store.getState().companyProfile.profile.email,
         subject: interview_title,
         message: interview_msg,
         date: interview_date,
@@ -1006,7 +1008,7 @@ function* updateJobApplicationDetailsSaga({
     } else {
       yield put(showSuccessSnackbar());
       yield put(
-        getApplicationDetailsById(application_id, company_id, post_id, email)
+        getApplicationDetailsById(id, company_id, post_id, email)
       );
       yield put(openAdToSeeAdInfo(post_id));
     }

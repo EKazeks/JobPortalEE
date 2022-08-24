@@ -180,6 +180,7 @@ export const fetchJobInfo = (
   jobName,
   jobPostNumber,
   address,
+  dateOfApplication,
   url
 ) => ({
   type: FETCH_JOB_INFO,
@@ -188,6 +189,7 @@ export const fetchJobInfo = (
   jobName,
   jobPostNumber,
   address,
+  dateOfApplication
 });
 
 export const editOffer = (id) => ({
@@ -800,13 +802,13 @@ export const resetApplicationSent = () => ({
 
 // GET APPLICATION
 export const getApplicationDetailsById = (
-  id,
+  instanceId,
   //company_id,
   jobpostId,
   email
 ) => ({
   type: GET_APPLICATION_DETAILS_BY_ID,
-  id,
+  instanceId,
   //company_id,
   jobpostId,
   email,
@@ -832,17 +834,17 @@ export const updateApplicantStatus = (
 });
 
 export const updateJobApplicationDetails = (
-  application_id,
-  company_id,
-  post_id,
-  email,
+  id,
+  //company_id,
+  //post_id,
+  //email,
   update
 ) => ({
   type: UPDATE_JOB_APPLICATION_DETAILS,
-  application_id,
-  company_id,
-  post_id,
-  email,
+  id,
+  //company_id,
+  //post_id,
+  //email,
   update,
 });
 
