@@ -110,7 +110,7 @@ function* addCompanyProfile() {
     }
     const result = yield call(axios.patch(url, body).then((res) => res.data));
     if (result.data) {
-      yield put(showSuccessSnackbar());
+      yield put(showSuccessSnackbar(result.data));
       if (isToAddNewProfile) {
         yield put(getUserCompanyList());
       } else {
@@ -119,10 +119,11 @@ function* addCompanyProfile() {
         // yield put(navigateAdsFromMainMenu(1));
       }
       // console.log('calling addcompany API', result);
-    } else if (result.data.includes("Employee error")) {
-      const email = result.data.split("-")[1];
+    } else if (result.data != result.data) {
+      //const email = result.data.split("-")[1];
       yield put(
-        showCustomErrorMsg(`${email}${i18next.t("profile:existingUser")}`)
+        // showCustomErrorMsg(`${email}${i18next.t("profile:existingUser")}`)
+        showCustomErrorMsg(`${i18next.t("profile:existingUser")}`)
       );
     } else if (result.data.includes("Same company already exists")) {
       const msg = i18next.t("profile:companyExists");

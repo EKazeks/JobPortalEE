@@ -31,11 +31,11 @@ function* signInSaga() {
     const formValues = getFormValues("signin")(store.getState());
     const hashedPassword = CryptoJS.SHA256(formValues.password).toString();
     // Checking the following flag to decide where to route users after logging in.
-
+    console.log('SIGIN formValues ===>', formValues);
     const body = JSON.stringify({
       email: formValues.email,
       password: hashedPassword,
-      SubjectId: formValues.email,
+      subjectId: formValues.email,
     });
     result = yield call(loginPost, url, body);
     yield put(setClient(result));
