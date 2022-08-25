@@ -1,22 +1,26 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
-import { getFormValues } from 'redux-form';
-import CryptoJS from 'crypto-js';
-import { ESTONIAN_USER_REGISTER, SIGNUP_FORM_SUBMIT } from '../constants';
-import store from '../store';
-import { registerPost } from '../utils/request';
-import { signUpFormSubmitSuccess, signUpFormSubmitUserExistError, signUpFormSubmitFailed } from '../actions';
+import { call, put, takeEvery } from "redux-saga/effects";
+import { getFormValues } from "redux-form";
+import CryptoJS from "crypto-js";
+import { ESTONIAN_USER_REGISTER, SIGNUP_FORM_SUBMIT } from "../constants";
+import store from "../store";
+import { registerPost } from "../utils/request";
+import {
+  signUpFormSubmitSuccess,
+  signUpFormSubmitUserExistError,
+  signUpFormSubmitFailed,
+} from "../actions";
 
 function* signUpSaga() {
   try {
     const url = `${ESTONIAN_USER_REGISTER}`;
-    const formValues = getFormValues('signup')(store.getState());
+    const formValues = getFormValues("signup")(store.getState());
     const hashedPassword = CryptoJS.SHA256(formValues.password).toString();
-    console.log('SIGNUP formValues =>', formValues)
+    console.log("SIGNUP formValues =>", formValues);
     const body = JSON.stringify({
       firstName: formValues.firstName,
       lastname: formValues.lastName,
       email: formValues.email,
-      password: hashedPassword,
+      password: formValues.password,
       userType: formValues.user_type,
       //SubjectId: formValues.email,
     });
