@@ -8,11 +8,10 @@ import { apiManualPost, apiManualRequest } from '../utils/request';
 function* getCompaniesList({ isProfileUpdated, }) {
   try {
     const email = store.getState().client.user.data.email;
-    //const id = store.getState().client.user.data.company_id;
+    const id = store.getState().client.user.data.company_id;
 
     if (email) {
-      const url = `https://localhost:7262/getAllCompanies`;
-
+      const url = `https://localhost:7262/getCompanyById/${id}`;
 
       const result = yield call(apiManualRequest, url);
       const parsedResult = result.data;

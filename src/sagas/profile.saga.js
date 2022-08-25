@@ -11,7 +11,7 @@ import {
   ESTONIAN_GET_APPLICANT_PROFILE,
 } from "../constants";
 import store from "../store";
-import { apiManualPost, apiManualRequest } from "../utils/request";
+import { apiManualPatch, apiManualPost, apiManualRequest } from "../utils/request";
 import {
   getCompanyProfileSuccess,
   showSuccessSnackbar,
@@ -42,7 +42,7 @@ function* addCompanyProfile() {
     console.log("refinedFormValues =>", refinedFormValues);
     console.log("formValues =>", formValues);
 
-    if (isToAddNewProfile || formValues.company_id === 0) {
+    if (isToAddNewProfile || formValues.companyBusinessId === null) {
       // For newly registered company users - getCompanyProfile gives company id 0.
       url = `${API_SERVER}/AddCompanyProfile`;
     } else {
@@ -58,7 +58,7 @@ function* addCompanyProfile() {
 
     if (Array.isArray(formValues.logo_document) === true) {
       const base64 = formValues.logo_document;
-      body = {
+      body = JSON.stringify({
         id: refinedFormValues.id,
         companyName: refinedFormValues.companyName,
         firstName: refinedFormValues.firstName,
@@ -72,10 +72,10 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
-      };
+      });
     } else if (!uploadedLogo.name) {
       const base64 = formValues.logo_document;
-      body = {
+      body = JSON.stringify({
         id: refinedFormValues.id,
         companyName: refinedFormValues.companyName,
         firstName: refinedFormValues.firstName,
@@ -89,10 +89,10 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
-      };
+      });
     } else {
       const base64 = formValues.logo_document;
-      body = {
+      body = JSON.stringify({
         id: refinedFormValues.id,
         companyName: refinedFormValues.companyName,
         firstName: refinedFormValues.firstName,
@@ -106,11 +106,11 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
-      };
+      });
     }
-    const result = yield call(axios.patch(url, body).then((res) => res.data));
-    if (result.data) {
-      yield put(showSuccessSnackbar(result.data));
+    const result = yield call(apiManualPatch, url, body);
+    if (result.data && isToAddNewProfile === false  || result.data && isToAddNewProfile === true) {
+      yield put(showSuccessSnackbar());
       if (isToAddNewProfile) {
         yield put(getUserCompanyList());
       } else {

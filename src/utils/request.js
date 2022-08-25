@@ -63,6 +63,28 @@ export const apiManualPost = (
     .then((data) => ({ data }))
     .catch((error) => ({ error }));
 };
+
+export const apiManualPatch = (
+  url = "https://localhost:7262/",
+  body,
+  method = "PATCH"
+) => {
+  const headers = getManualAuthHeaders();
+  headers.append("Content-Type", "application/json");
+
+  const options = {
+    method,
+    headers,
+    body,
+  };
+
+  return fetch(url, options)
+    .then((res) => res.json())
+    .then((data) => ( {data} ))
+    .catch((error) => ({ error }));
+};
+
+
 export const apiManualDelete = (
   url = "https://localhost:7262/jobsEn",
   body,
