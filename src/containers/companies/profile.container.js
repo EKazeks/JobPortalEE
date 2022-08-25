@@ -52,7 +52,7 @@ const mapStateToProps = (state) => {
     isUserType: state.client.user && state.client.user.data.user_type,
     isToAddNewProfile,
     isCompanyCreated: state.companyProfile.profile.company_id !== 0, // Resembles newly registered users but profile not updated
-    isSuperUser: state.client.user && state.client.user.data.user_role === 0, // Resembles only the registered user, not added employees
+    isSuperUser: state.client.user && state.client.user.data.user_role === 1, // Resembles only the registered user, not added employees
     uploadedLogo: state.companyProfile.profile.companyLogo?.logo,
     companyLists: state.companyLists.companyLists,
     apiSuccess: state.companyLists.apiSuccess,

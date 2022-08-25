@@ -265,12 +265,12 @@ function* addApplicantProfile() {
 function* addNewCompanySaga() {
   try {
     const {
-      firstname,
-      lastname,
+      firstName,
+      lastName,
       email,
     } = store.getState().companyProfile.profile; // Populate the new form with registered user's details
-    yield put(change("newCompanyForm", "firstname", firstname));
-    yield put(change("newCompanyForm", "lastname", lastname));
+    yield put(change("newCompanyForm", "firstName", firstName));
+    yield put(change("newCompanyForm", "lastName", lastName));
     yield put(change("newCompanyForm", "email", email));
   } catch (e) {
     console.log(e);

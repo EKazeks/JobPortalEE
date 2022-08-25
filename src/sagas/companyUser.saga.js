@@ -3,25 +3,21 @@ import { takeEvery, call, put } from 'redux-saga/effects';
 import { getUserCompanyListSuccess, getCompanyProfile, navigateAdsFromMainMenu, getAllAdsByStatus, addNewCompanyEnd, selectCompany } from '../actions';
 import { API_SERVER, GET_USER_COMPANIES_LIST, SELECT_COMPANY } from '../constants';
 import store from '../store';
-import { apiManualPost } from '../utils/request';
+import { apiManualPost, apiManualRequest } from '../utils/request';
 
 function* getCompaniesList({ isProfileUpdated, }) {
   try {
     const email = store.getState().client.user.data.email;
-    const id = store.getState().client.user.data.company_id;
+    //const id = store.getState().client.user.data.company_id;
 
     if (email) {
-      const url = `https://localhost:7262/getCompanyById/${id}`;
+      const url = `https://localhost:7262/getAllCompanies`;
 
-      const data = {
-        email,
-      };
 
-      const body = JSON.stringify(data);
-      const result = yield call(axios.patch(url, body).then((res) => res.data));
+      const result = yield call(apiManualRequest, url);
       const parsedResult = result.data;
 
-      if (result.data) {
+      if (parsedResult) {
         yield put(getUserCompanyListSuccess(parsedResult));
         if (!isProfileUpdated) {
           // New company is added from add new company btn.

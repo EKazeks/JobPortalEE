@@ -604,9 +604,9 @@ export const getUserCompanyList = (isProfileUpdated) => ({
   type: GET_USER_COMPANIES_LIST,
   isProfileUpdated,
 });
-export const getUserCompanyListSuccess = (data) => ({
+export const getUserCompanyListSuccess = (parsedResult) => ({
   type: GET_USER_COMPANIES_LIST_SUCCESS,
-  data,
+  parsedResult,
 });
 
 // SELECT COMPANY
