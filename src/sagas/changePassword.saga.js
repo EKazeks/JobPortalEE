@@ -11,7 +11,7 @@ function* changePasswordSaga() {
     const formValues = getFormValues('changePassword')(store.getState());
     const hashedOldPassword = CryptoJS.SHA256(formValues.current_password).toString();
     const hashedPassword = CryptoJS.SHA256(formValues.new_password).toString();
-    const uuid = store.getState().client.user.data[2];
+    const uuid = store.getState().client.user.data.id;
     const body = JSON.stringify({
       oldpassword: hashedOldPassword,
       password: hashedPassword,

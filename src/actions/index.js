@@ -179,7 +179,7 @@ export const fetchJobInfo = (
   companyBusinessId,
   jobName,
   jobPostNumber,
-  address,
+  dateOfApplication,
   url
 ) => ({
   type: FETCH_JOB_INFO,
@@ -187,7 +187,7 @@ export const fetchJobInfo = (
   companyBusinessId,
   jobName,
   jobPostNumber,
-  address,
+  dateOfApplication
 });
 
 export const editOffer = (id) => ({
@@ -240,9 +240,9 @@ export const filterJobsSuccess = (result) => ({
   result,
 });
 export const getJobDetailsById = (id) => ({ type: GET_JOB_DETAILS_BY_ID, id });
-export const getJobDetailsByIdSuccess = (result) => ({
+export const getJobDetailsByIdSuccess = (data) => ({
   type: GET_JOB_DETAILS_BY_ID_SUCCESS,
-  result,
+  data,
 });
 
 export const getWorkStartSuccess = (result) => ({
@@ -602,9 +602,9 @@ export const getUserCompanyList = (isProfileUpdated) => ({
   type: GET_USER_COMPANIES_LIST,
   isProfileUpdated,
 });
-export const getUserCompanyListSuccess = (data) => ({
+export const getUserCompanyListSuccess = (parsedResult) => ({
   type: GET_USER_COMPANIES_LIST_SUCCESS,
-  data,
+  parsedResult,
 });
 
 // SELECT COMPANY
@@ -629,9 +629,9 @@ export const getApplicantProfileSuccess = (response) => ({
 export const getFavoriteJobs = () => ({
   type: GET_FAVORITE_JOBS,
 });
-export const getFavoriteJobsSuccess = (response) => ({
+export const getFavoriteJobsSuccess = (favoriteJobs) => ({
   type: GET_FAVORITE_JOBS_SUCCESS,
-  response,
+  favoriteJobs,
 });
 
 export const getAppliedJobs = () => ({
@@ -657,9 +657,12 @@ export const updateEmailNotification = () => ({
 });
 
 // FAVORITE JOBS
-export const toggleFavoriteJobs = (id) => ({
+export const toggleFavoriteJobs = (id,jobName,dateOfApplication) => ({
   type: TOGGLE_FAVORITE_JOBS,
   id,
+  jobName,
+  dateOfApplication,
+
 });
 export const deleteFavoriteJobs = (id) => ({
   type: DELETE_FAVORITE_JOBS,
@@ -797,13 +800,13 @@ export const resetApplicationSent = () => ({
 
 // GET APPLICATION
 export const getApplicationDetailsById = (
-  id,
+  instanceId,
   //company_id,
   jobpostId,
   email
 ) => ({
   type: GET_APPLICATION_DETAILS_BY_ID,
-  id,
+  instanceId,
   //company_id,
   jobpostId,
   email,
@@ -829,17 +832,17 @@ export const updateApplicantStatus = (
 });
 
 export const updateJobApplicationDetails = (
-  application_id,
-  company_id,
-  post_id,
-  email,
+  id,
+  //company_id,
+  //post_id,
+  //email,
   update
 ) => ({
   type: UPDATE_JOB_APPLICATION_DETAILS,
-  application_id,
-  company_id,
-  post_id,
-  email,
+  id,
+  //company_id,
+  //post_id,
+  //email,
   update,
 });
 
