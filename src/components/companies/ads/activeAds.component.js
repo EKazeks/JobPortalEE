@@ -11,6 +11,7 @@ import i18n from "../../../utils/i18n";
 import axios from "axios";
 import { getDate } from "date-fns";
 import { getAdInfoFromSideMenu } from "../../../actions";
+import { useSelector } from "react-redux";
 
 const ActiveAdsComponent = ({
   warnToDelete,
@@ -35,14 +36,14 @@ const ActiveAdsComponent = ({
   const [componentDeployed, setComponentDeployed] = useState(false);
   const [offerDeleted, setOfferDeleted] = useState(false);
   const [dateOfApplication,setDateOfApplication] = useState();
-
+  const {email} = useSelector((state) => state.client.user.data)
   const refreshPage = () => {
     window.location.reload();
   };
 
   useEffect(() => {
     const getData = async () => {
-      await axios.get(`https://localhost:7262/activeAds`).then((res) => {
+      await axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
         setJobsToRender(
           res.data.filter((status) => status.offerStatus === "active")
         );
