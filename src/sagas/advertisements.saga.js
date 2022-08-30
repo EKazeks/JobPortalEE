@@ -374,7 +374,7 @@ function* saveAndPublishAdvertisementSaga() {
 
 function* getJobPostByPostIdSaga({ id }) {
   try {
-    const campaignsType = store
+    const campaignsType = store;
     const url = `${API_SERVER_EST}/${id}`;
 
     if (id === 0 || id === undefined || id === null) {
@@ -468,7 +468,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
 
     if (isToEdit) {
       yield put(change("vacancy", "jobPostNumber", jobPostNumber));
-      yield put(change('vacancy', 'campaignType', campaignType));
+      yield put(change("vacancy", "campaignType", campaignType));
       // yield put(change('vacancy', "value from inputfield", "value from api call"));
       if (logo) {
         yield put(change("vacancy", "logo", logo));
@@ -842,7 +842,7 @@ function* changeJobPostStatusSaga({ id }) {
   }
 }
 function* saveMarketingDetailsSaga() {
-  console.log('marketingDetails =>,', formValues)
+  console.log("marketingDetails =>,", formValues);
   try {
     const formValues = getFormValues("marketingDetails")(store.getState());
     const { marketing_platform, more_budget, marketing_budget } = formValues;
@@ -896,16 +896,26 @@ function* deleteJobPostSaga({ id }) {
       post_id: userRole === "admin" ? id.split("admin")[0] : id,
       company_id: userRole === "admin" ? id.split("admin")[1] : companyId,
     });
-    //yield call( apiOpenRequest, url);
-    const result = axios.delete(url).finally((res) => ({ res }));
+    // yield call( apiOpenRequest, url);
+    // const result = axios.delete(url).finally((res) => ({ res }));
+    const deleteAd = () => {
+      return axios.delete(url);
+    };
+
+    const { data } = yield call(deleteAd);
+
     if (userRole === "admin") {
-      yield put(filterJobs(result, true));
+      yield put(filterJobs(data, true));
     } else {
       yield put(getAllAdsByStatus(0));
       yield put(getAllAdsByStatus(1));
       yield put(getAllAdsByStatus(2));
     }
+
     yield put(deleteAdvertisement());
+
+    // NOTE: Reload window after the state update
+    // window.location.reload();
   } catch (error) {
     console.log(error);
   }
@@ -917,7 +927,6 @@ function* saveAdvertisementAsDraft() {
 
 function* getApplicationDetailsByIdSaga({ jobpostId, instanceId }) {
   try {
-    
     const url = `https://localhost:7262/getAllApplicants/${instanceId}`;
 
     const result = yield call(apiManualRequest, url);
@@ -969,14 +978,13 @@ function* updateJobApplicationDetailsSaga({
   update,
 }) {
   try {
-  
     let body;
     let url;
     const id = store.getState().advertisement.viewApplication.id;
     const formValues = getFormValues("applicantDetails")(store.getState());
     let response;
     const loggedInUser = store.getState().client.user.data;
-    console.log('formValues =>>>>', formValues)
+    console.log("formValues =>>>>", formValues);
     const {
       application_notes,
       interview_title,
@@ -1010,9 +1018,7 @@ function* updateJobApplicationDetailsSaga({
       yield put(showFailedSnackbar());
     } else {
       yield put(showSuccessSnackbar());
-      yield put(
-        getApplicationDetailsById(id, company_id, post_id, email)
-      );
+      yield put(getApplicationDetailsById(id, company_id, post_id, email));
       yield put(openAdToSeeAdInfo(post_id));
     }
     // console.log('result', result);

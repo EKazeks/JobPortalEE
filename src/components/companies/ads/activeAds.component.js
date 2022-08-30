@@ -35,31 +35,36 @@ const ActiveAdsComponent = ({
   const [toEdit, setToEdit] = useState();
   const [componentDeployed, setComponentDeployed] = useState(false);
   const [offerDeleted, setOfferDeleted] = useState(false);
-  const [dateOfApplication,setDateOfApplication] = useState();
-  const {email} = useSelector((state) => state.client.user.data)
-  const refreshPage = () => {
-    window.location.reload();
-  };
+  const [loadAds, setLoadAds] = useState(true);
+  const [dateOfApplication, setDateOfApplication] = useState();
+  const { email } = useSelector((state) => state.client.user.data);
+  const advertisement = useSelector((state) => state.advertisement);
 
   useEffect(() => {
-    const getData = async () => {
-      await axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
-        setJobsToRender(
-          res.data.filter((status) => status.offerStatus === "active")
-        );
-        setDateOfApplication(res.data.dateOfApplication)
-      });
-    };
-    getData();
-    setComponentDeployed(true);
-  }, [componentDeployed === false]);
+    if (!advertisement.warnToDelete) {
+      const getData = () =>
+        axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
+          setJobsToRender(
+            res.data.filter((status) => status.offerStatus === "active")
+          );
+          setDateOfApplication(res.data.dateOfApplication);
+        });
+
+      if (loadAds) {
+        getData();
+        setComponentDeployed(true);
+        setLoadAds(false);
+      }
+    }
+  }, [componentDeployed === false, loadAds, advertisement.warnToDelete]);
 
   const getDate = (date) => {
-    const newDate = date.substring(0, 10).split(".")
+    const newDate = date.substring(0, 10).split(".");
     const replacedDate = newDate.toString().split("-");
-    let finelDate = replacedDate[2] + "." + replacedDate[1] + "." + replacedDate[0];
-    return <>{finelDate}</>
-}
+    let finelDate =
+      replacedDate[2] + "." + replacedDate[1] + "." + replacedDate[0];
+    return <>{finelDate}</>;
+  };
 
   const updateSize = () => {
     setIsDesktop(window.innerWidth >= 1440);
@@ -138,7 +143,7 @@ const ActiveAdsComponent = ({
                             //   item.jobPostNumber
                             // );
                             // fetchJobById(item.id);
-                            openAdToSeeAdInfo(item.id)
+                            openAdToSeeAdInfo(item.id);
                             //getJobDetailsById(item.id)
                             getAdInfoFromSideMenu(1);
                           }}
@@ -191,10 +196,12 @@ const ActiveAdsComponent = ({
                         {/* {item.dateOfApplication.charAt(2) === "."
                           ? item.dateOfApplication
                           : dateFormat(item.dateOfApplication)} */}
-                          {/* {item.dateOfApplication} */}
-                          {/* {item.dateOfApplication.indexOf(':00.000Z') === item.dateOfApplication.indexOf(':00.000Z') ? item.dateOfApplication?.replace("T12:27:00.000Z", "") : item.dateOfApplication} */}
-                          {item.dateOfApplication.indexOf(':00.000Z') !== -1 ? getDate(item.dateOfApplication?.substring(0,10)) : item.dateOfApplication}
-                          {/* {getDate(dateOfApplication)} */}
+                        {/* {item.dateOfApplication} */}
+                        {/* {item.dateOfApplication.indexOf(':00.000Z') === item.dateOfApplication.indexOf(':00.000Z') ? item.dateOfApplication?.replace("T12:27:00.000Z", "") : item.dateOfApplication} */}
+                        {item.dateOfApplication.indexOf(":00.000Z") !== -1
+                          ? getDate(item.dateOfApplication?.substring(0, 10))
+                          : item.dateOfApplication}
+                        {/* {getDate(dateOfApplication)} */}
                       </h5>
                     </div>
                   </Grid>
@@ -255,7 +262,7 @@ const ActiveAdsComponent = ({
                                 //   item.jobPostNumber
                                 // );
                                 // fetchJobById(item.id);
-                                openAdToSeeAdInfo(item.id)
+                                openAdToSeeAdInfo(item.id);
                               }}
                             >
                               {t("common:openBtn")}
@@ -276,7 +283,7 @@ const ActiveAdsComponent = ({
         warnToDeleteModal
         handleClick={() => {
           deleteJobOffer(isToDeleteAdvertisementId);
-          refreshPage();
+          setLoadAds(true);
         }}
       />
       <div className="pagination-body">
