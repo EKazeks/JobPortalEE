@@ -186,7 +186,7 @@ const JobsComponent = ({
   const [address, setAddress] = useState();
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/activeAds`).then((res) => {
+    axios.get(`https://localhost:7262/jobsEn`).then((res) => {
       setJobsToRender(
         res.data.filter((activeJobs) => activeJobs.offerStatus === "active")
       );

@@ -2,20 +2,29 @@ import React from "react";
 import store from "../store";
 
 export const customURL = (url, type) => {
+  const {companyName, companyBusinessId} = store.getState().jobs;
+  let { jobName } = store.getState().jobs;
+  let { jobPostNumber } = store.getState().jobs;
+
   let pathname;
   if (typeof url === "object" || url === undefined) {
     return;
   } else {
     if (url.indexOf("/tookohad/") != -1) {
       pathname = url && url.split("/tookohad/")[1];
-    } else {
+      jobName = url && url.split("/tookohad/")[1].split('/')[2].toLowerCase();
+      jobPostNumber = url && url.split("/tookohad/")[1].split('/')[3];
+    } else if (url.indexOf("/toopakkumised/") != -1) {
+      pathname = url && url.split("/toopakkumised/")[1];
+      //const lastIndex = pathname.lastIndexOf("-");
+      pathname = `${companyName}/${companyBusinessId}/${jobName}/${jobPostNumber}`
+    } else {     
       pathname = url && url.split("/tyopaikat/")[1];
     }
 
     const splittedPath = pathname && pathname.split("/");
-    let { jobName } = store.getState().advertisement.viewSelectedAd;
     // const companyName = splittedPath && splittedPath[0]
-    let jobPostNumber = "65009";
+    //let jobPostNumber = "65009";
     const companyId = splittedPath && splittedPath[1];
     //const jobName = splittedPath && splittedPath[2];
     //const jobPostNumber = splittedPath && splittedPath[3];

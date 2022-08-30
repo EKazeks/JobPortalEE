@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { customURL } from "../../../utils/helperFunctions";
 import CustomizedDialogs from "../../../utils/customizedDialog";
 import axios from "axios";
+import store from "../../../store";
 
 const InactiveAds = ({
   inActiveAds,
@@ -27,13 +28,13 @@ const InactiveAds = ({
   const { t } = useTranslation("jobs", "common");
   const [jobsToRender, setJobsToRender] = useState([]);
   const [activeJobs, setActiveJobs] = useState([]);
-
+  const {email} = store.getState().client.user.data;
   const refreshPage = () => {
     window.location.reload();
   };
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/activeAds`).then((res) => {
+    axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
       setJobsToRender(
         res.data.filter((status) => status.offerStatus === "inactive")
       );
