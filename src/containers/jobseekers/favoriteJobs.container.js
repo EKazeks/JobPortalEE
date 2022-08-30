@@ -34,7 +34,7 @@ class FavoriteJobsContainer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    favoriteJobs: state.jobs.favoriteJobs && state.jobs.favoriteJobs,
+    favoriteJobs: state.jobs.dashboard.favoriteJobs && state.jobs.dashboard.favoriteJobs,
     selectedPage: state.pagination.selectedPage.selected,
     advertPages: Math.ceil(state.jobs.favoriteJobs.length / 10),
     isUserType: state.client.user && state.client.user.data.user_type,

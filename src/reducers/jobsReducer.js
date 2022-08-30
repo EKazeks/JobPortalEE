@@ -106,7 +106,6 @@ const jobsReducer = (state = initialState, action) => {
         companyBusinessId: action.companyBusinessId,
         jobName: action.jobName,
         jobPostNumber: action.jobPostNumber,
-        address: action.address,
         dateOfApplication: action.dateOfApplication
       };
     case GET_JOB_APPLICANTS:
@@ -173,7 +172,7 @@ const jobsReducer = (state = initialState, action) => {
     case GET_FAVORITE_JOBS_SUCCESS:
       return {
         ...state,
-        favoriteJobs: action.response,
+        favoriteJobs: action.favoriteJobs,
         //jobDetails: []
       };
     case SEND_APPLICATION_SUCCESS:

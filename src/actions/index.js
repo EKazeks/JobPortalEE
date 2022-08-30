@@ -179,7 +179,6 @@ export const fetchJobInfo = (
   companyBusinessId,
   jobName,
   jobPostNumber,
-  address,
   dateOfApplication,
   url
 ) => ({
@@ -188,7 +187,6 @@ export const fetchJobInfo = (
   companyBusinessId,
   jobName,
   jobPostNumber,
-  address,
   dateOfApplication
 });
 
@@ -631,9 +629,9 @@ export const getApplicantProfileSuccess = (response) => ({
 export const getFavoriteJobs = () => ({
   type: GET_FAVORITE_JOBS,
 });
-export const getFavoriteJobsSuccess = (response) => ({
+export const getFavoriteJobsSuccess = (favoriteJobs) => ({
   type: GET_FAVORITE_JOBS_SUCCESS,
-  response,
+  favoriteJobs,
 });
 
 export const getAppliedJobs = () => ({

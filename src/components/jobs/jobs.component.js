@@ -248,7 +248,8 @@ const JobsComponent = ({
                                   item.companyName,
                                   item.companyBusinessId,
                                   item.jobName,
-                                  item.jobPostNumber
+                                  item.jobPostNumber,
+                                  item.dateOfApplication
                                 );
                               }}
                             />
@@ -260,7 +261,8 @@ const JobsComponent = ({
                                   item.companyName,
                                   item.companyBusinessId,
                                   item.jobName,
-                                  item.jobPostNumber
+                                  item.jobPostNumber,
+                                  item.dateOfApplication
                                 );
                               }}
                               className={classes.jobContainerHover}
@@ -419,7 +421,8 @@ const JobsComponent = ({
                                             item.companyName,
                                             item.companyBusinessId,
                                             item.jobName,
-                                            item.jobPostNumber
+                                            item.jobPostNumber,
+                                            item.dateOfApplication
                                           );
                                         }}
                                       >
@@ -441,7 +444,8 @@ const JobsComponent = ({
                                             item.companyName,
                                             item.companyBusinessId,
                                             item.jobName,
-                                            item.jobPostNumber
+                                            item.jobPostNumber,
+                                            item.dateOfApplication
                                           );
                                         }}
                                       >
