@@ -36,19 +36,24 @@ const DraftAds = ({
   const { t } = useTranslation("jobs", "advertForm");
   const [jobs, setJobs] = useState([]);
   const [draftJobs, setDraftJobs] = useState([]);
-  const {email} = store.getState().client.user.data
-
-  const refreshPage = () => {
-    window.location.reload();
-  };
+  const { email } = store.getState().client.user.data;
+  const advertisement = store.getState().advertisement;
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
-      setJobs(res.data);
-      setDraftJobs(res.data.filter((isDraft) => isDraft.isDraft === 1));
-    });
-  }, []);
-  console.log("draftJOBS", draftJobs);
+    const getData = () => {
+      axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
+        setJobs(res.data);
+        setDraftJobs(res.data.filter((isDraft) => isDraft.isDraft === 1));
+      });
+    };
+
+    if (!advertisement.warnToDelete) {
+      getData();
+    }
+  }, [advertisement.warnToDelete]);
+
+  // console.log("draftJOBS", draftJobs);
+
   return (
     <div className="container">
       <h3 style={{ margin: "30px 0px" }}>
@@ -159,7 +164,6 @@ const DraftAds = ({
         warnToDeleteModal
         handleClick={() => {
           deleteJobOffer(isToDeleteAdvertisementId);
-          refreshPage();
         }}
       />
 

@@ -35,28 +35,24 @@ const ActiveAdsComponent = ({
   const [toEdit, setToEdit] = useState();
   const [componentDeployed, setComponentDeployed] = useState(false);
   const [offerDeleted, setOfferDeleted] = useState(false);
-  const [loadAds, setLoadAds] = useState(true);
   const [dateOfApplication, setDateOfApplication] = useState();
   const { email } = useSelector((state) => state.client.user.data);
   const advertisement = useSelector((state) => state.advertisement);
 
   useEffect(() => {
-    if (!advertisement.warnToDelete) {
-      const getData = () =>
-        axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
-          setJobsToRender(
-            res.data.filter((status) => status.offerStatus === "active")
-          );
-          setDateOfApplication(res.data.dateOfApplication);
-        });
+    const getData = () =>
+      axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
+        setJobsToRender(
+          res.data.filter((status) => status.offerStatus === "active")
+        );
+        setDateOfApplication(res.data.dateOfApplication);
+      });
 
-      if (loadAds) {
-        getData();
-        setComponentDeployed(true);
-        setLoadAds(false);
-      }
+    if (!advertisement.warnToDelete) {
+      getData();
+      setComponentDeployed(true);
     }
-  }, [componentDeployed === false, loadAds, advertisement.warnToDelete]);
+  }, [componentDeployed === false, advertisement.warnToDelete]);
 
   const getDate = (date) => {
     const newDate = date.substring(0, 10).split(".");
@@ -283,7 +279,6 @@ const ActiveAdsComponent = ({
         warnToDeleteModal
         handleClick={() => {
           deleteJobOffer(isToDeleteAdvertisementId);
-          setLoadAds(true);
         }}
       />
       <div className="pagination-body">

@@ -28,18 +28,22 @@ const InactiveAds = ({
   const { t } = useTranslation("jobs", "common");
   const [jobsToRender, setJobsToRender] = useState([]);
   const [activeJobs, setActiveJobs] = useState([]);
-  const {email} = store.getState().client.user.data;
-  const refreshPage = () => {
-    window.location.reload();
-  };
+  const { email } = store.getState().client.user.data;
+  const advertisement = store.getState().advertisement;
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
-      setJobsToRender(
-        res.data.filter((status) => status.offerStatus === "inactive")
-      );
-    });
-  }, []);
+    const getData = () => {
+      axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
+        setJobsToRender(
+          res.data.filter((status) => status.offerStatus === "inactive")
+        );
+      });
+    };
+
+    if (!advertisement.warnToDelete) {
+      getData();
+    }
+  }, [advertisement.warnToDelete]);
 
   return (
     <div className="container">
@@ -164,7 +168,6 @@ const InactiveAds = ({
         warnToDeleteModal
         handleClick={() => {
           deleteJobOffer(isToDeleteAdvertisementId);
-          refreshPage();
         }}
       />
 
