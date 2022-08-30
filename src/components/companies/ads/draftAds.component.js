@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import CustomizedDialogs from "../../../utils/customizedDialog";
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import store from "../../../store";
 
 const styles = (theme) => ({
   activatedHelp: {
@@ -35,13 +36,14 @@ const DraftAds = ({
   const { t } = useTranslation("jobs", "advertForm");
   const [jobs, setJobs] = useState([]);
   const [draftJobs, setDraftJobs] = useState([]);
+  const {email} = store.getState().client.user.data
 
   const refreshPage = () => {
     window.location.reload();
   };
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/activeAds`).then((res) => {
+    axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
       setJobs(res.data);
       setDraftJobs(res.data.filter((isDraft) => isDraft.isDraft === 1));
     });
