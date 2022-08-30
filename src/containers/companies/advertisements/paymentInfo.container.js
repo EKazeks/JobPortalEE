@@ -18,7 +18,7 @@ const mapStateToProps = state => {
 
   let newCampValue;
   if (isToChangeCampaign) {
-    const currentCampValue = viewSelectedAd.value;
+    const currentCampValue = viewSelectedAd.campaignValue;
     newCampValue = value - currentCampValue; //Only charge if new campaign type is selected and the difference
   }
   const isExtraServiceAdded = state.advertisement.extraService.help || state.advertisement.extraService.sos ? true : false;

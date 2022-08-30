@@ -11,7 +11,7 @@ const CampaignsContainer = reduxForm({
 
 const mapStateToProps = state => ({
   campaigns: state.advertisement.campaigns,
-  currentCampaignPrice: state.advertisement.viewSelectedAd && state.advertisement.viewSelectedAd.value,
+  currentCampaignPrice: state.advertisement.viewSelectedAd && state.advertisement.viewSelectedAd.campaignValue,
   selectedCampaign: state.advertisement.selectedCampaign,
   marketingDetails: state.advertisement.marketingDetails,
   isToChangeCampaign: state.advertisement.isToChangeCampaign,

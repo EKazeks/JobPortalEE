@@ -374,6 +374,7 @@ function* saveAndPublishAdvertisementSaga() {
 
 function* getJobPostByPostIdSaga({ id }) {
   try {
+    const campaignsType = store
     const url = `${API_SERVER_EST}/${id}`;
 
     if (id === 0 || id === undefined || id === null) {
@@ -840,6 +841,7 @@ function* changeJobPostStatusSaga({ id }) {
   }
 }
 function* saveMarketingDetailsSaga() {
+  console.log('marketingDetails =>,', formValues)
   try {
     const formValues = getFormValues("marketingDetails")(store.getState());
     const { marketing_platform, more_budget, marketing_budget } = formValues;
