@@ -430,10 +430,10 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     const campaigns = store.getState().advertisement.campaigns;
     const userRole = store.getState().client.user.data.user_type;
     /* const formValues = getFormValues("vacancy")(store.getState()); */
-    const body = JSON.stringify({
-      jobPostNumber: userRole === "admin" ? id.split("admin")[0] : id,
-      //companyBusinessId: userRole === 'admin' ? id.split('admin')[1] : companyBusinessId,
-    });
+    // const body = JSON.stringify({
+    //   jobPostNumber: userRole === "admin" ? id.split("admin")[0] : id,
+    //   //companyBusinessId: userRole === 'admin' ? id.split('admin')[1] : companyBusinessId,
+    // });
     const result = yield call(apiManualRequest, url);
     const resultParsed = result.data;
     console.log("Populate Vacancy form", resultParsed);
@@ -462,12 +462,13 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       more_budget,
       marketing_budget,
       urlToApplyJob,
+      campaignType,
       durationOfEmployment,
     } = resultParsed;
 
     if (isToEdit) {
       yield put(change("vacancy", "jobPostNumber", jobPostNumber));
-      // yield put(change('vacancy', 'company_id', company_id));
+      yield put(change('vacancy', 'campaignType', campaignType));
       // yield put(change('vacancy', "value from inputfield", "value from api call"));
       if (logo) {
         yield put(change("vacancy", "logo", logo));
@@ -494,7 +495,7 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     yield put(change("vacancy", "notice_frequency", notice_frequency));
 
     const postCampaign = campaigns.find(
-      (campaign) => campaign.id === campaign_id
+      (campaign) => campaign.type === campaignType
     );
 
     const campaignDetails = {
