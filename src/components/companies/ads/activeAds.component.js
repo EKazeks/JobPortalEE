@@ -12,6 +12,7 @@ import axios from "axios";
 import { getDate } from "date-fns";
 import { getAdInfoFromSideMenu } from "../../../actions";
 import { useSelector } from "react-redux";
+import { formatISOToFi } from "../../../utils/dateTimeFormat";
 
 const ActiveAdsComponent = ({
   warnToDelete,
@@ -27,7 +28,7 @@ const ActiveAdsComponent = ({
   fetchJobInfo,
   editOffer,
   deleteAdvertisement,
-  openAdToSeeAdInfo,
+  openAdToSeeAdInfo
 }) => {
   const { t } = useTranslation("jobs");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth);
@@ -36,14 +37,14 @@ const ActiveAdsComponent = ({
   const [componentDeployed, setComponentDeployed] = useState(false);
   const [offerDeleted, setOfferDeleted] = useState(false);
   const [dateOfApplication, setDateOfApplication] = useState();
-  const { email } = useSelector((state) => state.client.user.data);
-  const advertisement = useSelector((state) => state.advertisement);
+  const { email } = useSelector(state => state.client.user.data);
+  const advertisement = useSelector(state => state.advertisement);
 
   useEffect(() => {
     const getData = () =>
-      axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
+      axios.get(`https://localhost:7262/activeAds/${email}`).then(res => {
         setJobsToRender(
-          res.data.filter((status) => status.offerStatus === "active")
+          res.data.filter(status => status.offerStatus === "active")
         );
         setDateOfApplication(res.data.dateOfApplication);
       });
@@ -54,7 +55,7 @@ const ActiveAdsComponent = ({
     }
   }, [componentDeployed === false, advertisement.warnToDelete]);
 
-  const getDate = (date) => {
+  const getDate = date => {
     const newDate = date.substring(0, 10).split(".");
     const replacedDate = newDate.toString().split("-");
     let finelDate =
@@ -114,7 +115,7 @@ const ActiveAdsComponent = ({
       </Grid>
       {jobsToRender
         .slice(selectedPage * 10, selectedPage * 10 + 10)
-        .map((item) => {
+        .map(item => {
           return (
             <div key={item.id === null ? item.id : item.id}>
               <Paper style={{ marginTop: 20 }}>
@@ -145,7 +146,7 @@ const ActiveAdsComponent = ({
                           }}
                         >
                           {item.jobName === null ? item.jobName : item.jobName},
-                          {item.jobPostAsukohaAddress.map((address) => {
+                          {item.jobPostAsukohaAddress.map(address => {
                             {
                               if (address.address[17] === null) {
                                 return address.address
@@ -155,7 +156,7 @@ const ActiveAdsComponent = ({
                               } else return address.address;
                             }
                           }) === null || undefined
-                            ? item.jobPostAsukohaAddress.map((address) => {
+                            ? item.jobPostAsukohaAddress.map(address => {
                                 {
                                   if (address.address[17] === null) {
                                     return address.address
@@ -194,10 +195,13 @@ const ActiveAdsComponent = ({
                           : dateFormat(item.dateOfApplication)} */}
                         {/* {item.dateOfApplication} */}
                         {/* {item.dateOfApplication.indexOf(':00.000Z') === item.dateOfApplication.indexOf(':00.000Z') ? item.dateOfApplication?.replace("T12:27:00.000Z", "") : item.dateOfApplication} */}
-                        {item.dateOfApplication.indexOf(":00.000Z") !== -1
+                        {/* item.dateOfApplication.indexOf(":00.000Z") !== -1
                           ? getDate(item.dateOfApplication?.substring(0, 10))
-                          : item.dateOfApplication}
+                          : item.dateOfApplication */}
                         {/* {getDate(dateOfApplication)} */}
+                        {item.dateOfApplication
+                          ? formatISOToFi(item.dateOfApplication)
+                          : undefined}
                       </h5>
                     </div>
                   </Grid>
