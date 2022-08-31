@@ -29,7 +29,7 @@ const InactiveAds = ({
   const [jobsToRender, setJobsToRender] = useState([]);
   const [activeJobs, setActiveJobs] = useState([]);
   const {email} = store.getState().client.user.data;
-  
+  const advertisement = store.getState().advertisement
   const refreshPage = () => {
     window.location.reload();
   };
