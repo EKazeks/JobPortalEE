@@ -23,7 +23,7 @@ const InactiveAds = ({
   deleteJobOffer,
   campaigns,
   populateVacancyForm,
-  deleteAdvertisement,
+  deleteAdvertisement
 }) => {
   const { t } = useTranslation("jobs", "common");
   const [jobsToRender, setJobsToRender] = useState([]);
@@ -33,9 +33,9 @@ const InactiveAds = ({
 
   useEffect(() => {
     const getData = () => {
-      axios.get(`https://localhost:7262/activeAds/${email}`).then((res) => {
+      axios.get(`https://localhost:7262/activeAds/${email}`).then(res => {
         setJobsToRender(
-          res.data.filter((status) => status.offerStatus === "inactive")
+          res.data.filter(status => status.offerStatus === "inactive")
         );
       });
     };
@@ -67,7 +67,7 @@ const InactiveAds = ({
       {jobsToRender &&
         jobsToRender
           .slice(selectedPage * 10, selectedPage * 10 + 10)
-          .map((item) => {
+          .map(item => {
             return (
               <div key={item.id}>
                 <Paper style={{ marginTop: 20 }}>
@@ -109,7 +109,7 @@ const InactiveAds = ({
                         </span>
                       </div>
                     </Grid>
-                    <Grid item md={3} style={{ color: "#34495E " }}>
+                    <Grid item md={3} style={{ color: "#34495E" }}>
                       <div>
                         {/* <h5>{new Intl.DateTimeFormat('fi-FI').format(new Date(item.created))}</h5> */}
                       </div>

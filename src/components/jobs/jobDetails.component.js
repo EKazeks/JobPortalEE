@@ -12,7 +12,7 @@ import {
   convertJobTypeToStr,
   convertJobWorksStartToStr,
   customURL,
-  dateFormat,
+  dateFormat
 } from "../../utils/helperFunctions";
 import CustomizedDialogs from "../../utils/customizedDialog";
 import Loader from "../../utils/loader";
@@ -24,20 +24,21 @@ import { isRteEmpty } from "../../containers/validate";
 import NotFoundPage from "../../utils/notFoundPage";
 import { fetchJobById, fetchJobInfo, setIdToApply } from "../../actions";
 import i18n from "../../utils/i18n";
+import { formatISOToFi } from "../../utils/dateTimeFormat";
 
-const styles = (theme) => ({
+const styles = theme => ({
   addMargin: {
-    margin: "20px auto 20px auto",
+    margin: "20px auto 20px auto"
   },
   backBtnContainer: {
-    margin: "16px auto",
+    margin: "16px auto"
   },
   backBtnText: {
     color: theme.palette.secondary.main,
     "&:hover": {
       textDecoration: "none",
-      color: theme.palette.primary.main,
-    },
+      color: theme.palette.primary.main
+    }
   },
 
   logo: {
@@ -47,55 +48,55 @@ const styles = (theme) => ({
     [theme.breakpoints.down("xs")]: {
       minHeight: 190,
       maxHeight: 190,
-      width: "100%",
+      width: "100%"
     },
     [theme.breakpoints.only("sm")]: {
       minHeight: 360,
       maxHeight: 420,
-      width: "100%",
-    },
+      width: "100%"
+    }
   },
   companyImgFrame: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
 
   companyLogo: {
     minHeight: 80,
     minWidth: 150,
     backgroundSize: "contain",
-    backgroundRepeat: "no-repeat",
+    backgroundRepeat: "no-repeat"
   },
   jobDetail: {
     margin: "20px 0 50px 0",
     padding: "0 0 50px",
-    border: "1px solid lightgray",
+    border: "1px solid lightgray"
   },
   jobDesc: {
-    padding: "20px 40px",
+    padding: "20px 40px"
   },
   additionalInfo: {
-    padding: "10px 40px",
+    padding: "10px 40px"
   },
   sourceInfo: {
     padding: "10px 40px",
-    float: "right",
+    float: "right"
   },
   metaData: {
-    color: theme.palette.secondary.main,
+    color: theme.palette.secondary.main
   },
   metaDataTitle: {
-    color: theme.palette.primary.main,
+    color: theme.palette.primary.main
   },
 
   ctaBtn: {
     marginBottom: 20,
     [theme.breakpoints.up("md")]: {
       justifyContent: "flex-end",
-      marginBottom: 50,
-    },
-  },
+      marginBottom: 50
+    }
+  }
 });
 
 const JobDetailsComponent = ({
@@ -112,17 +113,17 @@ const JobDetailsComponent = ({
   classes,
   changePagination,
   fetchJobInfo,
-  setIdToApply,
+  setIdToApply
 }) => {
   const [jobsToRender, setJobsToRender] = useState([]);
-  const { id } = useSelector((state) => state.jobs);
+  const { id } = useSelector(state => state.jobs);
   const [dateOfApplication, setDateOfApplication] = useState();
   const [address, setAddress] = useState("");
   const isPermanentPlace = "isPermanentPlace";
   const isPartPlace = "isPartPlace";
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
+    axios.get(`https://localhost:7262/jobsEn/${id}`).then(res => {
       setJobsToRender(res.data);
       setDateOfApplication(dateFormat(res.data.dateOfApplication));
       setAddress(res.data.jobPostAddress.address);
@@ -147,7 +148,7 @@ const JobDetailsComponent = ({
             <Link
               onClick={() => changePagination(false)}
               to={{
-                pathname: "/tyopaikat",
+                pathname: "/tyopaikat"
               }}
               className={classes.backBtnText}
             >
@@ -161,10 +162,13 @@ const JobDetailsComponent = ({
                 <strong className={classes.metaDataTitle}>
                   <span>{t("applyPeriod")}: </span>
                   <span className={classes.metaData}>
-                    {jobsToRender.dateOfApplication?.indexOf(":00.000Z") !== -1
+                    {/*jobsToRender.dateOfApplication?.indexOf(":00.000Z") !== -1
                       ? jobsToRender.dateOfApplication?.substring(0, 10)
-                      : jobsToRender.dateOfApplication}
+                      : jobsToRender.dateOfApplication */}
                     {/* {dateOfApplication?.indexOf(':00.000Z') !== -1 ? getDate(dateOfApplication?.substring(0,10)) : getDate(dateOfApplication)} */}
+                    {jobsToRender.dateOfApplication
+                      ? formatISOToFi(jobsToRender.dateOfApplication)
+                      : undefined}
                   </span>
                 </strong>
               </h6>
@@ -315,7 +319,7 @@ const JobDetailsComponent = ({
                 </p>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: jobDetails.companyDescription,
+                    __html: jobDetails.companyDescription
                   }} // To convert rte string into html
                 />
               </div>
@@ -405,7 +409,7 @@ const JobDetailsComponent = ({
                             jobsToRender.jobPostNumber,
                             jobsToRender.jobPostAddress.address,
                             jobsToRender.url,
-                            jobsToRender.dateOfApplication,
+                            jobsToRender.dateOfApplication
                           );
                         }}
                       >
@@ -426,7 +430,7 @@ const JobDetailsComponent = ({
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center",
+          horizontal: "center"
         }}
         open={showSuccessSnackbar}
         autoHideDuration={2000}
@@ -445,7 +449,7 @@ const JobDetailsComponent = ({
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center",
+          horizontal: "center"
         }}
         open={showFailedSnackbar}
         autoHideDuration={2000}
