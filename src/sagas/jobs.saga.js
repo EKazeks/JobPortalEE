@@ -230,11 +230,12 @@ function* getAppliedJobsSaga() {
 }
 function* getFavoriteJobsSaga() {
   try {
-    const url = `https://localhost:7262/getAllApplicants`;
+    const id = store.getState().client.user.data.company_id
+    const url = `https://localhost:7262/jobsEn`;
 
     const result = yield call(apiManualRequest, url);
     const data = result.data
-    const {favoriteJobs} = data[0]
+    const favoriteJobs = data.filter((favJobs) => favJobs.isFavourite === 1)
 
     if (favoriteJobs === favoriteJobs) {
       yield put(getFavoriteJobsSuccess(favoriteJobs));

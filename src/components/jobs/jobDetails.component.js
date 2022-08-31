@@ -226,8 +226,9 @@ const JobDetailsComponent = ({
                       isFav={!!jobsToRender.isFavourite}
                       handleFav={() =>
                         toggleFavoriteJobs(
-                          jobsToRender.companyBusinessId,
                           jobsToRender.id,
+                          jobsToRender.jobName,
+                          jobsToRender.dateOfApplication,
                           !favBtnstatus
                         )
                       }
@@ -365,8 +366,9 @@ const JobDetailsComponent = ({
                     isFav={!!jobsToRender.isFavourite}
                     handleFav={() =>
                       toggleFavoriteJobs(
-                        jobsToRender.companyBusinessId,
                         jobsToRender.id,
+                        jobsToRender.jobName,
+                        jobsToRender.dateOfApplication,
                         !favBtnstatus
                       )
                     }

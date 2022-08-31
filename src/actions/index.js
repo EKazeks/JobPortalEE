@@ -165,9 +165,10 @@ export const getJobsOffers = () => ({
   type: GET_JOBS_OFFERS_SUCCESS,
 });
 
-export const fetchJobById = (id) => ({
+export const fetchJobById = (id,jobPostId) => ({
   type: FETCH_JOB_BY_ID,
   id,
+  jobPostId
 });
 
 export const setIdToApply = (id) => ({

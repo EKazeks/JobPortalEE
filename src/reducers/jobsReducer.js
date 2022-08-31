@@ -30,6 +30,7 @@ const initialState = {
   apiFailed: false,
   isToEdit: false,
   id: 0,
+  jobPostId: 0,
   idToApply: 0,
   jobName: "",
   idToCopy: 0,
@@ -92,6 +93,7 @@ const jobsReducer = (state = initialState, action) => {
       return {
         ...state,
         id: action.id,
+        jobPostId: action.jobPostId
       };
 
     case SET_ID_TO_APPLY:
@@ -160,8 +162,8 @@ const jobsReducer = (state = initialState, action) => {
       return {
         ...state,
         id: action.id,  
-        dateOfApplication: action.dateOfApplication,
-        jobName: action.jobName
+        jobName: action.jobName,
+        dateOfApplication: action.dateOfApplication
       };
     case GET_APPLIED_JOBS_SUCCESS:
       return {

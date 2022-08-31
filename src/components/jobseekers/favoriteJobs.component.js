@@ -8,6 +8,9 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import { customURL } from "../../utils/helperFunctions";
 import store from "../../store";
+import { openAdToSeeAdInfo } from "../../actions";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const FavoriteJobsComponent = ({
   favoriteJobs,
@@ -16,9 +19,18 @@ const FavoriteJobsComponent = ({
   selectedPage,
   fetchJobInfo,
   fetchJobById,
-  deleteFavoriteJobs
+  deleteFavoriteJobs,
 }) => {
   const { t } = useTranslation("favoriteJobs", "common");
+  //const [favoriteJobDetail, setFavoriteJobDetail] = useState([])
+//  const jobPostId = store.getState().jobs.favoriteJobs 
+
+  
+  // useEffect(() => {
+  //   axios.get(`https://localhost:7262/jobsEn/${jobPostId}`).then((res) => {
+  //     setFavoriteJobDetail(res.data)
+  //   })
+  // },[])
 
   const getDate = (date) => {
     const newDate = date.substring(0, 10).split(".")
@@ -65,13 +77,16 @@ const FavoriteJobsComponent = ({
                         >
                           <h4
                             onClick={() => {
-                              fetchJobById(post.id);
-                              fetchJobInfo(
-                                //post.companyName,
-                                //post.companyBusinessId,
-                                post.jobName,
-                                //post.jobPostNumber
-                              );
+                              fetchJobById(
+                                post.id,
+                                post.jobPostId
+                                );
+                              // fetchJobInfo(
+                              //   favoriteJobDetail.companyName,
+                              //   favoriteJobDetail.companyBusinessId,
+                              //   favoriteJobDetail.jobName,
+                              //   favoriteJobDetail.jobPostNumber
+                              // );
                             }}
                           >
                             {post.jobTitle}
