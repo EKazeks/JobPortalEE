@@ -1,9 +1,15 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { getFavoriteJobs, changeAdvertPage,fetchJobInfo,fetchJobById } from '../../actions';
-import FavoriteJobsComponent from '../../components/jobseekers/favoriteJobs.component';
-import store from '../../store';
+import React from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import {
+  getFavoriteJobs,
+  changeAdvertPage,
+  fetchJobInfo,
+  fetchJobById,
+  deleteFavoriteJobs
+} from "../../actions";
+import FavoriteJobsComponent from "../../components/jobseekers/favoriteJobs.component";
+import store from "../../store";
 
 class FavoriteJobsContainer extends React.Component {
   componentDidMount() {
@@ -19,19 +25,19 @@ class FavoriteJobsContainer extends React.Component {
   }
 
   render() {
-    if (this.props.isUserType === 'applicant') {
+    if (this.props.isUserType === "applicant") {
       return <FavoriteJobsComponent {...this.props} />;
     }
     return <Redirect to="/" />;
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    favoriteJobs: state.jobs.favoriteJobs && state.jobs.favoriteJobs,
+    favoriteJobs: state.jobs.dashboard.favoriteJobs && state.jobs.dashboard.favoriteJobs,
     selectedPage: state.pagination.selectedPage.selected,
     advertPages: Math.ceil(state.jobs.favoriteJobs.length / 10),
-    isUserType: state.client.user && state.client.user.data[6].user_type,
+    isUserType: state.client.user && state.client.user.data.user_type,
   };
 };
 
@@ -39,6 +45,10 @@ const mapDispatchToProps = {
   getFavoriteJobs,
   changeAdvertPage,
   fetchJobInfo,
-  fetchJobById
+  fetchJobById,
+  deleteFavoriteJobs
 };
-export default connect(mapStateToProps, mapDispatchToProps)(FavoriteJobsContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FavoriteJobsContainer);

@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { customURL } from "../../../utils/helperFunctions";
 import CustomizedDialogs from "../../../utils/customizedDialog";
 import axios from "axios";
+import store from "../../../store";
 
 const InactiveAds = ({
   inActiveAds,
@@ -22,23 +23,27 @@ const InactiveAds = ({
   deleteJobOffer,
   campaigns,
   populateVacancyForm,
-  deleteAdvertisement,
+  deleteAdvertisement
 }) => {
   const { t } = useTranslation("jobs", "common");
   const [jobsToRender, setJobsToRender] = useState([]);
   const [activeJobs, setActiveJobs] = useState([]);
-
-  const refreshPage = () => {
-    window.location.reload();
-  };
+  const { email } = store.getState().client.user.data;
+  const advertisement = store.getState().advertisement;
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/activeAds`).then((res) => {
-      setJobsToRender(
-        res.data.filter((status) => status.offerStatus === "inactive")
-      );
-    });
-  }, []);
+    const getData = () => {
+      axios.get(`https://localhost:7262/activeAds/${email}`).then(res => {
+        setJobsToRender(
+          res.data.filter(status => status.offerStatus === "inactive")
+        );
+      });
+    };
+
+    if (!advertisement.warnToDelete) {
+      getData();
+    }
+  }, [advertisement.warnToDelete]);
 
   return (
     <div className="container">
@@ -62,7 +67,7 @@ const InactiveAds = ({
       {jobsToRender &&
         jobsToRender
           .slice(selectedPage * 10, selectedPage * 10 + 10)
-          .map((item) => {
+          .map(item => {
             return (
               <div key={item.id}>
                 <Paper style={{ marginTop: 20 }}>
@@ -104,7 +109,7 @@ const InactiveAds = ({
                         </span>
                       </div>
                     </Grid>
-                    <Grid item md={3} style={{ color: "#34495E " }}>
+                    <Grid item md={3} style={{ color: "#34495E" }}>
                       <div>
                         {/* <h5>{new Intl.DateTimeFormat('fi-FI').format(new Date(item.created))}</h5> */}
                       </div>
@@ -163,7 +168,6 @@ const InactiveAds = ({
         warnToDeleteModal
         handleClick={() => {
           deleteJobOffer(isToDeleteAdvertisementId);
-          refreshPage();
         }}
       />
 
