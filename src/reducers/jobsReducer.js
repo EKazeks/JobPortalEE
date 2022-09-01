@@ -30,6 +30,7 @@ const initialState = {
   apiFailed: false,
   isToEdit: false,
   id: 0,
+  jobPostId: 0,
   idToApply: 0,
   jobName: "",
   idToCopy: 0,
@@ -49,6 +50,7 @@ const initialState = {
   favoriteJobs: [],
   appliedJobs: [],
   dashboard: [],
+  dateOfApplication: '',
   notificationToggleBtn: false,
   workStart: null,
   // warnToDelete: false,
@@ -91,6 +93,7 @@ const jobsReducer = (state = initialState, action) => {
       return {
         ...state,
         id: action.id,
+        jobPostId: action.jobPostId
       };
 
     case SET_ID_TO_APPLY:
@@ -105,7 +108,7 @@ const jobsReducer = (state = initialState, action) => {
         companyBusinessId: action.companyBusinessId,
         jobName: action.jobName,
         jobPostNumber: action.jobPostNumber,
-        address: action.address,
+        dateOfApplication: action.dateOfApplication
       };
     case GET_JOB_APPLICANTS:
       return {
@@ -137,7 +140,7 @@ const jobsReducer = (state = initialState, action) => {
     case GET_JOB_DETAILS_BY_ID_SUCCESS:
       return {
         ...state,
-        jobDetails: action.result,
+        jobDetails: action.data,
         uploadedDocument: [],
         showSpinner: false,
       };
@@ -158,6 +161,9 @@ const jobsReducer = (state = initialState, action) => {
     case TOGGLE_FAVORITE_JOBS:
       return {
         ...state,
+        id: action.id,  
+        jobName: action.jobName,
+        dateOfApplication: action.dateOfApplication
       };
     case GET_APPLIED_JOBS_SUCCESS:
       return {
@@ -168,7 +174,7 @@ const jobsReducer = (state = initialState, action) => {
     case GET_FAVORITE_JOBS_SUCCESS:
       return {
         ...state,
-        favoriteJobs: action.response,
+        favoriteJobs: action.favoriteJobs,
         //jobDetails: []
       };
     case SEND_APPLICATION_SUCCESS:
@@ -180,7 +186,7 @@ const jobsReducer = (state = initialState, action) => {
       return {
         ...state,
         dashboard: action.response,
-        notificationToggleBtn: action.response[0].email_notice_active,
+        //notificationToggleBtn: action.response.emailNotificationActive,
       };
     case TOGGLE_EMAIL_NOTIFICATION:
       return {

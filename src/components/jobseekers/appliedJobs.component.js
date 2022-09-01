@@ -12,47 +12,35 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const AppliedJobsComponent = ({ appliedJobs, advertPages, changeAdvertPage, selectedPage }) => {
   const { t } = useTranslation('appliedJobs', 'common');
-  const [jobsToRender, setJobsToRender] = useState([]);
-  const [applicants, setApplicants] = useState([]);
-  const { id } = useSelector((state) => state.jobs);
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
-      setJobsToRender(res.data);
-      setApplicants(res.data.jobPostApplications)
-      // dispatch(fetchJobApplicants(applicants.id))
-    });
-  }, []);
 
   return (
-    <div className="container" key={jobsToRender.id}>
+    <div className="container" key={appliedJobs.id}>
       <div>
         <Grid container style={{ padding: '50px 0px' }}>
           <Grid item sm={10}>
             <h3>
-              {t('appliedJobsTitle')}({`${applicants.length}`}):
+              {t('appliedJobsTitle')}({`${appliedJobs.length}`}):
             </h3>
           </Grid>
         </Grid>
       </div>
 
-      {jobsToRender &&
-        jobsToRender.slice(selectedPage * 10, selectedPage * 10 + 10).map(post => {
+      {appliedJobs &&
+        appliedJobs.slice(selectedPage * 10, selectedPage * 10 + 10).map(post => {
           return (
-            <div key={`${post.jobPostApplications.jobpostId}${post.jobPostApplications.id}`}>
+            <div key={`${post.jobPostId}${post.id}`}>
               <Paper style={{ marginTop: 20 }}>
                 <Grid container spacing={1} style={{ padding: 20 }} alignItems="center">
                   <Grid item xs={8}>
                     <div>
                       <Link to={customURL(post.url, 'internal')} className="btnLink">
-                        <h4>{post.jobName}</h4>
+                        <h4>{post.jobTitle}</h4>
                       </Link>
                     </div>
                     <div>
                       <span>
                         {t('common:deadline')}:
-                        <span style={{ color: 'red', margin: '0 5px' }}>{post.dateOfApplication.lastIndexOf(':00.000Z') ? dateFormat(post.dateOfApplication) : post.dateOfApplication}</span>
+                        <span style={{ color: 'red', margin: '0 5px' }}>{post.closingDate?.indexOf(':00.000Z') ? dateFormat(post.closingDate) : post.closingDate}</span>
                       </span>
                     </div>
                   </Grid>
