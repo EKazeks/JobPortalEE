@@ -21,7 +21,7 @@ import {
   FETCH_JOB_NAME_BY_ID,
   FETCH_JOB_INFO,
   SET_ID_TO_APPLY,
-  DELETE_SUCCESS,
+  DELETE_SUCCESS
 } from "../constants";
 
 const initialState = {
@@ -43,16 +43,16 @@ const initialState = {
   jobDetails: [],
   jobApplicantsId: 0,
   selectedPage: {
-    selected: 0,
+    selected: 0
   },
   showSpinner: false,
   uploadedDocument: [],
   favoriteJobs: [],
   appliedJobs: [],
   dashboard: [],
-  dateOfApplication: '',
+  dateOfApplication: "",
   notificationToggleBtn: false,
-  workStart: null,
+  workStart: null
   // warnToDelete: false,
   // isToDeleteAdvertisementId: 0,
 };
@@ -62,7 +62,7 @@ const jobsReducer = (state = initialState, action) => {
     case SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE:
       return {
         ...state,
-        showSpinner: true,
+        showSpinner: true
       };
     // case DELETE_JOB_OFFER:
     //   return {
@@ -81,13 +81,13 @@ const jobsReducer = (state = initialState, action) => {
         ...state,
         idToCopy: action.id,
         isOfferCopied: true,
-        isOfferEdited: true,
+        isOfferEdited: true
       };
     case SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE_SUCCESS:
       return {
         ...state,
         showSpinner: false,
-        apiSuccess: true,
+        apiSuccess: true
       };
     case FETCH_JOB_BY_ID:
       return {
@@ -99,7 +99,7 @@ const jobsReducer = (state = initialState, action) => {
     case SET_ID_TO_APPLY:
       return {
         ...state,
-        idToApply: action.id,
+        idToApply: action.id
       };
     case FETCH_JOB_INFO:
       return {
@@ -113,14 +113,14 @@ const jobsReducer = (state = initialState, action) => {
     case GET_JOB_APPLICANTS:
       return {
         ...state,
-        jobApplicantsId: action.id,
+        jobApplicantsId: action.id
         //payload: action.payload
       };
     case FILTER_JOBS:
       return {
         ...state,
         jobsList: [],
-        showSpinner: true,
+        showSpinner: true
       };
 
     case FILTER_JOBS_SUCCESS:
@@ -129,39 +129,39 @@ const jobsReducer = (state = initialState, action) => {
         jobsList: action.result,
         id: 0,
         jobDetails: [],
-        showSpinner: false,
+        showSpinner: false
       };
     case GET_JOB_DETAILS_BY_ID:
       return {
         ...state,
         id: action.id,
-        showSpinner: true,
+        showSpinner: true
       };
     case GET_JOB_DETAILS_BY_ID_SUCCESS:
       return {
         ...state,
         jobDetails: action.data,
         uploadedDocument: [],
-        showSpinner: false,
+        showSpinner: false
       };
     case GET_WORK_START_SUCCESS:
       return {
         ...state,
-        workStart: action.result.tyoAlkaaTekstiYhdistetty,
+        workStart: action.result.tyoAlkaaTekstiYhdistetty
       };
     case RETRIEVE_DOCUMENT_INFO:
       return {
         ...state,
         uploadedDocument: [
           {
-            ...action.document,
-          },
-        ],
+            ...action.document
+          }
+        ]
       };
     case TOGGLE_FAVORITE_JOBS:
       return {
         ...state,
-        id: action.id,  
+        id: action.id,
         jobName: action.jobName,
         dateOfApplication: action.dateOfApplication
       };
@@ -169,29 +169,29 @@ const jobsReducer = (state = initialState, action) => {
       return {
         ...state,
         appliedJobs: action.response,
-        jobDetails: [],
+        jobDetails: []
       };
     case GET_FAVORITE_JOBS_SUCCESS:
       return {
         ...state,
-        favoriteJobs: action.favoriteJobs,
+        favoriteJobs: action.favoriteJobs
         //jobDetails: []
       };
     case SEND_APPLICATION_SUCCESS:
       return {
         ...state,
-        uploadedDocument: [],
+        uploadedDocument: []
       };
     case GET_APPLICANT_DASHBOARD_INFO_SUCCESS:
       return {
         ...state,
-        dashboard: action.response,
+        dashboard: action.response
         //notificationToggleBtn: action.response.emailNotificationActive,
       };
     case TOGGLE_EMAIL_NOTIFICATION:
       return {
         ...state,
-        notificationToggleBtn: !state.notificationToggleBtn,
+        notificationToggleBtn: !state.notificationToggleBtn
       };
 
     default:

@@ -7,11 +7,11 @@ import {
   renderMultiselect,
   jobHours,
   jobType,
-  publishedTimes,
+  publishedTimes
 } from "../../utils/customSelectField";
 import {
   renderDenseTextField,
-  renderSearchSelectField,
+  renderSearchSelectField
 } from "../../utils/wrappers";
 import autoCompleteLocation from "../../utils/autoCompleteLocation";
 import axios from "axios";
@@ -20,16 +20,16 @@ const _onFormSubmit = () => {
   return false;
 };
 
-const styles = (theme) => ({
+const styles = theme => ({
   searchField: {
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   searchSelectField: {
-    transform: "translate(14px, 14px) scale(1)",
+    transform: "translate(14px, 14px) scale(1)"
   },
   title: {
     color: "white",
-    textAlign: "center",
+    textAlign: "center"
   },
   searchBtn: {
     color: theme.palette.primary.main,
@@ -37,51 +37,50 @@ const styles = (theme) => ({
     margin: "20px auto",
     width: "100%",
     "&:hover": {
-      color: theme.palette.custom.jobListHoverColor,
-    },
+      color: theme.palette.custom.jobListHoverColor
+    }
   },
   multiSelectSearch: {
     "& .rw-widget-container": {
       borderRadius: 0,
-      border: "none",
+      border: "none"
     },
     "& .rw-widget": {
-      margin: "8px 0",
+      margin: "8px 0"
     },
     "& .rw-multiselect .rw-input-reset": {
-      width: "100%",
-    },
+      width: "100%"
+    }
     // '& .rw-multiselect-tag': {
     //   width: '100%'
     // }
     /* '& .rw-list-option .rw-state-focus .rw-list-option .rw-state-focus:hover': {
       border: 'none'
     } */
-  },
+  }
 });
-const SearchFormComponent = ({
-  handleSubmit,
-  filterJobs,
-  classes,
-}) => {
+
+const SearchFormComponent = ({ handleSubmit, filterJobs, classes }) => {
   const { t } = useTranslation("searchForm", "publishedTimes");
   const [jobsToRender, setJobsToRender] = useState([]);
-
-  const categorys = jobsToRender.map((category) => category.jobTags);
+  const categorys = jobsToRender.map(category => category.jobTags);
   const sortCategorys = Array.from(new Set(categorys));
 
   useEffect(() => {
-    axios.get("https://localhost:7262/jobsEn").then((res) => {
+    axios.get("https://localhost:7262/jobsEn").then(res => {
       setJobsToRender(res.data);
     });
   }, []);
+
   const objCategory = sortCategorys.map((str, index) => ({
     value: str,
-    id: index + 1,
+    id: index + 1
   }));
-  if ((objCategory.length = 23)) {
-    //console.log(objCategory)
-  }
+
+  // if ((objCategory.length = 23)) {
+  //   console.log(objCategory)
+  // }
+
   return (
     <div>
       <h2 className={classes.title}>{t("title")}</h2>
@@ -122,11 +121,11 @@ const SearchFormComponent = ({
               <Field
                 name="portal_category_id"
                 component={renderMultiselect}
-                data={objCategory.map((category) => {
+                data={objCategory.map(category => {
                   return {
                     id: category.id,
                     value: category.value,
-                    label: t(`category:${category.id}`),
+                    label: t(`category:${category.id}`)
                   };
                 })}
                 valueField="type"
@@ -139,10 +138,10 @@ const SearchFormComponent = ({
               <Field
                 name="job_type"
                 component={renderMultiselect}
-                data={jobType.map((jobType) => {
+                data={jobType.map(jobType => {
                   return {
                     value: jobType.value,
-                    label: t(`jobtype:jobType${jobType.value}`),
+                    label: t(`jobtype:jobType${jobType.value}`)
                   };
                 })}
                 valueField="value"
@@ -155,10 +154,10 @@ const SearchFormComponent = ({
               <Field
                 name="job_hours"
                 component={renderMultiselect}
-                data={jobHours.map((hour) => {
+                data={jobHours.map(hour => {
                   return {
                     value: hour.value,
-                    label: t(`jobhours:jobHours${hour.value}`),
+                    label: t(`jobhours:jobHours${hour.value}`)
                   };
                 })}
                 valueField="value"
@@ -179,7 +178,7 @@ const SearchFormComponent = ({
                 {/* <option value="" disabled>
                   {t('publishedTimes:publishLabel')}
                 </option> */}
-                {publishedTimes.map((item) => {
+                {publishedTimes.map(item => {
                   return (
                     <option value={item.value} key={item.value}>
                       {t(`publishedTimes:${item.value}`)}

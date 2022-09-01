@@ -17,13 +17,13 @@ import jobHeroImg from "../../images/jobportal_hero.jpg";
 import { SEO } from "../seo/metaInfo.component";
 import axios from "axios";
 
-const styles = (theme) => ({
+const styles = theme => ({
   heroImage: {
     height: 420,
     background: `url(${jobHeroImg}) no-repeat`,
     backgroundSize: "contain",
     backgroundPosition: "center center",
-    backgroundColor: "#F1B1B1",
+    backgroundColor: "#F1B1B1"
   },
   heroImageTitle: {
     color: "white",
@@ -32,67 +32,67 @@ const styles = (theme) => ({
     fontWeight: 800,
     fontSize: "4.5rem",
     [theme.breakpoints.down("sm")]: {
-      fontSize: "2.5rem !important",
-    },
+      fontSize: "2.5rem !important"
+    }
   },
   searchForm: {
     marginTop: -150,
     backgroundColor: theme.palette.primary.main,
-    padding: "50px 10px 70px 10px",
+    padding: "50px 10px 70px 10px"
   },
   jobInfo: {
     color: theme.palette.custom.darkText,
     [theme.breakpoints.down("xs")]: {
-      fontSize: "1rem",
-    },
+      fontSize: "1rem"
+    }
   },
   titleSpacer: {
     [theme.breakpoints.up("sm")]: {
-      height: 170,
-    },
+      height: 170
+    }
   },
   jobTitle: {
     color: theme.palette.primary.main,
 
     fontWeight: 600,
     [theme.breakpoints.down("xs")]: {
-      fontSize: 18,
+      fontSize: 18
     },
     [theme.breakpoints.up("sm")]: {
-      fontSize: 20,
+      fontSize: 20
     },
     [theme.breakpoints.up("lg")]: {
-      fontSize: 22,
-    },
+      fontSize: 22
+    }
   },
   companyInfo: {
     fontWeight: 400,
     [theme.breakpoints.down("xs")]: {
-      fontSize: 14,
+      fontSize: 14
     },
     [theme.breakpoints.up("sm")]: {
-      fontSize: 16,
+      fontSize: 16
     },
     [theme.breakpoints.up("lg")]: {
-      fontSize: 18,
-    },
+      fontSize: 18
+    }
   },
 
   jobInfobody: {
     [theme.breakpoints.up("md")]: {
-      paddingLeft: "12px !important",
+      paddingLeft: "12px !important"
     },
     [theme.breakpoints.up("lg")]: {
-      paddingLeft: "40px !important",
-    },
+      paddingLeft: "40px !important"
+    }
   },
 
   emptyResult: {
-    padding: "50px 20px 70px 20px",
+    padding: "50px 20px 70px 20px"
   },
   listContainer: {
     backgroundColor: theme.palette.custom.background,
-    paddingBottom: 30,
+    paddingBottom: 30
   },
   logoContainer: {
     height: "6rem",
@@ -102,11 +102,11 @@ const styles = (theme) => ({
     [theme.breakpoints.down("xs")]: {
       height: "6rem",
       width: "5rem",
-      fontSize: 12,
+      fontSize: 12
     },
     [theme.breakpoints.up("lg")]: {
-      marginLeft: 20,
-    },
+      marginLeft: 20
+    }
   },
   logoDiv: {
     height: "5.5rem",
@@ -116,45 +116,45 @@ const styles = (theme) => ({
     backgroundPosition: "50% 50%",
     [theme.breakpoints.down("xs")]: {
       height: "4rem",
-      width: "4rem",
-    },
+      width: "4rem"
+    }
   },
   companyName: {
     borderRadius: 50,
     overflow: "hidden",
     width: "100%",
     fontSize: 13,
-    alignSelf: "center",
+    alignSelf: "center"
   },
   jobContainerHover: {
     position: "absolute",
     width: "100%",
     height: "100%",
     left: 0,
-    top: 0,
+    top: 0
   },
   paper: {
     marginTop: 12,
     position: "relative",
     "&:hover": {
-      backgroundColor: theme.palette.custom.jobListHoverColor,
-    },
+      backgroundColor: theme.palette.custom.jobListHoverColor
+    }
   },
   dateInfo: {
     "& span": {
       marginRight: 20,
       fontSize: 16,
       [theme.breakpoints.down("xs")]: {
-        fontSize: "0.8rem",
+        fontSize: "0.8rem"
       },
       [theme.breakpoints.down("sm")]: {
-        fontSize: "0.9rem",
-      },
-    },
+        fontSize: "0.9rem"
+      }
+    }
   },
   paginationBody: {
-    backgroundColor: theme.palette.custom.background,
-  },
+    backgroundColor: theme.palette.custom.background
+  }
 });
 
 const JobsComponent = ({
@@ -178,7 +178,7 @@ const JobsComponent = ({
   classes,
   fetchJobById,
   fetchJobInfo,
-  deleteFavoriteJobs,
+  deleteFavoriteJobs
 }) => {
   const { t } = useTranslation("jobsList", "jobs");
   const [jobsToRender, setJobsToRender] = useState([]);
@@ -186,12 +186,12 @@ const JobsComponent = ({
   const [address, setAddress] = useState();
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn`).then((res) => {
+    axios.get(`https://localhost:7262/jobsEn`).then(res => {
       setJobsToRender(
-        res.data.filter((activeJobs) => activeJobs.offerStatus === "active")
+        res.data.filter(activeJobs => activeJobs.offerStatus === "active")
       );
       setFavouritesJobs(
-        res.data.filter((favourite) => favourite.isFavourite === 1)
+        res.data.filter(favourite => favourite.isFavourite === 1)
       );
     });
   }, []);
@@ -227,7 +227,7 @@ const JobsComponent = ({
             {jobsToRender &&
               jobsToRender
                 .slice(selectedPage * 10, selectedPage * 10 + 10)
-                .map((item) => {
+                .map(item => {
                   return (
                     <div key={`${item.companyBusinessId}${item.id}`}>
                       <Paper className={classes.paper}>
@@ -383,9 +383,7 @@ const JobsComponent = ({
                                 ) : (
                                   <FavBtn
                                     className={classes.favBtn}
-                                    
                                     handleFav={() => {
-                                      
                                       // if (favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)) {
                                       //   deleteFavoriteJobs(item.id)
                                       // }
@@ -393,14 +391,26 @@ const JobsComponent = ({
                                         item.id,
                                         item.jobName,
                                         item.dateOfApplication,
-                                        !favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)
+                                        !favoriteJobs.some(
+                                          favList =>
+                                            favList.jobPostId === item.id &&
+                                            favList.jobTitle === item.jobName
+                                        )
                                       );
                                     }}
-                                    isFav={favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)} // checking from the favoriteJobs list
+                                    isFav={favoriteJobs.some(
+                                      favList =>
+                                        favList.jobPostId === item.id &&
+                                        favList.jobTitle === item.jobName
+                                    )} // checking from the favoriteJobs list
                                     btnText={
-                                      !favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)
-                                      ? t('addFav')
-                                      : t('delFav')
+                                      !favoriteJobs.some(
+                                        favList =>
+                                          favList.jobPostId === item.id &&
+                                          favList.jobTitle === item.jobName
+                                      )
+                                        ? t("addFav")
+                                        : t("delFav")
                                     }
                                   />
                                 )}
@@ -467,7 +477,7 @@ const JobsComponent = ({
         <Snackbar
           anchorOrigin={{
             vertical: "bottom",
-            horizontal: "center",
+            horizontal: "center"
           }}
           open={showSuccessSnackbar}
           autoHideDuration={2000}
@@ -504,9 +514,9 @@ const JobsComponent = ({
           pageCount={3000}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
-          onPageChange={(data) => {
+          onPageChange={data => {
             changeAdvertPage({
-              selected: data.selected,
+              selected: data.selected
             });
             filterJobs(true);
           }}
