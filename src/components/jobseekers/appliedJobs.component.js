@@ -33,7 +33,7 @@ const AppliedJobsComponent = ({ appliedJobs, advertPages, changeAdvertPage, sele
                 <Grid container spacing={1} style={{ padding: 20 }} alignItems="center">
                   <Grid item xs={8}>
                     <div>
-                      <Link to={customURL(post.url, 'internal')} className="btnLink">
+                      <Link to={customURL(post.url, 'external')} className="btnLink">
                         <h4>{post.jobTitle}</h4>
                       </Link>
                     </div>

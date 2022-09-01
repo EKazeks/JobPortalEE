@@ -144,11 +144,11 @@ const ApplicantDetails = ({
   //cv_filename
 }) => {
   const applicant_cv =
-    viewApplication.applicantDocument && viewApplication.applicantDocument.content;
+    viewSelectedAd.jobPostApplications.cv && viewApplication.jobPostApplications[0].cv;
   const cv_filename =
     viewApplication.applicantDocument?.fileName;
   const { t } = useTranslation("applicant", "common");
-
+  console.log('applicant-cv,', applicant_cv);
   return (
     <div className="job-application">
       <SideBar />

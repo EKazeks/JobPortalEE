@@ -300,7 +300,7 @@ const AdvertFormComponent = ({
                 />
               </Grid>
             </Grid>
-            <Grid container></Grid>
+            {/* <Grid container></Grid> */}
             <CampaignsContainer />
           </div>
 

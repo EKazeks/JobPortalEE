@@ -25,8 +25,8 @@ function* sendApplicationSaga() {
     const { jobPostNumber } = store.getState().jobs;
     const { dateOfApplication } = store.getState().jobs;
     const uploadedCV =
-      store.getState().jobs.uploadedDocument &&
-      store.getState().jobs.uploadedDocument[0];
+      store.getState().jobseekerProfile.uploadedDocument &&
+      store.getState().jobseekerProfile.uploadedDocument[0];
     const cv_id_value = store.getState().jobseekerProfile.profile.cv_id;
     const cv_id = cv_id_value?.toString(); // optional chaining ?.
     const formValues = getFormValues("applicationForm")(store.getState());
@@ -59,6 +59,7 @@ function* sendApplicationSaga() {
       note: formValues.application_description,
       closingDate: dateOfApplication,
       jobpostId: idToApply,
+      cv: cv_base64,
       instanceId: store.getState().client.user.data.company_id,
     };
     const result = yield call(apiManualPost, url, JSON.stringify(body));

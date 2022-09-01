@@ -803,14 +803,14 @@ export const resetApplicationSent = () => ({
 export const getApplicationDetailsById = (
   instanceId,
   //company_id,
+  email,
   jobpostId,
-  email
 ) => ({
   type: GET_APPLICATION_DETAILS_BY_ID,
   instanceId,
   //company_id,
-  jobpostId,
   email,
+  jobpostId,
 });
 export const getApplicationDetailsByIdSuccess = (response) => ({
   type: GET_APPLICATION_DETAILS_BY_ID_SUCCESS,

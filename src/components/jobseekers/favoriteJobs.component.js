@@ -68,30 +68,27 @@ const FavoriteJobsComponent = ({
                   >
                     <Grid item md={8} sm={8} xs={12}>
                       <div>
-                      <Link to={customURL(post.url, 'external')} className="btnLink">
+                      {/* <Link to={customURL(post.url, 'external')} className="btnLink">
                         <h4>{post.jobTitle}</h4>
-                      </Link>
-                        {/* <Link
+                      </Link> */}
+                        <Link
                           to={customURL(post.url, "external")}
                           className="btnLink"
+                          onClick={() => {
+                            fetchJobById(post.id);
+                            fetchJobInfo(
+                              post.companyName,
+                              post.companyBusinessId,
+                              post.jobName,
+                              post.jobPostNumber,
+                              post.dateOfApplication
+                            );
+                          }}
                         >
-                          <h4
-                            onClick={() => {
-                              fetchJobById(
-                                post.id,
-                                post.jobPostId
-                                );
-                              // fetchJobInfo(
-                              //   favoriteJobDetail.companyName,
-                              //   favoriteJobDetail.companyBusinessId,
-                              //   favoriteJobDetail.jobName,
-                              //   favoriteJobDetail.jobPostNumber
-                              // );
-                            }}
-                          >
+                          <h4>
                             {post.jobTitle}
                           </h4>
-                        </Link> */}
+                        </Link>
                       </div>
                       <div>
                         <span>

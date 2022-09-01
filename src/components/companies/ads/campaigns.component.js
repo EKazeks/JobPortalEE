@@ -33,7 +33,7 @@ const styles = theme => ({
     },
   },
   campaignType: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 5,
     paddingBottom: 10,
@@ -250,7 +250,7 @@ const CampaignComponent = ({
                 item
                 md={campaign.id === 'fd90b98a-c44f-4c38-9f96-2cbe9d3f3739' || campaign.id === 'e4f3fb19-db74-4aac-8190-6fa936aa0ac5' ? 6 : 'fd90b98a-c44f-4c38-9f96-2cbe9d3f3739'}
                 xs={12}
-                sm={6}
+                sm={4}
                 key={campaign.value}
                 className={
                   (userRole === 'admin' && !isToChangeCampaign) || (isToChangeCampaign && campaign.value < currentCampaignPrice)

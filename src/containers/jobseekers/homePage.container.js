@@ -30,8 +30,8 @@ const HomePageContainerForm = reduxForm({
 const mapStateToProps = state => {
   const formValues = getFormValues('jobPreference')(state);
   const dashboard = state.jobs.dashboard && state.jobs.dashboard[0];
-  const favoriteJobs = state.jobs.favoriteJobs && state.jobs.favoriteJobs;
-  const appliedJobs = state.jobs.dashboard.appliedJobs && state.jobs.dashboard.appliedJobs;
+  const favoriteJobs = state.jobs?.favoriteJobs && state.jobs?.favoriteJobs;
+  const appliedJobs = state.jobs.dashboard?.appliedJobs && state.jobs.dashboard?.appliedJobs;
   
   const extractJobCategoriesData = list => {
     const jobcategoryList = list.map(el => {

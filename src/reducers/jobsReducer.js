@@ -163,7 +163,7 @@ const jobsReducer = (state = initialState, action) => {
         ...state,
         id: action.id,  
         jobName: action.jobName,
-        dateOfApplication: action.dateOfApplication
+        dateOfApplication: action.dateOfApplication,
       };
     case GET_APPLIED_JOBS_SUCCESS:
       return {
