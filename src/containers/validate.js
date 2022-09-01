@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import store from "../store";
 
-export const registerValidate = (values) => {
+export const registerValidate = values => {
   const errors = {};
   const requiredFields = [
     "firstName",
@@ -9,10 +9,10 @@ export const registerValidate = (values) => {
     "email",
     "password",
     "user_type",
-    "agreement_terms",
+    "agreement_terms"
   ];
 
-  requiredFields.forEach((field) => {
+  requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = i18next.t("validation:fieldRequired");
     }
@@ -46,7 +46,7 @@ export const registerValidate = (values) => {
   return errors;
 };
 
-export const signInValidate = (values) => {
+export const signInValidate = values => {
   const errors = {};
   if (!values.email) {
     errors.email = i18next.t("validation:fieldRequired");
@@ -57,7 +57,7 @@ export const signInValidate = (values) => {
   return errors;
 };
 
-export const jobPostFormValidate = (values) => {
+export const jobPostFormValidate = values => {
   const errors = {};
   const extra_service = store.getState().advertisement.extraService;
   const requiredFields = [
@@ -67,14 +67,14 @@ export const jobPostFormValidate = (values) => {
     "jobDuration",
     "lastApplicationDate",
     "jobLocation",
-    "is_agreement",
-    "jobDescription",
+    "is_agreement"
+    // "jobDescription",
   ];
 
   if (!extra_service.sos) {
     requiredFields.push("job_description");
   }
-  requiredFields.forEach((field) => {
+  requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = i18next.t("validation:fieldRequired");
     }
@@ -120,14 +120,14 @@ export const jobPostFormValidate = (values) => {
   return errors;
 };
 
-export const passwordValidate = (values) => {
+export const passwordValidate = values => {
   const errors = {};
   const requiredFields = [
     "current_password",
     "new_password",
-    "new_password_confirmation",
+    "new_password_confirmation"
   ];
-  requiredFields.forEach((field) => {
+  requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = i18next.t("validation:fieldRequired");
     }
@@ -148,7 +148,7 @@ export const passwordValidate = (values) => {
   return errors;
 };
 
-export const profileValidate = (values) => {
+export const profileValidate = values => {
   const errors = {};
   const requiredFields = [
     "companyName",
@@ -159,10 +159,10 @@ export const profileValidate = (values) => {
     "companyBusinessId",
     "address",
     "city",
-    "zipCode",
+    "zipCode"
   ];
 
-  requiredFields.forEach((field) => {
+  requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = i18next.t("validation:fieldRequired");
     }
@@ -217,7 +217,7 @@ export const profileValidate = (values) => {
 
       const reqUserFields = ["firstname", "lastname", "email"];
 
-      reqUserFields.forEach((field) => {
+      reqUserFields.forEach(field => {
         if (!user || !user[field]) {
           userErrors[field] = i18next.t("validation:fieldRequired");
           userArrayErrors[i] = userErrors;
@@ -242,16 +242,16 @@ export const profileValidate = (values) => {
   return errors;
 };
 
-export const jobseekerProfileValidate = (values) => {
+export const jobseekerProfileValidate = values => {
   const errors = {};
   const requiredFields = [
     "firstName",
     "lastName",
     "email",
     "agreement_terms",
-    "profileDescription",
+    "profileDescription"
   ];
-  requiredFields.forEach((field) => {
+  requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = i18next.t("validation:fieldRequired");
     }
@@ -271,16 +271,16 @@ export const jobseekerProfileValidate = (values) => {
   return errors;
 };
 
-export const jobPreferenceValidate = (values) => {
+export const jobPreferenceValidate = values => {
   const errors = {};
   const requiredFields = [
     "job_category",
     "notice_frequency",
     "job_location",
     "job_type",
-    "job_hours",
+    "job_hours"
   ];
-  requiredFields.forEach((field) => {
+  requiredFields.forEach(field => {
     if (!values[field] || values[field].length === 0) {
       errors[field] = i18next.t("validation:fieldRequired");
     }
@@ -289,10 +289,10 @@ export const jobPreferenceValidate = (values) => {
   return errors;
 };
 
-export const marketingDetailsValidate = (values) => {
+export const marketingDetailsValidate = values => {
   const errors = {};
   const requiredFields = ["marketing_platform", "more_budget"];
-  requiredFields.forEach((field) => {
+  requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = i18next.t("validation:fieldRequired");
     }
@@ -310,15 +310,15 @@ export const marketingDetailsValidate = (values) => {
   return errors;
 };
 
-export const interviewDetailsValidate = (values) => {
+export const interviewDetailsValidate = values => {
   const errors = {};
   const requiredFields = [
     "interview_title",
     "interview_msg",
     "interview_date",
-    "interview_time",
+    "interview_time"
   ];
-  requiredFields.forEach((field) => {
+  requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = i18next.t("validation:fieldRequired");
     }
@@ -361,11 +361,11 @@ export const interviewDetailsValidate = (values) => {
   return errors;
 };
 
-export const applicationFormValidate = (values) => {
+export const applicationFormValidate = values => {
   const errors = {};
   const requiredFields = ["firstname", "lastname", "email", "agreement_terms"];
 
-  requiredFields.forEach((field) => {
+  requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = i18next.t("validation:fieldRequired");
     }
@@ -398,7 +398,7 @@ export const applicationFormValidate = (values) => {
   return errors;
 };
 
-export const campaignValidate = (values) => {
+export const campaignValidate = values => {
   const errors = {};
   if (!values.due_date) {
     errors.due_date = i18next.t("validation:fieldRequired");
@@ -419,7 +419,7 @@ export const campaignValidate = (values) => {
   return errors;
 };
 
-export const usersProfileValidate = (values) => {
+export const usersProfileValidate = values => {
   const errors = {};
   let requiredFields;
 
@@ -429,7 +429,7 @@ export const usersProfileValidate = (values) => {
     requiredFields = ["firstName", "lastName", "email"];
   }
 
-  requiredFields.forEach((field) => {
+  requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = i18next.t("validation:fieldRequired");
     }
@@ -474,11 +474,11 @@ export const usersProfileValidate = (values) => {
   return errors;
 };
 
-const isEmpty = (str) => {
+const isEmpty = str => {
   return !str.trim().length;
 };
 
-export const isRteEmpty = (str) => {
+export const isRteEmpty = str => {
   var regex = /(<([^>]+)>)/gi;
   const text = str
     .replace(regex, "")
