@@ -1,12 +1,16 @@
-import { connect } from 'react-redux';
-import CompanyNavBarComponent from '../../components/layout/company.navBar.component';
-import { navigateAdsFromMainMenu, postAdvertisement, logout } from '../../actions';
+import { connect } from "react-redux";
+import CompanyNavBarComponent from "../../components/layout/company.navBar.component";
+import {
+  navigateAdsFromMainMenu,
+  postAdvertisement,
+  logout,
+} from "../../actions";
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   selectedMainMenu: state.advertisement.selectedMainMenu,
-  companyId: state.companyProfile.profile.company_id,
+  companyId: state.client.user.data.company_id,
   companyName: state.companyProfile.profile.company_name,
-  userRole: state.client.user && state.client.user.data[5],
+  userRole: state.client.user.data.user_role && state.client.user.data.user_role,
   companiesList: state.usersCompanyList.companiesList,
 });
 
@@ -16,4 +20,7 @@ const mapDispatchToProps = {
   logout,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompanyNavBarComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CompanyNavBarComponent);
