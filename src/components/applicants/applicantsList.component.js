@@ -274,7 +274,7 @@ const ApplicationsList = ({ applications,jobsToRender,viewSelectedAd, classes, s
                                 color="primary"
                                 onClick={() =>
                                   store.dispatch(
-                                    getApplicationDetailsById(application.id, application.email, application.jobpostId),
+                                    getApplicationDetailsById(application.instanceId, application.email, application.jobpostId),
                                   )
                                 }
                               >

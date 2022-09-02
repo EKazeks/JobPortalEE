@@ -1,30 +1,30 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import { AppBar, Typography } from '@material-ui/core';
-import { NavLink } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import JobseekerNavBarContainer from '../../containers/layout/jobseeker.navBar.container';
-import CompanyNavBarContainer from '../../containers/layout/company.navBar.container';
-import AdminNavBarComponent from './admin.navBar.component';
-import { resetSearchCriteriaForm } from '../../actions';
-import store from '../../store';
-import Language from './lang.component';
-import { EmployerPage, Homepage } from '../../constants/wordpressRoutes';
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import { AppBar, Typography } from "@material-ui/core";
+import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import JobseekerNavBarContainer from "../../containers/layout/jobseeker.navBar.container";
+import CompanyNavBarContainer from "../../containers/layout/company.navBar.container";
+import AdminNavBarComponent from "./admin.navBar.component";
+import { resetSearchCriteriaForm } from "../../actions";
+import store from "../../store";
+import Language from "./lang.component";
+import { EmployerPage, Homepage } from "../../constants/wordpressRoutes";
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     flexGrow: 1,
   },
 
   paper: {
-    boxShadow: 'none',
+    boxShadow: "none",
   },
   header: {
     minHeight: 100,
     backgroundColor: theme.palette.primary.main,
-    color: '#fff',
+    color: "#fff",
   },
 
   brandLogo: {
@@ -33,16 +33,23 @@ const styles = theme => ({
   },
 });
 
-const brandLogo = 'https://vptapiprodstorage.blob.core.windows.net/jobportaldocs/job_portal_logo_white-200-px.png';
+const brandLogo =
+  "https://vptapiprodstorage.blob.core.windows.net/jobportaldocs/job_portal_logo_white-200-px.png";
 
 const NavBarComponent = ({ classes, isUserLoggedIn, userType, adminRole }) => {
   return (
     <div className={classes.root}>
-      {isUserLoggedIn && userType === 'company' && <CompanyNavBarContainer />}
+      {isUserLoggedIn && isUserLoggedIn.data.user_type === "company" && (
+        <CompanyNavBarContainer />
+      )}
 
       {/* Applicant's navbar view */}
-      {isUserLoggedIn && userType === 'applicant' && <JobseekerNavBarContainer />}
-      {isUserLoggedIn && adminRole === 1 && userType === 'admin' && <AdminNavBarComponent />}
+      {isUserLoggedIn && isUserLoggedIn.data.user_type === "applicant" && (
+        <JobseekerNavBarContainer />
+      )}
+      {isUserLoggedIn && adminRole === 1 && userType === "admin" && (
+        <AdminNavBarComponent />
+      )}
       {/* For users who are not logged in */}
       {!isUserLoggedIn && <NavBar classes={classes} />}
     </div>
@@ -50,7 +57,7 @@ const NavBarComponent = ({ classes, isUserLoggedIn, userType, adminRole }) => {
 };
 
 const NavBar = ({ classes }) => {
-  const { t } = useTranslation('navbar', 'footer');
+  const { t } = useTranslation("navbar", "footer");
   const { lang } = store.getState().language;
 
   return (
@@ -63,14 +70,18 @@ const NavBar = ({ classes }) => {
             rel="noopener noreferrer"
             className="navbar-brand"
           >
-            <img src={brandLogo} alt="job-portal-logo" className={classes.brandLogo} />
+            <img
+              src={brandLogo}
+              alt="job-portal-logo"
+              className={classes.brandLogo}
+            />
           </a>
           <Navbar.Toggle aria-controls="primary-navbar-nav" />
           <Navbar.Collapse id="primary-navbar-nav" className="ml-auto">
             <Nav className="ml-auto">
               <Typography variant="h6">
                 <a href={EmployerPage(lang)} className="nav-link">
-                  {t('footer:employers')}
+                  {t("footer:employers")}
                 </a>
               </Typography>
               <Typography variant="h6">
@@ -81,12 +92,12 @@ const NavBar = ({ classes }) => {
                     store.dispatch(resetSearchCriteriaForm());
                   }}
                 >
-                  {t('vacancies')}
+                  {t("vacancies")}
                 </NavLink>
               </Typography>
               <Typography variant="h6">
                 <NavLink to="/login" className="nav-link">
-                  {t('login')}
+                  {t("login")}
                 </NavLink>
               </Typography>
               <div className="nav-link">

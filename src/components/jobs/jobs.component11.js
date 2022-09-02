@@ -286,7 +286,7 @@ const JobsComponent = ({
                         </Grid>
                         <Grid item sm={2} md={1} xs={6}>
                           <div>
-                            <Link className="btnLink" to={`/tyopaikat/${customURL(item.tehtavanimi)}/${item.ilmoitusnumero}`}>
+                            <Link className="btnLink" to={`/tyopaikat/${customURL(item.jobName)}/${item.ilmoitusnumero}`}>
                               <Button variant="contained" color="primary" onClick={() => getJobDetailsById(`${item.ilmoitusnumero}$$${item.kieli}$$fromMol`)}>
                                 {t('watchBtn')}
                               </Button>

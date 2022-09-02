@@ -1,88 +1,101 @@
-import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
+import React, { useEffect, useState } from "react";
+import classNames from "classnames";
 
-import { Button, Card, CardContent, CardActions, Grid, Divider, Snackbar, CircularProgress } from '@material-ui/core';
-import { Field } from 'redux-form';
-import { withStyles } from '@material-ui/core/styles';
-import { useTranslation } from 'react-i18next';
-import DoneIcon from '@material-ui/icons/Done';
-import { MySnackbarContentWrapper } from '../../utils/snackbar.utils';
-import { renderAdminDatePicker, renderDenseTextField, renderTimePicker } from '../../utils/wrappers';
-import SideBar from '../../containers/layout/sideBar.container';
-import { Link } from 'react-router-dom';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import { customURL, dateFormat } from '../../utils/helperFunctions';
-import TextEditor from '../../utils/textEditor';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardActions,
+  Grid,
+  Divider,
+  Snackbar,
+  CircularProgress,
+} from "@material-ui/core";
+import { Field } from "redux-form";
+import { withStyles } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
+import DoneIcon from "@material-ui/icons/Done";
+import { MySnackbarContentWrapper } from "../../utils/snackbar.utils";
+import {
+  renderAdminDatePicker,
+  renderDenseTextField,
+  renderTimePicker,
+} from "../../utils/wrappers";
+import SideBar from "../../containers/layout/sideBar.container";
+import { Link } from "react-router-dom";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import { customURL, dateFormat } from "../../utils/helperFunctions";
+import TextEditor from "../../utils/textEditor";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
-const styles = theme => ({
+const styles = (theme) => ({
   formBtn: {
-    margin: '20px 0 0 20px',
+    margin: "20px 0 0 20px",
   },
 
   card: {
-    margin: '70px auto',
+    margin: "70px auto",
   },
   layout: {
     padding: 40,
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down("xs")]: {
       padding: 20,
     },
   },
   ctaBtn: {
-    padding: ' 0 40px 40px',
-    [theme.breakpoints.down('xs')]: {
-      padding: '0 20px 20px',
+    padding: " 0 40px 40px",
+    [theme.breakpoints.down("xs")]: {
+      padding: "0 20px 20px",
     },
   },
   title: {
-    margin: '50px 0',
+    margin: "50px 0",
     color: theme.palette.primary.main,
   },
   fieldLabel: {
     color: theme.palette.primary.main,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   fieldTitle: {
     color: theme.palette.primary.main,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     //fontSize: 25
   },
   activeStatus: {
     marginBottom: 10,
     backgroundColor: theme.palette.custom.activeBtn,
-    color: 'white',
-    '&:disabled': {
+    color: "white",
+    "&:disabled": {
       backgroundColor: theme.palette.custom.activeBtn,
-      color: 'white',
+      color: "white",
     },
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       marginRight: 6,
     },
   },
   rejectStatus: {
     marginBottom: 10,
     backgroundColor: theme.palette.custom.rejectBtn,
-    '&:disabled': {
+    "&:disabled": {
       backgroundColor: theme.palette.custom.rejectBtn,
-      color: 'white',
+      color: "white",
     },
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       marginRight: 6,
     },
   },
   inactiveStatus: {
     // width: 210,
     marginBottom: 10,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       marginRight: 6,
     },
   },
   adContent: {
     flexGrow: 1,
 
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up("md")]: {
       marginLeft: 200,
       padding: theme.spacing(3),
     },
@@ -94,8 +107,8 @@ const styles = theme => ({
   },
   backBtnText: {
     color: theme.palette.secondary.main,
-    '&:hover': {
-      textDecoration: 'none',
+    "&:hover": {
+      textDecoration: "none",
       color: theme.palette.primary.main,
     },
   },
@@ -103,7 +116,7 @@ const styles = theme => ({
     marginTop: 2,
   },
   rte: {
-    cursor: 'not-allowed',
+    cursor: "not-allowed",
   },
 });
 
@@ -128,24 +141,30 @@ const ApplicantDetails = ({
   valid,
   pristine,
   handleSubmit,
+  //cv_filename
 }) => {
-  const applicant_cv = viewApplication.applicant_cv && viewApplication.applicant_cv[0].path;
-  const cv_filename = viewApplication.applicant_cv && viewApplication.applicant_cv[0].filename;
-  const { t } = useTranslation('applicant', 'common');
-
+  const applicant_cv =
+    viewSelectedAd.jobPostApplications.cv && viewApplication.jobPostApplications[0].cv;
+  const cv_filename =
+    viewApplication.applicantDocument?.fileName;
+  const { t } = useTranslation("applicant", "common");
+  console.log('applicant-cv,', applicant_cv);
   return (
     <div className="job-application">
       <SideBar />
       <div className={classes.adContent}>
         <div className="container">
           <div className={classes.backBtnContainer}>
-            <Link to={`${customURL(viewSelectedAd.url, 'internal')}`} className={classes.backBtnText}>
-              <ArrowBackIosIcon /> {t('jobs:backButton')}
+            <Link
+              to={`${customURL(viewSelectedAd.url, "internal")}`}
+              className={classes.backBtnText}
+            >
+              <ArrowBackIosIcon /> {t("jobs:backButton")}
             </Link>
           </div>
           <div className={classes.title}>
             <h3>
-              {viewSelectedAd.jobName}, {viewSelectedAd.jobPostAddress.address}
+              {viewSelectedAd.jobName}, {viewSelectedAd.jobPostAddress?.address}
             </h3>
             <Divider />
           </div>
@@ -157,73 +176,119 @@ const ApplicantDetails = ({
                     <div>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label htmlFor="firstName" className={classes.fieldLabel}>
-                            {t('common:firstName')}:
+                          <label
+                            htmlFor="firstName"
+                            className={classes.fieldLabel}
+                          >
+                            {t("common:firstName")}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="firstName" id="firstName" disabled />
+                          <Field
+                            component={renderDenseTextField}
+                            name="firstName"
+                            id="firstName"
+                            disabled
+                          />
                         </Grid>
                       </Grid>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label htmlFor="lastName" className={classes.fieldLabel}>
-                            {t('common:lastName')}:
+                          <label
+                            htmlFor="lastName"
+                            className={classes.fieldLabel}
+                          >
+                            {t("common:lastName")}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="lastName" id="lastName" disabled />
+                          <Field
+                            component={renderDenseTextField}
+                            name="lastName"
+                            id="lastName"
+                            disabled
+                          />
                         </Grid>
                       </Grid>
 
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
                           <label htmlFor="email" className={classes.fieldLabel}>
-                            {t('common:email')}:
+                            {t("common:email")}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="email" id="email" disabled />
+                          <Field
+                            component={renderDenseTextField}
+                            name="email"
+                            id="email"
+                            disabled
+                          />
                         </Grid>
                       </Grid>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label htmlFor="phone" className={classes.fieldLabel}>
-                            {t('common:phone')}:
+                          <label htmlFor="contactNumber" className={classes.fieldLabel}>
+                            {t("common:phone")}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="phone" id="phone" disabled />
+                          <Field
+                            component={renderDenseTextField}
+                            name="contactNumber"
+                            id="contactNumber"
+                            disabled
+                          />
                         </Grid>
                       </Grid>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label htmlFor="linkedIn" className={classes.fieldLabel}>
-                            {t('common:LinkedIn')}:
+                          <label
+                            htmlFor="linkedIn"
+                            className={classes.fieldLabel}
+                          >
+                            {t("common:LinkedIn")}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="linkedIn" id="linkedIn" disabled />
+                          <Field
+                            component={renderDenseTextField}
+                            name="linkedIn"
+                            id="linkedIn"
+                            disabled
+                          />
                         </Grid>
                       </Grid>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label htmlFor="description" className={classes.fieldLabel}>
-                            {t('common:portfolio')}:
+                          <label
+                            htmlFor="portfolio"
+                            className={classes.fieldLabel}
+                          >
+                            {t("common:portfolio")}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="description" id="description" disabled />
+                          <Field
+                            component={renderDenseTextField}
+                            name="portfolio"
+                            id="portfolio"
+                            disabled
+                          />
                         </Grid>
                       </Grid>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
                           <label htmlFor="cv" className={classes.fieldLabel}>
-                            {t('cvTitle')}:
+                            {t("cvTitle")}:
                           </label>
                         </Grid>
                         <Grid item md={6} sm={8} xs={12}>
-                          <a href={applicant_cv} target="_blank" rel="noopener noreferrer">
+                          <a
+                            href={applicant_cv}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
                             {cv_filename}
                           </a>
                         </Grid>
@@ -231,14 +296,16 @@ const ApplicantDetails = ({
                     </div>
                   </Grid>
                   <Grid item md={4} sm={12} style={{ marginTop: 30 }}>
-                    {viewApplication && viewApplication.applicant_photo ? (
+                    {viewApplication && viewApplication.applicantPhoto ? (
                       <div className={classes.applicantPhoto}>
-                        <p className={classes.fieldLabel}>{t('common:photo')}:</p>
+                        <p className={classes.fieldLabel}>
+                          {t("common:photo")}:
+                        </p>
                         <div
                           style={{
-                            background: `url(${viewApplication.applicant_photo[0].path})`,
-                            backgroundSize: 'contain',
-                            backgroundRepeat: 'no-repeat',
+                            background: `url(${viewApplication.applicantPhoto.content})`,
+                            backgroundSize: "contain",
+                            backgroundRepeat: "no-repeat",
                             height: 200,
                             width: 200,
                           }}
@@ -251,16 +318,16 @@ const ApplicantDetails = ({
                 </Grid>
                 <Grid container alignItems="center" style={{ marginTop: 15 }}>
                   <Grid item sm={4}>
-                    <label className={classes.fieldLabel} htmlFor="description">
-                      {t('applicationMsg')}:
+                    <label className={classes.fieldLabel} htmlFor="profileDescription">
+                      {t("applicationMsg")}:
                     </label>
                   </Grid>
                   <Grid item xs={12} sm={12} md={10}>
                     <Field
                       className={classes.rte}
                       component={TextEditor}
-                      name="description"
-                      id="description"
+                      name="profileDescription"
+                      id="profileDescription"
                       disabled
                       // placeholder={t('descPlaceholder')}
                     />
@@ -273,56 +340,110 @@ const ApplicantDetails = ({
                     <Grid item className="fullWidthBtn">
                       <Button
                         variant="contained"
-                        className={classNames(viewApplication.favouriteCandidate === 1 ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
-                        startIcon={viewApplication.favouriteCandidate === 1 && <DoneIcon />}
+                        className={classNames(
+                          viewApplication.favouriteCandidate === 1
+                            ? classes.activeStatus
+                            : classes.inactiveStatus,
+                          "fullWidthBtn"
+                        )}
+                        startIcon={
+                          viewApplication.favouriteCandidate === 1 && (
+                            <DoneIcon />
+                          )
+                        }
                         disabled={viewApplication.favouriteCandidate === 1}
                         color="primary"
                         onClick={() =>
-                          updateApplicantStatus(viewApplication.id, viewApplication.jobpostId, viewApplication.email, 1)
+                          updateApplicantStatus(
+                            viewApplication.id,
+                            viewApplication.jobpostId,
+                            viewApplication.email,
+                            1
+                          )
                         }
                       >
-                        {t('call')} / {t('interview')}
+                        {t("call")} / {t("interview")}
                       </Button>
                     </Grid>
                     <Grid item className="fullWidthBtn">
                       <Button
                         variant="contained"
-                        className={classNames(viewApplication.favouriteCandidate === 4 ? classes.rejectStatus : classes.inactiveStatus, 'fullWidthBtn')}
-                        startIcon={viewApplication.favouriteCandidate === 4 && <DoneIcon />}
+                        className={classNames(
+                          viewApplication.favouriteCandidate === 4
+                            ? classes.rejectStatus
+                            : classes.inactiveStatus,
+                          "fullWidthBtn"
+                        )}
+                        startIcon={
+                          viewApplication.favouriteCandidate === 4 && (
+                            <DoneIcon />
+                          )
+                        }
                         disabled={viewApplication.favouriteCandidate === 4}
                         color="secondary"
                         onClick={() =>
-                          updateApplicantStatus(viewApplication.id, viewApplication.jobpostId, viewApplication.email, 4)
+                          updateApplicantStatus(
+                            viewApplication.id,
+                            viewApplication.jobpostId,
+                            viewApplication.email,
+                            4
+                          )
                         }
                       >
-                        {t('dontCall')}
+                        {t("dontCall")}
                       </Button>
                     </Grid>
                     <Grid item className="fullWidthBtn">
                       <Button
                         variant="contained"
-                        className={classNames(viewApplication.favouriteCandidate === 2 ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
-                        startIcon={viewApplication.favouriteCandidate === 2 && <DoneIcon />}
+                        className={classNames(
+                          viewApplication.favouriteCandidate === 2
+                            ? classes.activeStatus
+                            : classes.inactiveStatus,
+                          "fullWidthBtn"
+                        )}
+                        startIcon={
+                          viewApplication.favouriteCandidate === 2 && (
+                            <DoneIcon />
+                          )
+                        }
                         disabled={viewApplication.favouriteCandidate === 2}
                         color="primary"
                         onClick={() =>
-                          updateApplicantStatus(viewApplication.id, viewApplication.jobpostId, viewApplication.email, 2)
+                          updateApplicantStatus(
+                            viewApplication.id,
+                            viewApplication.jobpostId,
+                            viewApplication.email,
+                            2
+                          )
                         }
                       >
-                        {t('interviewBooked')}
+                        {t("interviewBooked")}
                       </Button>
                     </Grid>
                     <Grid item className="fullWidthBtn">
                       <Button
                         variant="contained"
-                        className={classNames(viewApplication.favouriteCandidate ? classes.activeStatus : classes.inactiveStatus, 'fullWidthBtn')}
-                        startIcon={viewApplication.favouriteCandidate && <DoneIcon />}
+                        className={classNames(
+                          viewApplication.favouriteCandidate
+                            ? classes.activeStatus
+                            : classes.inactiveStatus,
+                          "fullWidthBtn"
+                        )}
+                        startIcon={
+                          viewApplication.favouriteCandidate && <DoneIcon />
+                        }
                         color="secondary"
                         onClick={() =>
-                          updateApplicantStatus(viewApplication.id,viewApplication.jobpostId, viewApplication.email, 3)
+                          updateApplicantStatus(
+                            viewApplication.id,
+                            viewApplication.jobpostId,
+                            viewApplication.email,
+                            3
+                          )
                         }
                       >
-                        {t('addToFavorites')}
+                        {t("addToFavorites")}
                       </Button>
                     </Grid>
                   </Grid>
@@ -343,10 +464,7 @@ const ApplicantDetails = ({
                     handleClick={() =>
                       updateJobApplicationDetails(
                         viewApplication.id,
-                        //viewApplication.company_id,
-                        viewApplication.jobpostId,
-                        viewApplication.email,
-                        'note',
+                        "note"
                       )
                     }
                   />
@@ -367,7 +485,7 @@ const ApplicantDetails = ({
                         //viewApplication.company_id,
                         viewApplication.jobpostId,
                         viewApplication.email,
-                        'interview',
+                        "interview"
                       )
                     }
                   />
@@ -380,8 +498,8 @@ const ApplicantDetails = ({
 
       <Snackbar
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
+          vertical: "bottom",
+          horizontal: "center",
         }}
         open={showSuccessSnackbar}
         autoHideDuration={3000}
@@ -394,13 +512,13 @@ const ApplicantDetails = ({
             closeSnackbar();
           }}
           variant="success"
-          message={isToSendEmail ? t('emailSuccessMsg') : t('successMsg')}
+          message={isToSendEmail ? t("emailSuccessMsg") : t("successMsg")}
         />
       </Snackbar>
       <Snackbar
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
+          vertical: "bottom",
+          horizontal: "center",
         }}
         open={showFailedSnackbar}
         autoHideDuration={3000}
@@ -413,18 +531,25 @@ const ApplicantDetails = ({
             closeSnackbar();
           }}
           variant="error"
-          message={isToSendEmail ? t('emailFailedMsg') : t('failedMsg')}
+          message={isToSendEmail ? t("emailFailedMsg") : t("failedMsg")}
         />
       </Snackbar>
     </div>
   );
 };
 
-const ApplicantNotes = ({ t, classes, handleClick, loading, isToSendEmail, pristine }) => {
+const ApplicantNotes = ({
+  t,
+  classes,
+  handleClick,
+  loading,
+  isToSendEmail,
+  pristine,
+}) => {
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <h3 className="panel-title">{t('addNotes')}</h3>
+        <h3 className="panel-title">{t("addNotes")}</h3>
       </div>
       <div className={classes.applicationCard}>
         <Grid className="application-notes">
@@ -438,45 +563,76 @@ const ApplicantNotes = ({ t, classes, handleClick, loading, isToSendEmail, prist
           />
         </Grid>
         <Grid container justifyContent="flex-end">
-          <Button variant="outlined" className={classes.formBtn} color="primary" onClick={!pristine ? handleClick : undefined}>
-            {loading && !isToSendEmail ? <CircularProgress size={20} color="white" /> : t('common:saveBtn')}
+          <Button
+            variant="outlined"
+            className={classes.formBtn}
+            color="primary"
+            onClick={!pristine ? handleClick : undefined}
+          >
+            {loading && !isToSendEmail ? (
+              <CircularProgress size={20} color="white" />
+            ) : (
+              t("common:saveBtn")
+            )}
           </Button>
         </Grid>
       </div>
     </div>
   );
 };
-const ApplicantInterview = ({ t, classes, handleClick, loading, isToSendEmail, valid, hasInterviewData, isToEdit, editInterviewDetails }) => {
+const ApplicantInterview = ({
+  t,
+  classes,
+  handleClick,
+  loading,
+  isToSendEmail,
+  valid,
+  hasInterviewData,
+  isToEdit,
+  editInterviewDetails,
+}) => {
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <h3 className="panel-title">{t('interviewTitle')}</h3>
+        <h3 className="panel-title">{t("interviewTitle")}</h3>
       </div>
       <div className={classes.applicationCard}>
         <Grid container alignItems="center">
           <Grid item sm={3}>
             <label htmlFor="title" className={classes.fieldLabel}>
-              {t('interview:title')}:
+              {t("interview:title")}:
             </label>
           </Grid>
           <Grid item sm={9} xs={12}>
-            <Field component={renderDenseTextField} name="interview_title" id="title" disabled={hasInterviewData && !isToEdit ? true : false} />
+            <Field
+              component={renderDenseTextField}
+              name="interview_title"
+              id="title"
+              disabled={hasInterviewData && !isToEdit ? true : false}
+            />
           </Grid>
         </Grid>
         <Grid container alignItems="center" className="interview-rte">
           <Grid item sm={3}>
             <label htmlFor="message" className={classes.fieldLabel}>
-              {t('interview:message')}:
+              {t("interview:message")}:
             </label>
           </Grid>
           <Grid item sm={9} xs={12}>
-            <Field component={TextEditor} name="interview_msg" id="message" multiline rows="20" disabled={hasInterviewData && !isToEdit ? true : false} />
+            <Field
+              component={TextEditor}
+              name="interview_msg"
+              id="message"
+              multiline
+              rows="20"
+              disabled={hasInterviewData && !isToEdit ? true : false}
+            />
           </Grid>
         </Grid>
         <Grid container alignItems="center">
           <Grid item sm={3}>
             <label htmlFor="interview_date" className={classes.fieldLabel}>
-              {t('interview:date')}:
+              {t("interview:date")}:
             </label>
           </Grid>
           <Grid item sm={9} xs={12}>
@@ -492,21 +648,31 @@ const ApplicantInterview = ({ t, classes, handleClick, loading, isToSendEmail, v
         <Grid container alignItems="center">
           <Grid item sm={3}>
             <label htmlFor="interview_time" className={classes.fieldLabel}>
-              {t('interview:time')}:
+              {t("interview:time")}:
             </label>
           </Grid>
           <Grid item sm={9} xs={12}>
-            <Field component={renderTimePicker} name="interview_time" id="interview_time" disabled={hasInterviewData && !isToEdit ? true : false} />
+            <Field
+              component={renderTimePicker}
+              name="interview_time"
+              id="interview_time"
+              disabled={hasInterviewData && !isToEdit ? true : false}
+            />
           </Grid>
         </Grid>
         <Grid container alignItems="center">
           <Grid item sm={3}>
             <label htmlFor="interview_place" className={classes.fieldLabel}>
-              {t('interview:place')}:
+              {t("interview:place")}:
             </label>
           </Grid>
           <Grid item sm={9} xs={12}>
-            <Field component={renderDenseTextField} name="interview_place" id="interview_place" disabled={hasInterviewData && !isToEdit ? true : false} />
+            <Field
+              component={renderDenseTextField}
+              name="interview_place"
+              id="interview_place"
+              disabled={hasInterviewData && !isToEdit ? true : false}
+            />
           </Grid>
         </Grid>
 
@@ -522,12 +688,17 @@ const ApplicantInterview = ({ t, classes, handleClick, loading, isToSendEmail, v
                   editInterviewDetails(false);
                 }}
               >
-                {t('common:cancelBtn')}
+                {t("common:cancelBtn")}
               </Button>
             ) : (
               hasInterviewData && (
-                <Button variant="outlined" color="primary" className={classes.formBtn} onClick={() => editInterviewDetails(true)}>
-                  {t('common:editBtn')}
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  className={classes.formBtn}
+                  onClick={() => editInterviewDetails(true)}
+                >
+                  {t("common:editBtn")}
                 </Button>
               )
             )}
@@ -541,7 +712,11 @@ const ApplicantInterview = ({ t, classes, handleClick, loading, isToSendEmail, v
               disabled={hasInterviewData && !isToEdit ? true : false}
               onClick={valid ? handleClick : undefined}
             >
-              {loading && isToSendEmail ? <CircularProgress size={20} color="white" /> : t('common:sendBtn')}
+              {loading && isToSendEmail ? (
+                <CircularProgress size={20} color="white" />
+              ) : (
+                t("common:sendBtn")
+              )}
             </Button>
           </Grid>
         </Grid>
