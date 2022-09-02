@@ -182,6 +182,7 @@ const CampaignComponent = ({
       };
     }
   };
+ 
   return (
     <div className="container" style={{ marginBottom: 50 }}>
       <div>
