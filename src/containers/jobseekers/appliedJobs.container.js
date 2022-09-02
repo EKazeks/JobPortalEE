@@ -27,7 +27,7 @@ class AppliedJobsContainer extends React.Component {
 }
 const mapStateToProps = (state) => {
   return {
-    appliedJobs: store.getState().jobs.dashboard?.appliedJobs,
+    appliedJobs: store.getState().jobs.dashboard?.appliedJobs || [],
     selectedPage: state.pagination.selectedPage.selected,
     advertPages: Math.ceil(state.jobs.appliedJobs.length / 10),
     isUserType: state.client.user && state.client.user.data.user_type,

@@ -3,6 +3,7 @@ import { reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import ApplicationForm from "../../components/applicants/applicationForm.component";
 import {
+  getApplicantProfile,
   getJobDetailsById,
   sendApplication,
   closeSnackbar,
@@ -17,6 +18,11 @@ class ApplicationContainer extends React.Component {
   //   this.props.getJobDetailsById(`${this.props.match.params.id.split('JP')[1]}$$${this.props.match.params.id.split('JP')[0]}`);
   // }
 
+  // Add to load job seeker profile
+  componentDidMount() {
+    this.props.getApplicantProfile();
+  }
+
   componentWillUnmount() {
     if (this.props.isApplicationSent) {
       this.props.resetApplicationSent();
@@ -29,6 +35,7 @@ class ApplicationContainer extends React.Component {
 }
 const ApplicationFormContainer = reduxForm({
   form: "applicationForm",
+  enableReinitialize: true,
   validate,
 })(ApplicationContainer);
 
@@ -70,6 +77,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
+  getApplicantProfile,
   getJobDetailsById,
   sendApplication,
   closeSnackbar,
