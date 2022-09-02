@@ -38,7 +38,7 @@ const mapStateToProps = state => {
     showSuccessSnackbar: state.asyncActions.showSuccessSnackbar,
     showFailedSnackbar: state.asyncActions.showFailedSnackbar,
     expanded: state.admin.expanded,
-    isAdmin: state.client.user && state.client.user.data[5],
+    isAdmin: state.client.user && state.client.user.data.user_role,
     paymentToUpdateDetails: state.admin.paymentToUpdateDetails,
   };
 };
