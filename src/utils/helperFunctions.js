@@ -2,7 +2,7 @@ import React from "react";
 import store from "../store";
 
 export const customURL = (url, type) => {
-  const {companyName, companyBusinessId} = store.getState().jobs;
+  const { companyName, companyBusinessId } = store.getState().jobs;
   let { jobName } = store.getState().jobs;
   let { jobPostNumber } = store.getState().jobs;
 
@@ -12,13 +12,18 @@ export const customURL = (url, type) => {
   } else {
     if (url.indexOf("/tookohad/") != -1) {
       pathname = url && url.split("/tookohad/")[1];
-      jobName = url && url.split("/tookohad/")[1].split('/')[2].toLowerCase();
-      jobPostNumber = url && url.split("/tookohad/")[1].split('/')[3];
+      jobName =
+        url &&
+        url
+          .split("/tookohad/")[1]
+          .split("/")[2]
+          .toLowerCase();
+      jobPostNumber = url && url.split("/tookohad/")[1].split("/")[3];
     } else if (url.indexOf("/toopakkumised/") != -1) {
       pathname = url && url.split("/toopakkumised/")[1];
       //const lastIndex = pathname.lastIndexOf("-");
-      pathname = `${companyName}/${companyBusinessId}/${jobName}/${jobPostNumber}`
-    } else {     
+      pathname = `${companyName}/${companyBusinessId}/${jobName}/${jobPostNumber}`;
+    } else {
       pathname = url && url.split("/tyopaikat/")[1];
     }
 
@@ -97,7 +102,7 @@ export const convertJobTypeToStr = (t, type) => {
   );
 };
 
-export const dateFormat = (date) => {
+export const dateFormat = date => {
   const formatedDate = date.split("T", 10)[0].split("-");
   const newDateFormat =
     formatedDate[2] + "." + formatedDate[1] + "." + formatedDate[0];
@@ -236,14 +241,18 @@ export const convertJobWorksStartToStr = (t, type) => {
 export const scrollToTop = () => {
   window.scrollTo({
     top: 250,
-    behavior: "smooth",
+    behavior: "smooth"
   });
 };
 
-export const formatToFinnishCurrency = (amount) => {
+export const formatToFinnishCurrency = amount => {
+  if (!amount) {
+    return "";
+  }
+
   return new Intl.NumberFormat("fi-FI", {
     style: "currency",
-    currency: "EUR",
+    currency: "EUR"
   }).format(amount);
 };
 
