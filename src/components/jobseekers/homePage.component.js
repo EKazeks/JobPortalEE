@@ -120,6 +120,8 @@ const HomePageComponent = ({
   classes,
   valid,
   pristine,
+  favoriteJobs,
+  appliedJobs
 }) => {
 
   const { t } = useTranslation('homepage');
@@ -265,8 +267,7 @@ const HomePageComponent = ({
                 </Link>
               </div>
               <p className={classes.cardContentInfo}>
-                {/* <span className={classes.cardContentDynamicInfo}>{dashboard && dashboard.favourite}</span> */}
-                <span className={classes.cardContentDynamicInfo}>{'0'}</span>
+                <span className={classes.cardContentDynamicInfo}>{favoriteJobs.length}</span>
                 {t('totalFavs')}
               </p>
             </CardContent>
@@ -281,7 +282,7 @@ const HomePageComponent = ({
                 </Link>
               </div>
               <p className={classes.cardContentInfo}>
-                <span className={classes.cardContentDynamicInfo}>{dashboard && dashboard.applied}</span>
+                <span className={classes.cardContentDynamicInfo}>{appliedJobs?.length}</span>
                 {t('applied')}{' '}
               </p>
             </CardContent>

@@ -178,22 +178,25 @@ const JobsComponent = ({
   classes,
   fetchJobById,
   fetchJobInfo,
-  deleteFavoriteJobs
+  deleteFavoriteJobs,
 }) => {
   const { t } = useTranslation("jobsList", "jobs");
   const [jobsToRender, setJobsToRender] = useState([]);
   const [favouritesJobs, setFavouritesJobs] = useState([]);
-  const [address,setAddress] = useState();
+  const [address, setAddress] = useState();
 
   useEffect(() => {
-    axios.get(`https://localhost:7262/activeAds`).then((res) => {
-      setJobsToRender(res.data.filter((activeJobs) => activeJobs.offerStatus === 'active'));
-      setFavouritesJobs(res.data.filter((favourite) => favourite.isFavourite === 1));
+    axios.get(`https://localhost:7262/jobsEn`).then((res) => {
+      setJobsToRender(
+        res.data.filter((activeJobs) => activeJobs.offerStatus === "active")
+      );
+      setFavouritesJobs(
+        res.data.filter((favourite) => favourite.isFavourite === 1)
+      );
     });
-  }, [])
+  }, []);
 
-  return ( 
-
+  return (
     <div>
       <SEO title="Töökohad | Jobportal" />
       <div className={classes.heroImage}>
@@ -239,21 +242,29 @@ const JobsComponent = ({
                             <Link
                               className={classes.jobContainerHover}
                               to={customURL(item.url, "internal")}
-                              onClick={() => 
-                                {
-                                  fetchJobById(item.id)
-                                  fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
-                              }
-                              }
+                              onClick={() => {
+                                fetchJobById(item.id);
+                                fetchJobInfo(
+                                  item.companyName,
+                                  item.companyBusinessId,
+                                  item.jobName,
+                                  item.jobPostNumber,
+                                  item.dateOfApplication
+                                );
+                              }}
                             />
                           ) : (
                             <Link
-                              onClick={() => 
-                                {
-                                  fetchJobById(item.id)
-                                  fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
-                                }
-                              }
+                              onClick={() => {
+                                fetchJobById(item.id);
+                                fetchJobInfo(
+                                  item.companyName,
+                                  item.companyBusinessId,
+                                  item.jobName,
+                                  item.jobPostNumber,
+                                  item.dateOfApplication
+                                );
+                              }}
                               className={classes.jobContainerHover}
                               to={customURL(item.url, "external")}
                             />
@@ -275,15 +286,15 @@ const JobsComponent = ({
                                 //   }}
                                 // />
                                 <span className={classes.companyName}>
-                                  {item.companyName.length > 9
+                                  {item.companyName?.length > 9
                                     ? `${item.companyName.slice(0, 9)}...`
                                     : item.companyName}
                                 </span>
                               ) : (
                                 <span className={classes.companyName}>
-                                  {item.companyName.length > 9
-                                    ? `${item.companyName.slice(0, 9)}...`
-                                    : item.companyName}
+                                  {item.companyName?.length > 9
+                                    ? `${item.companyName?.slice(0, 9)}...`
+                                    : item?.companyName}
                                 </span>
                               )}
                             </div>
@@ -309,8 +320,7 @@ const JobsComponent = ({
 
                             <div>
                               <h5 className={classes.companyInfo}>
-                                {item.companyName},
-                                {item.jobPostAddress.address}
+                                {item.companyName},{item.jobPostAddress.address}
                               </h5>
                             </div>
                             <Hidden only={"xl"}>
@@ -325,7 +335,9 @@ const JobsComponent = ({
                                 <Grid item>
                                   <span>
                                     {t("applicationDueDate")}:
-                                    {item.dateOfApplication.charAt(2) === '.' ? item.dateOfApplication  : dateFormat(item.dateOfApplication)}
+                                    {item.dateOfApplication.charAt(2) === "."
+                                      ? item.dateOfApplication
+                                      : dateFormat(item.dateOfApplication)}
                                   </span>
                                 </Grid>
                               </Grid>
@@ -342,7 +354,9 @@ const JobsComponent = ({
                               <Grid item>
                                 <span>
                                   {t("applicationDueDate")}:
-                                  {item.dateOfApplication.charAt(2) === '.' ? item.dateOfApplication  : dateFormat(item.dateOfApplication)}
+                                  {item.dateOfApplication.charAt(2) === "."
+                                    ? item.dateOfApplication
+                                    : dateFormat(item.dateOfApplication)}
                                 </span>
                               </Grid>
                             </Hidden>
@@ -369,20 +383,24 @@ const JobsComponent = ({
                                 ) : (
                                   <FavBtn
                                     className={classes.favBtn}
+                                    
                                     handleFav={() => {
+                                      
+                                      // if (favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)) {
+                                      //   deleteFavoriteJobs(item.id)
+                                      // }
                                       toggleFavoriteJobs(
                                         item.id,
-                                        //item.companyBusinessId,
-                                        //item.jobPostNumber,
-                                        //!favoriteJobs.some(favList => favList.isFavourite),
+                                        item.jobName,
+                                        item.dateOfApplication,
+                                        !favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)
                                       );
                                     }}
-                                    isFav={favoriteJobs.some(favList => favList.companyBusinessId === item.companyBusinessId && favList.id === item.id)} // checking from the favoriteJobs list
+                                    isFav={favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)} // checking from the favoriteJobs list
                                     btnText={
-                                      !favoriteJobs.some(favList => favList.companyBusinessId === item.companyBusinessId && favList.id === item.id)
-                                      //!favoriteJobs.filter((favourite) => favourite.isFavourite)
-                                        ? t('addFav')
-                                        : t('delFav')
+                                      !favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)
+                                      ? t('addFav')
+                                      : t('delFav')
                                     }
                                   />
                                 )}
@@ -397,12 +415,16 @@ const JobsComponent = ({
                                       <Button
                                         variant="contained"
                                         color="primary"
-                                        onClick={() =>
-                                          {
-                                            fetchJobById(item.id)
-                                            fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
-                                          }
-                                        }
+                                        onClick={() => {
+                                          fetchJobById(item.id);
+                                          fetchJobInfo(
+                                            item.companyName,
+                                            item.companyBusinessId,
+                                            item.jobName,
+                                            item.jobPostNumber,
+                                            item.dateOfApplication
+                                          );
+                                        }}
                                       >
                                         {t("common:openBtn")}
                                       </Button>
@@ -416,12 +438,16 @@ const JobsComponent = ({
                                         variant="contained"
                                         color="primary"
                                         className="fullWidthBtn"
-                                        onClick={() =>
-                                          {
-                                            fetchJobById(item.id)
-                                            fetchJobInfo(item.companyName, item.companyBusinessId, item.jobName, item.jobPostNumber)
-                                          }
-                                        }
+                                        onClick={() => {
+                                          fetchJobById(item.id);
+                                          fetchJobInfo(
+                                            item.companyName,
+                                            item.companyBusinessId,
+                                            item.jobName,
+                                            item.jobPostNumber,
+                                            item.dateOfApplication
+                                          );
+                                        }}
                                       >
                                         {t("watchBtn")}
                                       </Button>

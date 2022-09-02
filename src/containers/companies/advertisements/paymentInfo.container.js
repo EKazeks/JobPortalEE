@@ -18,7 +18,7 @@ const mapStateToProps = state => {
 
   let newCampValue;
   if (isToChangeCampaign) {
-    const currentCampValue = viewSelectedAd.value;
+    const currentCampValue = viewSelectedAd.campaignValue;
     newCampValue = value - currentCampValue; //Only charge if new campaign type is selected and the difference
   }
   const isExtraServiceAdded = state.advertisement.extraService.help || state.advertisement.extraService.sos ? true : false;
@@ -27,7 +27,7 @@ const mapStateToProps = state => {
   const extraServiceSum = extraService === 'help' ? HELP_SERVICE_FEE : extraService === 'sos' ? SOS_SERVICE_FEE : 0;
   const totalSum = isExtraServiceAdded ? extraServiceSum : isToChangeCampaign ? newCampValue + mktBudget : value + mktBudget;
 
-  const userRole = state.client.user && state.client.user.data[5];
+  const userRole = state.client.user && state.client.user.data.user_role;
   return {
     /* initialValues: {
       payment_method: userRole === 1 ? 'invoice' : null

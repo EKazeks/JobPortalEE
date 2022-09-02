@@ -13,6 +13,7 @@ import {
   fetchJobInfo,
   editOffer,
   deleteSuccess,
+  getJobDetailsById
 } from "../../../actions";
 
 const mapStateToProps = (state) => {
@@ -42,5 +43,6 @@ const mapDispatchToProps = {
   fetchJobInfo,
   editOffer,
   deleteSuccess,
+  getJobDetailsById
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ActiveAdsComponent);
