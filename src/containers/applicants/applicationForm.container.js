@@ -8,7 +8,7 @@ import {
   sendApplication,
   closeSnackbar,
   resetApplicationSent,
-  fetchJobById,
+  fetchJobById
 } from "../../actions";
 import { applicationFormValidate as validate } from "../validate";
 import store from "../../store";
@@ -36,18 +36,19 @@ class ApplicationContainer extends React.Component {
 const ApplicationFormContainer = reduxForm({
   form: "applicationForm",
   enableReinitialize: true,
-  validate,
+  validate
 })(ApplicationContainer);
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const populateApplicationForm = {
-    firstname: state.jobseekerProfile.profile.firstName,
-    lastname: state.jobseekerProfile.profile.lastName,
-    email: state.jobseekerProfile.profile.email,
-    contact_number: state.jobseekerProfile.profile.contactNumber,
-    linkedin: state.jobseekerProfile.profile.linkedIn,
-    portfolio: state.jobseekerProfile.profile.portfolio,
-    application_description: state.jobseekerProfile.profile.profileDescription,
+    firstname: state.jobseekerProfile.profile?.firstName || "",
+    lastname: state.jobseekerProfile.profile?.lastName || "",
+    email: state.jobseekerProfile.profile?.email || "",
+    contact_number: state.jobseekerProfile.profile?.contactNumber || "",
+    linkedin: state.jobseekerProfile.profile?.linkedIn || "",
+    portfolio: state.jobseekerProfile.profile?.portfolio || "",
+    application_description:
+      state.jobseekerProfile.profile?.profileDescription || ""
   };
   return {
     uploadedDocument:
@@ -61,18 +62,18 @@ const mapStateToProps = (state) => {
     isLoggedIn: state.client.user !== null,
     initialValues: populateApplicationForm,
     applicant_cv:
-      state.jobseekerProfile.profile.cv_document &&
-      state.jobseekerProfile.profile.cv_document[0].path,
+      state.jobseekerProfile.profile?.cv_document &&
+      state.jobseekerProfile.profile?.cv_document[0].path,
     cv_filename:
-      state.jobseekerProfile.profile.cv_document &&
-      state.jobseekerProfile.profile.cv_document[0].filename,
+      state.jobseekerProfile.profile?.cv_document &&
+      state.jobseekerProfile.profile?.cv_document[0].filename,
     showErrorMsg:
       state?.form?.applicationForm?.syncErrors?.application_description
         ?.length > 0
         ? true
         : false,
     id: state.jobs.id,
-    address: state.jobs.address,
+    address: state.jobs.address
   };
 };
 
@@ -82,7 +83,7 @@ const mapDispatchToProps = {
   sendApplication,
   closeSnackbar,
   resetApplicationSent,
-  fetchJobById,
+  fetchJobById
 };
 export default connect(
   mapStateToProps,

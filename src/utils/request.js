@@ -20,10 +20,10 @@ const getManualAuthHeaders = () => {
 export const apiGetJobsOffers = () => {
   axios
     .get("https://localhost:7262/jobsEn")
-    .then((res) => res.json())
-    .then((data) => ({ data }))
-    .catch((error) => ({
-      error,
+    .then(res => res.json())
+    .then(data => ({ data }))
+    .catch(error => ({
+      error
     }));
 };
 
@@ -36,12 +36,12 @@ export const apiManualRequest = (
   const headers = getManualAuthHeaders();
   const options = {
     method,
-    headers,
+    headers
   };
   return fetch(url, options)
-    .then((res) => res.json())
-    .then((data) => ({ data }))
-    .catch((error) => ({ error }));
+    .then(res => res.json())
+    .then(data => ({ data }))
+    .catch(error => ({ error }));
 };
 
 export const apiManualPost = (
@@ -55,13 +55,17 @@ export const apiManualPost = (
   const options = {
     method,
     headers,
-    body,
+    body
   };
 
   return fetch(url, options)
-    .then((res) => res.json())
-    .then((data) => ({ data }))
-    .catch((error) => ({ error }));
+    .then(res => {
+      console.log(res);
+
+      return res.json();
+    })
+    .then(data => ({ data }))
+    .catch(error => ({ error }));
 };
 
 export const apiManualPatch = (
@@ -75,15 +79,14 @@ export const apiManualPatch = (
   const options = {
     method,
     headers,
-    body,
+    body
   };
 
   return fetch(url, options)
-    .then((res) => res.json())
-    .then((data) => ( {data} ))
-    .catch((error) => ({ error }));
+    .then(res => res.json())
+    .then(data => ({ data }))
+    .catch(error => ({ error }));
 };
-
 
 export const apiManualDelete = (
   url = "https://localhost:7262/jobsEn",
@@ -96,13 +99,13 @@ export const apiManualDelete = (
   const options = {
     method,
     headers,
-    body,
+    body
   };
 
   return fetch(url, options)
-    .then((res) => res.json())
-    .then((data) => ({ data }))
-    .catch((error) => ({ error }));
+    .then(res => res.json())
+    .then(data => ({ data }))
+    .catch(error => ({ error }));
 };
 
 export const registerPost = (url, body, method = "POST") => {
@@ -111,12 +114,12 @@ export const registerPost = (url, body, method = "POST") => {
   const options = {
     method,
     headers,
-    body,
+    body
   };
   return fetch(url, options)
-    .then((res) => res.json())
-    .then((data) => ({ data }))
-    .catch((error) => ({ error }));
+    .then(res => res.json())
+    .then(data => ({ data }))
+    .catch(error => ({ error }));
 };
 
 export const loginPost = (url, body, method = "POST") => {
@@ -125,12 +128,12 @@ export const loginPost = (url, body, method = "POST") => {
   const options = {
     method,
     headers,
-    body,
+    body
   };
   return fetch(url, options)
-    .then((res) => res.json())
-    .then((data) => ({ data }))
-    .catch((error) => ({ error }));
+    .then(res => res.json())
+    .then(data => ({ data }))
+    .catch(error => ({ error }));
 };
 /* export const apiOpenRequest = (url, body, method = "GET") => {
   const headers = new Headers();
@@ -146,19 +149,16 @@ export const loginPost = (url, body, method = "POST") => {
     .catch(error => ({ error }));
 }; */
 
-export const apiOpenRequest = (
-  url,
-  method = "GET"
-) => {
+export const apiOpenRequest = (url, method = "GET") => {
   const headers = new Headers();
   const options = {
     method,
-    headers,
+    headers
   };
   return fetch(url, options)
-    .then((res) => res.json())
-    .then((data) => ({ data }))
-    .catch((error) => ({ error }));
+    .then(res => res.json())
+    .then(data => ({ data }))
+    .catch(error => ({ error }));
 };
 
 export const apiOpenPost = (
@@ -172,11 +172,11 @@ export const apiOpenPost = (
   const options = {
     method,
     headers,
-    body,
+    body
   };
 
   return fetch(url, options)
-    .then((res) => res.json())
-    .then((data) => ({ data }))
-    .catch((error) => ({ error }));
+    .then(res => res.json())
+    .then(data => ({ data }))
+    .catch(error => ({ error }));
 };
