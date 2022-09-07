@@ -15,7 +15,7 @@ import {
   RESET_SEARCH_CRITERIA_FORM,
   JOBPOST_COUNT_PER_PAGE,
   mol_page_url,
-  BASE_API_SERVER_EST
+  BASE_API_SERVER_EST,
 } from "../constants";
 import {
   filterJobsSuccess,
@@ -31,13 +31,13 @@ import {
   getApplicantDashboardInfoSuccess,
   changeAdvertPage,
   changePagination,
-  getWorkStartSuccess
+  getWorkStartSuccess,
 } from "../actions";
 import {
   apiOpenPost,
   apiManualPost,
   apiOpenRequest,
-  apiManualRequest
+  apiManualRequest,
 } from "../utils/request";
 import store from "../store";
 import axios from "axios";
@@ -60,24 +60,24 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
         : undefined,
       portal_category_id:
         searchFormValues.portal_category_id.length > 0
-          ? searchFormValues.portal_category_id.map(category =>
+          ? searchFormValues.portal_category_id.map((category) =>
               category.id.toString()
             )
           : undefined,
       job_type:
         searchFormValues.job_type.length > 0
-          ? searchFormValues.job_type.map(jobType => jobType.value.toString())
+          ? searchFormValues.job_type.map((jobType) => jobType.value.toString())
           : undefined,
       job_hours:
         searchFormValues.job_hours.length > 0
-          ? searchFormValues.job_hours.map(jobHours =>
+          ? searchFormValues.job_hours.map((jobHours) =>
               jobHours.value.toString()
             )
           : undefined,
       published:
         searchFormValues.published !== ""
           ? parseInt(searchFormValues.published)
-          : undefined
+          : undefined,
     });
 
     if (isToRetainSelectedPage) {
@@ -96,7 +96,7 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
       // If not fetching new results based on pagination ..start from page 0. E.g. when component mounts or when hae button is clicked after inputting filters.
       yield put(
         changeAdvertPage({
-          selected: 0
+          selected: 0,
         })
       );
     }
@@ -180,7 +180,7 @@ function* toggleFavoriteJobsSaga({ id }) {
       jobTitle: jobName,
       closingDate: dateOfApplication,
       instanceId,
-      jobPostId: id
+      jobPostId: id,
     });
 
     const result = yield call(apiManualPost, url, body);
@@ -204,7 +204,7 @@ function* deleteFavoriteJobsSaga({ id }) {
   try {
     const url = `https://localhost:7262/deleteOfferFromFavourite/${id}`;
 
-    const result = axios.delete(url).then(res => res.data);
+    const result = axios.delete(url).then((res) => res.data);
     const data = result.data;
     if (data === data) {
       yield put(getFavoriteJobs());
@@ -236,7 +236,7 @@ function* getFavoriteJobsSaga() {
 
     const result = yield call(apiManualRequest, url);
     const data = result.data;
-    const favoriteJobs = data.filter(favJobs => favJobs.isFavourite === 1);
+    const favoriteJobs = data.filter((favJobs) => favJobs.isFavourite === 1);
 
     if (favoriteJobs === favoriteJobs) {
       yield put(getFavoriteJobsSuccess(favoriteJobs));
@@ -287,39 +287,36 @@ function* getApplicantDashboardInfoSaga() {
 function* toggleEmailNotificationSaga() {
   try {
     // const url = `${API_SERVER}/UpdateApplicantEmailNotification`;
-    const url = `${BASE_API_SERVER_EST}//UpdateEmailFrequency`;
-    const email = store.getState().client.user.data.email;
-    const isToggleOn = store.getState().jobs.notificationToggleBtn;
-    const formValues = getFormValues("jobPreference")(store.getState());
-
-    const body = JSON.stringify({
-      ...formValues,
-      email_notice_active: isToggleOn,
-      email,
-      job_category:
-        formValues.job_category.length > 0
-          ? formValues.job_category.map(category => category.id.toString())
-          : undefined,
-      job_type:
-        formValues.job_type.length > 0
-          ? formValues.job_type.map(el => el.type.toString())
-          : undefined,
-      job_hours:
-        formValues.job_hours.length > 0
-          ? formValues.job_hours.map(el => el.type.toString())
-          : undefined
-    });
-
-    const result = yield call(apiManualPost, url, body);
-
-    if (
-      result.data === "Applicant's email notification updated successfully!"
-    ) {
-      yield put(showSuccessSnackbar());
-      yield put(getApplicantDashboardInfo());
-    } else {
-      yield put(showFailedSnackbar());
-    }
+    // const url = `${BASE_API_SERVER_EST}/UpdateEmailFrequency`;
+    // const email = store.getState().client.user.data.email;
+    // const isToggleOn = store.getState().jobs.notificationToggleBtn;
+    // const formValues = getFormValues("jobPreference")(store.getState());
+    // const body = JSON.stringify({
+    //   ...formValues,
+    //   email_notice_active: isToggleOn,
+    //   email,
+    //   job_category:
+    //     formValues.job_category?.length > 0
+    //       ? formValues.job_category.map((category) => category.id.toString())
+    //       : undefined,
+    //   job_type:
+    //     formValues.job_type?.length > 0
+    //       ? formValues.job_type.map((el) => el.type.toString())
+    //       : undefined,
+    //   job_hours:
+    //     formValues.job_hours?.length > 0
+    //       ? formValues.job_hours.map((el) => el.type.toString())
+    //       : undefined,
+    // });
+    // const result = yield call(apiManualPost, url, body);
+    // if (
+    //   result.data === "Applicant's email notification updated successfully!"
+    // ) {
+    //   yield put(showSuccessSnackbar());
+    //   yield put(getApplicantDashboardInfo());
+    // } else {
+    //   yield put(showFailedSnackbar());
+    // }
   } catch (e) {
     console.log(e);
   }
@@ -337,35 +334,18 @@ function* updateEmailNotificationSaga() {
       email,
       job_category:
         formValues.job_category.length > 0
-          ? formValues.job_category.map(category => category.id.toString())
+          ? formValues.job_category.map((category) => category.id.toString())
           : undefined,
       job_type:
         formValues.job_type.length > 0
-          ? formValues.job_type.map(el => el.type.toString())
+          ? formValues.job_type.map((el) => el.type.toString())
           : undefined,
       job_hours:
         formValues.job_hours.length > 0
-          ? formValues.job_hours.map(el => el.type.toString())
-          : undefined
+          ? formValues.job_hours.map((el) => el.type.toString())
+          : undefined,
     });
 
-    // let headers = new Headers();
-    // headers.append("Accept", "application/json");
-    // headers.append(
-    //   "Authorization",
-    //   `Bearer ${store.getState().client.user.data.access_token}`
-    // );
-    // headers.append("Content-Type", "application/json");
-    //
-    // const fetcher = () => {
-    //   return axios.post(url, body, {
-    //     headers: {
-    //       ...headers
-    //     }
-    //   });
-    // };
-    //
-    // const result = yield call(fetcher);
     const result = yield call(apiManualPost, url, body);
 
     if (

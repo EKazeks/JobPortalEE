@@ -24,15 +24,25 @@ class JobseekerProfile extends React.Component {
   }
 }
 const mapStateToProps = (state) => ({
-  profilePic:  state.jobseekerProfile.profile.applicantPhoto?.content,
+  profilePic:
+    state.jobseekerProfile.profile?.applicantPhoto.content &&
+    state.jobseekerProfile.profile.applicantPhoto.content,
   initialValues:
     state.jobseekerProfile.profile && state.jobseekerProfile.profile,
-  applicant_cv: state.jobseekerProfile.profile.applicantDocument?.content,
-  cv_filename: state.jobseekerProfile.profile.applicantDocument?.fileName,
+  applicant_cv:
+    state.jobseekerProfile.profile?.applicantDocument.content &&
+    state.jobseekerProfile.profile.applicantDocument.content,
+  cv_filename:
+    state.jobseekerProfile.profile?.applicantDocument.fileName &&
+    state.jobseekerProfile.profile.applicantDocument.fileName,
   showSuccessSnackbar: state.asyncActions.showSuccessSnackbar,
   showFailedSnackbar: state.asyncActions.showFailedSnackbar,
   isUserType: state.client.user && state.client.user.data.user_type,
-  uploadedDocument: state.jobseekerProfile.uploadedDocument && state.jobseekerProfile.uploadedDocument[0] ? state.jobseekerProfile.uploadedDocument[0] : '',
+  uploadedDocument:
+    state.jobseekerProfile.uploadedDocument &&
+    state.jobseekerProfile.uploadedDocument[0]
+      ? state.jobseekerProfile.uploadedDocument[0]
+      : "",
 });
 
 const mapDispatchToProps = {
