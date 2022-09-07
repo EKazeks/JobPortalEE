@@ -13,7 +13,7 @@ import {
   ADMIN_SEARCH_ADDITIONAL_SERVICE,
   UPDATE_PAYMENT_STATUS,
 } from '../constants';
-import { apiManualPost } from '../utils/request';
+import { apiManualPost, apiManualRequest } from '../utils/request';
 import store from '../store';
 import {
   adminSearchCompanySuccess,
@@ -63,21 +63,18 @@ function* adminSearchCompanySaga({ isToRetainSelectedPage }) {
       start = Math.ceil(currentPage * ADMIN_VIEW_COUNT_PER_PAGE);
     }
 
-    const url = `${API_SERVER}/SearchCompanies?offset=${start}&rows=${ADMIN_VIEW_COUNT_PER_PAGE}`;
+    const url = `https://localhost:7262/getAllCompanies`;
     let formValues = getFormValues('adminSearch')(store.getState());
     if (formValues) {
       formValues = trimObjValues(formValues);
     }
-    const body = JSON.stringify({
-      ...formValues,
-    });
-
-    const result = yield call(apiManualPost, url, body);
+  
+    const result = yield call(apiManualRequest, url);
 
     if (result.data === 'company details not existed' || result.data.length === 0) {
       yield put(adminSearchCompanySuccess([]));
     } else {
-      const resultParsed = JSON.parse(result.data);
+      const resultParsed = result.data;
       yield put(adminSearchCompanySuccess(resultParsed));
 
       if (!isToRetainSelectedPage) {
