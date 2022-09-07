@@ -145,7 +145,7 @@ function* getCompanyProfileSaga() {
 
     const uuid = client.user.data.id;
     const roleId = store.getState().client.user.data.id;
-    const selectedCompanyId = usersCompanyList.selectedCompany.company_id;
+    const selectedCompanyId = usersCompanyList.companiesList.user.companyId;
     const assignedCompanyId = client.user.data.company_id;
     const company_id = roleId === 0 ? selectedCompanyId : assignedCompanyId; // For super user with more than 1 company, use selected id otherwise assigned id (e.g. added employee or super user with only 1 company)
 

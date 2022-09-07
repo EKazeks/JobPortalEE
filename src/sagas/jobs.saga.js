@@ -287,7 +287,7 @@ function* getApplicantDashboardInfoSaga() {
 function* toggleEmailNotificationSaga() {
   try {
     // const url = `${API_SERVER}/UpdateApplicantEmailNotification`;
-    const url = `${BASE_API_SERVER_EST}//UpdateEmailFrequency`;
+    const url = `${BASE_API_SERVER_EST}/UpdateEmailFrequency`;
     const email = store.getState().client.user.data.email;
     const isToggleOn = store.getState().jobs.notificationToggleBtn;
     const formValues = getFormValues("jobPreference")(store.getState());
