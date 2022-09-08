@@ -23,7 +23,7 @@ const mapStateToProps = state => {
     campaigns: state.advertisement.campaigns,
     showSuccessSnackbar: state.asyncActions.showSuccessSnackbar,
     showFailedSnackbar: state.asyncActions.showFailedSnackbar,
-    userRole: state.client.user.data[6].user_type,
+    userRole: state.client.user.data.user_type,
     showDialog: state.advertisement.warnToDeleteApplication,
     advertPages: state.advertisement.viewSelectedAd.jobPostApplications && Math.ceil(state.advertisement.viewSelectedAd.jobPostApplications.length / rows),
     selectedPage: state.pagination.selectedPage.selected,

@@ -117,25 +117,25 @@ const AdminCompanyComponent = ({
           <TableBody>
             {companies.map((company, i) => {
               const details = {
-                company_name: company.company_name,
-                firstname: company.firstname,
-                lastname: company.lastname,
+                company_name: company.companyName,
+                firstname: company.firstName,
+                lastname: company.lastName,
                 email: company.email,
-                business_id: company.business_id,
-                company_id: company.company_id,
-                contact_number: company.contact_number,
-                profile_description: company.profile_description,
+                business_id: company.companyBusinessId,
+                company_id: company.id,
+                telephone: company.telephone,
+                profile_description: company.profileDescription,
               };
-              return isEdit && isToEditId === company.company_id ? (
+              return isEdit && isToEditId === company.id ? (
                 <AdminContactFormContainer user="company" key={i} />
               ) : (
                 <TableRow key={i} className={classes.companyRow}>
-                  <TableCell className={classes.tableCell}>{company.company_name}</TableCell>
-                  <TableCell className={classes.tableCell}>{company.firstname}</TableCell>
-                  <TableCell className={classes.tableCell}>{company.lastname}</TableCell>
+                  <TableCell className={classes.tableCell}>{company.companyName}</TableCell>
+                  <TableCell className={classes.tableCell}>{company.firstName}</TableCell>
+                  <TableCell className={classes.tableCell}>{company.lastName}</TableCell>
                   <TableCell className={classes.tableCell}>{company.email}</TableCell>
-                  <TableCell className={classes.tableCell}>{company.contact_number ? company.contact_number : '-'}</TableCell>
-                  <TableCell className={classes.tableCell}>{company.business_id ? company.business_id : '-'}</TableCell>
+                  <TableCell className={classes.tableCell}>{company.telephone ? company.telephone : '-'}</TableCell>
+                  <TableCell className={classes.tableCell}>{company.companyBusinessId ? company.companyBusinessId : '-'}</TableCell>
                   <TableCell className={classes.tableCell}>
                     <IconButton onClick={() => editContactDetails(details, 'company')}>
                       <EditIcon className={classes.editIcon} />

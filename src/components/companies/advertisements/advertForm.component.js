@@ -4,12 +4,13 @@ import { withStyles } from "@material-ui/core/styles";
 import { Grid, Button, Snackbar } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { useTranslation, Trans } from "react-i18next";
+
 import {
   renderTextField,
   renderCheckbox,
   renderDatePicker,
   renderSelectField,
-  renderDenseTextField,
+  renderDenseTextField
 } from "../../../utils/wrappers";
 
 import CampaignsContainer from "../../../containers/companies/ads/campaigns.container";
@@ -19,25 +20,24 @@ import ExtraServiceButtonContainer from "../../../containers/companies/advertise
 import {
   JobTypeComponent,
   JobHoursComponent,
-  JobCategoriesComponent,
+  JobCategoriesComponent
 } from "../../../utils/customSelectField";
 import store from "../../../store";
 import AutoCompleteLocationInput from "../../../utils/autoCompleteLocation";
 import Loader from "../../../utils/loader";
 import {
   PrivacyTermPage,
-  ServiceTermPage,
+  ServiceTermPage
 } from "../../../constants/wordpressRoutes";
 import CustomizedDialog from "../../../utils/customizedDialog";
 //import AutomaticEmailAnswersContainer from '../../../containers/companies/advertisements/automaticEmailAnswers.container';
 import i18n from "../../../utils/i18n";
 import TextEditor from "../../../utils/textEditor";
 import { Link } from "react-router-dom";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
-
-const styles = (theme) => ({
+const styles = theme => ({
   header: {
     // display: 'flex',
     color: theme.palette.primary.main,
@@ -45,9 +45,9 @@ const styles = (theme) => ({
     //maxWidth: '80%',
     margin: "60px 0 20px 0",
     [theme.breakpoints.down("xs")]: {
-      margin: "20px 0 20px 0",
+      margin: "20px 0 20px 0"
     },
-    width: "95%",
+    width: "95%"
     //marginLeft: '-3px',
   },
   headerForEE: {
@@ -57,9 +57,9 @@ const styles = (theme) => ({
     maxWidth: "92%",
     margin: "60px 0 -3px 0",
     [theme.breakpoints.down("xs")]: {
-      margin: "20px 0 20px 0",
+      margin: "20px 0 20px 0"
     },
-    marginLeft: "-3px",
+    marginLeft: "-3px"
   },
   headerForRU: {
     color: theme.palette.primary.main,
@@ -67,13 +67,13 @@ const styles = (theme) => ({
     width: "81%",
     margin: "60px 0 -3px 0",
     [theme.breakpoints.down("xs")]: {
-      margin: "20px 0 20px 0",
+      margin: "20px 0 20px 0"
     },
-    marginLeft: "-3px",
+    marginLeft: "-3px"
   },
   imageText: {
     color: "#6c757d",
-    marginTop: 10,
+    marginTop: 10
   },
   paper: {
     boxShadow: "none",
@@ -82,8 +82,8 @@ const styles = (theme) => ({
     marginBottom: 50,
     marginTop: 20,
     [theme.breakpoints.down("sm")]: {
-      padding: 10,
-    },
+      padding: 10
+    }
   },
   paperForEE: {
     boxShadow: "none",
@@ -92,32 +92,32 @@ const styles = (theme) => ({
     marginBottom: 50,
     marginTop: 23,
     [theme.breakpoints.down("sm")]: {
-      padding: 10,
-    },
+      padding: 10
+    }
   },
 
   ctaBtn: {
-    margin: "50px 0",
+    margin: "50px 0"
   },
   dropzone: {
-    alignSelf: "flex-end", // to show the buttons in the same level
+    alignSelf: "flex-end" // to show the buttons in the same level
   },
   serviceLink: {
-    color: theme.palette.secondary.main,
+    color: theme.palette.secondary.main
   },
   emailInput: {
     marginTop: -5,
     [theme.breakpoints.up("lg")]: {
       minWidth: 275,
 
-      marginTop: -3,
-    },
+      marginTop: -3
+    }
   },
   frequencySelect: {
     [theme.breakpoints.up("md")]: {
-      maxWidth: "fit-content",
-    },
-  },
+      maxWidth: "fit-content"
+    }
+  }
 });
 
 const _onFormSubmit = () => {
@@ -151,11 +151,11 @@ const AdvertFormComponent = ({
   postRequestSucces,
   postRequestFailure,
   idToCopy,
-  isOfferCopied,
+  isOfferCopied
 }) => {
   const { t } = useTranslation("advertForm", "campaigns");
   const [copiedJob, setCopiedJob] = useState({});
-  
+
   const storedPath =
     Array.isArray(
       formValueSelector("vacancy")(store.getState(), "image_document")
@@ -165,13 +165,13 @@ const AdvertFormComponent = ({
 
   useEffect(() => {
     if (isOfferCopied) {
-      axios.get(`https://localhost:7262/jobsEn/${idToCopy}`).then((res) => {
+      axios.get(`https://localhost:7262/jobsEn/${idToCopy}`).then(res => {
         setCopiedJob(res.data);
-        console.log('copiied',res.data)
+        console.log("copiied", res.data);
       });
     }
   }, []);
-  
+
   const { lang } = store.getState().language;
 
   return (
@@ -203,7 +203,7 @@ const AdvertFormComponent = ({
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <Field
-                  component={renderTextField} 
+                  component={renderTextField}
                   id="jobTitle"
                   label={t("field1")}
                   name="jobTitle"
@@ -214,7 +214,7 @@ const AdvertFormComponent = ({
                 <JobCategoriesComponent jobCategories={jobCategories} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <JobTypeComponent id="jobType"/>
+                <JobTypeComponent id="jobType" />
               </Grid>
               <Grid item xs={12} sm={6} id="jobDuration" name="jobDuration">
                 <JobHoursComponent />
@@ -275,7 +275,7 @@ const AdvertFormComponent = ({
                     storedPath
                       ? dispatch(
                           change("vacancy", "logo", {
-                            path: storedPath,
+                            path: storedPath
                           })
                         )
                       : dispatch(change("vacancy", "logo", ""));
@@ -300,7 +300,7 @@ const AdvertFormComponent = ({
                 />
               </Grid>
             </Grid>
-            <Grid container></Grid>
+            {/* <Grid container></Grid> */}
             <CampaignsContainer />
           </div>
 
@@ -444,10 +444,10 @@ const AdvertFormComponent = ({
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center",
+          horizontal: "center"
         }}
         open={apiSuccess}
-        autoHideDuration={4000}
+        autoHideDuration={2000}
         onClose={() => {
           closeSnackbar();
           changeRoute();
@@ -465,7 +465,7 @@ const AdvertFormComponent = ({
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center",
+          horizontal: "center"
         }}
         open={apiFailed || (submitFailed && synchronousError)} // for rte text editor!!
         autoHideDuration={4000}

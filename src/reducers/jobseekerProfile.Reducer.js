@@ -34,14 +34,14 @@ export default function jobseekerProfileReducer(state = initialState, action) {
 
     case CLEAR_JOBSEEKER_PROFILE_PIC:
       // if there has been a photo added in db, which we want to delete:
-      if (state.profile.photo_document) {
+      if (state.profile.applicantPhoto) {
         return {
           ...state,
 
           profile: {
             ...state.profile,
-            photo_document: {
-              path: state.profile.photo_document && state.profile.photo_document[0].path,
+            applicantPhoto: {
+              path: state.profile.applicantPhoto && state.profile.applicantPhoto.content[0].path,
             },
           },
           uploadedProfilePic: {},

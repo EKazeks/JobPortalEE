@@ -115,22 +115,22 @@ const NewProfileComponent = ({
                     <div>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label className={classes.fieldLabel} htmlFor="firstname">
+                          <label className={classes.fieldLabel} htmlFor="firstName">
                             {t('firstName')}
                           </label>
                         </Grid>
                         <Grid item sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="firstname" id="firstname" required disabled />
+                          <Field component={renderDenseTextField} name="firstName" id="firstName" required disabled />
                         </Grid>
                       </Grid>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label className={classes.fieldLabel} htmlFor="lastname">
+                          <label className={classes.fieldLabel} htmlFor="lastName">
                             {t('lastName')}:
                           </label>
                         </Grid>
                         <Grid item sm={8} xs={12}>
-                          <Field component={renderDenseTextField} name="lastname" required disabled />
+                          <Field component={renderDenseTextField} name="lastName" required disabled />
                         </Grid>
                       </Grid>
                       <Grid container alignItems="center">
