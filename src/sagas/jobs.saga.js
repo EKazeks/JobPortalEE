@@ -50,6 +50,8 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
     const currentPage = pagination.selectedPage?.selected;
 
     const searchFormValues = getFormValues("searchCriteria")(store.getState());
+    console.log('SearchCriteria values =>,', searchFormValues);
+
     // The foloowing conditions for not sending the keys to backend incase no inputs!
     const body = JSON.stringify({
       search_phrase: searchFormValues.search_phrase
@@ -84,10 +86,11 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
       start = Math.ceil(currentPage * JOBPOST_COUNT_PER_PAGE);
     }
 
-    const portal_url = `${API_SERVER}/SearchPortalAds/?offset=${start}&rows=${JOBPOST_COUNT_PER_PAGE}`;
+    // const portal_url = `${API_SERVER}/SearchPortalAds/?offset=${start}&rows=${JOBPOST_COUNT_PER_PAGE}`;
+    const portal_url = `https://localhost:7262/jobsEn`;
 
-    const portal_result = yield call(apiOpenPost, portal_url, body);
-    const portal_data = JSON.parse(portal_result.data);
+    const portal_result = yield call(apiOpenRequest, portal_url);
+    const portal_data = portal_result.data.filter((active) => active.offerStatus === 'active');
     yield put(filterJobsSuccess(portal_data));
 
     // When users come back from jobdetails page, stick to the current page
@@ -231,12 +234,12 @@ function* getAppliedJobsSaga() {
 }
 function* getFavoriteJobsSaga() {
   try {
-    const id = store.getState().client.user.data.company_id;
+    //const id = store.getState().client.user.data.company_id;
     const url = `https://localhost:7262/jobsEn`;
-
+    const one = 1;
     const result = yield call(apiManualRequest, url);
-    const data = result.data;
-    const favoriteJobs = data.filter(favJobs => favJobs.isFavourite === 1);
+    //const data = result.data;
+    const favoriteJobs = result.data.filter((favJobs) => favJobs.isFavourite === one);
 
     if (favoriteJobs === favoriteJobs) {
       yield put(getFavoriteJobsSuccess(favoriteJobs));

@@ -72,6 +72,7 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
+        companyAdditionalUsers: refinedFormValues.companyAdditionalUsers
       });
     } else if (!uploadedLogo.name) {
       const base64 = formValues.logo_document;
@@ -89,6 +90,7 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
+        companyAdditionalUsers: refinedFormValues.companyAdditionalUsers
       });
     } else {
       const base64 = formValues.logo_document;
@@ -106,6 +108,7 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
+        companyAdditionalUsers: refinedFormValues.companyAdditionalUsers
       });
     }
     const result = yield call(apiManualPatch, url, body);
