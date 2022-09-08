@@ -182,7 +182,7 @@ const JobsComponent = ({
 }) => {
   const { t } = useTranslation("jobsList", "jobs");
   const [jobsToRender, setJobsToRender] = useState([]);
-  const [favouritesJobs, setFavouritesJobs] = useState([]);
+  // const [favouritesJobs, setFavouritesJobs] = useState([]);
   const [address, setAddress] = useState();
 
   useEffect(() => {
@@ -190,11 +190,33 @@ const JobsComponent = ({
       setJobsToRender(
         res.data.filter((activeJobs) => activeJobs.offerStatus === "active")
       );
-      setFavouritesJobs(
-        res.data.filter((favourite) => favourite.isFavourite === 1)
-      );
+      // setFavouritesJobs(
+      //   res.data.filter((favourite) => favourite.isFavourite === 1)
+      // );
     });
   }, []);
+
+  const CustomFavBtn = ({ item }) => {
+    const jobInList = favoriteJobs
+      ? favoriteJobs.find((fav) => fav.id === item.id)
+      : undefined;
+    const isFav = jobInList === undefined ? false : true;
+
+    // NOTE: Need to check the id later
+
+    return (
+      <FavBtn
+        className={classes.favBtn}
+        handleFav={() => {
+          !isFav
+            ? toggleFavoriteJobs(item.id, item.jobName, item.dateOfApplication)
+            : deleteFavoriteJobs(jobInList.jobPostId);
+        }}
+        isFav={!isFav} // checking from the favoriteJobs list
+        btnText={!isFav ? t("addFav") : t("delFav")}
+      />
+    );
+  };
 
   return (
     <div>
@@ -381,28 +403,7 @@ const JobsComponent = ({
                                     {t("common:deleteBtn")}
                                   </Button>
                                 ) : (
-                                  <FavBtn
-                                    className={classes.favBtn}
-                                    
-                                    handleFav={() => {
-                                      
-                                      // if (favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)) {
-                                      //   deleteFavoriteJobs(item.id)
-                                      // }
-                                      toggleFavoriteJobs(
-                                        item.id,
-                                        item.jobName,
-                                        item.dateOfApplication,
-                                        !favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)
-                                      );
-                                    }}
-                                    isFav={favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)} // checking from the favoriteJobs list
-                                    btnText={
-                                      !favoriteJobs.some(favList => favList.jobPostId === item.id && favList.jobTitle === item.jobName)
-                                      ? t('addFav')
-                                      : t('delFav')
-                                    }
-                                  />
+                                  <CustomFavBtn item={item} />
                                 )}
                               </Grid>
                               <Grid item sm={5} xs={6}>
