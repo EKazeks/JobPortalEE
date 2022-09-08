@@ -9,7 +9,7 @@ import {
   Grid,
   Divider,
   Snackbar,
-  CircularProgress,
+  CircularProgress
 } from "@material-ui/core";
 import { Field } from "redux-form";
 import { withStyles } from "@material-ui/core/styles";
@@ -19,7 +19,7 @@ import { MySnackbarContentWrapper } from "../../utils/snackbar.utils";
 import {
   renderAdminDatePicker,
   renderDenseTextField,
-  renderTimePicker,
+  renderTimePicker
 } from "../../utils/wrappers";
 import SideBar from "../../containers/layout/sideBar.container";
 import { Link } from "react-router-dom";
@@ -29,37 +29,37 @@ import TextEditor from "../../utils/textEditor";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
-const styles = (theme) => ({
+const styles = theme => ({
   formBtn: {
-    margin: "20px 0 0 20px",
+    margin: "20px 0 0 20px"
   },
 
   card: {
-    margin: "70px auto",
+    margin: "70px auto"
   },
   layout: {
     padding: 40,
     [theme.breakpoints.down("xs")]: {
-      padding: 20,
-    },
+      padding: 20
+    }
   },
   ctaBtn: {
     padding: " 0 40px 40px",
     [theme.breakpoints.down("xs")]: {
-      padding: "0 20px 20px",
-    },
+      padding: "0 20px 20px"
+    }
   },
   title: {
     margin: "50px 0",
-    color: theme.palette.primary.main,
+    color: theme.palette.primary.main
   },
   fieldLabel: {
     color: theme.palette.primary.main,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   fieldTitle: {
     color: theme.palette.primary.main,
-    fontWeight: "bold",
+    fontWeight: "bold"
     //fontSize: 25
   },
   activeStatus: {
@@ -68,56 +68,56 @@ const styles = (theme) => ({
     color: "white",
     "&:disabled": {
       backgroundColor: theme.palette.custom.activeBtn,
-      color: "white",
+      color: "white"
     },
     [theme.breakpoints.up("sm")]: {
-      marginRight: 6,
-    },
+      marginRight: 6
+    }
   },
   rejectStatus: {
     marginBottom: 10,
     backgroundColor: theme.palette.custom.rejectBtn,
     "&:disabled": {
       backgroundColor: theme.palette.custom.rejectBtn,
-      color: "white",
+      color: "white"
     },
     [theme.breakpoints.up("sm")]: {
-      marginRight: 6,
-    },
+      marginRight: 6
+    }
   },
   inactiveStatus: {
     // width: 210,
     marginBottom: 10,
     [theme.breakpoints.up("sm")]: {
-      marginRight: 6,
-    },
+      marginRight: 6
+    }
   },
   adContent: {
     flexGrow: 1,
 
     [theme.breakpoints.up("md")]: {
       marginLeft: 200,
-      padding: theme.spacing(3),
-    },
+      padding: theme.spacing(3)
+    }
   },
   applicationCard: {
     padding: 20,
     marginTop: 8,
-    minHeight: 552,
+    minHeight: 552
   },
   backBtnText: {
     color: theme.palette.secondary.main,
     "&:hover": {
       textDecoration: "none",
-      color: theme.palette.primary.main,
-    },
+      color: theme.palette.primary.main
+    }
   },
   backBtnContainer: {
-    marginTop: 2,
+    marginTop: 2
   },
   rte: {
-    cursor: "not-allowed",
-  },
+    cursor: "not-allowed"
+  }
 });
 
 const _onFormSubmit = () => {
@@ -140,15 +140,15 @@ const ApplicantDetails = ({
   classes,
   valid,
   pristine,
-  handleSubmit,
+  handleSubmit
   //cv_filename
 }) => {
   const applicant_cv =
-    viewSelectedAd.jobPostApplications.cv && viewApplication.jobPostApplications[0].cv;
-  const cv_filename =
-    viewApplication.applicantDocument?.fileName;
+    viewSelectedAd.jobPostApplications.cv &&
+    viewApplication.jobPostApplications[0].cv;
+  const cv_filename = viewApplication.applicantDocument?.fileName;
   const { t } = useTranslation("applicant", "common");
-  console.log('applicant-cv,', applicant_cv);
+  console.log("applicant-cv,", applicant_cv);
   return (
     <div className="job-application">
       <SideBar />
@@ -228,7 +228,10 @@ const ApplicantDetails = ({
                       </Grid>
                       <Grid container alignItems="center">
                         <Grid item sm={4}>
-                          <label htmlFor="contactNumber" className={classes.fieldLabel}>
+                          <label
+                            htmlFor="contactNumber"
+                            className={classes.fieldLabel}
+                          >
                             {t("common:phone")}:
                           </label>
                         </Grid>
@@ -307,7 +310,7 @@ const ApplicantDetails = ({
                             backgroundSize: "contain",
                             backgroundRepeat: "no-repeat",
                             height: 200,
-                            width: 200,
+                            width: 200
                           }}
                         />
                       </div>
@@ -318,7 +321,10 @@ const ApplicantDetails = ({
                 </Grid>
                 <Grid container alignItems="center" style={{ marginTop: 15 }}>
                   <Grid item sm={4}>
-                    <label className={classes.fieldLabel} htmlFor="profileDescription">
+                    <label
+                      className={classes.fieldLabel}
+                      htmlFor="profileDescription"
+                    >
                       {t("applicationMsg")}:
                     </label>
                   </Grid>
@@ -462,10 +468,7 @@ const ApplicantDetails = ({
                     details={viewApplication}
                     loading={loading}
                     handleClick={() =>
-                      updateJobApplicationDetails(
-                        viewApplication.id,
-                        "note"
-                      )
+                      updateJobApplicationDetails(viewApplication.id, "note")
                     }
                   />
                 </Grid>
@@ -499,7 +502,7 @@ const ApplicantDetails = ({
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center",
+          horizontal: "center"
         }}
         open={showSuccessSnackbar}
         autoHideDuration={3000}
@@ -518,7 +521,7 @@ const ApplicantDetails = ({
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center",
+          horizontal: "center"
         }}
         open={showFailedSnackbar}
         autoHideDuration={3000}
@@ -544,7 +547,7 @@ const ApplicantNotes = ({
   handleClick,
   loading,
   isToSendEmail,
-  pristine,
+  pristine
 }) => {
   return (
     <div className="panel panel-default">
@@ -589,7 +592,7 @@ const ApplicantInterview = ({
   valid,
   hasInterviewData,
   isToEdit,
-  editInterviewDetails,
+  editInterviewDetails
 }) => {
   return (
     <div className="panel panel-default">
