@@ -95,20 +95,18 @@ function* adminSearchApplicantSaga({ isToRetainSelectedPage }) {
       start = Math.ceil(currentPage * ADMIN_VIEW_COUNT_PER_PAGE);
     }
 
-    const url = `${API_SERVER}/SearchApplicants?offset=${start}&rows=${ADMIN_VIEW_COUNT_PER_PAGE}`;
+    const url = `https://localhost:7262/getAllApplicants`;
     let formValues = getFormValues('adminSearch')(store.getState());
+    
     if (formValues) {
       formValues = trimObjValues(formValues);
     }
-    const body = JSON.stringify({
-      ...formValues,
-    });
 
-    const result = yield call(apiManualPost, url, body);
+    const result = yield call(apiManualRequest, url);
     if (result.data === 'Application details does not exist') {
       yield put(adminSearchApplicantSuccess([]));
     } else {
-      const resultParsed = JSON.parse(result.data);
+      const resultParsed = result.data;
       yield put(adminSearchApplicantSuccess(resultParsed));
 
       if (!isToRetainSelectedPage) {

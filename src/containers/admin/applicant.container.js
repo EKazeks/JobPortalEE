@@ -26,7 +26,7 @@ const mapStateToProps = (state) => ({
   selectedPage: state.pagination.selectedPage.selected,
   isAdmin: state.client.user && state.client.user.data.user_role,
   advertPages: Math.ceil(
-    state.admin.applicants[0]?.full_count / ADMIN_VIEW_COUNT_PER_PAGE
+    state.admin.applicants?.full_count / ADMIN_VIEW_COUNT_PER_PAGE
   ),
   isEdit: state.admin.isEdit,
   isToEditId: state.admin.isToEditId,

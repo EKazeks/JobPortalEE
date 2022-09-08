@@ -41,7 +41,7 @@ const styles = theme => ({
 
 const AdminApplicantComponent = ({
   adminSearchApplicant,
-  //applicants,
+  applicants,
   classes,
   advertPages,
   changeAdvertPage,
@@ -51,16 +51,6 @@ const AdminApplicantComponent = ({
   editContactDetails,
 }) => {
   const { t } = useTranslation('common');
-  const [jobsToRender, setJobsToRender] = useState([]);
-  const [applicants, setApplicants] = useState([])
-  const {id} = useSelector((state) => state.jobs)
-
-  useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
-      setJobsToRender(res.data);
-      setApplicants(res.data.jobPostApplication)
-    });
-  }, []);
 
   const header = [
     {
@@ -118,27 +108,27 @@ const AdminApplicantComponent = ({
                 firstname: applicant.firstName,
                 lastname: applicant.lastName,
                 email: applicant.email,
-                contact_number: applicant.phone,
+                contact_number: applicant.contactNumber,
                 linkedin: applicant.linkedIn,
                 portfolio: applicant.portfolio,
-                applicant_id: applicant.applicant.id,
+                applicant_id: applicant.id,
               };
-              return isEdit && isToEditId === applicant.applicant.id ? (
-                <AdminContactFormContainer user="applicant" key={applicant.applicant_id} />
+              return isEdit && isToEditId === applicant.id ? (
+                <AdminContactFormContainer user="applicant" key={applicant.id} />
               ) : (
                 <TableRow key={applicant.applicant_id} className={classes.applicantsRow}>
-                  <TableCell className={classes.tableCell}>{applicant.firstname}</TableCell>
-                  <TableCell className={classes.tableCell}>{applicant.lastname}</TableCell>
+                  <TableCell className={classes.tableCell}>{applicant.firsName}</TableCell>
+                  <TableCell className={classes.tableCell}>{applicant.lastName}</TableCell>
                   <TableCell className={classes.tableCell}>{applicant.email}</TableCell>
-                  <TableCell className={classes.tableCell}>{applicant.contact_number}</TableCell>
+                  <TableCell className={classes.tableCell}>{applicant.contactNumber}</TableCell>
                   <TableCell className={classes.tableCell}>
-                    {applicant.linkedin ? (
+                    {applicant.linkedIn ? (
                       <a
-                        href={applicant.linkedin.includes('https' || 'http') ? applicant.linkedin : `https://${applicant.linkedin}`}
+                        href={applicant.linkedIn.includes('https' || 'http') ? applicant.linkedIn : `https://${applicant.linkedIn}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {applicant.linkedin}
+                        {applicant.linkedIn}
                       </a>
                     ) : (
                       '-'
