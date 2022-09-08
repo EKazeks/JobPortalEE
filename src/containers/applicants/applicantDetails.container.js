@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ApplicantDetails from '../../components/applicants/applicantDetails.component';
 import { updateApplicantStatus, updateJobApplicationDetails, editInterviewDetails, closeSnackbar } from '../../actions';
 import { interviewDetailsValidate as validate } from '../validate';
+import store from '../../store';
 
 const ApplicantDetailsContainer = reduxForm({
   form: 'applicantDetails',
@@ -10,7 +11,7 @@ const ApplicantDetailsContainer = reduxForm({
   validate,
 })(ApplicantDetails);
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   viewSelectedAd: state.advertisement.viewSelectedAd,
   initialValues: state.advertisement.viewApplication,
   viewApplication: state.advertisement.viewApplication,

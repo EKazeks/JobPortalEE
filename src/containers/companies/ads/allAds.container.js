@@ -28,7 +28,7 @@ class AllAdsContainer extends React.Component {
 const mapStateToProps = state => ({
   state,
   selectedMainMenu: state.advertisement.selectedMainMenu,
-  isUserType: state.client.user && state.client.user.data && state.client.user.data[6] && state.client.user.data[6].user_type,
+  isUserType: state.client.user && state.client.user.data  && state.client.user.data.user_type,
 });
 
 const mapDispatchToProps = {

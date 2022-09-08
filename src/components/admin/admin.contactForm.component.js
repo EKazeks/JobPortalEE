@@ -125,7 +125,7 @@ const CompanyContactForm = ({
           <Field component={renderDenseTextField} variant="outlined" name="email" className={classes.textField} disabled />
         </TableCell>
         <TableCell className={classes.tableCell}>
-          <Field component={renderDenseTextField} variant="outlined" name="contact_number" className={classes.textField} />
+          <Field component={renderDenseTextField} variant="outlined" name="telephone" className={classes.textField} />
         </TableCell>
         <TableCell className={classes.tableCell}>
           <Field component={renderDenseTextField} variant="outlined" name="business_id" className={classes.textField} />

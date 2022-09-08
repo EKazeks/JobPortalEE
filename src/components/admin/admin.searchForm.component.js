@@ -169,7 +169,7 @@ const CompanySearch = ({ classes, searchBtn, handleSubmit }) => {
           <Grid item md={11} lg={11} xl={11}>
             <Grid container alignItems="center">
               <Grid item>
-                <Field component={renderDenseTextField} variant="outlined" name="company_Name" placeholder={t('companyName')} className={classes.searchField} />
+                <Field component={renderDenseTextField} variant="outlined" name="companyName" placeholder={t('companyName')} className={classes.searchField} />
               </Grid>
               <Grid item>
                 <Field component={renderDenseTextField} variant="outlined" name="firstName" placeholder={t('firstName')} className={classes.searchField} />
