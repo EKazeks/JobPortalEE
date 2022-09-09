@@ -1,5 +1,5 @@
 import { change, getFormValues } from "redux-form";
-import { takeEvery, call, put } from "redux-saga/effects";
+import { takeEvery, call, put, all } from "redux-saga/effects";
 import {
   API_SERVER,
   ADD_COMPANY_PROFILE,
@@ -37,6 +37,8 @@ function* addCompanyProfile() {
     const formValues = getFormValues(formName)(store.getState());
     const { uploadedLogo } = companyProfile;
     const uuid = client.user.data[2];
+    const id = companyProfile.profile.id;
+    const companyId = companyProfile.profile.user.companyId;
     const refinedFormValues = filterObj("logo_document", formValues);
 
     console.log("refinedFormValues =>", refinedFormValues);
@@ -44,7 +46,7 @@ function* addCompanyProfile() {
 
     if (isToAddNewProfile || formValues.companyBusinessId === null) {
       // For newly registered company users - getCompanyProfile gives company id 0.
-      url = `${API_SERVER}/AddCompanyProfile`;
+      url = `https://localhost:7262/addAditionalCompany`;
     } else {
       url = `${API_SERVER_UPDATE_COMPANY_INFO}`;
     }
@@ -90,7 +92,7 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
-        companyAdditionalUsers: refinedFormValues.companyAdditionalUsers
+        companyAdditionalUsers: refinedFormValues.companyUser
       });
     } else {
       const base64 = formValues.logo_document;
@@ -108,13 +110,64 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
-        companyAdditionalUsers: refinedFormValues.companyAdditionalUsers
+        companyAdditionalUsers: refinedFormValues.companyUser
       });
-    }
-    const result = yield call(apiManualPatch, url, body);
-    if (result.data && isToAddNewProfile === false  || result.data && isToAddNewProfile === true) {
+    } 
+
+    const base64 = formValues.logo_document;
+   const bodyForAddCompany = JSON.stringify({
+      id: id,
+      companyName: refinedFormValues.company_name,
+      firstName: refinedFormValues.firstName,
+      lastName: refinedFormValues.lastName,
+      email: refinedFormValues.email,
+      telephone: refinedFormValues.contact_number,
+      businessId: refinedFormValues.business_id,
+      address: refinedFormValues.address,
+      city: refinedFormValues.city,
+      postalCode: refinedFormValues.zip_code,
+      companyUrl: refinedFormValues.company_url,
+      profileDescription: refinedFormValues.profile_description,
+      //companyLogo: base64,
+      additionalCompaniesAdditionalUsers: refinedFormValues.companyAdditionalUsers,
+      companyId: companyId
+    });
+  //   const result = yield call(apiManualPost, url, body);
+  //   if (result.data && isToAddNewProfile === true) {
+  //     yield put(showSuccessSnackbar());
+  //     if (result.data && isToAddNewProfile === false) {
+  //       yield call(apiManualPatch, url, body);
+  //       yield put(getCompanyProfile());
+  //       yield put(getUserCompanyList(true));
+  //     } else {
+  //       yield put(getUserCompanyList());
+  //       // yield put(navigateAdsFromMainMenu(1));
+  //     }
+  //   } else if (result.data != result.data) {
+  //     //const email = result.data.split("-")[1];
+  //     yield put(
+  //       // showCustomErrorMsg(`${email}${i18next.t("profile:existingUser")}`)
+  //       showCustomErrorMsg(`${i18next.t("profile:existingUser")}`)
+  //     );
+  //   } else if (result.data.includes("Same company already exists")) {
+  //     const msg = i18next.t("profile:companyExists");
+  //     yield put(showCustomErrorMsg(msg));
+  //   } else {
+  //     yield put(showFailedSnackbar());
+  //   }
+  // } catch (e) {
+  //   console.log(e);
+  //   yield put(showFailedSnackbar());
+  // }
+    
+
+    const resultForUpdateCompany = yield call(apiManualPatch, url, body);
+    const resultForAddCompany = yield call(apiManualPost, url, bodyForAddCompany)
+
+    if (resultForUpdateCompany.data || resultForAddCompany.data) {
       yield put(showSuccessSnackbar());
-      if (isToAddNewProfile) {
+      if (resultForAddCompany.data && isToAddNewProfile === true) {
+        //yield call(apiManualPost, url, body)
         yield put(getUserCompanyList());
       } else {
         yield put(getCompanyProfile());
@@ -122,13 +175,13 @@ function* addCompanyProfile() {
         // yield put(navigateAdsFromMainMenu(1));
       }
       // console.log('calling addcompany API', result);
-    } else if (result.data != result.data) {
+    } else if (resultForUpdateCompany.data != resultForUpdateCompany.data) {
       //const email = result.data.split("-")[1];
       yield put(
         // showCustomErrorMsg(`${email}${i18next.t("profile:existingUser")}`)
         showCustomErrorMsg(`${i18next.t("profile:existingUser")}`)
       );
-    } else if (result.data.includes("Same company already exists")) {
+    } else if (resultForUpdateCompany.data.includes("Same company already exists")) {
       const msg = i18next.t("profile:companyExists");
       yield put(showCustomErrorMsg(msg));
     } else {
