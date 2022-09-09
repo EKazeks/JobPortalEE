@@ -50,7 +50,7 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
     const currentPage = pagination.selectedPage?.selected;
 
     const searchFormValues = getFormValues("searchCriteria")(store.getState());
-    console.log('SearchCriteria values =>,', searchFormValues);
+    console.log("SearchCriteria values =>,", searchFormValues);
 
     // The foloowing conditions for not sending the keys to backend incase no inputs!
     const body = JSON.stringify({
@@ -90,7 +90,9 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
     const portal_url = `https://localhost:7262/jobsEn`;
 
     const portal_result = yield call(apiOpenRequest, portal_url);
-    const portal_data = portal_result.data.filter((active) => active.offerStatus === 'active');
+    const portal_data = portal_result.data.filter(
+      active => active.offerStatus === "active"
+    );
     yield put(filterJobsSuccess(portal_data));
 
     // When users come back from jobdetails page, stick to the current page
@@ -239,7 +241,9 @@ function* getFavoriteJobsSaga() {
     const one = 1;
     const result = yield call(apiManualRequest, url);
     //const data = result.data;
-    const favoriteJobs = result.data.filter((favJobs) => favJobs.isFavourite === one);
+    const favoriteJobs = result.data.filter(
+      favJobs => favJobs.isFavourite === one
+    );
 
     if (favoriteJobs === favoriteJobs) {
       yield put(getFavoriteJobsSuccess(favoriteJobs));
@@ -352,23 +356,8 @@ function* updateEmailNotificationSaga() {
           : undefined
     });
 
-    // let headers = new Headers();
-    // headers.append("Accept", "application/json");
-    // headers.append(
-    //   "Authorization",
-    //   `Bearer ${store.getState().client.user.data.access_token}`
-    // );
-    // headers.append("Content-Type", "application/json");
-    //
-    // const fetcher = () => {
-    //   return axios.post(url, body, {
-    //     headers: {
-    //       ...headers
-    //     }
-    //   });
-    // };
-    //
-    // const result = yield call(fetcher);
+    console.log(body);
+
     const result = yield call(apiManualPost, url, body);
 
     if (

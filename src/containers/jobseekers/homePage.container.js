@@ -40,57 +40,69 @@ const mapStateToProps = state => {
     state.jobs.dashboard?.appliedJobs && state.jobs.dashboard?.appliedJobs;
 
   const extractJobCategoriesData = list => {
-    const jobcategoryList = list.map(el => {
-      const data = {};
-      data.id = el.job_category;
-      data.label = i18next.t(`category:${el.job_category}`);
+    return list.map(el => {
+      let data = {};
+      data.id = el.id;
+      data.label = i18next.t(`category:${el.name}`);
       return data;
     });
-    return jobcategoryList;
   };
 
   const extractJobTypeData = list => {
-    const jobtypeList = list.map(el => {
+    return list.map(el => {
       const data = {};
-      data.type = el.job_type;
-      data.label = i18next.t(`jobtype:jobType${el.job_type}`);
+      data.type = el.id;
+      data.label = i18next.t(`jobtype:jobType${el.name}`);
       return data;
     });
-    return jobtypeList;
   };
 
   const extractJobHoursData = list => {
-    const jobhourList = list.map(el => {
+    return list.map(el => {
       const data = {};
-      data.type = el.job_hours;
-      data.label = i18next.t(`jobhours:jobHours${el.job_hours}`);
+      data.type = el.id;
+      data.label = i18next.t(`jobhours:jobHours${el.name}`);
       return data;
     });
-    return jobhourList;
   };
 
+  // const populateFormValues = {
+  //   notice_frequency: dashboard && dashboard.notice_frequency,
+  //   job_location: dashboard && dashboard.job_location,
+  //   job_category:
+  //     dashboard &&
+  //     dashboard.job_category &&
+  //     extractJobCategoriesData(dashboard.job_category.categoryList),
+  //   job_type:
+  //     dashboard &&
+  //     dashboard.job_type &&
+  //     extractJobTypeData(dashboard.job_type.jobtypeList),
+  //   job_hours:
+  //     dashboard &&
+  //     dashboard.job_hours &&
+  //     extractJobHoursData(dashboard.job_hours.jobhoursList)
+  // };
+
+  // Dashboard used in sjob alert
+  const db = state.jobs.dashboard;
+  const emailNotificationStatus = state.jobs.dashboard.emailNotificationActive;
   const populateFormValues = {
-    notice_frequency: dashboard && dashboard.notice_frequency,
-    job_location: dashboard && dashboard.job_location,
+    notice_frequency: db.emailNotificationFrequency,
+    job_location: db.job_location,
     job_category:
-      dashboard &&
-      dashboard.job_category &&
-      extractJobCategoriesData(dashboard.job_category.categoryList),
+      db.applicant_job_category &&
+      extractJobCategoriesData(db.applicant_job_category),
     job_type:
-      dashboard &&
-      dashboard.job_type &&
-      extractJobTypeData(dashboard.job_type.jobtypeList),
+      db.applicant_job_type && extractJobTypeData(db.applicant_job_type),
     job_hours:
-      dashboard &&
-      dashboard.job_hours &&
-      extractJobHoursData(dashboard.job_hours.jobhoursList)
+      db.applicant_job_hours && extractJobHoursData(db.applicant_job_hours)
   };
 
   return {
     initialValues: populateFormValues,
     dashboard,
     jobCategories: state.jobCategories.jobCategories,
-    notificationToggleBtn: state.jobs.notificationToggleBtn,
+    notificationToggleBtn: emailNotificationStatus,
     showSuccessSnackbar: state.asyncActions.showSuccessSnackbar,
     showFailedSnackbar: state.asyncActions.showFailedSnackbar,
     isUserType: state.client.user && state.client.user.data.user_type,
