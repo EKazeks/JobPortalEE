@@ -444,9 +444,6 @@ export const choosePaymentMethod = () => ({
 export const sendInvoiceToTalous = details => ({
   type: SEND_INVOICE_TO_TALOUS,
   details
-export const sendInvoiceToTalous = (detail) => ({
-  type: SEND_INVOICE_TO_TALOUS,
-  detail,
 });
 
 export const registerPayment = (jobpostOrderDetails) => ({

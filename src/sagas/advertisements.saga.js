@@ -50,7 +50,7 @@ import {
   apiOpenRequest,
   apiGetJobsOffers,
   apiManualDelete,
-  apiManualPatch,
+  apiManualPatch
 } from "../utils/request";
 import { filterObj } from "../utils/wrappers";
 import {
@@ -827,14 +827,6 @@ function* updateCampaignSaga({ id }) {
       } else {
         yield put(showSuccessSnackbar());
       }
-    // const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
-    axios.patch(url, body).then((res) => {
-      response = res;
-    });
-    if (response === 400) {
-      yield put(showFailedSnackbar());
-    } else {
-      yield put(showSuccessSnackbar());
     }
   } catch (error) {
     console.log(error);
