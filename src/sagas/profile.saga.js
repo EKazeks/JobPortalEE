@@ -96,7 +96,7 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
-        companyAdditionalUsers: refinedFormValues.companyAdditionalUsers,
+        companyAdditionalUsers: refinedFormValues.companyUser
       });
     } else {
       const base64 = formValues.logo_document;
@@ -114,14 +114,61 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
-        companyAdditionalUsers: refinedFormValues.companyAdditionalUsers,
+        companyAdditionalUsers: refinedFormValues.companyUser
       });
-    }
-    const result = yield call(apiManualPatch, url, body);
-    if (
-      (result.data && isToAddNewProfile === false) ||
-      (result.data && isToAddNewProfile === true)
-    ) {
+    } 
+
+    const base64 = formValues.logo_document;
+   const bodyForAddCompany = JSON.stringify({
+      id: id,
+      companyName: refinedFormValues.company_name,
+      firstName: refinedFormValues.firstName,
+      lastName: refinedFormValues.lastName,
+      email: refinedFormValues.email,
+      telephone: refinedFormValues.contact_number,
+      businessId: refinedFormValues.business_id,
+      address: refinedFormValues.address,
+      city: refinedFormValues.city,
+      postalCode: refinedFormValues.zip_code,
+      companyUrl: refinedFormValues.company_url,
+      profileDescription: refinedFormValues.profile_description,
+      //companyLogo: base64,
+      additionalCompaniesAdditionalUsers: refinedFormValues.companyAdditionalUsers,
+      companyId: companyId
+    });
+  //   const result = yield call(apiManualPost, url, body);
+  //   if (result.data && isToAddNewProfile === true) {
+  //     yield put(showSuccessSnackbar());
+  //     if (result.data && isToAddNewProfile === false) {
+  //       yield call(apiManualPatch, url, body);
+  //       yield put(getCompanyProfile());
+  //       yield put(getUserCompanyList(true));
+  //     } else {
+  //       yield put(getUserCompanyList());
+  //       // yield put(navigateAdsFromMainMenu(1));
+  //     }
+  //   } else if (result.data != result.data) {
+  //     //const email = result.data.split("-")[1];
+  //     yield put(
+  //       // showCustomErrorMsg(`${email}${i18next.t("profile:existingUser")}`)
+  //       showCustomErrorMsg(`${i18next.t("profile:existingUser")}`)
+  //     );
+  //   } else if (result.data.includes("Same company already exists")) {
+  //     const msg = i18next.t("profile:companyExists");
+  //     yield put(showCustomErrorMsg(msg));
+  //   } else {
+  //     yield put(showFailedSnackbar());
+  //   }
+  // } catch (e) {
+  //   console.log(e);
+  //   yield put(showFailedSnackbar());
+  // }
+    
+
+    const resultForUpdateCompany = yield call(apiManualPatch, url, body);
+    const resultForAddCompany = yield call(apiManualPost, url, bodyForAddCompany)
+
+    if (resultForUpdateCompany.data || resultForAddCompany.data) {
       yield put(showSuccessSnackbar());
       if (resultForAddCompany.data && isToAddNewProfile === true) {
         //yield call(apiManualPost, url, body)
