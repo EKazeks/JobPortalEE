@@ -14,6 +14,7 @@ import {
   UPDATE_AND_PUBLISH_ADVERTISEMENT,
   API_SERVER,
   API_SERVER_EST,
+  BASE_API_SERVER_EST,
   API_SERVER_EST_GET_ID,
   GET_ALL_CAMPAIGNS,
   OPEN_AD_TO_SEE_AD_INFO,
@@ -49,6 +50,7 @@ import {
   apiOpenRequest,
   apiGetJobsOffers,
   apiManualDelete,
+  apiManualPatch,
 } from "../utils/request";
 import { filterObj } from "../utils/wrappers";
 import {
@@ -954,6 +956,7 @@ function* getApplicationDetailsByIdSaga({ jobpostId, instanceId }) {
 }
 
 function* updateApplicantStatusSaga({
+  jobSeekerId,
   application_id,
   // company_id,
   post_id,
@@ -962,20 +965,21 @@ function* updateApplicantStatusSaga({
 }) {
   try {
     // const url = `${API_SERVER}/UpdateJobApplicationStatus`;
-    const url = `${API_SERVER}/UpdateApplicantApplicationStatus`;
+    const url = `${BASE_API_SERVER_EST}/UpdateApplicantApplicationStatus`;
     const body = JSON.stringify({
-      application_id,
+      id: application_id,
       // company_id,
       // post_id,
       // email,
       status,
     });
-    const result = yield call(apiManualPost, url, body);
+    const result = yield call(apiManualPatch, url, body);
+
     if (result.data === "Job Application's status updated successfully!") {
       //yield put(showSuccessSnackbar());
       yield put(
         // getApplicationDetailsById(application_id, company_id, post_id, email)
-        getApplicationDetailsById(application_id, post_id, email)
+        getApplicationDetailsById(jobSeekerId, post_id, email)
       );
       yield put(openAdToSeeAdInfo(post_id));
     } else {

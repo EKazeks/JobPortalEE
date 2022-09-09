@@ -157,23 +157,23 @@ import {
   GET_JOB_APPLICANTS,
   FETCH_JOB_INFO,
   SET_ID_TO_APPLY,
-  DELETE_SUCCESS
+  DELETE_SUCCESS,
 } from "../constants";
 
 // get jobs offers
 export const getJobsOffers = () => ({
-  type: GET_JOBS_OFFERS_SUCCESS
+  type: GET_JOBS_OFFERS_SUCCESS,
 });
 
 export const fetchJobById = (id, jobPostId) => ({
   type: FETCH_JOB_BY_ID,
   id,
-  jobPostId
+  jobPostId,
 });
 
-export const setIdToApply = id => ({
+export const setIdToApply = (id) => ({
   type: SET_ID_TO_APPLY,
-  id
+  id,
 });
 export const fetchJobInfo = (
   companyName,
@@ -188,17 +188,17 @@ export const fetchJobInfo = (
   companyBusinessId,
   jobName,
   jobPostNumber,
-  dateOfApplication
+  dateOfApplication,
 });
 
-export const editOffer = id => ({
+export const editOffer = (id) => ({
   type: EDIT_OFFER,
-  id
+  id,
 });
 
 export const fetchJobApplicants = (id, payload) => ({
   type: GET_JOB_APPLICANTS,
-  id
+  id,
   //payload
 });
 
@@ -207,266 +207,266 @@ export const fetchJobApplicants = (id, payload) => ({
 // });
 
 //search companies details action
-export const searchCompanyDetails = companyName => ({
+export const searchCompanyDetails = (companyName) => ({
   type: SEARCH_COMPANY_DETAILS,
-  companyName: companyName
+  companyName: companyName,
 });
 
 // search companies details success
-export const searchCompanyDetailsSuccess = companyLists => ({
+export const searchCompanyDetailsSuccess = (companyLists) => ({
   type: SEARCH_COMPANY_DETAILS_SUCCESS,
-  companyLists
+  companyLists,
 });
 
 // fetch company addresses
 export const loadSelectedCompany = (selectedCompany, formName) => ({
   type: LOAD_SELECTED_COMPANY,
   selectedCompany,
-  formName
+  formName,
 });
 
 // Close dialog-box
 export const closeCompanyLists = () => ({
-  type: CLOSE_COMPANY_LISTS
+  type: CLOSE_COMPANY_LISTS,
 });
 
 // OPEN JOBS COMPONENT
 
-export const filterJobs = isToRetainSelectedPage => ({
+export const filterJobs = (isToRetainSelectedPage) => ({
   type: FILTER_JOBS,
-  isToRetainSelectedPage
+  isToRetainSelectedPage,
 });
-export const filterJobsSuccess = result => ({
+export const filterJobsSuccess = (result) => ({
   type: FILTER_JOBS_SUCCESS,
-  result
+  result,
 });
-export const getJobDetailsById = id => ({ type: GET_JOB_DETAILS_BY_ID, id });
-export const getJobDetailsByIdSuccess = data => ({
+export const getJobDetailsById = (id) => ({ type: GET_JOB_DETAILS_BY_ID, id });
+export const getJobDetailsByIdSuccess = (data) => ({
   type: GET_JOB_DETAILS_BY_ID_SUCCESS,
-  data
+  data,
 });
 
-export const getWorkStartSuccess = result => ({
+export const getWorkStartSuccess = (result) => ({
   type: GET_WORK_START_SUCCESS,
-  result
+  result,
 });
 
 // LAYOUT COMPONENT
-export const getAdInfoFromSideMenu = value => ({
+export const getAdInfoFromSideMenu = (value) => ({
   type: GET_AD_INFO_FROM_SIDE_MENU,
-  value
+  value,
 });
 
-export const navigateAdsFromMainMenu = status => ({
+export const navigateAdsFromMainMenu = (status) => ({
   type: NAVIGATE_ADS_FROM_MAIN_MENU,
-  status
+  status,
 });
 
-export const getAllAdsByStatus = status => ({
+export const getAllAdsByStatus = (status) => ({
   type: GET_ALL_ADS_BY_STATUS,
-  status
+  status,
 });
-export const getAllAdsByStatusSuccess = result => ({
+export const getAllAdsByStatusSuccess = (result) => ({
   type: GET_ALL_ADS_BY_STATUS_SUCCESS,
-  result
+  result,
 });
 
-export const openAdToSeeAdInfo = id => ({
+export const openAdToSeeAdInfo = (id) => ({
   type: OPEN_AD_TO_SEE_AD_INFO,
-  id
+  id,
 });
 
-export const openAdToSeeAdInfoSuccess = resultParsed => ({
+export const openAdToSeeAdInfoSuccess = (resultParsed) => ({
   type: OPEN_AD_TO_SEE_AD_INFO_SUCCESS,
-  resultParsed
+  resultParsed,
 });
 
 export const hideSpinner = () => ({
-  type: HIDE_SPINNER
+  type: HIDE_SPINNER,
 });
 
 export const openApplicantToSeeApplication = {
-  type: OPEN_APPLICANT_TO_SEE_APPLICATION
+  type: OPEN_APPLICANT_TO_SEE_APPLICATION,
 };
 
-export const changeAdvertPage = selected => ({
+export const changeAdvertPage = (selected) => ({
   type: CHANGE_ADVERT_PAGE,
-  selected
+  selected,
 });
 
 // LANGUAGE TRANSLATION
-export const handleChangeLang = lang => ({ type: LANGUAGE_CHANGE, lang });
+export const handleChangeLang = (lang) => ({ type: LANGUAGE_CHANGE, lang });
 
 // REGISTER USER
 export const signUpFormSubmit = () => ({ type: SIGNUP_FORM_SUBMIT });
-export const signUpFormSubmitSuccess = result => ({
+export const signUpFormSubmitSuccess = (result) => ({
   type: SIGNUP_FORM_SUBMIT_SUCCESS,
-  result
+  result,
 });
-export const signUpFormSubmitUserExistError = error => ({
+export const signUpFormSubmitUserExistError = (error) => ({
   type: SIGNUP_FORM_SUBMIT_USER_EXIST_ERROR,
-  error
+  error,
 });
-export const signUpFormSubmitFailed = error => ({
+export const signUpFormSubmitFailed = (error) => ({
   type: SIGNUP_FORM_SUBMIT_FAILED,
-  error
+  error,
 });
 export const closeRegisterSnackbar = () => ({
-  type: CLOSE_SIGNUP_SNACKBAR
+  type: CLOSE_SIGNUP_SNACKBAR,
 });
 
 // USER SELECTION
-export const selectUserType = userType => ({
+export const selectUserType = (userType) => ({
   type: SELECT_USER_TYPE,
-  userType
+  userType,
 });
 
 // SIGNIN USER
 export const signInFormSubmit = () => ({ type: SIGNIN_FORM_SUBMIT });
-export const signInFormSubmitSuccess = result => ({
+export const signInFormSubmitSuccess = (result) => ({
   type: SIGNIN_FORM_SUBMIT_SUCCESS,
-  result
+  result,
 });
-export const signInFormSubmitFailed = error => ({
+export const signInFormSubmitFailed = (error) => ({
   type: SIGNIN_FORM_SUBMIT_FAILED,
-  error
+  error,
 });
 export const closeSignInSnackBar = () => ({ type: CLOSE_SIGNIN_SNACKBAR });
-export const setClient = token => ({ type: CLIENT_SET, token });
+export const setClient = (token) => ({ type: CLIENT_SET, token });
 export const unsetClient = () => ({ type: CLIENT_UNSET });
 export const logout = () => ({ type: LOGOUT });
 
 // RESET PASSWORD
 export const resetPassword = () => ({ type: RESET_PASSWORD });
 export const resetPasswordSubmitSuccess = () => ({
-  type: RESET_PASSWORD_SUBMIT_SUCCESS
+  type: RESET_PASSWORD_SUBMIT_SUCCESS,
 });
 export const resetPasswordSubmitFailed = () => ({
-  type: RESET_PASSWORD_SUBMIT_FAILED
+  type: RESET_PASSWORD_SUBMIT_FAILED,
 });
 
 // CHANGE PASSWORD
 export const changePassword = () => ({ type: CHANGE_PASSWORD });
 export const changePasswordSubmitSuccess = () => ({
-  type: CHANGE_PASSWORD_SUBMIT_SUCCESS
+  type: CHANGE_PASSWORD_SUBMIT_SUCCESS,
 });
 export const changePasswordSubmitFailed = () => ({
-  type: CHANGE_PASSWORD_SUBMIT_FAILED
+  type: CHANGE_PASSWORD_SUBMIT_FAILED,
 });
 
 // POST JOB ADVERTISEMENT
 export const postAdvertisement = () => ({
-  type: POST_ADVERTISEMENT
+  type: POST_ADVERTISEMENT,
 });
 export const saveAndPublishAdvertisement = () => ({
-  type: SAVE_AND_PUBLISH_ADVERTISEMENT
+  type: SAVE_AND_PUBLISH_ADVERTISEMENT,
 });
 export const saveAndPublishAdvertisementToEe = () => ({
-  type: SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE
+  type: SAVE_AND_PUBLISH_ADVERTISEMENT_TO_EE,
 });
 export const updateAndPublishAdvertisement = () => ({
-  type: UPDATE_AND_PUBLISH_ADVERTISEMENT
+  type: UPDATE_AND_PUBLISH_ADVERTISEMENT,
 });
 export const updateAndPublishAdvertisementSuccess = () => ({
-  type: UPDATE_AND_PUBLISH_ADVERTISEMENT_SUCCESS
+  type: UPDATE_AND_PUBLISH_ADVERTISEMENT_SUCCESS,
 });
 
-export const saveAndPublishAdvertisementSuccess = payload => ({
+export const saveAndPublishAdvertisementSuccess = (payload) => ({
   type: SAVE_AND_PUBLISH_ADVERTISEMENT_SUCCESS,
-  payload: payload
+  payload: payload,
 });
 
 export const saveAdvertisementAsDraft = () => ({
-  type: SAVE_ADVERTISEMENT_AS_DRAFT
+  type: SAVE_ADVERTISEMENT_AS_DRAFT,
 });
 
-export const addExtraService = serviceType => ({
+export const addExtraService = (serviceType) => ({
   type: ADD_EXTRA_SERVICE,
-  serviceType
+  serviceType,
 });
 
 export const changeRoute = () => ({
-  type: CHANGE_ROUTE
+  type: CHANGE_ROUTE,
 });
 
 export const saveAndPublishAdvertisementFailed = () => ({
-  type: SAVE_AND_PUBLISH_ADVERTISEMENT_FAILED
+  type: SAVE_AND_PUBLISH_ADVERTISEMENT_FAILED,
 });
 
-export const retrieveImageInfo = image => ({
+export const retrieveImageInfo = (image) => ({
   type: RETRIEVE_IMAGE_INFO,
   image: {
     name: image.name,
     type: image.type,
-    id: 0
-  }
+    id: 0,
+  },
 });
-export const retrieveLogoInfo = image => ({
+export const retrieveLogoInfo = (image) => ({
   type: RETRIEVE_LOGO_INFO,
   image: {
     name: image.name,
     type: image.type,
-    id: 0
-  }
+    id: 0,
+  },
 });
-export const retrieveProfilePicInfo = image => ({
+export const retrieveProfilePicInfo = (image) => ({
   type: RETRIEVE_PROFILE_PIC_INFO,
   image: {
     name: image.name,
     type: image.type,
-    id: 0
-  }
+    id: 0,
+  },
 });
-export const retrieveDocumentInfo = document => ({
+export const retrieveDocumentInfo = (document) => ({
   type: RETRIEVE_DOCUMENT_INFO,
   document: {
     name: document.name,
     type: document.type,
-    id: 0
-  }
+    id: 0,
+  },
 });
 export const clearCompanyLogo = () => ({ type: CLEAR_COMPANY_LOGO });
 export const clearImagesFromState = () => ({ type: CLEAR_IMAGES });
 export const clearJobseekerProfilePic = () => ({
-  type: CLEAR_JOBSEEKER_PROFILE_PIC
+  type: CLEAR_JOBSEEKER_PROFILE_PIC,
 });
 export const getJobPostViewsByDate = () => ({
-  type: GET_JOBPOST_VIEWS_BY_DATE
+  type: GET_JOBPOST_VIEWS_BY_DATE,
 });
-export const getJobPostViewsByDateSuccess = response => ({
+export const getJobPostViewsByDateSuccess = (response) => ({
   type: GET_JOBPOST_VIEWS_BY_DATE_SUCCESS,
-  response
+  response,
 });
 export const choosePaymentMethod = () => ({
-  type: CHOOSE_PAYMENT_METHOD
+  type: CHOOSE_PAYMENT_METHOD,
 });
 
-export const sendInvoiceToTalous = detail => ({
+export const sendInvoiceToTalous = (detail) => ({
   type: SEND_INVOICE_TO_TALOUS,
-  detail
+  detail,
 });
 
-export const registerPayment = jobpostOrderDetails => ({
+export const registerPayment = (jobpostOrderDetails) => ({
   type: REGISTER_PAYMENT,
-  jobpostOrderDetails
+  jobpostOrderDetails,
 });
 
 export const processOnlinePayment = () => ({
-  type: PROCESS_ONLINE_PAYMENT
+  type: PROCESS_ONLINE_PAYMENT,
 });
 
-export const displayPaymentStatusMessage = responseText => ({
+export const displayPaymentStatusMessage = (responseText) => ({
   type: DISPLAY_PAYMENT_STATUS_MESSAGE,
-  responseText
+  responseText,
 });
 
 export const autoEmailToApplicant = () => ({
-  type: AUTO_EMAIL_TO_APPLICANT
+  type: AUTO_EMAIL_TO_APPLICANT,
 });
 
-export const populateEmailMessage = languages => ({
+export const populateEmailMessage = (languages) => ({
   type: POPULATE_EMAIL_MESSAGE,
-  languages
+  languages,
 });
 
 // POPULATE FORM
@@ -474,24 +474,24 @@ export const populateEmailMessage = languages => ({
 export const populateVacancyForm = (id, isToEdit) => ({
   type: POPULATE_VACANCY_FORM,
   id,
-  isToEdit
+  isToEdit,
 });
 export const populateVacancyFormSuccess = (campaignDetails, isToEdit) => ({
   type: POPULATE_VACANCY_FORM_SUCCESS,
   campaignDetails,
-  isToEdit
+  isToEdit,
 });
 
 export const editVacancyForm = (id, isToEdit) => ({
   type: EDIT_VACANCY_FORM,
   id,
-  isToEdit
+  isToEdit,
 });
 
 // POPULATE SIGNUP FORM
-export const populateSignupForm = applicantData => ({
+export const populateSignupForm = (applicantData) => ({
   type: POPULATE_SIGNUP_FORM,
-  applicantData
+  applicantData,
 });
 
 // UPDATE ADVERTISEMENT
@@ -499,71 +499,71 @@ export const populateSignupForm = applicantData => ({
 export const updateAdvertisement = (id, isToEdit) => ({
   type: UPDATE_ADVERTISEMENT,
   id,
-  isToEdit
+  isToEdit,
 });
-export const changeCampaign = campaign => ({
+export const changeCampaign = (campaign) => ({
   type: CHANGE_CAMPAIGN,
-  campaign
+  campaign,
 });
-export const saveNewCampaign = id => ({
+export const saveNewCampaign = (id) => ({
   type: SAVE_NEW_CAMPAIGN,
-  id
+  id,
 });
 export const saveNewCampaignSuccess = () => ({
-  type: SAVE_NEW_CAMPAIGN_SUCCESS
+  type: SAVE_NEW_CAMPAIGN_SUCCESS,
 });
-export const changeActivePostToInactive = id => ({
+export const changeActivePostToInactive = (id) => ({
   type: CHANGE_ACTIVE_POST_TO_INACTIVE,
-  id
+  id,
 });
 
 // DELETE ADVERTISEMENT
-export const deleteJobOffer = id => ({
+export const deleteJobOffer = (id) => ({
   type: DELETE_JOB_OFFER,
-  id
+  id,
 });
 
-export const deleteAdvertisement = id => ({
+export const deleteAdvertisement = (id) => ({
   type: DELETE_ADVERTISEMENT,
-  id
+  id,
 });
-export const warnToDelete = id => ({
+export const warnToDelete = (id) => ({
   type: WARN_TO_DELETE,
-  id
+  id,
 });
 
 export const deleteSuccess = () => ({
-  type: DELETE_SUCCESS
+  type: DELETE_SUCCESS,
 });
 
 // GET ALL CAMAPIGNS
-export const chooseCampaign = campaign => ({
+export const chooseCampaign = (campaign) => ({
   type: CHOOSE_CAMPAIGN,
-  campaign
+  campaign,
 });
 export const getAllCampaigns = () => ({ type: GET_ALL_CAMPAIGNS });
-export const getAllCampaignsSuccess = result => ({
+export const getAllCampaignsSuccess = (result) => ({
   type: GET_ALL_CAMPAIGNS_SUCCESS,
-  result
+  result,
 });
 export const saveMarketingDetails = () => ({
-  type: SAVE_MARKETING_DETAILS
+  type: SAVE_MARKETING_DETAILS,
 });
-export const saveMarketingDetailsSuccess = details => ({
+export const saveMarketingDetailsSuccess = (details) => ({
   type: SAVE_MARKETING_DETAILS_SUCCESS,
-  details
+  details,
 });
 
 // GET ALL JOB CATEGORIES
-export const chooseJobCategory = name => ({
+export const chooseJobCategory = (name) => ({
   type: CHOOSE_JOB_CATEGORY,
-  name
+  name,
 });
 
 export const getAllJobCategory = () => ({ type: GET_ALL_JOB_CATEGORY });
-export const getAllJobCategorySuccess = result => ({
+export const getAllJobCategorySuccess = (result) => ({
   type: GET_ALL_JOB_CATEGORY_SUCCESS,
-  result
+  result,
 });
 /* export const getAllJobCategoryFromEstoniaSuccess = (jobTags) => ({
   type: GET_ALL_JOB_CATEGORY_FROM_ESTONIA_SUCCESS,
@@ -572,89 +572,89 @@ export const getAllJobCategorySuccess = result => ({
 
 // COMPANY PROFILE
 export const addCompanyProfile = () => ({
-  type: ADD_COMPANY_PROFILE
+  type: ADD_COMPANY_PROFILE,
 });
 export const getCompanyProfile = () => ({
-  type: GET_COMPANY_PROFILE
+  type: GET_COMPANY_PROFILE,
 });
-export const getCompanyProfileSuccess = response => ({
+export const getCompanyProfileSuccess = (response) => ({
   type: GET_COMPANY_PROFILE_SUCCESS,
-  response
+  response,
 });
-export const getCompanyProfileFailed = response => ({
+export const getCompanyProfileFailed = (response) => ({
   type: GET_COMPANY_PROFILE_FAILED,
-  response
+  response,
 });
 export const addNewCompanyStart = () => ({
-  type: ADD_NEW_COMPANY_START
+  type: ADD_NEW_COMPANY_START,
 });
 
 export const addNewCompanyEnd = () => ({
-  type: ADD_NEW_COMPANY_END
+  type: ADD_NEW_COMPANY_END,
 });
 
-export const adminGetUserCompanyProfile = id => ({
+export const adminGetUserCompanyProfile = (id) => ({
   type: ADMIN_GET_USER_PROFILE,
-  id
+  id,
 });
 
 // GET USER'S ALL COMPANIES
-export const getUserCompanyList = isProfileUpdated => ({
+export const getUserCompanyList = (isProfileUpdated) => ({
   type: GET_USER_COMPANIES_LIST,
-  isProfileUpdated
+  isProfileUpdated,
 });
-export const getUserCompanyListSuccess = parsedResult => ({
+export const getUserCompanyListSuccess = (parsedResult) => ({
   type: GET_USER_COMPANIES_LIST_SUCCESS,
-  parsedResult
+  parsedResult,
 });
 
 // SELECT COMPANY
-export const selectCompany = data => ({ type: SELECT_COMPANY, data });
-export const selectCompanySuccess = data => ({
+export const selectCompany = (data) => ({ type: SELECT_COMPANY, data });
+export const selectCompanySuccess = (data) => ({
   type: SELECT_COMPANY_SUCCESS,
-  data
+  data,
 });
 
 // APPLICANT PROFILE
 export const addApplicantProfile = () => ({
-  type: ADD_APPLICANT_PROFILE
+  type: ADD_APPLICANT_PROFILE,
 });
 export const getApplicantProfile = () => ({
-  type: GET_APPLICANT_PROFILE
+  type: GET_APPLICANT_PROFILE,
 });
-export const getApplicantProfileSuccess = response => ({
+export const getApplicantProfileSuccess = (response) => ({
   type: GET_APPLICANT_PROFILE_SUCCESS,
-  response
+  response,
 });
 
 export const getFavoriteJobs = () => ({
-  type: GET_FAVORITE_JOBS
+  type: GET_FAVORITE_JOBS,
 });
-export const getFavoriteJobsSuccess = favoriteJobs => ({
+export const getFavoriteJobsSuccess = (favoriteJobs) => ({
   type: GET_FAVORITE_JOBS_SUCCESS,
-  favoriteJobs
+  favoriteJobs,
 });
 
 export const getAppliedJobs = () => ({
-  type: GET_APPLIED_JOBS
+  type: GET_APPLIED_JOBS,
 });
-export const getAppliedJobsSuccess = response => ({
+export const getAppliedJobsSuccess = (response) => ({
   type: GET_APPLIED_JOBS_SUCCESS,
-  response
+  response,
 });
 
 export const getApplicantDashboardInfo = () => ({
-  type: GET_APPLICANT_DASHBOARD_INFO
+  type: GET_APPLICANT_DASHBOARD_INFO,
 });
-export const getApplicantDashboardInfoSuccess = response => ({
+export const getApplicantDashboardInfoSuccess = (response) => ({
   type: GET_APPLICANT_DASHBOARD_INFO_SUCCESS,
-  response
+  response,
 });
 export const toggleEmailNotification = () => ({
-  type: TOGGLE_EMAIL_NOTIFICATION
+  type: TOGGLE_EMAIL_NOTIFICATION,
 });
 export const updateEmailNotification = () => ({
-  type: UPDATE_EMAIL_NOTIFICATION
+  type: UPDATE_EMAIL_NOTIFICATION,
 });
 
 // FAVORITE JOBS
@@ -662,45 +662,45 @@ export const toggleFavoriteJobs = (id, jobName, dateOfApplication) => ({
   type: TOGGLE_FAVORITE_JOBS,
   id,
   jobName,
-  dateOfApplication
+  dateOfApplication,
 });
-export const deleteFavoriteJobs = id => ({
+export const deleteFavoriteJobs = (id) => ({
   type: DELETE_FAVORITE_JOBS,
-  id
+  id,
 });
 
 // ADMINS
-export const adminSearchCompany = isToRetainSelectedPage => ({
+export const adminSearchCompany = (isToRetainSelectedPage) => ({
   type: ADMIN_SEARCH_COMPANY,
-  isToRetainSelectedPage
+  isToRetainSelectedPage,
 });
-export const adminSearchCompanySuccess = response => ({
+export const adminSearchCompanySuccess = (response) => ({
   type: ADMIN_SEARCH_COMPANY_SUCCESS,
-  response
+  response,
 });
-export const adminSearchApplicant = isToRetainSelectedPage => ({
+export const adminSearchApplicant = (isToRetainSelectedPage) => ({
   type: ADMIN_SEARCH_APPLICANT,
-  isToRetainSelectedPage
+  isToRetainSelectedPage,
 });
-export const adminSearchApplicantSuccess = response => ({
+export const adminSearchApplicantSuccess = (response) => ({
   type: ADMIN_SEARCH_APPLICANT_SUCCESS,
-  response
+  response,
 });
 export const adminSearchInvoice = () => ({
-  type: ADMIN_SEARCH_INVOICE
+  type: ADMIN_SEARCH_INVOICE,
 });
-export const adminSearchInvoiceSuccess = response => ({
+export const adminSearchInvoiceSuccess = (response) => ({
   type: ADMIN_SEARCH_INVOICE_SUCCESS,
-  response
+  response,
 });
-export const adminSearchAdsMarketing = keepRowExpanded => ({
+export const adminSearchAdsMarketing = (keepRowExpanded) => ({
   type: ADMIN_SEARCH_ADS_MARKETING,
-  keepRowExpanded
+  keepRowExpanded,
 });
 export const adminSearchAdsMarketingSuccess = (response, keepRowExpanded) => ({
   type: ADMIN_SEARCH_ADS_MARKETING_SUCCESS,
   response,
-  keepRowExpanded
+  keepRowExpanded,
 });
 export const adminUpdateMarketingStatus = (
   company_id,
@@ -710,92 +710,92 @@ export const adminUpdateMarketingStatus = (
   type: ADMIN_UPDATE_MARKETING_STATUS,
   company_id,
   post_id,
-  campaign_id
+  campaign_id,
 });
 
 // Admin additional service for activated help and sos feature
 
-export const adminSearchAdditionalService = isToRetainSelectedPage => ({
+export const adminSearchAdditionalService = (isToRetainSelectedPage) => ({
   type: ADMIN_SEARCH_ADDITIONAL_SERVICE,
-  isToRetainSelectedPage
+  isToRetainSelectedPage,
 });
 
-export const adminSearchAdditionalServiceSuccess = response => ({
+export const adminSearchAdditionalServiceSuccess = (response) => ({
   type: ADMIN_SEARCH_ADDITIONAL_SERVICE_SUCCESS,
-  response
+  response,
 });
 
-export const updatePaymentStatus = orderDetails => ({
+export const updatePaymentStatus = (orderDetails) => ({
   type: UPDATE_PAYMENT_STATUS,
-  orderDetails
+  orderDetails,
 });
 
 export const adminExpandAdRow = (post_id, sm_marketing_status) => ({
   type: ADMIN_EXPAND_AD_ROW,
   post_id,
-  sm_marketing_status
+  sm_marketing_status,
 });
 
 export const adminCloseAdRow = () => ({
-  type: ADMIN_CLOSE_AD_ROW
+  type: ADMIN_CLOSE_AD_ROW,
 });
-export const getMarketingBudgetSuccess = details => ({
+export const getMarketingBudgetSuccess = (details) => ({
   type: GET_MARKETING_BUDGET_SUCCESS,
-  details
+  details,
 });
 
 export const editContactDetails = (details, user) => ({
   type: EDIT_CONTACT_DETAILS,
   details,
-  user
+  user,
 });
 
 export const cancelEditContactDetails = () => ({
-  type: CANCEL_EDIT_CONTACT_DETAILS
+  type: CANCEL_EDIT_CONTACT_DETAILS,
 });
-export const adminUpdateUserProfile = user => ({
+export const adminUpdateUserProfile = (user) => ({
   type: ADMIN_UPDATE_USER_PROFILE,
-  user
+  user,
 });
 
 export const adminUpdateUserProfileSuccess = () => ({
-  type: ADMIN_UPDATE_USER_PROFILE_SUCCESS
+  type: ADMIN_UPDATE_USER_PROFILE_SUCCESS,
 });
 export const adminUpdateUserProfileFail = () => ({
-  type: ADMIN_UPDATE_USER_PROFILE_FAIL
+  type: ADMIN_UPDATE_USER_PROFILE_FAIL,
 });
 // ASYNC ACTIONS SNACKBAR
 export const showSuccessSnackbar = () => ({
-  type: SHOW_SUCCESS_SNACKBAR
+  type: SHOW_SUCCESS_SNACKBAR,
 });
 export const showFailedSnackbar = () => ({
-  type: SHOW_FAILED_SNACKBAR
+  type: SHOW_FAILED_SNACKBAR,
 });
-export const showCustomErrorMsg = msg => ({
+export const showCustomErrorMsg = (msg) => ({
   type: SHOW_CUSTOM_ERROR_MESSAGE,
-  msg
+  msg,
 });
 export const closeSnackbar = () => ({
-  type: CLOSE_SNACKBAR
+  type: CLOSE_SNACKBAR,
 });
 export const showDialog = () => ({
-  type: SHOW_DIALOG
+  type: SHOW_DIALOG,
 });
 export const closeDialog = () => ({
-  type: CLOSE_DIALOG
+  type: CLOSE_DIALOG,
 });
 
 // SEND APPLICATION
-export const sendApplication = id => ({
+export const sendApplication = (id) => ({
   type: SEND_APPLICATION,
-  id
+  id,
 });
 export const sendApplicationSuccess = () => ({
-  type: SEND_APPLICATION_SUCCESS
+  type: SEND_APPLICATION_SUCCESS,
 });
 
 export const resetApplicationSent = () => ({
-  type: RESET_APPLICATION_SENT
+  type: RESET_APPLICATION_SENT,
 });
 
 // GET APPLICATION
@@ -809,14 +809,15 @@ export const getApplicationDetailsById = (
   instanceId,
   //company_id,
   email,
-  jobpostId
+  jobpostId,
 });
-export const getApplicationDetailsByIdSuccess = response => ({
+export const getApplicationDetailsByIdSuccess = (response) => ({
   type: GET_APPLICATION_DETAILS_BY_ID_SUCCESS,
-  response
+  response,
 });
 
 export const updateApplicantStatus = (
+  jobSeekerId,
   application_id,
   // company_id,
   post_id,
@@ -824,11 +825,12 @@ export const updateApplicantStatus = (
   status
 ) => ({
   type: UPDATE_APPLICANT_STATUS,
+  jobSeekerId,
   application_id,
   // company_id,
   post_id,
   email,
-  status
+  status,
 });
 
 export const updateJobApplicationDetails = (
@@ -843,38 +845,38 @@ export const updateJobApplicationDetails = (
   //company_id,
   //post_id,
   //email,
-  update
+  update,
 });
 
 export const editInterviewDetails = (isToEdit, id) => ({
   type: EDIT_INTERVIEW_DETAILS,
   isToEdit,
-  id
+  id,
 });
 
-export const warnToDeleteApplication = id => ({
+export const warnToDeleteApplication = (id) => ({
   type: WARN_TO_DELETE_APPLICATION,
-  id
+  id,
 });
 
 export const deleteApplication = () => ({
-  type: DELETE_APPLICATION
+  type: DELETE_APPLICATION,
 });
 
 // SHOW APPLICATIONS PER PAGE OPTIONS
-export const changeRowsPerPage = rows => ({
+export const changeRowsPerPage = (rows) => ({
   type: CHANGE_ROWS_PER_PAGE,
-  rows
+  rows,
 });
 
 // RESET SEARCH CRITERIA FORM
 export const resetSearchCriteriaForm = () => ({
-  type: RESET_SEARCH_CRITERIA_FORM
+  type: RESET_SEARCH_CRITERIA_FORM,
 });
 
 // CHANGE_PAGINATION to the same page
 
-export const changePagination = changePage => ({
+export const changePagination = (changePage) => ({
   type: CHANGE_PAGINATION,
-  changePage
+  changePage,
 });
