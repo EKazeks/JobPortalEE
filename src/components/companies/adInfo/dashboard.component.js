@@ -52,7 +52,6 @@ const DashboardComponent = ({
   const [jobsToRender, setJobsToRender] = useState([]);
   const [dateOfApplication,setDateOfApplication] = useState();
   const [applicant, setApplicant] = useState({})
-  const [address,setAddress] = useState();
   const selectedPage = 1; 
   const dispatch = useDispatch();
   const { id } = useSelector((state) => state.jobs);
@@ -61,7 +60,6 @@ const DashboardComponent = ({
     axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
       setJobsToRender(res.data);
       setDateOfApplication(dateFormat(res.data.dateOfApplication))
-      setAddress(res.data.jobPostAddress.address)
       setApplicant(res.data.jobPostApplications)
     });
   }, []);
@@ -81,18 +79,7 @@ const DashboardComponent = ({
           <h2 className="ad_title_1">{t("adDetails:dashboard")} </h2>
           <h6 className="ad_title_2">
             <strong style={{ marginRight: 10 }}>
-              {jobsToRender.jobName},{" "}
-              {/* {jobsToRender.jobPostAsukohaAddress.map((address) => {
-                {
-                  if (address.address[17]) {
-                    return address.address
-                      .split(",")
-                      .splice(1)
-                      .toString();
-                  } else return address.address;
-                }
-              })} */}
-              {address}
+              {viewSelectedAd.jobName},{viewSelectedAd.jobPostAddress.address}
             </strong>
           </h6>
           <Divider />
@@ -100,14 +87,20 @@ const DashboardComponent = ({
         <div className="ad_title_3">
           <Grid container spacing={1}>
             <Grid item>
-              <h3>{t("campaign")}: {jobsToRender.campaignType}</h3>
+              <h3>{t("campaign")}: 
+              {viewSelectedAd.campaignType === 'free' ? <span>Free</span> : null}
+              {viewSelectedAd.campaignType === 'lift' ? <span>Lift</span> : null}
+              {viewSelectedAd.campaignType === 'home_page_thing' ? <span>Frontpage news</span> : null}
+              {viewSelectedAd.campaignType === 'noteworthy' ? <span>Remarkable</span> : null}
+              {viewSelectedAd.campaignType === 'some_star' ? <span>Social media start</span> : null}
+              </h3>
             </Grid>
             <Grid item>
-              <h3>{customTranslateCampaign("Free")}</h3>
+              {/* <h3>{customTranslateCampaign(viewSelectedAd.campaignType)}</h3> */}
             </Grid>
           </Grid>
           <strong style={{ color: "#34495e" }}>
-            {jobsToRender && dateOfApplication}
+          {dateFormat(viewSelectedAd.dateOfApplication)}
           </strong>{" "}
         </div>
         <div>
@@ -125,14 +118,18 @@ const DashboardComponent = ({
                   </div>
                   <div>
                     <h3 className="ad_title_1">
-                      {jobsToRender.campaignType}
+                      {viewSelectedAd.campaignType === 'free' ? <span>Free</span> : null}
+                      {viewSelectedAd.campaignType === 'lift' ? <span>Lift</span> : null}
+                      {viewSelectedAd.campaignType === 'home_page_thing' ? <span>Frontpage news</span> : null}
+                      {viewSelectedAd.campaignType === 'noteworthy' ? <span>Remarkable</span> : null}
+                      {viewSelectedAd.campaignType === 'some_star' ? <span>Social media start</span> : null}
                     </h3>
                   </div>
                 </Grid>
                 <CardActions>
                   <Grid item sm={12}>
                     <Link
-                      to={customURL(jobsToRender.url, "campaign")}
+                      to={customURL(viewSelectedAd.url, "campaign")}
                       className="btnLink"
                     >
                       <Button
@@ -141,7 +138,7 @@ const DashboardComponent = ({
                         onClick={() =>
                           changeCampaign(
                             campaigns.find(
-                              (campaign) => campaign.id === jobsToRender.campaignType
+                              (campaign) => campaign.id === viewSelectedAd.campaignType
                             )
                           )
                         }
@@ -162,8 +159,7 @@ const DashboardComponent = ({
                 <CardContent className={classes.cardContent}>
                   <div>
                     <h3>
-                      {/* <strong>{jobsToRender.totalLikes}</strong> */}
-                      <strong>{'0'}</strong>
+                      <strong>{viewSelectedAd.totalLikes}</strong>
                     </h3>
                   </div>
                   <div>{t("adDetails:totalFavs")}</div>
@@ -175,8 +171,7 @@ const DashboardComponent = ({
                 <CardContent className={classes.cardContent}>
                   <div>
                     <h3>
-                      {/* <strong>{jobsToRender.totalViewed}</strong> */}
-                      <strong>{'0'}</strong>
+                      <strong>{viewSelectedAd.totalViewed}</strong>
                     </h3>
                   </div>
                   <div>{t("adDetails:totalViewed")}</div>
@@ -204,7 +199,7 @@ const DashboardComponent = ({
                 <CardContent className={classes.cardContent}>
                   <div>
                     <h3>
-                      <strong>{applicant.length}</strong>
+                      <strong>{viewSelectedAd.jobPostApplications.length}</strong>
                     </h3>
                   </div>
                   <div>{t("adDetails:totalApplication")}</div>
