@@ -1,7 +1,7 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import ExtraServiceButton from '../../../components/companies/advertisements/extraServiceButton.component';
-import { addExtraService } from '../../../actions';
+import React from "react";
+import { connect } from "react-redux";
+import ExtraServiceButton from "../../../components/companies/advertisements/extraServiceButton.component";
+import { addExtraService } from "../../../actions";
 
 class ExtraServiceButtonContainer extends React.Component {
   render() {
@@ -9,12 +9,15 @@ class ExtraServiceButtonContainer extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   extraService: state.advertisement.extraService,
-  userRole: state.client.user.data[6].user_type,
+  userRole: state.client.user.data.user_type,
 });
 
 const mapDispatchToProps = {
   addExtraService,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(ExtraServiceButtonContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ExtraServiceButtonContainer);

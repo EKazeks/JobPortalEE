@@ -80,7 +80,7 @@ const SearchFormComponent = ({
     id: index + 1,
   }));
   if ((objCategory.length = 23)) {
-    //console.log(objCategory)
+    console.log(objCategory)
   }
   return (
     <div>

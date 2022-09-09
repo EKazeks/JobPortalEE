@@ -208,7 +208,7 @@ const PaymentInfoComponent = ({
                 <Grid container justifyContent="space-between" alignItems="baseline" spacing={2}>
                   <Grid item>
                     <label className={classes.label}>
-                      <Radio value="online" disabled={roleId === 1} />
+                      <Radio value="online" disabled={roleId === 1} />  
                       {t('online')}
                     </label>
                   </Grid>
