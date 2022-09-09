@@ -221,7 +221,7 @@ const AdDetails = ({
                      {viewSelectedAd.campaignType === "lift" || viewSelectedAd.campaignType === "Lift" ? <span>Lift</span> : null}
                      {viewSelectedAd.campaignType === "home_page_thing" || viewSelectedAd.campaignType === "Home_page_thing" ? <span>Front Page News</span> : null}
                      {viewSelectedAd.campaignType === "noteworthy" || viewSelectedAd.campaignType === "Noteworthy" ? <span>Remarkable</span> : null}
-                     {viewSelectedAd.campaignType === "some_start" || viewSelectedAd.campaignType === "Some_start" ? <span>Social Media Start</span> : null}
+                     {viewSelectedAd.campaignType === "some_star" || viewSelectedAd.campaignType === "Some_star" ? <span>Social Media Star</span> : null}
                    </h6>
                    <h6>
                      <strong>{t("postStatus")}: </strong>

@@ -48,7 +48,8 @@ import {
   apiManualPost,
   apiOpenRequest,
   apiGetJobsOffers,
-  apiManualDelete
+  apiManualDelete,
+  apiManualPatch
 } from "../utils/request";
 import { filterObj } from "../utils/wrappers";
 import {
@@ -718,6 +719,7 @@ function* updateCampaignSaga({ id }) {
     const url = `https://localhost:7262/updateJobOfferCampaignType`;
     const uuid = store.getState().client.user.data;
     const { type, includes_mktbudget } = advertisement.selectedCampaign;
+    const { marketing_budget, marketing_platform,more_budget } = advertisement.marketingDetails;
     const campaign_id = advertisement.selectedCampaign.id;
     const userRole = client.user.data.user_type;
     const { id } = advertisement.viewSelectedAd;
@@ -725,7 +727,7 @@ function* updateCampaignSaga({ id }) {
     const companyId =
       userRole === "admin"
         ? id.split("admin")[1]
-        : companyProfile.profile.company_id;
+        : companyProfile.profile.id;
     const campaignDate = formValueSelector("campaign")(
       store.getState(),
       "due_date"
@@ -733,10 +735,11 @@ function* updateCampaignSaga({ id }) {
     let parsedCompany = {};
 
     const body = {
-      campaignType: type,
-      //uuid,
       id,
-      //company_id: companyId,
+      campaignType: type,
+      marketing_budget,
+      marketing_platform,
+      more_budget,
       campaignDate
     };
 
@@ -756,77 +759,71 @@ function* updateCampaignSaga({ id }) {
         : 0;
     }
 
-    // const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
-    axios.patch(url, body).then(res => {
-      response = res;
-    });
-    if (response === 400) {
-      yield put(showFailedSnackbar());
-    } else {
-      yield put(showSuccessSnackbar());
+    const result = yield call(apiManualPatch, url, JSON.stringify(body));
+    const resultParsed = result.data;
+
+    if (resultParsed) {
+      //If admin is upgrading post or updating jobpost on behalf of companies:
+      if (userRole === 'admin') {
+        const body2 = {
+          id,
+          campaignType: type,
+          campaignDate
+        };
+        const jobPostOwner = yield call(apiManualRequest, `https://localhost:7262/getCompanyById/${id}`, { ...body2 });
+        parsedCompany = jobPostOwner.data;
+      }
+
+      const { companyName, companyBusinessId, firstName, lastName, email, address, zipCode, city } =
+        userRole === 'admin' ? parsedCompany[0] : companyProfile.profile;
+      const jobTitle = advertisement.viewSelectedAd.jobName;
+      const description = `${jobTitle} | Kampanjapaketti - ${customTranslateCampaign(campaign_id)}`;
+      const mkt_description = `${jobTitle} | Lisätty markkinointiraha`;
+
+      const orderId = '112'; // hardcoded!!! need to add on backend
+      const previousCampaignPrice = advertisement.viewSelectedAd.campaignValue;
+      const newCampaignPrice = resultParsed.campaignValue;
+      const amount = newCampaignPrice - previousCampaignPrice;
+
+      // If mkt budget is added.
+      let marketing_budget = 0;
+      const newMarketingBudget = resultParsed.marketing_budget;
+      if (includes_mktbudget && newMarketingBudget > 0) {
+        marketing_budget = newMarketingBudget;
+      }
+      const totalSum = (marketing_budget + amount) * 1.24;
+
+      // If new and more expensive campaign price OR more marketing budget, generate invoice
+
+      const details = {
+        company_id: companyId,
+        companyName,
+        companyBusinessId,
+        firstName,
+        lastName,
+        email,
+        address,
+        zipCode,
+        city,
+        description,
+        totalSum,
+        amount,
+        post_id: parseInt(post_id),
+        order_id: orderId,
+        marketing_budget,
+        mkt_description,
+        isSameCampaign: amount === 0 ? true : false, // Meaning same campaign but new budget
+        selectedCampaign: advertisement.selectedCampaign,
+        postIdToFetch: id,
+      };
+      if (payment_method === 'invoice') {
+        yield put(sendInvoiceToTalous(details));
+      } else if (payment_method === 'online') {
+        yield put(registerPayment(details));
+      } else {
+        yield put(showSuccessSnackbar());
+      }
     }
-
-    // if (resultParsed) {
-    //   //If admin is upgrading post or updating jobpost on behalf of companies:
-    //   if (userRole === 'admin') {
-    //     const body2 = {
-    //       company_id: parseInt(companyId),
-    //       uuid,
-    //     };
-    //     const jobPostOwner = yield call(apiManualPost, `${API_SERVER}/GetCompanyProfile`, JSON.stringify({ ...body2 }));
-    //     parsedCompany = JSON.parse(jobPostOwner.data);
-    //   }
-
-    //   const { company_name, business_id, firstname, lastname, email, address, zip_code, city } =
-    //     userRole === 'admin' ? parsedCompany[0] : companyProfile.profile;
-    //   const jobTitle = advertisement.viewSelectedAd.job_title;
-    //   const description = `${jobTitle} | Kampanjapaketti - ${customTranslateCampaign(campaign_id)}`;
-    //   const mkt_description = `${jobTitle} | Lisätty markkinointiraha`;
-
-    //   const orderId = resultParsed[0].order_id;
-    //   const previousCampaignPrice = resultParsed[0].prev_campaign_money;
-    //   const newCampaignPrice = resultParsed[0].new_campaign_money;
-    //   const amount = newCampaignPrice - previousCampaignPrice;
-
-    //   // If mkt budget is added.
-    //   let marketing_budget = 0;
-    //   const newMarketingBudget = resultParsed[0].marketing_budget;
-    //   if (includes_mktbudget && newMarketingBudget > 0) {
-    //     marketing_budget = newMarketingBudget;
-    //   }
-    //   const totalSum = (marketing_budget + amount) * 1.24;
-
-    //   // If new and more expensive campaign price OR more marketing budget, generate invoice
-
-    //   const details = {
-    //     company_id: companyId,
-    //     company_name,
-    //     business_id,
-    //     firstname,
-    //     lastname,
-    //     email,
-    //     address,
-    //     zip_code,
-    //     city,
-    //     description,
-    //     totalSum,
-    //     amount,
-    //     post_id: parseInt(post_id),
-    //     order_id: orderId,
-    //     marketing_budget,
-    //     mkt_description,
-    //     isSameCampaign: amount === 0 ? true : false, // Meaning same campaign but new budget
-    //     selectedCampaign: advertisement.selectedCampaign,
-    //     postIdToFetch: id,
-    //   };
-    //   if (payment_method === 'invoice') {
-    //     yield put(sendInvoiceToTalous(details));
-    //   } else if (payment_method === 'online') {
-    //     yield put(registerPayment(details));
-    //   } else {
-    //     yield put(showSuccessSnackbar());
-    //   }
-    // }
   } catch (error) {
     console.log(error);
     yield put(showFailedSnackbar());

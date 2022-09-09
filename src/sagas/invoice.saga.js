@@ -12,7 +12,7 @@ import { API_SERVER, SEND_INVOICE_TO_TALOUS } from '../constants';
 import store from '../store';
 import { apiManualPost } from '../utils/request';
 
-function* sendInvoiceToTalousSaga({ detail }) {
+function* sendInvoiceToTalousSaga({ details }) {
   const url = `${API_SERVER}/SendJobPostInvoice`;
   const isToChangeCampaign = store.getState().advertisement.isToChangeCampaign;
 
@@ -36,7 +36,7 @@ function* sendInvoiceToTalousSaga({ detail }) {
     isSameCampaign,
     selectedCampaign,
     postIdToFetch,
-  } = detail;
+  } = details;
 
   try {
     const invoiceBody = {
@@ -120,7 +120,8 @@ function* sendInvoiceToTalousSaga({ detail }) {
     if (!!amount || !!marketing_budget) {
       const response = yield call(apiManualPost, url, JSON.stringify({ ...invoiceBody }));
       const campaign_id = selectedCampaign.id;
-      if (response.data === 'Invoice added and sent to the customer') {
+      // if (response.data === 'Invoice added and sent to the customer') {
+      if (isToChangeCampaign) { // This line need to be deleted after when INVOICE logic is working. Uncomment above line
         if (isToChangeCampaign) {
           yield put(showSuccessSnackbar());
           yield put(openAdToSeeAdInfo(postIdToFetch));

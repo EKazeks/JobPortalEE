@@ -437,7 +437,7 @@ const CampaignComponent = ({
           horizontal: 'center',
         }}
         open={showSuccessSnackbar}
-        autoHideDuration={3000}
+        autoHideDuration={2000}
         onClose={() => {
           closeSnackbar();
           window.history.back();
