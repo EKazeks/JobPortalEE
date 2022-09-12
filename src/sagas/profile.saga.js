@@ -11,7 +11,11 @@ import {
   ESTONIAN_GET_APPLICANT_PROFILE,
 } from "../constants";
 import store from "../store";
-import { apiManualPatch, apiManualPost, apiManualRequest } from "../utils/request";
+import {
+  apiManualPatch,
+  apiManualPost,
+  apiManualRequest,
+} from "../utils/request";
 import {
   getCompanyProfileSuccess,
   showSuccessSnackbar,
@@ -74,7 +78,7 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
-        companyAdditionalUsers: refinedFormValues.companyAdditionalUsers
+        companyAdditionalUsers: refinedFormValues.companyAdditionalUsers,
       });
     } else if (!uploadedLogo.name) {
       const base64 = formValues.logo_document;
@@ -92,7 +96,7 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
-        companyAdditionalUsers: refinedFormValues.companyUser
+        companyAdditionalUsers: refinedFormValues.companyAdditionalUsers,
       });
     } else {
       const base64 = formValues.logo_document;
@@ -110,61 +114,14 @@ function* addCompanyProfile() {
         companyUrl: refinedFormValues.companyUrl,
         companyInformation: refinedFormValues.profileDescription,
         companyLogo: base64,
-        companyAdditionalUsers: refinedFormValues.companyUser
+        companyAdditionalUsers: refinedFormValues.companyAdditionalUsers,
       });
-    } 
-
-    const base64 = formValues.logo_document;
-   const bodyForAddCompany = JSON.stringify({
-      id: id,
-      companyName: refinedFormValues.company_name,
-      firstName: refinedFormValues.firstName,
-      lastName: refinedFormValues.lastName,
-      email: refinedFormValues.email,
-      telephone: refinedFormValues.contact_number,
-      businessId: refinedFormValues.business_id,
-      address: refinedFormValues.address,
-      city: refinedFormValues.city,
-      postalCode: refinedFormValues.zip_code,
-      companyUrl: refinedFormValues.company_url,
-      profileDescription: refinedFormValues.profile_description,
-      //companyLogo: base64,
-      additionalCompaniesAdditionalUsers: refinedFormValues.companyAdditionalUsers,
-      companyId: companyId
-    });
-  //   const result = yield call(apiManualPost, url, body);
-  //   if (result.data && isToAddNewProfile === true) {
-  //     yield put(showSuccessSnackbar());
-  //     if (result.data && isToAddNewProfile === false) {
-  //       yield call(apiManualPatch, url, body);
-  //       yield put(getCompanyProfile());
-  //       yield put(getUserCompanyList(true));
-  //     } else {
-  //       yield put(getUserCompanyList());
-  //       // yield put(navigateAdsFromMainMenu(1));
-  //     }
-  //   } else if (result.data != result.data) {
-  //     //const email = result.data.split("-")[1];
-  //     yield put(
-  //       // showCustomErrorMsg(`${email}${i18next.t("profile:existingUser")}`)
-  //       showCustomErrorMsg(`${i18next.t("profile:existingUser")}`)
-  //     );
-  //   } else if (result.data.includes("Same company already exists")) {
-  //     const msg = i18next.t("profile:companyExists");
-  //     yield put(showCustomErrorMsg(msg));
-  //   } else {
-  //     yield put(showFailedSnackbar());
-  //   }
-  // } catch (e) {
-  //   console.log(e);
-  //   yield put(showFailedSnackbar());
-  // }
-    
-
-    const resultForUpdateCompany = yield call(apiManualPatch, url, body);
-    const resultForAddCompany = yield call(apiManualPost, url, bodyForAddCompany)
-
-    if (resultForUpdateCompany.data || resultForAddCompany.data) {
+    }
+    const result = yield call(apiManualPatch, url, body);
+    if (
+      (result.data && isToAddNewProfile === false) ||
+      (result.data && isToAddNewProfile === true)
+    ) {
       yield put(showSuccessSnackbar());
       if (resultForAddCompany.data && isToAddNewProfile === true) {
         //yield call(apiManualPost, url, body)
@@ -216,7 +173,7 @@ function* getCompanyProfileSaga() {
 function* getApplicantProfileSaga() {
   try {
     const { client } = store.getState();
-     const url = `${ESTONIAN_GET_APPLICANT_PROFILE}/${client.user.data.company_id}`;
+    const url = `${ESTONIAN_GET_APPLICANT_PROFILE}/${client.user.data.company_id}`;
     //const url = `${ESTONIAN_GET_APPLICANT_PROFILE}/${id}`;
 
     const result = yield call(apiManualRequest, url);
@@ -231,13 +188,14 @@ function* addApplicantProfile() {
   try {
     let url;
     let body;
+
     const { client, jobseekerProfile } = store.getState();
     const uuid = client.user.data[2];
     const formValues = getFormValues("jobseekerProfile")(store.getState());
     const { uploadedProfilePic } = jobseekerProfile;
     const uploadedCV =
       jobseekerProfile.uploadedDocument && jobseekerProfile.uploadedDocument[0];
-    const cv_base64 = formValues && formValues.cv_document
+    const cv_base64 = formValues && formValues.applicantDocument;
 
     if (!!uploadedCV && formValues.cv_document) {
       formValues.CV = {
@@ -255,58 +213,94 @@ function* addApplicantProfile() {
 
     if (!formValues.applicant_id) {
       url = `https://localhost:7262/fullFillApplicant`;
-    } else {
-      url = `https://localhost:7262/fullFillApplicant`;
-    }
-    console.log('FORMVALUES ===>>', formValues);
-    if (Array.isArray(formValues.photo_document) === true) {
-      const base64 = formValues.photo_document;
-      body = {
-        id: formValues.id,
-        firstName: formValues.firstName,
-        lastName: formValues.lastName,
-        email: formValues.email,
-        contactNumber: formValues.contactNumber,
-        linkedIn: formValues.linkedIn,
-        portfolio: formValues.portfolio,
-        description: formValues.profileDescription,
-        applicantPhoto: base64.toString(),
-        applicantCv: cv_base64,
-        applicantCvFileName: uploadedCV.name
-      };
-    } else if (!uploadedProfilePic.name) {
-      const base64 = formValues.photo_document;
-      body = {
-        id: formValues.id,
-        firstName: formValues.firstName,
-        lastName: formValues.lastName,
-        email: formValues.email,
-        contactNumber: formValues.contactNumber,
-        linkedIn: formValues.linkedIn,
-        portfolio: formValues.portfolio,
-        description: formValues.profileDescription,
-        applicantPhoto: base64.toString(),
-        applicantCv: cv_base64,
-        applicantCvFileName: uploadedCV.name
-      };
-    } else {
-      const base64 = formValues.photo_document;
-      body = {
-        id: formValues.id,
-        firstName: formValues.firstName,
-        lastName: formValues.lastName,
-        email: formValues.email,
-        contactNumber: formValues.contactNumber,
-        linkedIn: formValues.linkedIn,
-        portfolio: formValues.portfolio,
-        description: formValues.profileDescription,
-        applicantPhoto: base64.toString(),
-        applicantCv: cv_base64,
-        applicantCvFileName: uploadedCV.name
-      };
+      // } else {
+      //   url = `https://localhost:7262/fullFillApplicant`;
     }
 
-    const result = yield call(axios.patch(url, body).then((res) => res.data));
+    console.log("FORMVALUES ===>>", formValues);
+
+    const photo_base64 = formValues.applicantPhoto.content;
+
+    // if (Array.isArray(formValues.photo_document) === true) {
+    // const base64 = formValues.photo_document;
+
+    //   body = {
+    //     id: formValues.id,
+    //     firstName: formValues.firstName,
+    //     lastName: formValues.lastName,
+    //     email: formValues.email,
+    //     contactNumber: formValues.contactNumber,
+    //     linkedIn: formValues.linkedIn,
+    //     portfolio: formValues.portfolio,
+    //     description: formValues.profileDescription,
+    //     // applicantPhoto: base64.toString(),
+    //     // applicantCv: cv_base64,
+    //     // applicantCvFileName: uploadedCV.name
+    //     applicantPhoto: photo_base64,
+    //     applicantCv: cv_base64.content,
+    //     applicantCvFileName: cv_base64.filename,
+    //   };
+    // } else if (!uploadedProfilePic.name) {
+    // const base64 = formValues.photo_document;
+
+    //   body = {
+    //     id: formValues.id,
+    //     firstName: formValues.firstName,
+    //     lastName: formValues.lastName,
+    //     email: formValues.email,
+    //     contactNumber: formValues.contactNumber,
+    //     linkedIn: formValues.linkedIn,
+    //     portfolio: formValues.portfolio,
+    //     description: formValues.profileDescription,
+    //     // applicantPhoto: base64.toString(),
+    //     // applicantCv: cv_base64,
+    //     // applicantCvFileName: uploadedCV.name
+    //     applicantPhoto: photo_base64,
+    //     applicantCv: cv_base64.content,
+    //     applicantCvFileName: cv_base64.filename,
+    //   };
+    // } else {
+    // const base64 = formValues.photo_document;
+
+    //   body = {
+    //     id: formValues.id,
+    //     firstName: formValues.firstName,
+    //     lastName: formValues.lastName,
+    //     email: formValues.email,
+    //     contactNumber: formValues.contactNumber,
+    //     linkedIn: formValues.linkedIn,
+    //     portfolio: formValues.portfolio,
+    //     description: formValues.profileDescription,
+    //     // applicantPhoto: base64.toString(),
+    //     // applicantCv: cv_base64,
+    //     // applicantCvFileName: uploadedCV.name,
+    //     applicantPhoto: photo_base64,
+    //     applicantCv: cv_base64.content,
+    //     applicantCvFileName: cv_base64.filename,
+    //   };
+    // }
+
+    body = JSON.stringify({
+      id: formValues.id,
+      firstName: formValues.firstName,
+      lastName: formValues.lastName,
+      email: formValues.email,
+      contactNumber: formValues.contactNumber,
+      linkedIn: formValues.linkedIn,
+      portfolio: formValues.portfolio,
+      description: formValues.profileDescription,
+      // applicantPhoto: base64.toString(),
+      // applicantCv: cv_base64,
+      // applicantCvFileName: uploadedCV.name
+      applicantPhoto: photo_base64,
+      applicantCv: cv_base64.content,
+      applicantCvFileName: cv_base64.fileName,
+    });
+
+    console.log(body);
+
+    const result = yield call(apiManualPatch, url, body);
+
     if (result.data) {
       yield put(getApplicantProfile());
       yield put(showSuccessSnackbar());
