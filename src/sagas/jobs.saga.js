@@ -15,7 +15,7 @@ import {
   RESET_SEARCH_CRITERIA_FORM,
   JOBPOST_COUNT_PER_PAGE,
   mol_page_url,
-  BASE_API_SERVER_EST
+  BASE_API_SERVER_EST,
 } from "../constants";
 import {
   filterJobsSuccess,
@@ -31,13 +31,13 @@ import {
   getApplicantDashboardInfoSuccess,
   changeAdvertPage,
   changePagination,
-  getWorkStartSuccess
+  getWorkStartSuccess,
 } from "../actions";
 import {
   apiOpenPost,
   apiManualPost,
   apiOpenRequest,
-  apiManualRequest
+  apiManualRequest,
 } from "../utils/request";
 import store from "../store";
 import axios from "axios";
@@ -62,24 +62,24 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
         : undefined,
       portal_category_id:
         searchFormValues.portal_category_id.length > 0
-          ? searchFormValues.portal_category_id.map(category =>
+          ? searchFormValues.portal_category_id.map((category) =>
               category.id.toString()
             )
           : undefined,
       job_type:
         searchFormValues.job_type.length > 0
-          ? searchFormValues.job_type.map(jobType => jobType.value.toString())
+          ? searchFormValues.job_type.map((jobType) => jobType.value.toString())
           : undefined,
       job_hours:
         searchFormValues.job_hours.length > 0
-          ? searchFormValues.job_hours.map(jobHours =>
+          ? searchFormValues.job_hours.map((jobHours) =>
               jobHours.value.toString()
             )
           : undefined,
       published:
         searchFormValues.published !== ""
           ? parseInt(searchFormValues.published)
-          : undefined
+          : undefined,
     });
 
     if (isToRetainSelectedPage) {
@@ -91,7 +91,7 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
 
     const portal_result = yield call(apiOpenRequest, portal_url);
     const portal_data = portal_result.data.filter(
-      active => active.offerStatus === "active"
+      (active) => active.offerStatus === "active"
     );
     yield put(filterJobsSuccess(portal_data));
 
@@ -101,7 +101,7 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
       // If not fetching new results based on pagination ..start from page 0. E.g. when component mounts or when hae button is clicked after inputting filters.
       yield put(
         changeAdvertPage({
-          selected: 0
+          selected: 0,
         })
       );
     }
@@ -113,27 +113,24 @@ function* filterJobsSaga({ isToRetainSelectedPage }) {
 }
 
 function* getJobDetailsByIdSaga(props) {
-  const { jobs } = store.getState();
-  const { id } = jobs;
+  const { appliedJobs } = store.getState().jobs.dashboard;
+  // const { id } = jobs;
+
   try {
-    const url = `${API_SERVER_EST}/${id}`;
+    // let body;
+    // let result;
+    // let resultParsed;
+    // let jobDetailResult;
+    // let jobUrl;
+    // let ilmoId;
 
-    let body;
-    let result;
-    let resultParsed;
-    let jobDetailResult;
-    let jobUrl;
-    let ilmoId;
+    // const job_detail = props.id.split("$$");
+    const job_detail = props.id;
 
-    const job_detail = props.id.split("$$");
-
-    const { user } = store.getState().client;
-
-    const email = user && user.data && user.data[1];
-
-    const userUrl = window.location.href;
-
-    const isApplyPage = userUrl.includes("hae") ? true : false;
+    // const { user } = store.getState().client;
+    // const email = user && user.data && user.data[1];
+    // const userUrl = window.location.href;
+    // const isApplyPage = userUrl.includes("hae") ? true : false;
 
     // if (email) {
     //   body = JSON.stringify({
@@ -149,10 +146,22 @@ function* getJobDetailsByIdSaga(props) {
     //     isApplyPage,
     //   });
     // }
-    result = yield call(apiManualRequest, url);
+
+    const found = appliedJobs.find(
+      (i) =>
+        i.url
+          .split("/")
+          .slice(-2)
+          .join("/") === job_detail
+    );
+
+    const url = `${API_SERVER_EST}/${found.jobPostId}`;
+    const result = yield call(apiManualRequest, url);
+
     //result = axios.get(url).then((res) => res.data);
     const data = result.data;
-    if (data === data) {
+
+    if (data) {
       //resultParsed = result.data[0];
       //ilmoId = resultParsed.ilmoitusnumero;
       //jobUrl = `${mol_page_url}-api/v1/tyopaikat/${ilmoId}?kieli=fi`;
@@ -185,7 +194,7 @@ function* toggleFavoriteJobsSaga({ id }) {
       jobTitle: jobName,
       closingDate: dateOfApplication,
       instanceId,
-      jobPostId: id
+      jobPostId: id, // NOTE: Need to check this id
     });
 
     const result = yield call(apiManualPost, url, body);
@@ -209,7 +218,7 @@ function* deleteFavoriteJobsSaga({ id }) {
   try {
     const url = `https://localhost:7262/deleteOfferFromFavourite/${id}`;
 
-    const result = axios.delete(url).then(res => res.data);
+    const result = axios.delete(url).then((res) => res.data);
     const data = result.data;
     if (data === data) {
       yield put(getFavoriteJobs());
@@ -219,13 +228,13 @@ function* deleteFavoriteJobsSaga({ id }) {
   }
 }
 
-function* getAppliedJobsSaga() {
+function* getAppliedJobsSaga({ id }) {
   try {
-    const url = `https://localhost:7262/getAllApplicants`;
+    const url = `https://localhost:7262/getAllApplicants/${id}`;
 
     const result = yield call(apiManualRequest, url);
     const data = result.data;
-    const { appliedJobs } = data[0];
+    const { appliedJobs } = data;
 
     if (appliedJobs) {
       yield put(getAppliedJobsSuccess(appliedJobs));
@@ -242,7 +251,7 @@ function* getFavoriteJobsSaga() {
     const result = yield call(apiManualRequest, url);
     //const data = result.data;
     const favoriteJobs = result.data.filter(
-      favJobs => favJobs.isFavourite === one
+      (favJobs) => favJobs.isFavourite === one
     );
 
     if (favoriteJobs === favoriteJobs) {
@@ -305,16 +314,16 @@ function* toggleEmailNotificationSaga() {
       email,
       job_category:
         formValues.job_category.length > 0
-          ? formValues.job_category.map(category => category.id.toString())
+          ? formValues.job_category.map((category) => category.id.toString())
           : undefined,
       job_type:
         formValues.job_type.length > 0
-          ? formValues.job_type.map(el => el.type.toString())
+          ? formValues.job_type.map((el) => el.type.toString())
           : undefined,
       job_hours:
         formValues.job_hours.length > 0
-          ? formValues.job_hours.map(el => el.type.toString())
-          : undefined
+          ? formValues.job_hours.map((el) => el.type.toString())
+          : undefined,
     });
 
     const result = yield call(apiManualPost, url, body);
@@ -344,16 +353,16 @@ function* updateEmailNotificationSaga() {
       email,
       job_category:
         formValues.job_category.length > 0
-          ? formValues.job_category.map(category => category.id.toString())
+          ? formValues.job_category.map((category) => category.id.toString())
           : undefined,
       job_type:
         formValues.job_type.length > 0
-          ? formValues.job_type.map(el => el.type.toString())
+          ? formValues.job_type.map((el) => el.type.toString())
           : undefined,
       job_hours:
         formValues.job_hours.length > 0
-          ? formValues.job_hours.map(el => el.type.toString())
-          : undefined
+          ? formValues.job_hours.map((el) => el.type.toString())
+          : undefined,
     });
 
     console.log(body);
