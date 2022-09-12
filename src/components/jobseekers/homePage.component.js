@@ -1,103 +1,118 @@
-import React,{ useEffect,useState } from 'react';
-import { Field } from 'redux-form';
-import { Paper, Grid, Button, Card, CardContent, Snackbar } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { renderSwitchLabels as RenderSwitchLabels, renderSelectField } from '../../utils/wrappers';
-import { MySnackbarContentWrapper } from '../../utils/snackbar.utils';
-import autoCompleteLocation from '../../utils/autoCompleteLocation';
-import { MultiSelectJobCategoriesComponent, MultiSelectJobHoursComponent, MultiSelectJobTypeComponent } from '../../utils/multiSelectCustomField';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { Field } from "redux-form";
+import {
+  Paper,
+  Grid,
+  Button,
+  Card,
+  CardContent,
+  Snackbar,
+} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import {
+  renderSwitchLabels as RenderSwitchLabels,
+  renderSelectField,
+} from "../../utils/wrappers";
+import { MySnackbarContentWrapper } from "../../utils/snackbar.utils";
+import autoCompleteLocation from "../../utils/autoCompleteLocation";
+import {
+  MultiSelectJobCategoriesComponent,
+  MultiSelectJobHoursComponent,
+  MultiSelectJobTypeComponent,
+} from "../../utils/multiSelectCustomField";
+import axios from "axios";
+import { formatToFinnishCurrency } from "../../utils/helperFunctions";
 
-const styles = theme => ({
+const styles = (theme) => ({
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 20,
     paddingTop: 30,
   },
   notification: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 20,
   },
   body: {
-    padding: '20px 50px',
+    padding: "20px 50px",
   },
   dashboardInfo: {
-    margin: '30px 0px',
+    margin: "30px 0px",
   },
   card: {
-    paddingLeft: '0 !important',
+    paddingLeft: "0 !important",
   },
   cardContent: {
-    textAlign: 'center',
-    [theme.breakpoints.up('md')]: {
-      padding: '50px !important',
+    textAlign: "center",
+    [theme.breakpoints.up("md")]: {
+      padding: "50px !important",
     },
   },
   cardContentInfo: {
     marginTop: 40,
-    color: 'black',
+    color: "black",
   },
   cardContentDynamicInfo: {
-    margin: '0 8px',
+    margin: "0 8px",
   },
   searchBtn: {
-    textAlign: 'center',
+    textAlign: "center",
     paddingBottom: 80,
   },
   searchBtnText: {
     fontSize: 20,
     color: theme.palette.primary.main,
-    textTransform: 'none',
+    textTransform: "none",
   },
   homePageMultiSelectInitial: {
-    '& .rw-widget-input': {
-      boxShadow: 'none',
+    "& .rw-widget-input": {
+      boxShadow: "none",
     },
   },
   homePageMultiSelectCategory: {
-    '& .rw-multiselect-taglist': {
-      width: '100%',
+    "& .rw-multiselect-taglist": {
+      width: "100%",
     },
-    '& .rw-multiselect-tag': {
-      width: 'auto',
+    "& .rw-multiselect-tag": {
+      width: "auto",
     },
-    '& .rw-multiselect .rw-input-reset': {
+    "& .rw-multiselect .rw-input-reset": {
       height: 0,
       width: 0,
       padding: 0,
     },
   },
   homePageMultiSelectType: {
-    '& .rw-multiselect-taglist': {
-      width: '100%',
+    "& .rw-multiselect-taglist": {
+      width: "100%",
     },
-    '& .rw-multiselect-tag': {
-      width: 'auto',
+    "& .rw-multiselect-tag": {
+      width: "auto",
     },
-    '& .rw-multiselect .rw-input-reset': {
+    "& .rw-multiselect .rw-input-reset": {
       height: 0,
       width: 0,
       padding: 0,
     },
   },
   homePageMultiSelectHours: {
-    '& .rw-multiselect-taglist': {
-      width: '100%',
+    "& .rw-multiselect-taglist": {
+      width: "100%",
     },
-    '& .rw-multiselect-tag': {
-      width: 'auto',
+    "& .rw-multiselect-tag": {
+      width: "auto",
     },
-    '& .rw-multiselect .rw-input-reset': {
+    "& .rw-multiselect .rw-input-reset": {
       height: 0,
       width: 0,
       padding: 0,
     },
   },
   switch_base: {
-    '&.Mui-checked': {
-      transform: 'translateX(30px)',
+    "&.Mui-checked": {
+      transform: "translateX(30px)",
     },
   },
 });
@@ -121,58 +136,63 @@ const HomePageComponent = ({
   valid,
   pristine,
   favoriteJobs,
-  appliedJobs
+  appliedJobs,
 }) => {
-
-  const { t } = useTranslation('homepage');
+  const { t } = useTranslation("homepage");
   return (
     <div className="container">
       <Paper>
         <div className={classes.body}>
-          <h2 className={classes.title}>{t('title')}</h2>
+          <h2 className={classes.title}>{t("title")}</h2>
           {/* In jobs reducer,  notificationToggleBtn is undefined, if no previous job alert has been submitted, so to hide the toggle btn */}
           {notificationToggleBtn !== undefined && (
             <div className={classes.notification}>
               <RenderSwitchLabels
-                label={notificationToggleBtn ? t('on') : t('off')}
+                label={notificationToggleBtn ? t("on") : t("off")}
                 isNotificationOn={notificationToggleBtn}
                 toggleChecked={toggleEmailNotification}
                 switchBaseStyle={classes.switch_base}
               />
             </div>
           )}
-          <p>{t('infoText')}</p>
+          <p>{t("infoText")}</p>
           <div>
             <form onSubmit={handleSubmit(_onFormSubmit)}>
               <Grid container spacing={1} alignItems="flex-start">
                 <Grid item xs={12} sm={12} md={12}>
                   <Grid container spacing={1} alignItems="center">
                     <Grid item xs={12} sm={2}>
-                      <label>{t('category')}*:</label>
+                      <label>{t("category")}*:</label>
                     </Grid>
                     <Grid
                       item
                       xs={12}
                       sm={10}
                       className={
-                        formValues && formValues.job_category && formValues.job_category.length > 0
+                        formValues &&
+                        formValues.job_category &&
+                        formValues.job_category.length > 0
                           ? classes.homePageMultiSelectCategory
                           : classes.homePageMultiSelectInitial
                       }
                     >
-                      <MultiSelectJobCategoriesComponent jobCategories={jobCategories} />
+                      <MultiSelectJobCategoriesComponent
+                        jobCategories={jobCategories}
+                      />
                     </Grid>
                   </Grid>
                   <Grid container spacing={1} alignItems="center">
                     <Grid item xs={12} sm={2}>
-                      <label>{t('jobHours')}*: </label>
+                      <label>{t("jobHours")}*: </label>
                     </Grid>
                     <Grid
                       item
                       xs={12}
                       sm={10}
                       className={
-                        formValues && formValues.job_hours && formValues.job_hours.length > 0
+                        formValues &&
+                        formValues.job_hours &&
+                        formValues.job_hours.length > 0
                           ? classes.homePageMultiSelectHours
                           : classes.homePageMultiSelectInitial
                       }
@@ -182,14 +202,16 @@ const HomePageComponent = ({
                   </Grid>
                   <Grid container spacing={1} alignItems="center">
                     <Grid item xs={12} sm={2}>
-                      <label>{t('jobType')}*:</label>
+                      <label>{t("jobType")}*:</label>
                     </Grid>
                     <Grid
                       item
                       xs={12}
                       sm={10}
                       className={
-                        formValues && formValues.job_type && formValues.job_type.length > 0
+                        formValues &&
+                        formValues.job_type &&
+                        formValues.job_type.length > 0
                           ? classes.homePageMultiSelectType
                           : classes.homePageMultiSelectInitial
                       }
@@ -199,31 +221,45 @@ const HomePageComponent = ({
                   </Grid>
                   <Grid container spacing={1} alignItems="center">
                     <Grid item xs={12} sm={2}>
-                      <label>{t('location')}*:</label>
+                      <label>{t("location")}*:</label>
                     </Grid>
                     <Grid item xs={12} sm={10}>
-                      <Field component={autoCompleteLocation} name="job_location" variant="outlined" fullWidth margin="dense" jobseekerHome />
+                      <Field
+                        component={autoCompleteLocation}
+                        name="job_location"
+                        variant="outlined"
+                        fullWidth
+                        margin="dense"
+                        jobseekerHome
+                      />
                     </Grid>
                   </Grid>
 
                   <Grid container spacing={1} alignItems="center">
                     <Grid item xs={12} sm={2}>
-                      <label>{t('noticeFrequency')}*:</label>
+                      <label>{t("noticeFrequency")}*:</label>
                     </Grid>
                     <Grid item xs={12} sm={10}>
-                      <Field component={renderSelectField} name="notice_frequency" variant="outlined" margin="dense" marginLeft="0" fullWidth>
+                      <Field
+                        component={renderSelectField}
+                        name="notice_frequency"
+                        variant="outlined"
+                        margin="dense"
+                        marginLeft="0"
+                        fullWidth
+                      >
                         <option value="" />
-                        <option value="heti">{t('immediate')}</option>
-                        <option value="1">{t('day')}</option>
-                        <option value="7">{t('week')}</option>
-                        <option value="30">{t('month')}</option>
+                        <option value="heti">{t("immediate")}</option>
+                        <option value="1">{t("day")}</option>
+                        <option value="7">{t("week")}</option>
+                        <option value="30">{t("month")}</option>
                       </Field>
                     </Grid>
                   </Grid>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}></Grid>
               </Grid>
-              <div style={{ textAlign: 'center', marginTop: 30 }}>
+              <div style={{ textAlign: "center", marginTop: 30 }}>
                 <Button
                   type="submit"
                   size="large"
@@ -233,7 +269,7 @@ const HomePageComponent = ({
                   disabled={pristine}
                   onClick={valid ? updateEmailNotification : null}
                 >
-                  {t('orderBtn')}
+                  {t("orderBtn")}
                 </Button>
               </div>
             </form>
@@ -246,13 +282,15 @@ const HomePageComponent = ({
             <CardContent className={classes.cardContent}>
               <div>
                 <Link to="/profile">
-                  <h3>{t('profile')}</h3>
+                  <h3>{t("profile")}</h3>
                 </Link>
               </div>
               <p className={classes.cardContentInfo}>
-                {t('lastUpdated')}
+                {t("lastUpdated")}
                 <span className={classes.cardContentDynamicInfo}>
-                  {dashboard && new Intl.DateTimeFormat('fi-Fi').format(new Date(dashboard.last_modified_date))}
+                  {/* {dashboard && new Intl.DateTimeFormat('fi-Fi').format(new Date(dashboard.last_modified_date))} */}
+                  {dashboard &&
+                    formatToFinnishCurrency(dashboard.lastUpdatedTime)}{" "}
                 </span>
               </p>
             </CardContent>
@@ -263,12 +301,14 @@ const HomePageComponent = ({
             <CardContent className={classes.cardContent}>
               <div>
                 <Link to="/suosikit">
-                  <h3>{t('favorites')}</h3>
+                  <h3>{t("favorites")}</h3>
                 </Link>
               </div>
               <p className={classes.cardContentInfo}>
-                <span className={classes.cardContentDynamicInfo}>{favoriteJobs.length}</span>
-                {t('totalFavs')}
+                <span className={classes.cardContentDynamicInfo}>
+                  {favoriteJobs.length}
+                </span>
+                {t("totalFavs")}
               </p>
             </CardContent>
           </Card>
@@ -278,12 +318,14 @@ const HomePageComponent = ({
             <CardContent className={classes.cardContent}>
               <div>
                 <Link to="/toopakkumised">
-                  <h3>{t('appliedJobs')}</h3>
+                  <h3>{t("appliedJobs")}</h3>
                 </Link>
               </div>
               <p className={classes.cardContentInfo}>
-                <span className={classes.cardContentDynamicInfo}>{appliedJobs?.length}</span>
-                {t('applied')}{' '}
+                <span className={classes.cardContentDynamicInfo}>
+                  {appliedJobs?.length}
+                </span>
+                {t("applied")}{" "}
               </p>
             </CardContent>
           </Card>
@@ -293,14 +335,16 @@ const HomePageComponent = ({
       <div className={classes.searchBtn}>
         <Link to="/tyopaikat" className="btnLink">
           <Button variant="contained" color="secondary">
-            <strong className={classes.searchBtnText}>{t('openJobsBtn')}</strong>
+            <strong className={classes.searchBtnText}>
+              {t("openJobsBtn")}
+            </strong>
           </Button>
         </Link>
       </div>
       <Snackbar
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
+          vertical: "bottom",
+          horizontal: "center",
         }}
         open={showSuccessSnackbar}
         autoHideDuration={4000}
@@ -310,7 +354,7 @@ const HomePageComponent = ({
       >
         <MySnackbarContentWrapper
           variant="success"
-          message={t('successMsg')}
+          message={t("successMsg")}
           onClose={() => {
             closeSnackbar();
           }}
@@ -318,8 +362,8 @@ const HomePageComponent = ({
       </Snackbar>
       <Snackbar
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
+          vertical: "bottom",
+          horizontal: "center",
         }}
         open={showFailedSnackbar}
         autoHideDuration={4000}
@@ -332,7 +376,7 @@ const HomePageComponent = ({
             closeSnackbar();
           }}
           variant="error"
-          message={t('failedMsg')}
+          message={t("failedMsg")}
         />
       </Snackbar>
     </div>
