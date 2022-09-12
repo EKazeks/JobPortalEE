@@ -10,7 +10,7 @@ const companyUserReducer = (
 ) => {
   switch (action.type) {
     case GET_USER_COMPANIES_LIST_SUCCESS:
-      return { ...state, companiesList: action.data };
+      return { ...state, companiesList: action.parsedResult };
 
     case SELECT_COMPANY:
       return { ...state, selectedCompany: action.data };

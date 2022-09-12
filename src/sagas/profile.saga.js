@@ -1,8 +1,21 @@
-import { change, getFormValues } from 'redux-form';
-import { takeEvery, call, put } from 'redux-saga/effects';
-import { API_SERVER, ADD_COMPANY_PROFILE, GET_COMPANY_PROFILE, ADD_APPLICANT_PROFILE, GET_APPLICANT_PROFILE, ADD_NEW_COMPANY_START } from '../constants';
-import store from '../store';
-import { apiManualPost } from '../utils/request';
+import { change, getFormValues } from "redux-form";
+import { takeEvery, call, put, all } from "redux-saga/effects";
+import {
+  API_SERVER,
+  ADD_COMPANY_PROFILE,
+  GET_COMPANY_PROFILE,
+  ADD_APPLICANT_PROFILE,
+  GET_APPLICANT_PROFILE,
+  ADD_NEW_COMPANY_START,
+  API_SERVER_UPDATE_COMPANY_INFO,
+  ESTONIAN_GET_APPLICANT_PROFILE,
+} from "../constants";
+import store from "../store";
+import {
+  apiManualPatch,
+  apiManualPost,
+  apiManualRequest,
+} from "../utils/request";
 import {
   getCompanyProfileSuccess,
   showSuccessSnackbar,
@@ -13,9 +26,10 @@ import {
   // navigateAdsFromMainMenu,
   showCustomErrorMsg,
   getUserCompanyList,
-} from '../actions';
-import { filterObj } from '../utils/wrappers';
-import i18next from 'i18next';
+} from "../actions";
+import { filterObj } from "../utils/wrappers";
+import i18next from "i18next";
+import axios from "axios";
 
 function* addCompanyProfile() {
   try {
@@ -23,53 +37,141 @@ function* addCompanyProfile() {
     let body;
     const { client, companyProfile } = store.getState();
     const { isToAddNewProfile } = companyProfile;
-    const formName = isToAddNewProfile ? 'newCompanyForm' : 'companyProfile'; // Depending on if users are adding additional company
+    const formName = isToAddNewProfile ? "newCompanyForm" : "companyProfile"; // Depending on if users are adding additional company
     const formValues = getFormValues(formName)(store.getState());
     const { uploadedLogo } = companyProfile;
     const uuid = client.user.data[2];
-    const refinedFormValues = filterObj('logo_document', formValues);
+    const id = companyProfile.profile.id;
+    const companyId = companyProfile.profile.user.companyId;
+    const refinedFormValues = filterObj("logo_document", formValues);
 
-    if (isToAddNewProfile || formValues.company_id === 0) {
+    console.log("refinedFormValues =>", refinedFormValues);
+    console.log("formValues =>", formValues);
+
+    if (isToAddNewProfile || formValues.companyBusinessId === null) {
       // For newly registered company users - getCompanyProfile gives company id 0.
-      url = `${API_SERVER}/AddCompanyProfile`;
+      url = `https://localhost:7262/addAditionalCompany`;
     } else {
-      url = `${API_SERVER}/UpdateCompanyProfile`;
+      url = `${API_SERVER_UPDATE_COMPANY_INFO}`;
     }
     // Send companyUser as empty array if no additional users/ Back-end needs it
-    if (!formValues.companyUser) {
-      formValues.companyUser = [];
+    if (!formValues.companyAdditionalUsers) {
+      formValues.companyAdditionalUsers = [];
     }
-    if (!refinedFormValues.companyUser) {
-      refinedFormValues.companyUser = [];
+    if (!refinedFormValues.companyAdditionalUsers) {
+      refinedFormValues.companyAdditionalUsers = [];
     }
 
     if (Array.isArray(formValues.logo_document) === true) {
+      const base64 = formValues.logo_document;
       body = JSON.stringify({
-        ...refinedFormValues,
-        uuid,
+        id: refinedFormValues.id,
+        companyName: refinedFormValues.companyName,
+        firstName: refinedFormValues.firstName,
+        lastName: refinedFormValues.lastName,
+        email: refinedFormValues.email,
+        telephone: refinedFormValues.telephone,
+        businessId: refinedFormValues.companyBusinessId,
+        address: refinedFormValues.address,
+        city: refinedFormValues.city,
+        postalCode: refinedFormValues.zipCode,
+        companyUrl: refinedFormValues.companyUrl,
+        companyInformation: refinedFormValues.profileDescription,
+        companyLogo: base64,
+        companyAdditionalUsers: refinedFormValues.companyAdditionalUsers,
       });
     } else if (!uploadedLogo.name) {
+      const base64 = formValues.logo_document;
       body = JSON.stringify({
-        ...formValues,
-        uuid,
+        id: refinedFormValues.id,
+        companyName: refinedFormValues.companyName,
+        firstName: refinedFormValues.firstName,
+        lastName: refinedFormValues.lastName,
+        email: refinedFormValues.email,
+        telephone: refinedFormValues.telephone,
+        businessId: refinedFormValues.companyBusinessId,
+        address: refinedFormValues.address,
+        city: refinedFormValues.city,
+        postalCode: refinedFormValues.zipCode,
+        companyUrl: refinedFormValues.companyUrl,
+        companyInformation: refinedFormValues.profileDescription,
+        companyLogo: base64,
+        companyAdditionalUsers: refinedFormValues.companyUser
       });
     } else {
       const base64 = formValues.logo_document;
       body = JSON.stringify({
-        ...formValues,
-        uuid,
-        logo_document: {
-          data: base64,
-          filename: uploadedLogo.name.replace(/\s+\(\d+\)/g, 'JP'), // If stored filename has (int), dropzone doesn't understand the path..so changing such names before sending to db.
-          filetype: uploadedLogo.type,
-          path: 'logo',
-        },
+        id: refinedFormValues.id,
+        companyName: refinedFormValues.companyName,
+        firstName: refinedFormValues.firstName,
+        lastName: refinedFormValues.lastName,
+        email: refinedFormValues.email,
+        telephone: refinedFormValues.telephone,
+        businessId: refinedFormValues.companyBusinessId,
+        address: refinedFormValues.address,
+        city: refinedFormValues.city,
+        postalCode: refinedFormValues.zipCode,
+        companyUrl: refinedFormValues.companyUrl,
+        companyInformation: refinedFormValues.profileDescription,
+        companyLogo: base64,
+        companyAdditionalUsers: refinedFormValues.companyUser
       });
-    }
-    const result = yield call(apiManualPost, url, body);
-    if (result.data === 'Company Profile updated successfully!' || result.data === 'Company Profile saved successfully!') {
+    } 
+
+    const base64 = formValues.logo_document;
+   const bodyForAddCompany = JSON.stringify({
+      id: id,
+      companyName: refinedFormValues.company_name,
+      firstName: refinedFormValues.firstName,
+      lastName: refinedFormValues.lastName,
+      email: refinedFormValues.email,
+      telephone: refinedFormValues.contact_number,
+      businessId: refinedFormValues.business_id,
+      address: refinedFormValues.address,
+      city: refinedFormValues.city,
+      postalCode: refinedFormValues.zip_code,
+      companyUrl: refinedFormValues.company_url,
+      profileDescription: refinedFormValues.profile_description,
+      //companyLogo: base64,
+      additionalCompaniesAdditionalUsers: refinedFormValues.companyAdditionalUsers,
+      companyId: companyId
+    });
+  //   const result = yield call(apiManualPost, url, body);
+  //   if (result.data && isToAddNewProfile === true) {
+  //     yield put(showSuccessSnackbar());
+  //     if (result.data && isToAddNewProfile === false) {
+  //       yield call(apiManualPatch, url, body);
+  //       yield put(getCompanyProfile());
+  //       yield put(getUserCompanyList(true));
+  //     } else {
+  //       yield put(getUserCompanyList());
+  //       // yield put(navigateAdsFromMainMenu(1));
+  //     }
+  //   } else if (result.data != result.data) {
+  //     //const email = result.data.split("-")[1];
+  //     yield put(
+  //       // showCustomErrorMsg(`${email}${i18next.t("profile:existingUser")}`)
+  //       showCustomErrorMsg(`${i18next.t("profile:existingUser")}`)
+  //     );
+  //   } else if (result.data.includes("Same company already exists")) {
+  //     const msg = i18next.t("profile:companyExists");
+  //     yield put(showCustomErrorMsg(msg));
+  //   } else {
+  //     yield put(showFailedSnackbar());
+  //   }
+  // } catch (e) {
+  //   console.log(e);
+  //   yield put(showFailedSnackbar());
+  // }
+    
+
+    const resultForUpdateCompany = yield call(apiManualPatch, url, body);
+    const resultForAddCompany = yield call(apiManualPost, url, bodyForAddCompany)
+
+    if (resultForUpdateCompany.data || resultForAddCompany.data) {
       yield put(showSuccessSnackbar());
-      if (isToAddNewProfile) {
+      if (resultForAddCompany.data && isToAddNewProfile === true) {
+        //yield call(apiManualPost, url, body)
         yield put(getUserCompanyList());
       } else {
         yield put(getCompanyProfile());
@@ -77,11 +179,14 @@ function* addCompanyProfile() {
         // yield put(navigateAdsFromMainMenu(1));
       }
       // console.log('calling addcompany API', result);
-    } else if (result.data.includes('Employee error')) {
-      const email = result.data.split('-')[1];
-      yield put(showCustomErrorMsg(`${email}${i18next.t('profile:existingUser')}`));
-    } else if (result.data.includes('Same company already exists')) {
-      const msg = i18next.t('profile:companyExists');
+    } else if (resultForUpdateCompany.data != resultForUpdateCompany.data) {
+      //const email = result.data.split("-")[1];
+      yield put(
+        // showCustomErrorMsg(`${email}${i18next.t("profile:existingUser")}`)
+        showCustomErrorMsg(`${i18next.t("profile:existingUser")}`)
+      );
+    } else if (resultForUpdateCompany.data.includes("Same company already exists")) {
+      const msg = i18next.t("profile:companyExists");
       yield put(showCustomErrorMsg(msg));
     } else {
       yield put(showFailedSnackbar());
@@ -93,22 +198,19 @@ function* addCompanyProfile() {
 }
 
 function* getCompanyProfileSaga() {
+  const company_id_to_fetch = store.getState().client.user.data.company_id;
   try {
-    const url = `${API_SERVER}/GetCompanyProfile`;
+    const url = `https://localhost:7262/getCompanyById/${company_id_to_fetch}`;
     const { client, usersCompanyList } = store.getState();
 
-    const uuid = client.user.data[2];
-    const roleId = store.getState().client.user.data[5];
-    const selectedCompanyId = usersCompanyList.selectedCompany.company_id;
-    const assignedCompanyId = client.user.data[6].company_id;
+    const uuid = client.user.data.id;
+    const roleId = store.getState().client.user.data.id;
+    const selectedCompanyId = usersCompanyList.companiesList.user.companyId;
+    const assignedCompanyId = client.user.data.company_id;
     const company_id = roleId === 0 ? selectedCompanyId : assignedCompanyId; // For super user with more than 1 company, use selected id otherwise assigned id (e.g. added employee or super user with only 1 company)
-    const body = JSON.stringify({
-      uuid,
-      company_id,
-    });
-    const result = yield call(apiManualPost, url, body);
-    const resultParsed = JSON.parse(result.data)[0];
-    yield put(getCompanyProfileSuccess(resultParsed));
+
+    const result = yield call(apiManualRequest, url);
+    yield put(getCompanyProfileSuccess(result.data));
   } catch (error) {
     console.warn(error);
   }
@@ -118,16 +220,12 @@ function* getCompanyProfileSaga() {
 function* getApplicantProfileSaga() {
   try {
     const { client } = store.getState();
-    const url = `${API_SERVER}/GetApplicantProfile`;
-    const uuid = client.user.data[2];
-    const email = client.user.data[1];
-    const body = JSON.stringify({
-      email,
-      uuid,
-    });
-    const result = yield call(apiManualPost, url, body);
-    const resultParsed = JSON.parse(result.data)[0];
-    yield put(getApplicantProfileSuccess(resultParsed));
+    const url = `${ESTONIAN_GET_APPLICANT_PROFILE}/${client.user.data.company_id}`;
+    //const url = `${ESTONIAN_GET_APPLICANT_PROFILE}/${id}`;
+
+    const result = yield call(apiManualRequest, url);
+
+    yield put(getApplicantProfileSuccess(result.data));
   } catch (error) {
     console.warn(error);
   }
@@ -137,17 +235,19 @@ function* addApplicantProfile() {
   try {
     let url;
     let body;
+
     const { client, jobseekerProfile } = store.getState();
     const uuid = client.user.data[2];
-    const formValues = getFormValues('jobseekerProfile')(store.getState());
+    const formValues = getFormValues("jobseekerProfile")(store.getState());
     const { uploadedProfilePic } = jobseekerProfile;
-    const uploadedCV = jobseekerProfile.uploadedDocument && jobseekerProfile.uploadedDocument[0];
-    const cv_base64 = formValues && formValues.cv_document;
+    const uploadedCV =
+      jobseekerProfile.uploadedDocument && jobseekerProfile.uploadedDocument[0];
+    const cv_base64 = formValues && formValues.applicantDocument;
 
     if (!!uploadedCV && formValues.cv_document) {
-      formValues.cv_document = {
+      formValues.CV = {
         document_id: uploadedCV.id,
-        path: 'Jobportal',
+        path: "Jobportal",
         filename: uploadedCV.name,
         filetype: uploadedCV.type,
         data: cv_base64,
@@ -156,40 +256,99 @@ function* addApplicantProfile() {
       delete formValues.cv_document;
     }
 
-    const refinedFormValues = filterObj('photo_document', formValues);
+    const refinedFormValues = filterObj("photo_document", formValues);
 
     if (!formValues.applicant_id) {
-      url = `${API_SERVER}/AddApplicantProfile`;
-    } else {
-      url = `${API_SERVER}/UpdateApplicantProfile`;
+      url = `https://localhost:7262/fullFillApplicant`;
+      // } else {
+      //   url = `https://localhost:7262/fullFillApplicant`;
     }
 
-    if (Array.isArray(formValues.photo_document) === true) {
-      body = JSON.stringify({
-        ...refinedFormValues,
-        uuid,
-      });
-    } else if (!uploadedProfilePic.name) {
-      body = JSON.stringify({
-        ...formValues,
-        uuid,
-      });
-    } else {
-      const base64 = formValues.photo_document;
-      body = JSON.stringify({
-        ...formValues,
-        uuid,
-        photo_document: {
-          data: base64,
-          filename: uploadedProfilePic.name.replace(/\s+\(\d+\)/g, 'JP'), // If stored filename has (int), dropzone doesn't understand the path..so changing such names before sending to db.
-          filetype: uploadedProfilePic.type,
-          path: 'jobportal',
-        },
-      });
-    }
+    console.log("FORMVALUES ===>>", formValues);
 
-    const result = yield call(apiManualPost, url, body);
-    if (result.data === 'Applicant Profile updated successfully!') {
+    const photo_base64 = formValues.applicantPhoto.content;
+
+    // if (Array.isArray(formValues.photo_document) === true) {
+    // const base64 = formValues.photo_document;
+
+    //   body = {
+    //     id: formValues.id,
+    //     firstName: formValues.firstName,
+    //     lastName: formValues.lastName,
+    //     email: formValues.email,
+    //     contactNumber: formValues.contactNumber,
+    //     linkedIn: formValues.linkedIn,
+    //     portfolio: formValues.portfolio,
+    //     description: formValues.profileDescription,
+    //     // applicantPhoto: base64.toString(),
+    //     // applicantCv: cv_base64,
+    //     // applicantCvFileName: uploadedCV.name
+    //     applicantPhoto: photo_base64,
+    //     applicantCv: cv_base64.content,
+    //     applicantCvFileName: cv_base64.filename,
+    //   };
+    // } else if (!uploadedProfilePic.name) {
+    // const base64 = formValues.photo_document;
+
+    //   body = {
+    //     id: formValues.id,
+    //     firstName: formValues.firstName,
+    //     lastName: formValues.lastName,
+    //     email: formValues.email,
+    //     contactNumber: formValues.contactNumber,
+    //     linkedIn: formValues.linkedIn,
+    //     portfolio: formValues.portfolio,
+    //     description: formValues.profileDescription,
+    //     // applicantPhoto: base64.toString(),
+    //     // applicantCv: cv_base64,
+    //     // applicantCvFileName: uploadedCV.name
+    //     applicantPhoto: photo_base64,
+    //     applicantCv: cv_base64.content,
+    //     applicantCvFileName: cv_base64.filename,
+    //   };
+    // } else {
+    // const base64 = formValues.photo_document;
+
+    //   body = {
+    //     id: formValues.id,
+    //     firstName: formValues.firstName,
+    //     lastName: formValues.lastName,
+    //     email: formValues.email,
+    //     contactNumber: formValues.contactNumber,
+    //     linkedIn: formValues.linkedIn,
+    //     portfolio: formValues.portfolio,
+    //     description: formValues.profileDescription,
+    //     // applicantPhoto: base64.toString(),
+    //     // applicantCv: cv_base64,
+    //     // applicantCvFileName: uploadedCV.name,
+    //     applicantPhoto: photo_base64,
+    //     applicantCv: cv_base64.content,
+    //     applicantCvFileName: cv_base64.filename,
+    //   };
+    // }
+
+    body = JSON.stringify({
+      id: formValues.id,
+      firstName: formValues.firstName,
+      lastName: formValues.lastName,
+      email: formValues.email,
+      contactNumber: formValues.contactNumber,
+      linkedIn: formValues.linkedIn,
+      portfolio: formValues.portfolio,
+      description: formValues.profileDescription,
+      // applicantPhoto: base64.toString(),
+      // applicantCv: cv_base64,
+      // applicantCvFileName: uploadedCV.name
+      applicantPhoto: photo_base64,
+      applicantCv: cv_base64.content,
+      applicantCvFileName: cv_base64.fileName,
+    });
+
+    console.log(body);
+
+    const result = yield call(apiManualPatch, url, body);
+
+    if (result.data) {
       yield put(getApplicantProfile());
       yield put(showSuccessSnackbar());
     } else {
@@ -202,10 +361,14 @@ function* addApplicantProfile() {
 
 function* addNewCompanySaga() {
   try {
-    const { firstname, lastname, email } = store.getState().companyProfile.profile; // Populate the new form with registered user's details
-    yield put(change('newCompanyForm', 'firstname', firstname));
-    yield put(change('newCompanyForm', 'lastname', lastname));
-    yield put(change('newCompanyForm', 'email', email));
+    const {
+      firstName,
+      lastName,
+      email,
+    } = store.getState().companyProfile.profile; // Populate the new form with registered user's details
+    yield put(change("newCompanyForm", "firstName", firstName));
+    yield put(change("newCompanyForm", "lastName", lastName));
+    yield put(change("newCompanyForm", "email", email));
   } catch (e) {
     console.log(e);
   }

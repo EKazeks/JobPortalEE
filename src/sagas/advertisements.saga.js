@@ -7,13 +7,14 @@ import {
   initialize,
   getFormInitialValues,
   touch,
-  formValues,
+  formValues
 } from "redux-form";
 import {
   SAVE_AND_PUBLISH_ADVERTISEMENT,
   UPDATE_AND_PUBLISH_ADVERTISEMENT,
   API_SERVER,
   API_SERVER_EST,
+  BASE_API_SERVER_EST,
   API_SERVER_EST_GET_ID,
   GET_ALL_CAMPAIGNS,
   OPEN_AD_TO_SEE_AD_INFO,
@@ -40,7 +41,7 @@ import {
   POPULATE_EMAIL_MESSAGE,
   AUTO_EMAIL_TO_APPLICANT,
   EDIT_VACANCY_FORM,
-  DELETE_JOB_OFFER,
+  DELETE_JOB_OFFER
 } from "../constants";
 import store from "../store";
 import {
@@ -49,6 +50,7 @@ import {
   apiOpenRequest,
   apiGetJobsOffers,
   apiManualDelete,
+  apiManualPatch
 } from "../utils/request";
 import { filterObj } from "../utils/wrappers";
 import {
@@ -80,7 +82,7 @@ import {
   getAllJobCategoryFromEstoniaSuccess,
   editVacancyForm,
   deleteSuccess,
-  deleteAdvertisement,
+  deleteAdvertisement
 } from "../actions";
 import { customTranslateCampaign } from "../utils/customTranslate";
 import browserHistory from "../history";
@@ -90,27 +92,15 @@ import { useSelector } from "react-redux";
 
 function* getAllCampaignsSaga() {
   try {
-    const url = `${API_SERVER}/GetCampaigns`;
+    const url = `https://localhost:7262/campaigns/Campaign`;
     const result = yield call(apiManualRequest, url);
-    const resultParsed = JSON.parse(result.data);
+    const resultParsed = result.data;
     yield put(getAllCampaignsSuccess(resultParsed));
   } catch (error) {
     console.log(error);
   }
 }
-/* function* getAllJobCategorySaga() {
-  try {
-    const url = 'https://localhost:7262/jobsEn/getAllCategories';
-   
-    const result = yield call(apiOpenRequest, url);
-   
-    const resultParsed = JSON.parse(result.data);
-    yield put(getAllJobCategorySuccess(resultParsed));
-   console.log('hello')
-  } catch (error) {
-    console.log(error);
-  }
-} */
+
 function* getAllJobCategorySaga() {
   try {
     const url = "https://localhost:7262/getAllCategories";
@@ -122,17 +112,17 @@ function* getAllJobCategorySaga() {
     const jobCateg = [
       ...categoryArray
         .reduce((map, obj) => map.set(obj.jobCode, obj), new Map())
-        .values(),
+        .values()
     ];
     const sorted = jobCateg.sort((a, b) => a.jobCode - b.jobCode);
     const firstCategory = { jobCode: "0", jobTags: "" };
     jobCateg.unshift(firstCategory);
     const lastCategory = { jobCode: `${jobCateg.length}`, jobTags: "Other" };
     jobCateg.push(lastCategory);
-    const mapped = jobCateg.map((item) => {
+    const mapped = jobCateg.map(item => {
       return {
         id: parseInt(item.jobCode),
-        type: item.jobTags,
+        type: item.jobTags
       };
     });
 
@@ -156,30 +146,37 @@ function* saveAndPublishAdvertisementSaga() {
 
     console.log("FORMVALUESPUBLISH", formValues);
     const paymentInfoForm = getFormValues("paymentInfo")(store.getState());
-    const uuid = client.user.data[2];
-    const userRole = client.user.data[6].user_type;
+    const uuid = client.user.data;
+    const userRole = client.user.data.user_type;
     const payment_method = paymentInfoForm && paymentInfoForm.payment_method;
-    const companyId = companyProfile.profile.company_id;
-    const {company_name,company_url,profile_description,email,contact_number} = companyProfile.profile;
+    const companyId = companyProfile.profile.user.companyId;
+    const {
+      companyName,
+      companyUrl,
+      profileDescription,
+      email,
+      contactNumber,
+      telephone
+    } = companyProfile.profile;
 
-    if (!formValues.company_id) {
-      formValues.company_id = companyId; // Also sending company_id to add company specific post.
+    if (!formValues.companyId) {
+      formValues.companyId = companyId; // Also sending company_id to add company specific post.
     }
 
     yield put(closeDialog());
 
-    // if (userRole === "admin") {
-    //   const companyDetails = {
-    //     company_id: parseInt(formValues.company_id),
-    //     uuid,
-    //   };
-    //   const jobPostOwner = yield call(
-    //     apiManualPost,
-    //     `${API_SERVER}/GetCompanyProfile`,
-    //     JSON.stringify({ ...companyDetails })
-    //   );
-    //   parsedCompany = JSON.parse(jobPostOwner.data);
-    // }
+    if (userRole === "admin") {
+      const companyDetails = {
+        companyId: parseInt(formValues.companyId),
+        uuid
+      };
+      const jobPostOwner = yield call(
+        apiManualPost,
+        `https://localhost:7262/getCompanyById/${companyId}`,
+        JSON.stringify({ ...companyDetails })
+      );
+      parsedCompany = jobPostOwner.data;
+    }
 
     const {
       selectedCampaign,
@@ -187,7 +184,7 @@ function* saveAndPublishAdvertisementSaga() {
       isToEdit,
       uploadedImage,
       marketingDetails,
-      extraService,
+      extraService
     } = advertisement;
     const refinedUploadedImage =
       uploadedImage &&
@@ -211,29 +208,31 @@ function* saveAndPublishAdvertisementSaga() {
       : null;
 
     // image_document array means, it already exists in db, no need to send while updating
-    if (Array.isArray(formValues.image_document) === true) {
+    if (Array.isArray(formValues.logo) === true) {
       body = {
-        companyName: company_name,
-        companyPageUrl: company_url,
-        companyDescription: profile_description,
+        companyName: companyName,
+        companyPageUrl: companyUrl,
+        companyDescription: profileDescription,
         email,
-        phone: contact_number,
+        applicationUrl: formValues.applicationUrl,
+        phone: telephone,
         ...refinedFormValues,
         uuid,
-        campaign_type: selectedCampaign.type,
+        campaignLevel: selectedCampaign.type,
         status: statusToUpdate,
         extra_service: selectedService,
-        isDraft,
+        isDraft
       };
     } else if (!uploadedImage.name) {
       // no uploaded image means, no need to send any base64. Also, if there is an image stored in db..and we want to delete it, I am changing the formvalues of image_document in component
       body = {
-        companyName: company_name,
-        companyPageUrl: company_url,
-        companyDescription: profile_description,
+        companyName: companyName,
+        companyPageUrl: companyUrl,
+        companyDescription: profileDescription,
         email,
-        phone: contact_number,
-        companyBusinessId: companyId.toString(),
+        applicationUrl: formValues.applicationUrl,
+        phone: telephone,
+        companyBusinessId: companyId,
         is_agreement: formValues.is_agreement,
         jobCategory: formValues.jobCategory,
         jobDescription: formValues.jobDescription,
@@ -246,20 +245,18 @@ function* saveAndPublishAdvertisementSaga() {
         campaignLevel: selectedCampaign.type,
         status: statusToUpdate,
         extra_service: selectedService,
-        isDraft,
+        isDraft
       };
-    } else if (
-      uploadedImage.name &&
-      !Array.isArray(formValues.image_document)
-    ) {
-      const base64 = formValues.image_document;
+    } else if (uploadedImage.name && !Array.isArray(formValues.logo)) {
+      const base64 = formValues.logo;
       body = {
-        companyName: company_name,
-        companyPageUrl: company_url,
-        companyDescription: profile_description,
+        companyName: companyName,
+        companyPageUrl: companyUrl,
+        companyDescription: profileDescription,
         email,
-        phone: contact_number,
-        companyBusinessId: companyId.toString(),
+        applicationUrl: formValues.applicationUrl,
+        phone: telephone,
+        companyBusinessId: companyId,
         is_agreement: formValues.is_agreement,
         jobCategory: formValues.jobCategory,
         jobDescription: formValues.jobDescription,
@@ -271,23 +268,16 @@ function* saveAndPublishAdvertisementSaga() {
         uuid,
         campaignLevel: selectedCampaign.type,
         status: statusToUpdate,
-        image_document: {
-          uuid,
-          document_id: uploadedImage.id,
-          path: "",
-          filename: refinedUploadedImage,
-          filetype: uploadedImage.type,
-          logo: base64,
-        },
+        logo: base64,
         extra_service: selectedService,
-        isDraft,
-      }
+        isDraft
+      };
     }
     if (selectedCampaign.includes_mktbudget) {
       const {
         marketing_platform,
         more_budget,
-        marketing_budget,
+        marketing_budget
       } = marketingDetails;
       body.marketing_platform = !!marketing_platform
         ? marketing_platform
@@ -297,103 +287,120 @@ function* saveAndPublishAdvertisementSaga() {
         ? parseInt(marketing_budget)
         : 0;
     }
-    // SAVING AND PUBLISHING JOBPOST
-    axios.post(url, body).then((res) => {
-      response = res;
-    });
 
-    /*   const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
-    const parsedResult = JSON.parse(result.data); */
-    if (response === 400) {
-      yield put(saveAndPublishAdvertisement());
+    const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
+    const parsedResult = result.data;
+
+    //If publishing post, Generate invoice under the hood via Talousvirta API or online payment via NETS
+
+    if (parsedResult) {
+      const {
+        companyName,
+        companyBusinessId,
+        firstName,
+        lastName,
+        email,
+        address,
+        zipCode,
+        city
+      } = userRole === "admin" ? parsedCompany[0] : companyProfile.profile;
+      const jobTitle = formValues.jobTitle;
+      const postId = parsedResult.jobPostNumber;
+      const orderId = "112"; // hardcoded value,need to find for what this need;
+      const publishedPostStatus = statusToUpdate;
+      const description = `${jobTitle} | Kampanjapaketti - ${customTranslateCampaign(
+        selectedCampaign.id
+      )}`;
+      const mkt_description = `${jobTitle} | Lisätty markkinointiraha`;
+
+      const extra_service_description = `Aktivoitu lisäpalvelu | ${
+        extraService.help ? "HELP" : "SOS"
+      }`;
+
+      // If mkt budget is added with campaigns with mkt budget, i.e. 5th campaign for now.
+      let marketing_budget = 0;
+      if (
+        selectedCampaign.includes_mktbudget &&
+        !!parsedResult.marketing_budget
+      ) {
+        marketing_budget = parsedResult.marketing_budget;
+      }
+
+      const extra_service_fee = extraService.help
+        ? HELP_SERVICE_FEE
+        : extraService.sos
+        ? SOS_SERVICE_FEE
+        : 0;
+
+      if (
+        (publishedPostStatus === 0 && extra_service_fee > 0) || // If help and sos are added as extra service
+        publishedPostStatus === 4 // If paid campaigns are selected, temporary placeholder status
+      ) {
+        const isExtraServiceAdded =
+          publishedPostStatus === 0 && extra_service_fee > 0 ? true : false;
+        const extra_service_fee_with_vat = extra_service_fee * 1.24; // Total price for the extra service including vat
+
+        const amount = parsedResult.campaignValue;
+        const totalSum = (marketing_budget + amount) * 1.24;
+
+        const details = {
+          companyId: formValues.companyId,
+          companyName,
+          companyBusinessId,
+          firstName,
+          lastName,
+          email,
+          address,
+          zipCode,
+          city,
+          description: isExtraServiceAdded
+            ? extra_service_description
+            : description,
+          totalSum: isExtraServiceAdded ? extra_service_fee_with_vat : totalSum,
+          amount: isExtraServiceAdded ? extra_service_fee : amount,
+          post_id: postId,
+          order_id: orderId,
+          marketing_budget,
+          mkt_description,
+          selectedCampaign
+        };
+
+        if (payment_method === "invoice") {
+          yield put(sendInvoiceToTalous(details));
+        } else if (payment_method === "online") {
+          yield put(registerPayment(details));
+        }
+      }
+      // Post saved as a draft or free campaign or help/sos feature
+      //if (parsedResult[0].job_post_status !== 4)
+      else {
+        yield put(saveAndPublishAdvertisementSuccess());
+      }
     } else {
-      yield put(saveAndPublishAdvertisementSuccess());
+      yield put(saveAndPublishAdvertisementFailed());
     }
-    // response = result.data.status
-
-    // const parsedResult = JSON.parse(result.data);
-
-    // If publishing post, Generate invoice under the hood via Talousvirta API or online payment via NETS
-
-    // if (parsedResult) {
-    //   const { company_name, business_id, firstname, lastname, email, address, zip_code, city } =
-    //     userRole === 'admin' ? parsedCompany[0] : companyProfile.profile;
-    //   const jobTitle = formValues.job_title;
-    //   const postId = parsedResult[0].post_id;
-    //   const orderId = parsedResult[0].order_id;
-    //   const publishedPostStatus = parsedResult[0].job_post_status;
-    //   const description = `${jobTitle} | Kampanjapaketti - ${customTranslateCampaign(selectedCampaign.id)}`;
-    //   const mkt_description = `${jobTitle} | Lisätty markkinointiraha`;
-
-    //   const extra_service_description = `Aktivoitu lisäpalvelu | ${extraService.help ? 'HELP' : 'SOS'}`;
-
-    //   // If mkt budget is added with campaigns with mkt budget, i.e. 5th campaign for now.
-    //   let marketing_budget = 0;
-    //   if (selectedCampaign.includes_mktbudget && !!parsedResult[0].marketing_budget) {
-    //     marketing_budget = parsedResult[0].marketing_budget;
-    //   }
-
-    //   const extra_service_fee = extraService.help ? HELP_SERVICE_FEE : extraService.sos ? SOS_SERVICE_FEE : 0;
-
-    //   if (
-    //     (publishedPostStatus === 0 && extra_service_fee > 0) || // If help and sos are added as extra service
-    //     publishedPostStatus === 4 // If paid campaigns are selected, temporary placeholder status
-    //   ) {
-    //     const isExtraServiceAdded = publishedPostStatus === 0 && extra_service_fee > 0 ? true : false;
-    //     const extra_service_fee_with_vat = extra_service_fee * 1.24; // Total price for the extra service including vat
-
-    //     const amount = parsedResult[0].job_post_campaign_money;
-    //     const totalSum = (marketing_budget + amount) * 1.24;
-
-    //     const details = {
-    //       company_id: formValues.company_id,
-    //       company_name,
-    //       business_id,
-    //       firstname,
-    //       lastname,
-    //       email,
-    //       address,
-    //       zip_code,
-    //       city,
-    //       description: isExtraServiceAdded ? extra_service_description : description,
-    //       totalSum: isExtraServiceAdded ? extra_service_fee_with_vat : totalSum,
-    //       amount: isExtraServiceAdded ? extra_service_fee : amount,
-    //       post_id: postId,
-    //       order_id: orderId,
-    //       marketing_budget,
-    //       mkt_description,
-    //       selectedCampaign,
-    //     };
-
-    //     if (payment_method === 'invoice') {
-    //       yield put(sendInvoiceToTalous(details));
-    //     } else if (payment_method === 'online') {
-    //       \ put(registerPayment(details));
-    //     }
-    //   }
-    //   // Post saved as a draft or free campaign or help/sos feature
-    //   //if (parsedResult[0].job_post_status !== 4)
-    //   else {
-    //     yield put(saveAndPublishAdvertisementSuccess());
-    //   }
-    // } else {
-    //   yield put(saveAndPublishAdvertisementFailed());
-    // }
   } catch (error) {
     console.log(error);
     yield put(saveAndPublishAdvertisementFailed());
   }
 }
 
-function* getJobPostByPostIdSaga({id}) {
+function* getJobPostByPostIdSaga({ id }) {
   try {
+    const campaignsType = store;
     const url = `${API_SERVER_EST}/${id}`;
-    const companyBusinessId = store.getState().jobs.jobsList.companyBusinessId;
-    const userRole = store.getState().client.user.data[6].user_type;
 
-    const result = yield call(apiOpenRequest, url);
-    const resultParsed = result.data;
-    yield put(openAdToSeeAdInfoSuccess(resultParsed));
+    if (id === 0 || id === undefined || id === null) {
+    } else {
+      const result = yield call(apiManualRequest, url);
+      const resultParsed = result.data;
+
+      if (result.data.status === 404) {
+        yield put(hideSpinner());
+      } else {
+        yield put(openAdToSeeAdInfoSuccess(resultParsed));
+      }
+    }
   } catch (error) {
     console.log(error);
     yield put(hideSpinner());
@@ -419,7 +426,7 @@ function* getAllAdsByStatusSaga({ status }) {
     const body = JSON.stringify({
       status,
       uuid,
-      company_id,
+      company_id
     });
 
     const result = yield call(apiManualPost, url, body);
@@ -435,12 +442,12 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     const url = `${API_SERVER_EST}/${id}`;
     //const companyBusinessId = store.getState().jobs.companyBusinessId;
     const campaigns = store.getState().advertisement.campaigns;
-    const userRole = store.getState().client.user.data[6].user_type;
+    const userRole = store.getState().client.user.data.user_type;
     /* const formValues = getFormValues("vacancy")(store.getState()); */
-    const body = JSON.stringify({
-      jobPostNumber: userRole === "admin" ? id.split("admin")[0] : id,
-      //companyBusinessId: userRole === 'admin' ? id.split('admin')[1] : companyBusinessId,
-    });
+    // const body = JSON.stringify({
+    //   jobPostNumber: userRole === "admin" ? id.split("admin")[0] : id,
+    //   //companyBusinessId: userRole === 'admin' ? id.split('admin')[1] : companyBusinessId,
+    // });
     const result = yield call(apiManualRequest, url);
     const resultParsed = result.data;
     console.log("Populate Vacancy form", resultParsed);
@@ -469,12 +476,13 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
       more_budget,
       marketing_budget,
       urlToApplyJob,
-      durationOfEmployment,
+      campaignType,
+      durationOfEmployment
     } = resultParsed;
 
     if (isToEdit) {
       yield put(change("vacancy", "jobPostNumber", jobPostNumber));
-      // yield put(change('vacancy', 'company_id', company_id));
+      yield put(change("vacancy", "campaignType", campaignType));
       // yield put(change('vacancy', "value from inputfield", "value from api call"));
       if (logo) {
         yield put(change("vacancy", "logo", logo));
@@ -501,14 +509,14 @@ function* populateVacancyFormSaga({ id, isToEdit }) {
     yield put(change("vacancy", "notice_frequency", notice_frequency));
 
     const postCampaign = campaigns.find(
-      (campaign) => campaign.id === campaign_id
+      campaign => campaign.type === campaignType
     );
 
     const campaignDetails = {
       postCampaign,
       marketing_platform,
       more_budget,
-      marketing_budget,
+      marketing_budget
     };
 
     yield put(populateVacancyFormSuccess(campaignDetails, isToEdit));
@@ -521,10 +529,10 @@ function* editVacancyFormSaga({ id, isToEdit }) {
   try {
     const url = `https://localhost:7262/activeAds`;
     const campaigns = store.getState().advertisement.campaigns;
-    const userRole = store.getState().client.user.data[6].user_type;
+    const userRole = store.getState().client.user.data.user_type;
 
     const body = JSON.stringify({
-      jobPostNumber: userRole === "admin" ? id.split("admin")[0] : id,
+      jobPostNumber: userRole === "admin" ? id.split("admin")[0] : id
     });
     const result = yield call(apiManualRequest, url);
     const resultParsed = result.data;
@@ -551,7 +559,7 @@ function* editVacancyFormSaga({ id, isToEdit }) {
       more_budget,
       marketing_budget,
       urlToApplyJob,
-      durationOfEmployment,
+      durationOfEmployment
     } = resultParsed;
 
     if (isToEdit) {
@@ -579,14 +587,14 @@ function* editVacancyFormSaga({ id, isToEdit }) {
     yield put(change("editVacancy", "notice_frequency", notice_frequency));
 
     const postCampaign = campaigns.find(
-      (campaign) => campaign.id === campaign_id
+      campaign => campaign.id === campaign_id
     );
 
     const campaignDetails = {
       postCampaign,
       marketing_platform,
       more_budget,
-      marketing_budget,
+      marketing_budget
     };
 
     yield put(populateVacancyFormSuccess(campaignDetails, isToEdit));
@@ -623,7 +631,7 @@ function* updateJobPostSaga({ isToEdit, id }) {
       marketing_platform,
       more_budget,
       marketing_budget,
-      urlToApplyJob,
+      urlToApplyJob
     } = resultParsed;
 
     if (isToEdit) {
@@ -659,7 +667,7 @@ function* updateJobPostSaga({ isToEdit, id }) {
 function* updateAndPublishAdvertisementSaga() {
   try {
     const url = `https://localhost:7262/updateJobOffer`;
-    const {id} = store.getState().jobs
+    const { id } = store.getState().jobs;
     let response;
     const campaignLevel = store.getState().advertisement.campaigns[0].type;
     const {
@@ -670,7 +678,7 @@ function* updateAndPublishAdvertisementSaga() {
       jobLocation,
       applicationUrl,
       lastApplicationDate,
-      jobDescription,
+      jobDescription
     } = getFormValues("editVacancy")(store.getState());
     let body = {
       id,
@@ -682,10 +690,10 @@ function* updateAndPublishAdvertisementSaga() {
       applicationUrl,
       lastApplicationDate,
       jobDescription,
-      campaignLevel,
+      campaignLevel
     };
 
-    axios.patch(url, body).then((res) => {
+    axios.patch(url, body).then(res => {
       response = res;
     });
     console.log(response);
@@ -711,16 +719,19 @@ function* updateCampaignSaga({ id }) {
 
     // Upgrade campaign
     const url = `https://localhost:7262/updateJobOfferCampaignType`;
-    const uuid = store.getState().client.user.data[2];
+    const uuid = store.getState().client.user.data;
     const { type, includes_mktbudget } = advertisement.selectedCampaign;
+    const {
+      marketing_budget,
+      marketing_platform,
+      more_budget
+    } = advertisement.marketingDetails;
     const campaign_id = advertisement.selectedCampaign.id;
-    const userRole = client.user.data[6].user_type;
-    const { id } = jobs;
+    const userRole = client.user.data.user_type;
+    const { id } = advertisement.viewSelectedAd;
     const post_id = userRole === "admin" ? id.split("admin")[0] : id;
     const companyId =
-      userRole === "admin"
-        ? id.split("admin")[1]
-        : companyProfile.profile.company_id;
+      userRole === "admin" ? id.split("admin")[1] : companyProfile.profile.id;
     const campaignDate = formValueSelector("campaign")(
       store.getState(),
       "due_date"
@@ -728,18 +739,20 @@ function* updateCampaignSaga({ id }) {
     let parsedCompany = {};
 
     const body = {
-      campaignType: type,
-      //uuid,
       id,
+      campaignType: type,
+      marketing_budget,
+      marketing_platform,
+      more_budget,
+      campaignDate
       //company_id: companyId,
-      campaignDate,
     };
 
     if (includes_mktbudget) {
       const {
         marketing_platform,
         more_budget,
-        marketing_budget,
+        marketing_budget
       } = advertisement.marketingDetails;
 
       body.marketing_platform = !!marketing_platform
@@ -751,77 +764,85 @@ function* updateCampaignSaga({ id }) {
         : 0;
     }
 
-    // const result = yield call(apiManualPost, url, JSON.stringify({ ...body }));
-    axios.patch(url, body).then((res) => {
-      response = res;
-    });
-    if (response === 400) {
-      yield put(showFailedSnackbar());
-    } else {
-      yield put(showSuccessSnackbar());
+    const result = yield call(apiManualPatch, url, JSON.stringify(body));
+    const resultParsed = result.data;
+
+    if (resultParsed) {
+      //If admin is upgrading post or updating jobpost on behalf of companies:
+      if (userRole === "admin") {
+        const body2 = {
+          id,
+          campaignType: type,
+          campaignDate
+        };
+        const jobPostOwner = yield call(
+          apiManualRequest,
+          `https://localhost:7262/getCompanyById/${id}`,
+          { ...body2 }
+        );
+        parsedCompany = jobPostOwner.data;
+      }
+
+      const {
+        companyName,
+        companyBusinessId,
+        firstName,
+        lastName,
+        email,
+        address,
+        zipCode,
+        city
+      } = userRole === "admin" ? parsedCompany[0] : companyProfile.profile;
+      const jobTitle = advertisement.viewSelectedAd.jobName;
+      const description = `${jobTitle} | Kampanjapaketti - ${customTranslateCampaign(
+        campaign_id
+      )}`;
+      const mkt_description = `${jobTitle} | Lisätty markkinointiraha`;
+
+      const orderId = "112"; // hardcoded!!! need to add on backend
+      const previousCampaignPrice = advertisement.viewSelectedAd.campaignValue;
+      const newCampaignPrice = resultParsed.campaignValue;
+      const amount = newCampaignPrice - previousCampaignPrice;
+
+      // If mkt budget is added.
+      let marketing_budget = 0;
+      const newMarketingBudget = resultParsed.marketing_budget;
+      if (includes_mktbudget && newMarketingBudget > 0) {
+        marketing_budget = newMarketingBudget;
+      }
+      const totalSum = (marketing_budget + amount) * 1.24;
+
+      // If new and more expensive campaign price OR more marketing budget, generate invoice
+
+      const details = {
+        company_id: companyId,
+        companyName,
+        companyBusinessId,
+        firstName,
+        lastName,
+        email,
+        address,
+        zipCode,
+        city,
+        description,
+        totalSum,
+        amount,
+        post_id: parseInt(post_id),
+        order_id: orderId,
+        marketing_budget,
+        mkt_description,
+        isSameCampaign: amount === 0 ? true : false, // Meaning same campaign but new budget
+        selectedCampaign: advertisement.selectedCampaign,
+        postIdToFetch: id
+      };
+      if (payment_method === "invoice") {
+        yield put(sendInvoiceToTalous(details));
+      } else if (payment_method === "online") {
+        yield put(registerPayment(details));
+      } else {
+        yield put(showSuccessSnackbar());
+      }
     }
-
-    // if (resultParsed) {
-    //   //If admin is upgrading post or updating jobpost on behalf of companies:
-    //   if (userRole === 'admin') {
-    //     const body2 = {
-    //       company_id: parseInt(companyId),
-    //       uuid,
-    //     };
-    //     const jobPostOwner = yield call(apiManualPost, `${API_SERVER}/GetCompanyProfile`, JSON.stringify({ ...body2 }));
-    //     parsedCompany = JSON.parse(jobPostOwner.data);
-    //   }
-
-    //   const { company_name, business_id, firstname, lastname, email, address, zip_code, city } =
-    //     userRole === 'admin' ? parsedCompany[0] : companyProfile.profile;
-    //   const jobTitle = advertisement.viewSelectedAd.job_title;
-    //   const description = `${jobTitle} | Kampanjapaketti - ${customTranslateCampaign(campaign_id)}`;
-    //   const mkt_description = `${jobTitle} | Lisätty markkinointiraha`;
-
-    //   const orderId = resultParsed[0].order_id;
-    //   const previousCampaignPrice = resultParsed[0].prev_campaign_money;
-    //   const newCampaignPrice = resultParsed[0].new_campaign_money;
-    //   const amount = newCampaignPrice - previousCampaignPrice;
-
-    //   // If mkt budget is added.
-    //   let marketing_budget = 0;
-    //   const newMarketingBudget = resultParsed[0].marketing_budget;
-    //   if (includes_mktbudget && newMarketingBudget > 0) {
-    //     marketing_budget = newMarketingBudget;
-    //   }
-    //   const totalSum = (marketing_budget + amount) * 1.24;
-
-    //   // If new and more expensive campaign price OR more marketing budget, generate invoice
-
-    //   const details = {
-    //     company_id: companyId,
-    //     company_name,
-    //     business_id,
-    //     firstname,
-    //     lastname,
-    //     email,
-    //     address,
-    //     zip_code,
-    //     city,
-    //     description,
-    //     totalSum,
-    //     amount,
-    //     post_id: parseInt(post_id),
-    //     order_id: orderId,
-    //     marketing_budget,
-    //     mkt_description,
-    //     isSameCampaign: amount === 0 ? true : false, // Meaning same campaign but new budget
-    //     selectedCampaign: advertisement.selectedCampaign,
-    //     postIdToFetch: id,
-    //   };
-    //   if (payment_method === 'invoice') {
-    //     yield put(sendInvoiceToTalous(details));
-    //   } else if (payment_method === 'online') {
-    //     yield put(registerPayment(details));
-    //   } else {
-    //     yield put(showSuccessSnackbar());
-    //   }
-    // }
   } catch (error) {
     console.log(error);
     yield put(showFailedSnackbar());
@@ -833,7 +854,7 @@ function* changeJobPostStatusSaga({ id }) {
     const url = `https://localhost:7262/changeOfferStatus`;
     const body = JSON.stringify({
       id,
-      status: "inactive",
+      status: "inactive"
     });
 
     const result = yield call(apiManualPost, url, body);
@@ -848,6 +869,7 @@ function* changeJobPostStatusSaga({ id }) {
   }
 }
 function* saveMarketingDetailsSaga() {
+  console.log("marketingDetails =>,", formValues);
   try {
     const formValues = getFormValues("marketingDetails")(store.getState());
     const { marketing_platform, more_budget, marketing_budget } = formValues;
@@ -895,22 +917,32 @@ function* deleteJobPostSaga({ id }) {
   try {
     const url = `${API_SERVER_EST}/${id}`;
     const companyId = store.getState().companyProfile.profile.company_id;
-    const userRole = store.getState().client.user.data[6].user_type;
+    const userRole = store.getState().client.user.data.user_type;
 
     const body = JSON.stringify({
       post_id: userRole === "admin" ? id.split("admin")[0] : id,
-      company_id: userRole === "admin" ? id.split("admin")[1] : companyId,
+      company_id: userRole === "admin" ? id.split("admin")[1] : companyId
     });
-    //yield call( apiOpenRequest, url);
-    const result = axios.delete(url).finally((res) => ({ res }));
+    // yield call( apiOpenRequest, url);
+    // const result = axios.delete(url).finally((res) => ({ res }));
+    const deleteAd = () => {
+      return axios.delete(url);
+    };
+
+    const { data } = yield call(deleteAd);
+
     if (userRole === "admin") {
-      yield put(filterJobs(result, true));
+      yield put(filterJobs(data, true));
     } else {
       yield put(getAllAdsByStatus(0));
       yield put(getAllAdsByStatus(1));
       yield put(getAllAdsByStatus(2));
     }
+
     yield put(deleteAdvertisement());
+
+    // NOTE: Reload window after the state update
+    // window.location.reload();
   } catch (error) {
     console.log(error);
   }
@@ -920,16 +952,16 @@ function* saveAdvertisementAsDraft() {
   yield put(saveAndPublishAdvertisement());
 }
 
-function* getApplicationDetailsByIdSaga({ jobpostId, id }) {
+function* getApplicationDetailsByIdSaga({ jobpostId, instanceId }) {
   try {
-    const url = `https://localhost:7262/jobsApplication/${id}`;
+    const url = `https://localhost:7262/getAllApplicants/${instanceId}`;
 
     const result = yield call(apiManualRequest, url);
     const resultParsed = result.data;
 
     if (resultParsed) {
       yield put(getApplicationDetailsByIdSuccess(resultParsed));
-      yield put(openAdToSeeAdInfo(id));
+      // yield put(openAdToSeeAdInfo(id));
     }
   } catch (e) {
     console.log(e.message);
@@ -937,26 +969,30 @@ function* getApplicationDetailsByIdSaga({ jobpostId, id }) {
 }
 
 function* updateApplicantStatusSaga({
+  jobSeekerId,
   application_id,
-  company_id,
+  // company_id,
   post_id,
   email,
-  status,
+  status
 }) {
   try {
-    const url = `${API_SERVER}/UpdateJobApplicationStatus`;
+    // const url = `${API_SERVER}/UpdateJobApplicationStatus`;
+    const url = `${BASE_API_SERVER_EST}/UpdateApplicantApplicationStatus`;
     const body = JSON.stringify({
-      application_id,
-      company_id,
-      post_id,
-      email,
-      status,
+      id: application_id,
+      // company_id,
+      // post_id,
+      // email,
+      status
     });
-    const result = yield call(apiManualPost, url, body);
+    const result = yield call(apiManualPatch, url, body);
+
     if (result.data === "Job Application's status updated successfully!") {
       //yield put(showSuccessSnackbar());
       yield put(
-        getApplicationDetailsById(application_id, company_id, post_id, email)
+        // getApplicationDetailsById(application_id, company_id, post_id, email)
+        getApplicationDetailsById(jobSeekerId, post_id, email)
       );
       yield put(openAdToSeeAdInfo(post_id));
     } else {
@@ -967,53 +1003,53 @@ function* updateApplicantStatusSaga({
   }
 }
 function* updateJobApplicationDetailsSaga({
-  application_id,
   company_id,
   post_id,
   email,
-  update,
+  update
 }) {
   try {
     let body;
     let url;
+    const id = store.getState().advertisement.viewApplication.id;
     const formValues = getFormValues("applicantDetails")(store.getState());
     let response;
-    const loggedInUser = store.getState().client.user.data[1];
+    const loggedInUser = store.getState().client.user.data;
+    console.log("formValues =>>>>", formValues);
     const {
       application_notes,
       interview_title,
       interview_msg,
       interview_date,
       interview_time,
-      interview_place,
+      interview_place
     } = formValues;
     if (update === "note") {
       url = `https://localhost:7262/addApplicantNote`;
       body = {
-        id: "646d0f1f-4fa7-44b4-869a-f56935677af8",
-        note: application_notes,
+        id: id,
+        note: application_notes
       };
     } else {
       url = `https://localhost:7262/sendApplicantReminderOfInterview`;
       body = {
-        email: "moscemoscemosce@gmail.com",
+        applicantEmail: formValues.email,
+        companyEmail: store.getState().companyProfile.profile.email,
         subject: interview_title,
         message: interview_msg,
         date: interview_date,
         time: interview_time,
-        address: interview_place,
+        address: interview_place
       };
     }
-    axios.post(url, body).then((res) => {
+    axios.post(url, body).then(res => {
       response = res;
     });
     if (response === "400") {
       yield put(showFailedSnackbar());
     } else {
       yield put(showSuccessSnackbar());
-      yield put(
-        getApplicationDetailsById(application_id, company_id, post_id, email)
-      );
+      yield put(getApplicationDetailsById(id, company_id, post_id, email));
       yield put(openAdToSeeAdInfo(post_id));
     }
     // console.log('result', result);
@@ -1030,7 +1066,7 @@ function* getJobPostViewsByDateSaga() {
     const { post_id } = store.getState().advertisement.viewSelectedAd;
     const body = JSON.stringify({
       company_id,
-      post_id,
+      post_id
     });
     const result = yield call(apiManualPost, url, body);
     const resultParsed = JSON.parse(result.data);
@@ -1061,7 +1097,7 @@ function* deleteApplicationSaga() {
 
 function* changeRouteSaga() {
   try {
-    const userRole = store.getState().client.user.data[6].user_type;
+    const userRole = store.getState().client.user.data.user_type;
 
     if (userRole === "company") {
       browserHistory.push("/omat-ilmoitukseni");
@@ -1081,13 +1117,12 @@ function* changePaginationSaga() {
 }
 
 function* adminGetUserCompanyProfileSaga({ id }) {
-  const url = `${API_SERVER}/GetCompanyProfile`;
+  //const id = store.getState().client.user.data.company_id;
+  const url = `https://localhost:7262/getCompanyById/${id}`;
 
   try {
-    const uuid = store.getState().client.user.data[2];
-    const body = JSON.stringify({ company_id: id, uuid });
-    const result = yield call(apiManualPost, url, body);
-    const resultParsed = JSON.parse(result.data)[0];
+    const result = yield call(apiManualPost, url);
+    const resultParsed = result.data;
     yield put(getCompanyProfileSuccess(resultParsed));
   } catch (e) {
     console.log(e);

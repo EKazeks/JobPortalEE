@@ -42,7 +42,7 @@ class JobsContainer extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const userRole = state.client.user && state.client.user.data && state.client.user.data[6] && state.client.user.data[6].user_type;
+  const userRole = state.client.user && state.client.user.data  && state.client.user.data.user_type;
   return {
     state,
     jobs: state.jobs.jobsList // Write comment based on job portal data or mol data

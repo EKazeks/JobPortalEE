@@ -105,7 +105,7 @@ const AdDetails = ({
   const [jobsToRender, setJobsToRender] = useState({});
   const dispatch = useDispatch();
   selectedPage = 1;
-
+  
   // useEffect(() => {
   //   axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
   //     setJobsToRender(res.data);
@@ -140,7 +140,10 @@ const AdDetails = ({
                     {`${viewSelectedAd.status === 0 ? t('draft') : viewSelectedAd.status === 1 ? t('active') : t('inactive')}`}:
                   </strong>
                   <strong>
-                    {dateFormat(viewSelectedAd.dateOfApplication)}
+                    {/* {dateFormat(viewSelectedAd.dateOfApplication)} */}
+                    {viewSelectedAd.dateOfApplication.charAt(2) === "."
+                                    ? viewSelectedAd.dateOfApplication
+                                    : dateFormat(viewSelectedAd.dateOfApplication)}
                   </strong>
                 </h6>
               </Grid>
@@ -214,11 +217,11 @@ const AdDetails = ({
                 <div className={classes.campaignType}>
                 <h6>
                      <strong>{t("postType")}: </strong>
-                     {viewSelectedAd.campaignType === "free" && <span>Free</span>}
-                     {viewSelectedAd.campaignType === "lift" && <span>Lift</span>}
-                     {viewSelectedAd.campaignType === "home_page_thing" && <span>Front Page News</span>}
-                     {viewSelectedAd.campaignType === "noteworthy" && <span>Remarkable</span>}
-                     {viewSelectedAd.campaignType === "some_start" && <span>Social Media Start</span>}
+                     {viewSelectedAd.campaignType === "free" || viewSelectedAd.campaignType === 'Free' ? <span>Free</span> : null}
+                     {viewSelectedAd.campaignType === "lift" || viewSelectedAd.campaignType === "Lift" ? <span>Lift</span> : null}
+                     {viewSelectedAd.campaignType === "home_page_thing" || viewSelectedAd.campaignType === "Home_page_thing" ? <span>Front Page News</span> : null}
+                     {viewSelectedAd.campaignType === "noteworthy" || viewSelectedAd.campaignType === "Noteworthy" ? <span>Remarkable</span> : null}
+                     {viewSelectedAd.campaignType === "some_star" || viewSelectedAd.campaignType === "Some_star" ? <span>Social Media Star</span> : null}
                    </h6>
                    <h6>
                      <strong>{t("postStatus")}: </strong>

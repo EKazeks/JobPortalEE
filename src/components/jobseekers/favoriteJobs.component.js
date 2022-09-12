@@ -8,7 +8,9 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import { customURL } from "../../utils/helperFunctions";
 import store from "../../store";
-import { deleteFavoriteJobs } from "../../actions";
+import { openAdToSeeAdInfo } from "../../actions";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const FavoriteJobsComponent = ({
   favoriteJobs,
@@ -17,8 +19,25 @@ const FavoriteJobsComponent = ({
   selectedPage,
   fetchJobInfo,
   fetchJobById,
+  deleteFavoriteJobs,
 }) => {
   const { t } = useTranslation("favoriteJobs", "common");
+  //const [favoriteJobDetail, setFavoriteJobDetail] = useState([])
+//  const jobPostId = store.getState().jobs.favoriteJobs 
+
+  
+  // useEffect(() => {
+  //   axios.get(`https://localhost:7262/jobsEn/${jobPostId}`).then((res) => {
+  //     setFavoriteJobDetail(res.data)
+  //   })
+  // },[])
+
+  const getDate = (date) => {
+    const newDate = date.substring(0, 10).split(".")
+    const replacedDate = newDate.toString().split("-");
+    let finelDate = replacedDate[2] + "." + replacedDate[1] + "." + replacedDate[0];
+    return <>{finelDate}</>
+}
 
   return (
     <div className="container">
@@ -38,7 +57,7 @@ const FavoriteJobsComponent = ({
           .slice(selectedPage * 10, selectedPage * 10 + 10)
           .map((post) => {
             return (
-              <div key={`${post.companyBusinessId}${post.jobPostNumber}`}>
+              <div key={`${post.id}${post.jobPostId}`}>
                 <Paper style={{ marginTop: 20 }}>
                   <Grid
                     container
@@ -49,22 +68,25 @@ const FavoriteJobsComponent = ({
                   >
                     <Grid item md={8} sm={8} xs={12}>
                       <div>
+                      {/* <Link to={customURL(post.url, 'external')} className="btnLink">
+                        <h4>{post.jobTitle}</h4>
+                      </Link> */}
                         <Link
                           to={customURL(post.url, "external")}
                           className="btnLink"
+                          onClick={() => {
+                            fetchJobById(post.id);
+                            fetchJobInfo(
+                              post.companyName,
+                              post.companyBusinessId,
+                              post.jobName,
+                              post.jobPostNumber,
+                              post.dateOfApplication
+                            );
+                          }}
                         >
-                          <h4
-                            onClick={() => {
-                              fetchJobById(post.id);
-                              fetchJobInfo(
-                                post.companyName,
-                                post.companyBusinessId,
-                                post.jobName,
-                                post.jobPostNumber
-                              );
-                            }}
-                          >
-                            {post.jobName}
+                          <h4>
+                            {post.jobTitle}
                           </h4>
                         </Link>
                       </div>
@@ -72,7 +94,7 @@ const FavoriteJobsComponent = ({
                         <span>
                           {t("common:deadline")}:
                           <span style={{ color: "red", margin: "0 5px" }}>
-                            {post.dateOfApplication}
+                            {post.closingDate.indexOf(':00.000Z') !== -1 ? getDate(post.closingDate?.substring(0,10)) : post.closingDate}
                           </span>
                           {/* <span style={{ color: 'red', margin: '0 5px' }}>{new Intl.DateTimeFormat('fi-FI').format(new Date('2022-08-31'))}</span> */}
                         </span>
@@ -85,7 +107,7 @@ const FavoriteJobsComponent = ({
                             variant="outlined"
                             color="secondary"
                             onClick={() =>
-                              store.dispatch(deleteFavoriteJobs(post.id, 0))
+                              deleteFavoriteJobs(post.jobPostId)
                             }
                           >
                             {t("common:deleteBtn")}
