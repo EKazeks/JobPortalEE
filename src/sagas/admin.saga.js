@@ -12,8 +12,9 @@ import {
   ADMIN_VIEW_COUNT_PER_PAGE,
   ADMIN_SEARCH_ADDITIONAL_SERVICE,
   UPDATE_PAYMENT_STATUS,
+  API_SERVER_UPDATE_COMPANY_INFO,
 } from '../constants';
-import { apiManualPost } from '../utils/request';
+import { apiManualPatch, apiManualPost, apiManualRequest } from '../utils/request';
 import store from '../store';
 import {
   adminSearchCompanySuccess,
@@ -63,21 +64,18 @@ function* adminSearchCompanySaga({ isToRetainSelectedPage }) {
       start = Math.ceil(currentPage * ADMIN_VIEW_COUNT_PER_PAGE);
     }
 
-    const url = `${API_SERVER}/SearchCompanies?offset=${start}&rows=${ADMIN_VIEW_COUNT_PER_PAGE}`;
+    const url = `https://localhost:7262/getAllCompanies`;
     let formValues = getFormValues('adminSearch')(store.getState());
     if (formValues) {
       formValues = trimObjValues(formValues);
     }
-    const body = JSON.stringify({
-      ...formValues,
-    });
-
-    const result = yield call(apiManualPost, url, body);
+  
+    const result = yield call(apiManualRequest, url);
 
     if (result.data === 'company details not existed' || result.data.length === 0) {
       yield put(adminSearchCompanySuccess([]));
     } else {
-      const resultParsed = JSON.parse(result.data);
+      const resultParsed = result.data;
       yield put(adminSearchCompanySuccess(resultParsed));
 
       if (!isToRetainSelectedPage) {
@@ -97,20 +95,18 @@ function* adminSearchApplicantSaga({ isToRetainSelectedPage }) {
       start = Math.ceil(currentPage * ADMIN_VIEW_COUNT_PER_PAGE);
     }
 
-    const url = `${API_SERVER}/SearchApplicants?offset=${start}&rows=${ADMIN_VIEW_COUNT_PER_PAGE}`;
+    const url = `https://localhost:7262/getAllApplicants`;
     let formValues = getFormValues('adminSearch')(store.getState());
+    
     if (formValues) {
       formValues = trimObjValues(formValues);
     }
-    const body = JSON.stringify({
-      ...formValues,
-    });
 
-    const result = yield call(apiManualPost, url, body);
+    const result = yield call(apiManualRequest, url);
     if (result.data === 'Application details does not exist') {
       yield put(adminSearchApplicantSuccess([]));
     } else {
-      const resultParsed = JSON.parse(result.data);
+      const resultParsed = result.data;
       yield put(adminSearchApplicantSuccess(resultParsed));
 
       if (!isToRetainSelectedPage) {
@@ -255,16 +251,23 @@ function* adminSearchInvoiceSaga() {
 
 function* adminUpdateUserProfileSaga({ user }) {
   try {
-    const url = user === 'company' ? `${API_SERVER}/UpdateCompanyProfileByAdmin` : `${API_SERVER}/UpdateApplicantProfileByAdmin`;
+    const url = user === 'company' ? `https://localhost:7262/AdminUpdateCompanyInfo` : `https://localhost:7262/AdminUpdateCompanyInfo`;
     const formValues = getFormValues('adminContact')(store.getState());
 
-    const body = JSON.stringify({
-      ...formValues,
+   const body = JSON.stringify({
+      bussines_id: formValues.business_id,
+      company_id: formValues.company_id,
+      company_name: formValues.company_name,
+      email: formValues.email,
+      firstname: formValues.firstname,
+      lastname: formValues.lastname,
+      profile_description: formValues.profile_description,
+      telephone: formValues.telephone,
     });
 
-    const result = yield call(apiManualPost, url, body);
+    const result = yield call(apiManualPatch, url, body);
 
-    if (result.data === 'User contact information updated successfully!') {
+    if (result.data === result.data) {
       yield put(adminUpdateUserProfileSuccess());
       if (user === 'company') {
         yield put(adminSearchCompany(true));

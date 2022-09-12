@@ -2,41 +2,92 @@ import React from "react";
 import store from "../store";
 
 export const customURL = (url, type) => {
+  const { companyName, companyBusinessId } = store.getState().jobs;
+  let { jobName } = store.getState().jobs;
+  let { jobPostNumber } = store.getState().jobs;
 
-  const {id} = store.getState().jobs
-  const {jobName} = store.getState().jobs
-  const {jobPostNumber} = store.getState().jobs
-  const {companyName} = store.getState().jobs
-  const {companyBusinessId} = store.getState().jobs
-  let splittedJobName;
+  let pathname;
+  if (typeof url === "object" || url === undefined) {
+    return;
+  } else {
+    if (url.indexOf("/tookohad/") != -1) {
+      pathname = url && url.split("/tookohad/")[1];
+      jobName =
+        url &&
+        url
+          .split("/tookohad/")[1]
+          .split("/")[2]
+          .toLowerCase();
+      jobPostNumber = url && url.split("/tookohad/")[1].split("/")[3];
+    } else if (url.indexOf("/toopakkumised/") != -1) {
+      pathname = url && url.split("/toopakkumised/")[1];
+      //const lastIndex = pathname.lastIndexOf("-");
+      pathname = `${companyName}/${companyBusinessId}/${jobName}/${jobPostNumber}`;
+    } else {
+      pathname = url && url.split("/tyopaikat/")[1];
+    }
 
-  splittedJobName = jobName.split(' ').join("-").toLowerCase();
-  if (jobName.length >= 40) {
-    splittedJobName = jobName.split(' ').toString().replace(/[ ,-,,/]/g, '-').toLowerCase()
-  } else if (jobName.includes('/')) {
-    splittedJobName = jobName.split(' ').toString().replace('/','-').replace(/[,]/gi, '').toLowerCase();
-  } 
-    
-  const splittedCompanyName = companyName.split(' ').join('-').toLowerCase();
-  
-  switch (type) {
-    case "internal": // For admins and companies, url path is jobpost/jobTitle/postId
-      return `/jobpost/${splittedJobName}/${jobPostNumber}`;
-      
-    case "external": // For public, url path is tyopaikat/companyName/companyId/jobTitle/postId
-      return `/tyopaikat/${splittedCompanyName}/${companyBusinessId}/${splittedJobName}/${jobPostNumber}`;
+    const splittedPath = pathname && pathname.split("/");
+    // const companyName = splittedPath && splittedPath[0]
+    //let jobPostNumber = "65009";
+    const companyId = splittedPath && splittedPath[1];
+    //const jobName = splittedPath && splittedPath[2];
+    //const jobPostNumber = splittedPath && splittedPath[3];
+    //let splittedJobName = jobName.split(' ').join("-").toLowerCase();
+    switch (type) {
+      case "internal": // For admins and companies, url path is jobpost/jobTitle/postId
+        return `/jobpost/${jobName}/${jobPostNumber}`;
 
-    case "application": // For application form component
-      return `/tyopaikat/${splittedJobName}/${companyBusinessId}JP${jobPostNumber}/hae`;
+      case "external": // For public, url path is tyopaikat/companyName/companyId/jobTitle/postId
+        return `/tyopaikat/${pathname}`;
 
-    case "campaign": // For campaign component
-      return `/${splittedJobName}/${jobPostNumber}/campaign`;
+      case "application": // For application form component
+        return `/tyopaikat/${jobName}/${companyId}JP${jobPostNumber}/hae`;
 
-    case "open_position":
-      return `/tyopaikat/${splittedCompanyName}/${companyBusinessId}/${splittedJobName}/${jobPostNumber}`;
-    default:
-      break;
+      case "campaign": // For campaign component
+        return `/${jobName}/${jobPostNumber}/campaign`;
+      default:
+        break;
+    }
   }
+
+  // const {id} = store.getState().jobs
+  // let {jobName} = store.getState().advertisement.viewSelectedAd
+  // const {jobPostNumber} = store.getState().jobs
+  // const {companyName} = store.getState().jobs
+  // const {companyBusinessId} = store.getState().jobs
+  // let splittedJobName;
+  // // if (jobName === undefined) {
+  // //   return jobName = 'customUrl';
+  // // } else {
+  // // }
+  // splittedJobName = jobName.split(' ').join("-").toLowerCase();
+  // if (jobName.length >= 40) {
+  //   splittedJobName = jobName.split(' ').toString().replace(/[ ,-,,/]/g, '-').toLowerCase()
+  // } else if (jobName.includes('/')) {
+  //   splittedJobName = jobName.split(' ').toString().replace('/','-').replace(/[,]/gi, '').toLowerCase();
+  // }
+
+  // const splittedCompanyName = companyName.split(' ').join('-').toLowerCase();
+
+  // switch (type) {
+  //   case "internal": // For admins and companies, url path is jobpost/jobTitle/postId
+  //     return `/jobpost/${splittedJobName}/${jobPostNumber}`;
+
+  //   case "external": // For public, url path is tyopaikat/companyName/companyId/jobTitle/postId
+  //     return `/tyopaikat/${splittedCompanyName}/${companyBusinessId}/${splittedJobName}/${jobPostNumber}`;
+
+  //   case "application": // For application form component
+  //     return `/tyopaikat/${splittedJobName}/${companyBusinessId}JP${jobPostNumber}/hae`;
+
+  //   case "campaign": // For campaign component
+  //     return `/${splittedJobName}/${jobPostNumber}/campaign`;
+
+  //   case "open_position":
+  //     return `/tyopaikat/${splittedCompanyName}/${companyBusinessId}/${splittedJobName}/${jobPostNumber}`;
+  //   default:
+  //     break;
+  // }
 };
 
 export const convertJobTypeToStr = (t, type) => {
@@ -51,9 +102,7 @@ export const convertJobTypeToStr = (t, type) => {
   );
 };
 
-
-
-export const dateFormat = (date) => {
+export const dateFormat = date => {
   const formatedDate = date.split("T", 10)[0].split("-");
   const newDateFormat =
     formatedDate[2] + "." + formatedDate[1] + "." + formatedDate[0];
@@ -71,9 +120,9 @@ export const dateFormat = (date) => {
   }
   //console.log(date);
 
-// if (date === date.slice(-1)) {
-//   return formatedDate
-// } 
+  // if (date === date.slice(-1)) {
+  //   return formatedDate
+  // }
 
   // if (date === date) {
   //   return date
@@ -192,14 +241,18 @@ export const convertJobWorksStartToStr = (t, type) => {
 export const scrollToTop = () => {
   window.scrollTo({
     top: 250,
-    behavior: "smooth",
+    behavior: "smooth"
   });
 };
 
-export const formatToFinnishCurrency = (amount) => {
+export const formatToFinnishCurrency = amount => {
+  if (!amount) {
+    return "";
+  }
+
   return new Intl.NumberFormat("fi-FI", {
     style: "currency",
-    currency: "EUR",
+    currency: "EUR"
   }).format(amount);
 };
 
