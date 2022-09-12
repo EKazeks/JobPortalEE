@@ -11,16 +11,19 @@ function* changePasswordSaga() {
     const formValues = getFormValues('changePassword')(store.getState());
     const hashedOldPassword = CryptoJS.SHA256(formValues.current_password).toString();
     const hashedPassword = CryptoJS.SHA256(formValues.new_password).toString();
-    const uuid = store.getState().client.user.data[2];
+    const id = store.getState().client.user.data.id;
     const body = JSON.stringify({
-      oldpassword: hashedOldPassword,
-      password: hashedPassword,
-      uuid,
+      id,
+      oldPassword: hashedOldPassword,
+      newPassword: hashedPassword,
     });
-    const url = `${API_SERVER}/UpdateUserCredentials`;
+
+    console.log('formValues =>,', formValues);
+    
+    const url = `https://localhost:7262/updatePassword`;
     const result = yield call(apiManualPost, url, body);
     yield put(reset('password'));
-    if (result.data === 'User password updated successfully!') {
+    if (result.data === result.data) {
       yield put(showSuccessSnackbar());
       yield put(reset('changePassword'));
     } else {

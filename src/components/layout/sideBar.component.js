@@ -65,12 +65,12 @@ const SideBar = ({
   const { id } = useSelector((state) => state.jobs);
   const selectedPage = 1;
 
-  useEffect(() => {
-    axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
-      setJobsToRender(res.data);
-      setApplicant(res.data.jobPostApplications)
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get(`https://localhost:7262/jobsEn/${id}`).then((res) => {
+  //     setJobsToRender(res.data);
+  //     setApplicant(res.data.jobPostApplications)
+  //   });
+  // }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

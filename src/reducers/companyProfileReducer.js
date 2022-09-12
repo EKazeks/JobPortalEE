@@ -15,14 +15,14 @@ export default function companyProfileReducer(state = initialState, action) {
       };
     case CLEAR_COMPANY_LOGO:
       // if there has been a logo added in db, which we want to delete:
-      if (state.profile.logo_document && !state.isToAddNewProfile) {
+      if (state.profile.companyLogo && !state.isToAddNewProfile) {
         return {
           ...state,
 
           profile: {
             ...state.profile,
-            logo_document: {
-              path: state.profile.logo_document && state.profile.logo_document[0].path,
+            companyLogo: {
+              path: state.profile.companyLogo && state.profile.companyLogo.logo[0].path,
             },
           },
           uploadedLogo: {},
